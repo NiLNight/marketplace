@@ -17,8 +17,8 @@ class UserProfile(models.Model):
     birth_date = models.DateField(null=True, blank=True)
     avatar = models.ImageField(
         verbose_name='Аватар',
-        upload_to='images/avatars/%Y/%m/%d',
-        default='images/avatars/default.jpg',
+        upload_to='media/images/avatars/%Y/%m/%d',
+        default='media/images/avatars/default.jpg',
         blank=True,
         validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])])
 
