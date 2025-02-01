@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
@@ -23,12 +24,13 @@ class UserLoginSerializer(serializers.Serializer):
         username = data.get('username')
         password = data.get('password')
 
-        if User.objects.filter(username=username).exists():
-            user = User.objects.get(username=username)
-            if user.check_password(password):
-                data['user'] = user
-                return data
-            else:
-                raise serializers.ValidationError("Неверный пароль")
-        else:
+        user = authenticate(
+            request=self.context.get('request'),
+            username=username,
+            password=password
+        )
+
+        if not user:
             raise serializers.ValidationError("Неверные учетные данные")
+        data['user'] = user
+        return data
