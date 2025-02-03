@@ -1,12 +1,13 @@
-# apps/users/models.py
-from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator, FileExtensionValidator
+from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.core.validators import RegexValidator, FileExtensionValidator
+from apps.services.utils import unique_slugify
 
 
 class UserProfile(models.Model):
+    public_id = models.CharField(max_length=255)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     phone = models.CharField(
         max_length=20,
@@ -21,6 +22,11 @@ class UserProfile(models.Model):
         default='media/images/avatars/default.jpg',
         blank=True,
         validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])])
+
+    def save(self, *args, **kwargs):
+        if not self.public_id:
+            self.public_id = unique_slugify(self.user.username)
+        super(UserProfile, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"Профиль {self.user.username}"
