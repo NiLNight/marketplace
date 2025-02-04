@@ -1,34 +1,38 @@
-from rest_framework_simplejwt.authentication import JWTAuthentication
+"""
+Кастомная аутентификация JWT с поддержкой cookies
+"""
 from django.conf import settings
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.exceptions import AuthenticationFailed
 
-from rest_framework.authentication import CSRFCheck
-from rest_framework import exceptions
 
-
-def enforce_csrf(request):
+class CustomJWTAuthentication(JWTAuthentication):
     """
-    Enforce CSRF validation.
+    Переопределенная аутентификация JWT:
+    - Поддержка токенов из cookies
+    - Кастомизация сообщений об ошибках
     """
-    check = CSRFCheck(request)
-    check.process_request(request)
-    reason = check.process_view(request, None, (), {})
-    if reason:
-        raise exceptions.PermissionDenied('CSRF Failed: %s' % reason)
-
-
-class CustomAuthentication(JWTAuthentication):
-    """Custom authentication class"""
-
     def authenticate(self, request):
+        """
+        Основной метод аутентификации:
+        1. Проверка заголовка Authorization
+        2. Проверка cookies
+        """
         header = self.get_header(request)
+        raw_token = None
 
-        if header is None:
-            raw_token = request.COOKIES.get(settings.SIMPLE_JWT['AUTH_COOKIE']) or None
-        else:
+        if header:
             raw_token = self.get_raw_token(header)
-        if raw_token is None:
+        else:
+            raw_token = request.COOKIES.get(settings.SIMPLE_JWT['AUTH_COOKIE'])
+
+        if not raw_token:
             return None
 
-        validated_token = self.get_validated_token(raw_token)
-        enforce_csrf(request)
-        return self.get_user(validated_token), validated_token
+        try:
+            validated_token = self.get_validated_token(raw_token)
+            return self.get_user(validated_token), validated_token
+        except AuthenticationFailed as e:
+            raise AuthenticationFailed({
+                "detail": f"Authentication failed: {str(e)}"
+            })

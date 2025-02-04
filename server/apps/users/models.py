@@ -11,6 +11,8 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     phone = models.CharField(
         max_length=20,
+        null=True,
+        blank=True,
         validators=[RegexValidator(
             r'^\+?1?\d{9,15}$',
             message="Номер телефона должен соответствовать шаблону: '+999999999'.")]
@@ -22,6 +24,10 @@ class UserProfile(models.Model):
         default='media/images/avatars/default.jpg',
         blank=True,
         validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])])
+
+    class Meta:
+        ordering = ['user__id']
+        indexes = [models.Index(fields=['public_id', 'id'])]
 
     def save(self, *args, **kwargs):
         if not self.public_id:

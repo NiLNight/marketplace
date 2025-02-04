@@ -146,6 +146,7 @@ SIMPLE_JWT = {
 
     # custom
     "AUTH_COOKIE": "access_token",  # имя cookie
+    "REFRESH_COOKIE": "refresh_token",
     "AUTH_COOKIE_DOMAIN": None,  # указывает домен, для которого будет отправлен cookie
     "AUTH_COOKIE_SECURE": False,  # ограничивает передачу cookie только через защищенные (HTTPS) соединения.
     "AUTH_COOKIE_HTTP_ONLY": True,  # запрещает клиентскому js доступ к cookie
@@ -155,7 +156,7 @@ SIMPLE_JWT = {
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'apps.users.authentication.CustomAuthentication',
+        'apps.users.authentication.CustomJWTAuthentication',
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
 }
