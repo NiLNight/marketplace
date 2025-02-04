@@ -39,9 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Импорты
     'rest_framework',
     'drf_spectacular',
     'rest_framework_simplejwt.token_blacklist',
+    'corsheaders',
     # Приложения
     'apps.users.apps.UsersConfig',
 ]
@@ -49,6 +51,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # Новое
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -130,19 +133,36 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SIMPLE_JWT = {
-    'AUTH_COOKIE': 'access_token',
-    'AUTH_COOKIE_SECURE': True,
-    'AUTH_COOKIE_HTTP_ONLY': True,
-    'AUTH_COOKIE_SAMESITE': 'Lax',
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
 
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': True,
+CORS_ALLOW_CREDENTIALS = True
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    'BLACKLIST_AFTER_ROTATION': True,
+
+    # custom
+    "AUTH_COOKIE": "access_token",  # имя cookie
+    "AUTH_COOKIE_DOMAIN": None,  # указывает домен, для которого будет отправлен cookie
+    "AUTH_COOKIE_SECURE": False,  # ограничивает передачу cookie только через защищенные (HTTPS) соединения.
+    "AUTH_COOKIE_HTTP_ONLY": True,  # запрещает клиентскому js доступ к cookie
+    "AUTH_COOKIE_PATH": "/",  # URL-путь, по которому будет отправлен cookie
+    "AUTH_COOKIE_SAMESITE": "Lax",  # указывает, следует ли отправлять cookie в межсайтовых запросах
 }
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+        'apps.users.authentication.CustomAuthentication',
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Marketplace',
+    'DESCRIPTION': 'Marketplace Documentation',
+    'VERSION': '0.1.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }

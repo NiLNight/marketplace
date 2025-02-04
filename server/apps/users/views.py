@@ -1,15 +1,37 @@
+from django.conf import settings
 from tokenize import TokenError
-
 from django.contrib.auth.models import User
+from apps.users.models import UserProfile
+
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from apps.users.serializers import UserRegistrationSerializer, UserLoginSerializer
+from apps.users.serializers import UserRegistrationSerializer, UserLoginSerializer, UserProfileSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
 from apps.users.utils import set_jwt_cookies
+from django.shortcuts import get_object_or_404
 
 
-class UserRegistration(APIView):
+class CustomTokenObtainPairView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        response = super(CustomTokenObtainPairView, self).post(request, *args, **kwargs)
+        access_token = response.data['access']
+        response.set_cookie(
+            key=settings.SIMPLE_JWT['AUTH_COOKIE'],
+            value=access_token,
+            domain=settings.SIMPLE_JWT['AUTH_COOKIE_DOMAIN'],
+            path=settings.SIMPLE_JWT['AUTH_COOKIE_PATH'],
+            expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
+            secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
+            httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
+            samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
+        )
+        return response
+
+
+class UserRegistrationView(APIView):
     serializer_class = UserRegistrationSerializer
 
     def post(self, request):
@@ -29,7 +51,7 @@ class UserRegistration(APIView):
         return set_jwt_cookies(response, user)
 
 
-class UserLogin(APIView):
+class UserLoginView(APIView):
     serializer_class = UserLoginSerializer
 
     def post(self, request):
@@ -39,6 +61,7 @@ class UserLogin(APIView):
         response = Response(
             {
                 'message': 'Login successful',
+                'id': user.id,
                 'user': user.username,
                 'email': user.email
             }
@@ -46,7 +69,7 @@ class UserLogin(APIView):
         return set_jwt_cookies(response, user)
 
 
-class UserLogout(APIView):
+class UserLogoutView(APIView):
     def post(self, request):
         refresh_token = request.COOKIES.get('refresh_token')
         try:
@@ -64,3 +87,13 @@ class UserLogout(APIView):
                 {"error": "Invalid refresh token"},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserProfileSerializer
+
+    def get(self, request):
+        profile = get_object_or_404(UserProfile, user=request.user)
+        serializer = UserProfileSerializer(profile)
+        return Response(serializer.data)

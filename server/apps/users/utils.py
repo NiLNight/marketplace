@@ -7,6 +7,7 @@ def set_jwt_cookies(response, user, secure=False):
     response.set_cookie(
         key='access_token',
         value=str(refresh.access_token),
+        path='/',
         httponly=True,
         secure=secure,
         samesite='Lax',
@@ -15,6 +16,7 @@ def set_jwt_cookies(response, user, secure=False):
     response.set_cookie(
         key='refresh_token',
         value=str(refresh),
+        path='/',
         httponly=True,
         secure=secure,
         samesite='Lax',

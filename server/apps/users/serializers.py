@@ -2,6 +2,8 @@ from django.contrib.auth import authenticate
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
+from apps.users.models import UserProfile
+
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True, label='Повторить пароль')
@@ -29,8 +31,16 @@ class UserLoginSerializer(serializers.Serializer):
             username=username,
             password=password
         )
-
         if not user:
             raise serializers.ValidationError("Неверные учетные данные")
         data['user'] = user
         return data
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = '__all__'
+
+    def get(self):
+        return self.context.get('user')
