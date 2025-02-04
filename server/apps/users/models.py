@@ -28,6 +28,8 @@ class UserProfile(models.Model):
     class Meta:
         ordering = ['user__id']
         indexes = [models.Index(fields=['public_id', 'id'])]
+        verbose_name = 'Профиль'
+        verbose_name_plural = 'Профили'
 
     def save(self, *args, **kwargs):
         if not self.public_id:
