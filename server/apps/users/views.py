@@ -1,4 +1,3 @@
-from django.conf import settings
 from tokenize import TokenError
 from django.contrib.auth.models import User
 from apps.users.models import UserProfile
@@ -12,23 +11,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from apps.users.utils import set_jwt_cookies
 from django.shortcuts import get_object_or_404
-
-
-class CustomTokenObtainPairView(TokenObtainPairView):
-    def post(self, request, *args, **kwargs):
-        response = super(CustomTokenObtainPairView, self).post(request, *args, **kwargs)
-        access_token = response.data['access']
-        response.set_cookie(
-            key=settings.SIMPLE_JWT['AUTH_COOKIE'],
-            value=access_token,
-            domain=settings.SIMPLE_JWT['AUTH_COOKIE_DOMAIN'],
-            path=settings.SIMPLE_JWT['AUTH_COOKIE_PATH'],
-            expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
-            secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
-            httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
-            samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
-        )
-        return response
 
 
 class UserRegistrationView(APIView):
@@ -51,10 +33,10 @@ class UserRegistrationView(APIView):
         return set_jwt_cookies(response, user)
 
 
-class UserLoginView(APIView):
+class UserLoginView(TokenObtainPairView):
     serializer_class = UserLoginSerializer
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
