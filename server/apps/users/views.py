@@ -6,7 +6,6 @@ Views для работы с пользователями:
 - Профиль пользователя
 """
 from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -115,7 +114,6 @@ class UserLoginView(APIView):
         return set_jwt_cookies(response, user)
 
 
-
 class UserLogoutView(APIView):
     """
     API view для выхода пользователя с инвалидацией токенов.
@@ -168,7 +166,6 @@ class UserLogoutView(APIView):
         response.delete_cookie('access_token')
         response.delete_cookie('refresh_token')
         return response
-
 
 
 class UserProfileView(APIView):

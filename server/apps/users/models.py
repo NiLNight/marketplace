@@ -14,16 +14,16 @@ class UserProfile(models.Model):
         null=True,
         blank=True,
         validators=[RegexValidator(
-            r'^\+?1?\d{9,15}$',
-            message="Номер телефона должен соответствовать шаблону: '+999999999'.")]
+            r'^\+\d{9}$|^\+\d \(\d{3}\) \d{3}-\d{2}-\d{2}$',
+            message="Номер телефона должен соответствовать шаблону: '+999999999' или +'9 (999) 999-99-99'.")]
     )
     birth_date = models.DateField(null=True, blank=True)
     avatar = models.ImageField(
         verbose_name='Аватар',
-        upload_to='media/images/avatars/%Y/%m/%d',
-        default='media/images/avatars/default.jpg',
+        upload_to='images/avatars/%Y/%m/%d',
+        default='images/avatars/default.png',
         blank=True,
-        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])])
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp', 'gif'])])
 
     class Meta:
         ordering = ['user__id']
