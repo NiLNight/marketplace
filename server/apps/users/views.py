@@ -17,7 +17,7 @@ from apps.users.models import UserProfile
 from apps.users.serializers import (
     UserRegistrationSerializer,
     UserLoginSerializer,
-    UserProfileSerializer,
+    UserSerializer
 )
 from apps.users.utils import set_jwt_cookies
 
@@ -182,7 +182,7 @@ class UserProfileView(APIView):
     """
 
     permission_classes = [IsAuthenticated]
-    serializer_class = UserProfileSerializer
+    serializer_class = UserSerializer
 
     def get(self, request):
         """
@@ -198,15 +198,15 @@ class UserProfileView(APIView):
         Returns:
             Response: Объект ответа Django Rest Framework, содержащий сериализованные данные профиля.
         """
-        profile, _ = UserProfile.objects.get_or_create(user=request.user)
-        serializer = self.serializer_class(profile)
+        user = request.user
+        serializer = self.serializer_class(user)
         return Response(serializer.data)
 
     def patch(self, request):
         """
-        Частичное обновление профиля пользователя.
+        Обновление профиля пользователя.
 
-        Этот метод позволяет частично обновить данные профиля пользователя,
+        Этот метод позволяет обновить данные профиля пользователя,
         ассоциированного с текущим аутентифицированным пользователем.
         Обновление выполняется на основе данных, переданных в теле запроса.
 
@@ -216,9 +216,9 @@ class UserProfileView(APIView):
         Returns:
             Response: Объект ответа Django Rest Framework, содержащий обновленные сериализованные данные профиля.
         """
-        profile = request.user.profile
+        user = request.user
         serializer = self.serializer_class(
-            profile,
+            user,
             data=request.data,
             partial=True
         )

@@ -25,17 +25,10 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         required=True,
         # validators=[validate_password]
     )
-    password2 = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'password2')
-
-    def validate(self, attrs):
-        """Проверка совпадения паролей"""
-        if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError("Пароли не совпадают")
-        return attrs
+        fields = ('username', 'email', 'password')
 
     def create(self, validated_data):
         """Создание пользователя с хешированием пароля"""
@@ -79,17 +72,36 @@ class UserLoginSerializer(serializers.Serializer):
 
 class UserProfileSerializer(serializers.ModelSerializer):
     """Сериализатор для профиля пользователя"""
-    username = serializers.CharField(source='user.username', read_only=True)
-    email = serializers.EmailField(source='user.email', read_only=True)
 
     class Meta:
         model = UserProfile
         fields = [
-            'username',
             'public_id',
-            'email',
             'phone',
             'birth_date',
-            'avatar'
+            'avatar',
         ]
-        read_only_fields = ['user']
+
+
+class UserSerializer(serializers.ModelSerializer):
+    profile = UserProfileSerializer()
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name', 'profile']
+
+    def update(self, instance, validated_data):
+        profile_data = validated_data.pop('profile', {})
+        profile = instance.profile
+        instance.username = validated_data.get('username', instance.username)
+        instance.email = validated_data.get('email', instance.email)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        if profile_data:
+            profile.public_id = profile_data.get('public_id', profile.public_id)
+            profile.phone = profile_data.get('phone', profile.phone)
+            profile.birth_date = profile_data.get('birth_date', profile.birth_date)
+            profile.avatar = profile_data.get('avatar', profile.avatar)
+            profile.save()
+            instance.save()
+        return instance
