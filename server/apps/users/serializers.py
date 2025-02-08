@@ -4,14 +4,13 @@
 - Авторизация
 - Профиль
 """
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-
+from django.shortcuts import get_object_or_404
 from apps.users.models import UserProfile
-
-User = get_user_model()
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -53,7 +52,7 @@ class UserLoginSerializer(serializers.Serializer):
         """Проверка учетных данных и активности пользователя"""
         email = attrs.get('email')
         password = attrs.get('password')
-        user = User.objects.get(email=email)
+        user = User.objects.filter(email=email).first()
         # Проверка пользователя и пароля
         if user and user.check_password(password):
             user = authenticate(username=user.username, password=password)
@@ -70,6 +69,7 @@ class UserLoginSerializer(serializers.Serializer):
 
 class UserProfileSerializer(serializers.ModelSerializer):
     """Сериализатор для профиля пользователя"""
+
     class Meta:
         model = UserProfile
         fields = [

@@ -13,7 +13,6 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from apps.users.models import UserProfile
 from apps.users.serializers import (
     UserRegistrationSerializer,
     UserLoginSerializer,
