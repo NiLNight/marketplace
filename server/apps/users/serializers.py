@@ -42,7 +42,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
 class UserLoginSerializer(serializers.Serializer):
     """Сериализатор для аутентификации по username/password"""
-    username = serializers.CharField(max_length=150)
+    email = serializers.EmailField(required=True)
     password = serializers.CharField(
         max_length=128,
         write_only=True,
@@ -51,18 +51,16 @@ class UserLoginSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         """Проверка учетных данных и активности пользователя"""
-        username = attrs.get('username')
+        email = attrs.get('email')
         password = attrs.get('password')
-
-        user = authenticate(
-            request=self.context.get('request'),
-            username=username,
-            password=password
-        )
-
+        user = User.objects.get(email=email)
+        # Проверка пользователя и пароля
+        if user and user.check_password(password):
+            user = authenticate(username=user.username, password=password)
+        # Если пользователь не найден
         if not user:
             raise serializers.ValidationError("Неверные учетные данные")
-
+        # Если пользователь не активен
         if not user.is_active:
             raise serializers.ValidationError("Учетная запись деактивирована")
 
@@ -72,7 +70,6 @@ class UserLoginSerializer(serializers.Serializer):
 
 class UserProfileSerializer(serializers.ModelSerializer):
     """Сериализатор для профиля пользователя"""
-
     class Meta:
         model = UserProfile
         fields = [
@@ -84,24 +81,21 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    profile = UserProfileSerializer()
+    """Сериализатор для пользователя"""
+    profile = UserProfileSerializer(required=False)
 
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name', 'profile']
 
     def update(self, instance, validated_data):
+        # Извлекаем данные для профиля (если они есть)
         profile_data = validated_data.pop('profile', {})
-        profile = instance.profile
-        instance.username = validated_data.get('username', instance.username)
-        instance.email = validated_data.get('email', instance.email)
-        instance.first_name = validated_data.get('first_name', instance.first_name)
-        instance.last_name = validated_data.get('last_name', instance.last_name)
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+        instance.save()
+        # Если есть данные профиля – обновляем профиль через его сериализатор
         if profile_data:
-            profile.public_id = profile_data.get('public_id', profile.public_id)
-            profile.phone = profile_data.get('phone', profile.phone)
-            profile.birth_date = profile_data.get('birth_date', profile.birth_date)
-            profile.avatar = profile_data.get('avatar', profile.avatar)
-            profile.save()
-            instance.save()
+            profile_serializer = self.fields['profile']
+            profile_serializer.update(instance.profile, profile_data)
         return instance
