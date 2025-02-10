@@ -5,10 +5,10 @@ Views для работы с пользователями:
 - Выход
 - Профиль пользователя
 """
-import random
-from django.utils import timezone
-import logging
 
+import random
+import logging
+from django.utils import timezone
 from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -27,48 +27,25 @@ from apps.users.utils import set_jwt_cookies
 from apps.users.tasks import send_confirmation_email
 
 User = get_user_model()
-
 logger = logging.getLogger(__name__)
 
 
 class UserRegistrationView(APIView):
     """
     API view для регистрации нового пользователя с установкой JWT в cookies.
-
-    Этот класс предоставляет метод POST для выполнения регистрации нового пользователя.
-    В процессе регистрации выполняется валидация данных, создание пользователя и установка JWT токенов в cookies.
-
-    Attributes:
-        serializer_class (class): Класс сериализатора, используемый для валидации данных регистрации.
     """
     permission_classes = [AllowAny]
     serializer_class = UserRegistrationSerializer
 
     def post(self, request):
-        """
-        Регистрация нового пользователя.
-
-        Этот метод выполняет следующие шаги:
-        1. Валидация данных регистрации.
-        2. Создание нового пользователя.
-        3. Установка JWT токенов в cookies.
-
-        Args:
-            request (Request): Объект запроса Django.
-
-        Returns:
-            Response: Объект ответа Django Rest Framework с данными нового пользователя и статусом 201 Created.
-        """
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-
-        user = serializer.save()  # Используем метод save() сериализатора для создания пользователя
+        user = serializer.save()  # Создаём пользователя
         response_data = {
             "id": user.id,
             "username": user.username,
-            "email": user.email
+            "email": user.email,
         }
-
         response = Response(response_data, status=status.HTTP_201_CREATED)
         return set_jwt_cookies(response, user)
 
@@ -76,50 +53,26 @@ class UserRegistrationView(APIView):
 class UserLoginView(APIView):
     """
     API view для аутентификации пользователя с возвратом JWT в cookies.
-
-    Этот класс предоставляет метод POST для выполнения аутентификации пользователя.
-    В процессе аутентификации проверяются учетные данные, генерируются новые токены и обновляются cookies.
-
-    Attributes:
-        serializer_class (class): Класс сериализатора, используемый для валидации данных аутентификации.
     """
     permission_classes = [AllowAny]
     serializer_class = UserLoginSerializer
 
     def post(self, request):
-        """
-        Аутентификация пользователя.
-
-        Этот метод выполняет следующие шаги:
-        1. Проверка учетных данных пользователя.
-        2. Генерация новых JWT токенов.
-        3. Обновление cookies с новыми токенами.
-
-        Args:
-            request (Request): Объект запроса Django.
-
-        Returns:
-            Response: Объект ответа Django Rest Framework с сообщением об успешной аутентификации и данными пользователя.
-        """
-        serializer = self.serializer_class(
-            data=request.data,
-            context={'request': request}
-        )
+        serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
-
         user = serializer.validated_data['user']
+        if not user.is_active:
+            logger.error(f"User {user.email} неактивен")
+            return Response({"error": "Аккаунт не активирован"}, status=403)
+
         response_data = {
             "message": "Login successful",
             "user": {
                 "id": user.id,
                 "username": user.username,
-                "email": user.email
+                "email": user.email,
             }
         }
-        if not user.is_active:
-            logger.error(f"User {user.email} неактивен")
-            return Response({"error": "Аккаунт не активирован"}, status=403)
-
         response = Response(response_data)
         return set_jwt_cookies(response, user)
 
@@ -127,52 +80,20 @@ class UserLoginView(APIView):
 class UserLogoutView(APIView):
     """
     API view для выхода пользователя с инвалидацией токенов.
-
-    Этот класс предоставляет метод POST для выполнения выхода пользователя из системы.
-    В процессе выхода refresh токен добавляется в черный список, а cookies очищаются.
-
-    Attributes:
-        permission_classes (list): Список классов разрешений, требуемых для доступа к этому представлению.
     """
-
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        """
-        Выход пользователя из системы.
-
-        Этот метод выполняет следующие шаги:
-        1. Извлечение refresh токена из cookies.
-        2. Добавление refresh токена в черный список.
-        3. Очистка cookies (access_token и refresh_token).
-
-        Args:
-            request (Request): Объект запроса Django.
-
-        Returns:
-            Response: Объект ответа Django Rest Framework с сообщением об успешном выходе или ошибке.
-        """
         refresh_token = request.COOKIES.get('refresh_token')
-
         if not refresh_token:
-            return Response(
-                {"error": "Refresh token missing"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
+            return Response({"error": "Refresh token missing"}, status=status.HTTP_400_BAD_REQUEST)
         try:
             token = RefreshToken(refresh_token)
             token.blacklist()
         except TokenError as e:
-            return Response(
-                {"error": f"Invalid token: {str(e)}"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({"error": f"Invalid token: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
 
-        response = Response(
-            {"message": "Successfully logged out"},
-            status=status.HTTP_200_OK
-        )
+        response = Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK)
         response.delete_cookie('access_token')
         response.delete_cookie('refresh_token')
         return response
@@ -181,81 +102,58 @@ class UserLogoutView(APIView):
 class UserProfileView(APIView):
     """
     API view для получения и обновления профиля пользователя.
-
-    Этот класс предоставляет два основных метода:
-    - GET: Получение профиля текущего пользователя.
-    - PATCH: Частичное обновление профиля пользователя.
-
-    Attributes:
-        permission_classes (list): Список классов разрешений, требуемых для доступа к этому представлению.
-        serializer_class (class): Класс сериализатора, используемый для валидации и сериализации данных профиля.
     """
-
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
 
     def get(self, request):
-        """
-        Получение профиля текущего пользователя.
-
-        Этот метод возвращает сериализованные данные профиля пользователя,
-        ассоциированного с текущим аутентифицированным пользователем.
-        Если профиль не существует, он будет создан автоматически.
-
-        Args:
-            request (Request): Объект запроса Django.
-
-        Returns:
-            Response: Объект ответа Django Rest Framework, содержащий сериализованные данные профиля.
-        """
         user = request.user
         serializer = self.serializer_class(user)
         return Response(serializer.data)
 
     def patch(self, request):
-        """
-        Обновление профиля пользователя.
-
-        Этот метод позволяет обновить данные профиля пользователя,
-        ассоциированного с текущим аутентифицированным пользователем.
-        Обновление выполняется на основе данных, переданных в теле запроса.
-
-        Args:
-            request (Request): Объект запроса Django.
-
-        Returns:
-            Response: Объект ответа Django Rest Framework, содержащий обновленные сериализованные данные профиля.
-        """
         user = request.user
-        serializer = self.serializer_class(
-            user,
-            data=request.data,
-            partial=True
-        )
+        serializer = self.serializer_class(user, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
 
 
 class ResendCodeView(APIView):
+    """
+    API view для повторной отправки кода подтверждения.
+    """
     permission_classes = [AllowAny]
 
     def post(self, request):
         email = request.data.get('email')
         try:
             user = User.objects.get(email=email, is_active=False)
-            # Генерация и сохранение кода
+            # Генерация нового кода подтверждения
             code = str(random.randint(100000, 999999))
-            email = EmailVerified.objects.filter(user=user).update(
-                confirmation_code=code, code_created_at=timezone.now())
-            # Запуск асинхронной задачи для отправки письма
-            send_confirmation_email.delay(email, code)
+            # Обновляем запись EmailVerified для данного пользователя
+            updated_count = EmailVerified.objects.filter(user=user).update(
+                confirmation_code=code,
+                code_created_at=timezone.now()
+            )
+            # Если запись не найдена – создаём её
+            if not updated_count:
+                EmailVerified.objects.create(
+                    user=user,
+                    confirmation_code=code,
+                    code_created_at=timezone.now()
+                )
+            # Отправляем асинхронное письмо с кодом (передаём user.email)
+            send_confirmation_email.delay(user.email, code)
             return Response({"message": "Новый код отправлен"})
         except User.DoesNotExist:
-            return Response({"error": "Аккаунт не найден"}, status=400)
+            return Response({"error": "Аккаунт не найден"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ConfirmView(APIView):
+    """
+    API view для подтверждения регистрации пользователя.
+    """
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -263,18 +161,22 @@ class ConfirmView(APIView):
         code = request.data.get('code')
         try:
             user = User.objects.get(email=email)
-            email_verified = EmailVerified.objects.filter(user=user, confirmation_code=code).first()
-            if not email_verified:
-                return Response({'error': 'Аккаунт активирован или код ещё не отправлен'})
-            time_diff = (timezone.now() - email_verified.code_created_at).total_seconds()
-
-            if time_diff > 86400:  # 24 часа в секундах
-                return Response({'error': 'Срок действия кода истек'}, status=400)
-
-            user.is_active = True
-            email_verified.confirmation_code = None  # Очистка кода после подтверждения
-            user.save()
-            email_verified.save()
-            return Response({'message': 'Аккаунт активирован'})
-        except User.DoesNotExist or EmailVerified.DoesNotExist:
+        except User.DoesNotExist:
             return Response({'error': 'Неверный код или email'}, status=400)
+
+        # Ищем EmailVerified с заданным кодом
+        email_verified = EmailVerified.objects.filter(user=user, confirmation_code=code).first()
+        if not email_verified:
+            return Response({'error': 'Аккаунт активирован или код ещё не отправлен'}, status=400)
+
+        time_diff = (timezone.now() - email_verified.code_created_at).total_seconds()
+        if time_diff > 86400:  # 24 часа
+            return Response({'error': 'Срок действия кода истек'}, status=400)
+
+        # Подтверждаем аккаунт
+        user.is_active = True
+        user.save()
+        # Очищаем код подтверждения
+        email_verified.confirmation_code = None
+        email_verified.save()
+        return Response({'message': 'Аккаунт активирован'})
