@@ -147,7 +147,7 @@ class ResendCodeView(APIView):
             send_confirmation_email.delay(user.email, code)
             return Response({"message": "Новый код отправлен"})
         except User.DoesNotExist:
-            return Response({"error": "Аккаунт не найден"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Аккаунт не найден или активирован"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ConfirmView(APIView):

@@ -19,6 +19,14 @@ class CustomJWTAuthentication(JWTAuthentication):
         1. Проверка заголовка Authorization
         2. Проверка cookies
         """
+        public_paths = [
+            '/api/register/',
+            '/api/confirm-code/',
+            '/api/resend-code/'
+        ]
+        if request.path in public_paths:
+            return None
+
         header = self.get_header(request)
         raw_token = None
 

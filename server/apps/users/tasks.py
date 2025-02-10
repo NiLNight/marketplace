@@ -5,8 +5,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 
-@shared_task(bind=True, autoretry_for=(Exception,), max_retries=3)
+@shared_task(bind=True, autoretry_for=(Exception,), max_retries=300)
 def send_confirmation_email(self, email: str, code: str):
+    print('Письмо отправлено')
     try:
         send_mail(
             subject="Ваш код подтверждения",
