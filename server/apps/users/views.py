@@ -5,22 +5,30 @@ Views для работы с пользователями:
 - Выход
 - Профиль пользователя
 """
+import random
+from django.utils import timezone
+import logging
+
 from django.contrib.auth import get_user_model
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from apps.users.models import EmailVerified
 from apps.users.serializers import (
     UserRegistrationSerializer,
     UserLoginSerializer,
-    UserSerializer
+    UserSerializer,
 )
 from apps.users.utils import set_jwt_cookies
+from apps.users.tasks import send_confirmation_email
 
 User = get_user_model()
+
+logger = logging.getLogger(__name__)
 
 
 class UserRegistrationView(APIView):
@@ -33,7 +41,7 @@ class UserRegistrationView(APIView):
     Attributes:
         serializer_class (class): Класс сериализатора, используемый для валидации данных регистрации.
     """
-
+    permission_classes = [AllowAny]
     serializer_class = UserRegistrationSerializer
 
     def post(self, request):
@@ -75,7 +83,7 @@ class UserLoginView(APIView):
     Attributes:
         serializer_class (class): Класс сериализатора, используемый для валидации данных аутентификации.
     """
-
+    permission_classes = [AllowAny]
     serializer_class = UserLoginSerializer
 
     def post(self, request):
@@ -108,6 +116,9 @@ class UserLoginView(APIView):
                 "email": user.email
             }
         }
+        if not user.is_active:
+            logger.error(f"User {user.email} неактивен")
+            return Response({"error": "Аккаунт не активирован"}, status=403)
 
         response = Response(response_data)
         return set_jwt_cookies(response, user)
@@ -224,3 +235,46 @@ class UserProfileView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+
+
+class ResendCodeView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get('email')
+        try:
+            user = User.objects.get(email=email, is_active=False)
+            # Генерация и сохранение кода
+            code = str(random.randint(100000, 999999))
+            email = EmailVerified.objects.filter(user=user).update(
+                confirmation_code=code, code_created_at=timezone.now())
+            # Запуск асинхронной задачи для отправки письма
+            send_confirmation_email.delay(email, code)
+            return Response({"message": "Новый код отправлен"})
+        except User.DoesNotExist:
+            return Response({"error": "Аккаунт не найден"}, status=400)
+
+
+class ConfirmView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get('email')
+        code = request.data.get('code')
+        try:
+            user = User.objects.get(email=email)
+            email_verified = EmailVerified.objects.filter(user=user, confirmation_code=code).first()
+            if not email_verified:
+                return Response({'error': 'Аккаунт активирован или код ещё не отправлен'})
+            time_diff = (timezone.now() - email_verified.code_created_at).total_seconds()
+
+            if time_diff > 86400:  # 24 часа в секундах
+                return Response({'error': 'Срок действия кода истек'}, status=400)
+
+            user.is_active = True
+            email_verified.confirmation_code = None  # Очистка кода после подтверждения
+            user.save()
+            email_verified.save()
+            return Response({'message': 'Аккаунт активирован'})
+        except User.DoesNotExist or EmailVerified.DoesNotExist:
+            return Response({'error': 'Неверный код или email'}, status=400)

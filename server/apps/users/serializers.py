@@ -4,12 +4,17 @@
 - Авторизация
 - Профиль
 """
-from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
+import random
+from django.utils import timezone
+
+from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from apps.users.models import UserProfile
+from apps.users.models import UserProfile, EmailVerified
+from apps.users.tasks import send_confirmation_email
+
+User = get_user_model()
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -33,8 +38,21 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
-            password=validated_data['password']
+            password=validated_data['password'],
+            is_active=False,
         )
+        # Генерация и сохранение кода
+        code = str(random.randint(100000, 999999))
+        email_verified = EmailVerified(user=user,
+                                       confirmation_code=code,
+                                       code_created_at=timezone.now())
+        email_verified.save()
+
+        # Запуск асинхронной задачи для отправки письма
+        # send_confirmation_email.delay(
+        #     email=user.email,
+        #     code=code
+        # )
         return user
 
 
@@ -52,15 +70,18 @@ class UserLoginSerializer(serializers.Serializer):
         email = attrs.get('email')
         password = attrs.get('password')
         user = User.objects.filter(email=email).first()
-        # Проверка пользователя и пароля
-        if user and user.check_password(password):
-            user = authenticate(username=user.username, password=password)
+
         # Если пользователь не найден
         if not user:
             raise serializers.ValidationError("Неверные учетные данные")
+
         # Если пользователь не активен
         if not user.is_active:
-            raise serializers.ValidationError("Учетная запись деактивирована")
+            raise serializers.ValidationError("Аккаунт не активирован. Проверьте почту")
+
+        # Проверка пользователя и пароля
+        if user and user.check_password(password):
+            user = authenticate(username=user.username, password=password)
 
         attrs['user'] = user
         return attrs
@@ -98,3 +119,7 @@ class UserSerializer(serializers.ModelSerializer):
             profile_serializer = self.fields['profile']
             profile_serializer.update(instance.profile, profile_data)
         return instance
+
+
+class EmailVerificationSerializer(serializers.Serializer):
+    email = serializers.EmailField(source='user.email')

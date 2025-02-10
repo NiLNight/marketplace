@@ -6,6 +6,12 @@ from django.dispatch import receiver
 from apps.services.utils import unique_slugify
 
 
+class EmailVerified(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='email_verified')
+    confirmation_code = models.CharField(max_length=6, blank=True, null=True)
+    code_created_at = models.DateTimeField(null=True, blank=True)
+
+
 class UserProfile(models.Model):
     public_id = models.CharField(max_length=255)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')

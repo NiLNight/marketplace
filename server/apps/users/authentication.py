@@ -3,7 +3,7 @@
 """
 from django.conf import settings
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework_simplejwt.exceptions import AuthenticationFailed
+from rest_framework_simplejwt.exceptions import AuthenticationFailed, InvalidToken
 
 
 class CustomJWTAuthentication(JWTAuthentication):
@@ -12,6 +12,7 @@ class CustomJWTAuthentication(JWTAuthentication):
     - Поддержка токенов из cookies
     - Кастомизация сообщений об ошибках
     """
+
     def authenticate(self, request):
         """
         Основной метод аутентификации:
@@ -31,8 +32,18 @@ class CustomJWTAuthentication(JWTAuthentication):
 
         try:
             validated_token = self.get_validated_token(raw_token)
-            return self.get_user(validated_token), validated_token
-        except AuthenticationFailed as e:
+            user = self.get_user(validated_token)
+
+            # Проверка активности пользователя
+            if not user.is_active:
+                raise AuthenticationFailed({
+                    "detail": "Аккаунт не активирован",
+                    "code": "user_inactive"
+                })
+
+            return user, validated_token
+        except InvalidToken as e:
             raise AuthenticationFailed({
-                "detail": f"Authentication failed: {str(e)}"
+                "detail": f"Неверный токен: {str(e)}",
+                "code": "token_invalid"
             })
