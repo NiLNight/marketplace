@@ -11,6 +11,14 @@ class EmailVerified(models.Model):
     confirmation_code = models.CharField(max_length=6, blank=True, null=True)
     code_created_at = models.DateTimeField(null=True, blank=True)
 
+    class Meta:
+        ordering = ['code_created_at']
+        verbose_name = 'Проверка почты'
+        verbose_name_plural = 'Проверка почты'
+
+    def __str__(self):
+        return f'{self.user.email}-{self.code_created_at}'
+
 
 class UserProfile(models.Model):
     public_id = models.CharField(max_length=255)
