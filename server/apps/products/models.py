@@ -15,7 +15,7 @@ class CategoryManager(models.Manager):
 
 class Category(MPTTModel):
     title = models.CharField(max_length=255)
-    slug = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True, blank=True)
     description = models.TextField()
     parent = TreeForeignKey(
         'self',
@@ -43,11 +43,6 @@ class Category(MPTTModel):
         """
         return reverse('blog:post_by_category', kwargs={'slug': self.slug})
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.public_id = unique_slugify(self.title)
-        super(Category, self).save(*args, **kwargs)
-
     def __str__(self):
         """
         Возвращение заголовка категории
@@ -65,7 +60,7 @@ class ProductManager(models.Manager):
 
 class Product(TimeStampedModel):
     title = models.CharField(max_length=255)
-    slug = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255, blank=True)
     description = models.TextField()
     price = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     discount = models.DecimalField(default=0.00, max_digits=4, decimal_places=2,
@@ -87,6 +82,8 @@ class Product(TimeStampedModel):
         indexes = [
             models.Index(fields=['price', '-created', 'is_active']),
         ]
+        verbose_name = 'Товар'
+        verbose_name_plural = 'Товары'
 
     @property
     def price_with_discount(self):
@@ -94,6 +91,13 @@ class Product(TimeStampedModel):
 
     def is_in_stock(self):
         return self.stock > 0
+
+    def save(self, *args, **kwargs):
+        """
+        При сохранении генерируем слаг и проверяем на уникальность
+        """
+        self.slug = unique_slugify(self.title)
+        super(Product, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
