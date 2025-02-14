@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
-from django.core.validators import FileExtensionValidator, MinValueValidator, MaxValueValidator
+from django.core.validators import FileExtensionValidator
 
 from apps.services.utils import unique_slugify
 from apps.users.models import User

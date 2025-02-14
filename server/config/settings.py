@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     # Приложения
+    'apps.core.apps.CoreConfig',
     'apps.users.apps.UsersConfig',
     'apps.products.apps.ProductsConfig',
 ]
