@@ -2,6 +2,8 @@ from django.db import models
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
 from django.core.validators import FileExtensionValidator, MinValueValidator, MaxValueValidator
+
+from apps.services.utils import unique_slugify
 from apps.users.models import User
 from apps.core.models import TimeStampedModel
 
@@ -41,8 +43,57 @@ class Category(MPTTModel):
         """
         return reverse('blog:post_by_category', kwargs={'slug': self.slug})
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.public_id = unique_slugify(self.title)
+        super(Category, self).save(*args, **kwargs)
+
     def __str__(self):
         """
         Возвращение заголовка категории
         """
+        return self.title
+
+
+class ProductManager(models.Manager):
+    def active(self):
+        return self.filter(is_active=True)
+
+    def with_discount(self):
+        return self.filter(discount__gt=0)
+
+
+class Product(TimeStampedModel):
+    title = models.CharField(max_length=255)
+    slug = models.CharField(max_length=255)
+    description = models.TextField()
+    price = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+    discount = models.DecimalField(default=0.00, max_digits=4, decimal_places=2,
+                                   null=True, blank=True)
+    stock = models.PositiveIntegerField(default=0)
+    category = TreeForeignKey(Category, on_delete=models.CASCADE, related_name='products')
+    thumbnail = models.ImageField(
+        upload_to='images/products/%Y/%m/%d',
+        default='images/avatars/default.png',
+        blank=True,
+        validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'webp', 'gif'])]
+    )
+    is_active = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='products')
+    objects = ProductManager()
+
+    class Meta:
+        ordering = ['-created']
+        indexes = [
+            models.Index(fields=['price', '-created', 'is_active']),
+        ]
+
+    @property
+    def price_with_discount(self):
+        return self.price * (1 - self.discount / 100) if self.discount else self.price
+
+    def is_in_stock(self):
+        return self.stock > 0
+
+    def __str__(self):
         return self.title

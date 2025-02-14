@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'corsheaders',
     # Приложения
     'apps.users.apps.UsersConfig',
+    'apps.products.apps.ProductsConfig',
 ]
 
 MIDDLEWARE = [
