@@ -22,9 +22,12 @@ from apps.users.serializers import (
     UserRegistrationSerializer,
     UserLoginSerializer,
     UserSerializer,
+    PasswordResetSerializer,
+    PasswordResetConfirmSerializer
 )
 from apps.users.utils import set_jwt_cookies
-from apps.users.tasks import send_confirmation_email
+from apps.users.tasks import send_confirmation_email, send_password_reset_email
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -180,3 +183,43 @@ class ConfirmView(APIView):
         email_verified.confirmation_code = None
         email_verified.save()
         return Response({'message': 'Аккаунт активирован'})
+
+
+# Сброс пароля
+
+class PasswordResetRequestView(APIView):
+    """
+    API view для отправки запроса на восстановление пароля.
+    """
+    serializer_class = PasswordResetSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data['email']
+        try:
+            user = User.objects.get(email=email)
+            token = PasswordResetTokenGenerator().make_token(user)
+            reset_url = f"http://localhost:8000/reset-password/?token={token}&uid={user.id}"
+            # Отправляем асинхронное письмо
+            send_password_reset_email.delay(user.email, reset_url)
+        except User.DoesNotExist:
+            pass
+        return Response({"detail": "Если указанный email существует, на него отправлено письмо для сброса пароля."},
+                        status=status.HTTP_200_OK)
+
+
+class PasswordResetConfirmView(APIView):
+    """
+    API view для изменения пароля.
+    """
+    serializer_class = PasswordResetConfirmSerializer
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        user.set_password(serializer.validated_data['new_password'])
+        user.save()
+        return Response({"detail": "Пароль успешно изменён."}, status=status.HTTP_200_OK)

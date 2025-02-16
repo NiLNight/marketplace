@@ -4,13 +4,14 @@
 - Авторизация
 - Профиль
 """
-
+import email
 import random
 from django.utils import timezone
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 from apps.users.models import UserProfile, EmailVerified
 from apps.users.tasks import send_confirmation_email
@@ -103,6 +104,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     """
     Сериализатор для профиля пользователя.
     """
+
     class Meta:
         model = UserProfile
         fields = ['public_id', 'phone', 'birth_date', 'avatar']
@@ -140,3 +142,38 @@ class UserSerializer(serializers.ModelSerializer):
             else:
                 UserProfile.objects.create(user=instance, **profile_data)
         return instance
+
+
+class PasswordResetSerializer(serializers.Serializer):
+    """
+    Сериализатор для получения почты, для отправки ссылки на сброс пароля.
+    """
+    email = serializers.EmailField()
+
+    def validate_email(self, attrs):
+        if not User.objects.filter(email=attrs).exists():
+            pass
+
+        return attrs
+
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    """
+    Сериализатор для сброса пароля.
+    """
+    uid = serializers.IntegerField()
+    token = serializers.CharField()
+    new_password = serializers.CharField(write_only=True)
+    new_password2 = serializers.CharField(write_only=True)
+
+    def validate(self, attrs):
+        if attrs['new_password'] != attrs['<PASSWORD>']:
+            raise serializers.ValidationError("Пароли не совпадают.")
+        try:
+            user = User.objects.get(id=attrs['uid'])
+        except User.DoesNotExist:
+            raise serializers.ValidationError("Неверные данные.")
+        if not PasswordResetTokenGenerator().check_token(user, attrs['token']):
+            raise serializers.ValidationError("Неверный или просроченный токен.")
+        attrs['user'] = user
+        return attrs

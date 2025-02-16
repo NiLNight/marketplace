@@ -5,7 +5,9 @@ from apps.users.views import (
     UserLogoutView,
     UserProfileView,
     ResendCodeView,
-    ConfirmView
+    ConfirmView,
+    PasswordResetRequestView,
+    PasswordResetConfirmView
 )
 
 app_name = 'users'
@@ -17,4 +19,6 @@ urlpatterns = [
     path('profile/', UserProfileView.as_view(), name='user_profile'),
     path('resend-code/', ResendCodeView.as_view(), name='resend_code'),
     path('confirm-code/', ConfirmView.as_view(), name='confirm_code'),
+    path('password-reset/', PasswordResetRequestView.as_view(), name='password_reset'),
+    path('password-reset-confirm//', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
 ]
