@@ -167,7 +167,7 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
     new_password2 = serializers.CharField(write_only=True)
 
     def validate(self, attrs):
-        if attrs['new_password'] != attrs['<PASSWORD>']:
+        if attrs['new_password'] != attrs['new_password2']:
             raise serializers.ValidationError("Пароли не совпадают.")
         try:
             user = User.objects.get(id=attrs['uid'])

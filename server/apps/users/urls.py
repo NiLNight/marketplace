@@ -20,5 +20,5 @@ urlpatterns = [
     path('resend-code/', ResendCodeView.as_view(), name='resend_code'),
     path('confirm-code/', ConfirmView.as_view(), name='confirm_code'),
     path('password-reset/', PasswordResetRequestView.as_view(), name='password_reset'),
-    path('password-reset-confirm//', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('password-reset-confirm/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
 ]
