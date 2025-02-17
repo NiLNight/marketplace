@@ -1,0 +1,1042 @@
+[
+  {
+    "model": "products.category",
+    "pk": 1,
+    "fields": {
+      "title": "Продукты",
+      "slug": "produkty",
+      "description": "Главная категория для всех продуктов",
+      "lft": 1,
+      "rght": 20,
+      "tree_id": 1,
+      "level": 0,
+      "parent_id": null
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 2,
+    "fields": {
+      "title": "Овощи",
+      "slug": "ovoshi",
+      "description": "Категория с овощами",
+      "lft": 2,
+      "rght": 3,
+      "tree_id": 1,
+      "level": 1,
+      "parent_id": 1
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 3,
+    "fields": {
+      "title": "Фрукты",
+      "slug": "fructi",
+      "description": "Категория с фруктами",
+      "lft": 4,
+      "rght": 5,
+      "tree_id": 1,
+      "level": 1,
+      "parent_id": 1
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 4,
+    "fields": {
+      "title": "Ягоды",
+      "slug": "yagody",
+      "description": "Категория с ягодами",
+      "lft": 6,
+      "rght": 7,
+      "tree_id": 1,
+      "level": 1,
+      "parent_id": 1
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 5,
+    "fields": {
+      "title": "Молочные продукты",
+      "slug": "molochnye-produkty",
+      "description": "Категория с молочными продуктами",
+      "lft": 8,
+      "rght": 9,
+      "tree_id": 1,
+      "level": 1,
+      "parent_id": 1
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 6,
+    "fields": {
+      "title": "Мясные продукты",
+      "slug": "myasnye-produkty",
+      "description": "Категория с мясными продуктами",
+      "lft": 10,
+      "rght": 11,
+      "tree_id": 1,
+      "level": 1,
+      "parent_id": 1
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 7,
+    "fields": {
+      "title": "Хлебобулочные изделия",
+      "slug": "hlebobulochnye-izdeliya",
+      "description": "Категория с хлебобулочными изделиями",
+      "lft": 12,
+      "rght": 13,
+      "tree_id": 1,
+      "level": 1,
+      "parent_id": 1
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 8,
+    "fields": {
+      "title": "Напитки",
+      "slug": "napitki",
+      "description": "Категория с напитками",
+      "lft": 14,
+      "rght": 15,
+      "tree_id": 1,
+      "level": 1,
+      "parent_id": 1
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 9,
+    "fields": {
+      "title": "Сладости",
+      "slug": "sladosti",
+      "description": "Категория с сладостями",
+      "lft": 16,
+      "rght": 17,
+      "tree_id": 1,
+      "level": 1,
+      "parent_id": 1
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 10,
+    "fields": {
+      "title": "Замороженные продукты",
+      "slug": "zamorozhennye-produkty",
+      "description": "Категория с замороженными продуктами",
+      "lft": 18,
+      "rght": 19,
+      "tree_id": 1,
+      "level": 1,
+      "parent_id": 1
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 1,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Морковка",
+      "slug": "morkovka",
+      "description": "морковка обычная",
+      "price": 10.00,
+      "discount": 10.00,
+      "stock": 100,
+      "thumbnail": "images/products/2025/morkovka.jpg",
+      "is_active": true,
+      "category_id": 2,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 2,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Абрикос",
+      "slug": "abrikos",
+      "description": "абрикос",
+      "price": 12.00,
+      "discount": 0.00,
+      "stock": 44,
+      "thumbnail": "images/products/2025/abrikos.jpg",
+      "is_active": true,
+      "category_id": 3,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 3,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Вишня",
+      "slug": "vishnya",
+      "description": "Вишня Вишня",
+      "price": 23.00,
+      "discount": 5.00,
+      "stock": 500,
+      "thumbnail": "images/products/2025/vishnya.jpg",
+      "is_active": true,
+      "category_id": 4,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 4,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Картофель",
+      "slug": "kartofel",
+      "description": "Свежий картофель",
+      "price": 8.00,
+      "discount": 2.00,
+      "stock": 200,
+      "thumbnail": "images/products/2025/kartofel.jpg",
+      "is_active": true,
+      "category_id": 2,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 5,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Яблоко",
+      "slug": "yabloko",
+      "description": "Сочное яблоко",
+      "price": 15.00,
+      "discount": 1.00,
+      "stock": 150,
+      "thumbnail": "images/products/2025/yabloko.jpg",
+      "is_active": true,
+      "category_id": 3,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 6,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Молоко",
+      "slug": "moloko",
+      "description": "Свежее молоко",
+      "price": 20.00,
+      "discount": 2.00,
+      "stock": 300,
+      "thumbnail": "images/products/2025/moloko.jpg",
+      "is_active": true,
+      "category_id": 5,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 7,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Курица",
+      "slug": "kuritsa",
+      "description": "Куриное филе",
+      "price": 50.00,
+      "discount": 5.00,
+      "stock": 100,
+      "thumbnail": "images/products/2025/kuritsa.jpg",
+      "is_active": true,
+      "category_id": 6,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 8,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Хлеб",
+      "slug": "hleb",
+      "description": "Свежий хлеб",
+      "price": 18.00,
+      "discount": 1.00,
+      "stock": 200,
+      "thumbnail": "images/products/2025/hleb.jpg",
+      "is_active": true,
+      "category_id": 7,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 9,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Сок",
+      "slug": "sok",
+      "description": "Натуральный сок",
+      "price": 25.00,
+      "discount": 3.00,
+      "stock": 120,
+      "thumbnail": "images/products/2025/sok.jpg",
+      "is_active": true,
+      "category_id": 8,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 10,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Шоколад",
+      "slug": "shokolad",
+      "description": "Молочный шоколад",
+      "price": 30.00,
+      "discount": 4.00,
+      "stock": 150,
+      "thumbnail": "images/products/2025/shokolad.jpg",
+      "is_active": true,
+      "category_id": 9,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 11,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Замороженные ягоды",
+      "slug": "zamorozhennye-yagody",
+      "description": "Смесь замороженных ягод",
+      "price": 40.00,
+      "discount": 5.00,
+      "stock": 80,
+      "thumbnail": "images/products/2025/zamorozhennye-yagody.jpg",
+      "is_active": true,
+      "category_id": 10,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 12,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Брокколи",
+      "slug": "brokkoli",
+      "description": "Свежая брокколи",
+      "price": 22.00,
+      "discount": 3.00,
+      "stock": 110,
+      "thumbnail": "images/products/2025/brokkoli.jpg",
+      "is_active": true,
+      "category_id": 2,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 13,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Груша",
+      "slug": "grusha",
+      "description": "Сочная груша",
+      "price": 17.00,
+      "discount": 2.00,
+      "stock": 130,
+      "thumbnail": "images/products/2025/grusha.jpg",
+      "is_active": true,
+      "category_id": 3,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 14,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Клубника",
+      "slug": "klubnika",
+      "description": "Свежая клубника",
+      "price": 35.00,
+      "discount": 4.00,
+      "stock": 90,
+      "thumbnail": "images/products/2025/klubnika.jpg",
+      "is_active": true,
+      "category_id": 4,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 15,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Сыр",
+      "slug": "syr",
+      "description": "Твердый сыр",
+      "price": 55.00,
+      "discount": 6.00,
+      "stock": 70,
+      "thumbnail": "images/products/2025/syr.jpg",
+      "is_active": true,
+      "category_id": 5,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 16,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Говядина",
+      "slug": "govyadina",
+      "description": "Свежая говядина",
+      "price": 70.00,
+      "discount": 8.00,
+      "stock": 60,
+      "thumbnail": "images/products/2025/govyadina.jpg",
+      "is_active": true,
+      "category_id": 6,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 17,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Булочка",
+      "slug": "bulochka",
+      "description": "Свежая булочка",
+      "price": 12.00,
+      "discount": 1.00,
+      "stock": 140,
+      "thumbnail": "images/products/2025/bulochka.jpg",
+      "is_active": true,
+      "category_id": 7,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 18,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Вода",
+      "slug": "voda",
+      "description": "Минеральная вода",
+      "price": 10.00,
+      "discount": 1.00,
+      "stock": 180,
+      "thumbnail": "images/products/2025/voda.jpg",
+      "is_active": true,
+      "category_id": 8,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 19,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Конфеты",
+      "slug": "konfety",
+      "description": "Сладкие конфеты",
+      "price": 28.00,
+      "discount": 3.00,
+      "stock": 160,
+      "thumbnail": "images/products/2025/konfety.jpg",
+      "is_active": true,
+      "category_id": 9,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 20,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Замороженные овощи",
+      "slug": "zamorozhennye-ovoshchi",
+      "description": "Смесь замороженных овощей",
+      "price": 38.00,
+      "discount": 4.00,
+      "stock": 100,
+      "thumbnail": "images/products/2025/zamorozhennye-ovoshchi.jpg",
+      "is_active": true,
+      "category_id": 10,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 21,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Капуста",
+      "slug": "kapusta",
+      "description": "Свежая капуста",
+      "price": 14.00,
+      "discount": 2.00,
+      "stock": 170,
+      "thumbnail": "images/products/2025/kapusta.jpg",
+      "is_active": true,
+      "category_id": 2,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 22,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Банан",
+      "slug": "banan",
+      "description": "Спелый банан",
+      "price": 19.00,
+      "discount": 2.00,
+      "stock": 190,
+      "thumbnail": "images/products/2025/banan.jpg",
+      "is_active": true,
+      "category_id": 3,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 23,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Малина",
+      "slug": "malina",
+      "description": "Свежая малина",
+      "price": 45.00,
+      "discount": 5.00,
+      "stock": 110,
+      "thumbnail": "images/products/2025/malina.jpg",
+      "is_active": true,
+      "category_id": 4,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 24,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Йогурт",
+      "slug": "yogurt",
+      "description": "Натуральный йогурт",
+      "price": 24.00,
+      "discount": 3.00,
+      "stock": 130,
+      "thumbnail": "images/products/2025/yogurt.jpg",
+      "is_active": true,
+      "category_id": 5,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 25,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Свинина",
+      "slug": "svinina",
+      "description": "Свежая свинина",
+      "price": 65.00,
+      "discount": 7.00,
+      "stock": 80,
+      "thumbnail": "images/products/2025/svinina.jpg",
+      "is_active": true,
+      "category_id": 6,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 26,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Багет",
+      "slug": "baguette",
+      "description": "Свежий багет",
+      "price": 16.00,
+      "discount": 2.00,
+      "stock": 150,
+      "thumbnail": "images/products/2025/baguette.jpg",
+      "is_active": true,
+      "category_id": 7,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 27,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Лимонад",
+      "slug": "limonad",
+      "description": "Освежающий лимонад",
+      "price": 15.00,
+      "discount": 2.00,
+      "stock": 170,
+      "thumbnail": "images/products/2025/limonad.jpg",
+      "is_active": true,
+      "category_id": 8,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 28,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Печенье",
+      "slug": "pechene",
+      "description": "Вкусное печенье",
+      "price": 22.00,
+      "discount": 3.00,
+      "stock": 140,
+      "thumbnail": "images/products/2025/pechene.jpg",
+      "is_active": true,
+      "category_id": 9,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 29,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Замороженная рыба",
+      "slug": "zamorozhennaya-ryba",
+      "description": "Свежая замороженная рыба",
+      "price": 48.00,
+      "discount": 5.00,
+      "stock": 90,
+      "thumbnail": "images/products/2025/zamorozhennaya-ryba.jpg",
+      "is_active": true,
+      "category_id": 10,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 30,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Огурец",
+      "slug": "ogurets",
+      "description": "Свежий огурец",
+      "price": 13.00,
+      "discount": 2.00,
+      "stock": 160,
+      "thumbnail": "images/products/2025/ogurets.jpg",
+      "is_active": true,
+      "category_id": 2,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 31,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Апельсин",
+      "slug": "apelsin",
+      "description": "Сочный апельсин",
+      "price": 21.00,
+      "discount": 3.00,
+      "stock": 180,
+      "thumbnail": "images/products/2025/apelsin.jpg",
+      "is_active": true,
+      "category_id": 3,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 32,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Черника",
+      "slug": "chernika",
+      "description": "Свежая черника",
+      "price": 50.00,
+      "discount": 6.00,
+      "stock": 120,
+      "thumbnail": "images/products/2025/chernika.jpg",
+      "is_active": true,
+      "category_id": 4,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 33,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Творог",
+      "slug": "tvorog",
+      "description": "Свежий творог",
+      "price": 32.00,
+      "discount": 4.00,
+      "stock": 100,
+      "thumbnail": "images/products/2025/tvorog.jpg",
+      "is_active": true,
+      "category_id": 5,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 34,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Куриные крылышки",
+      "slug": "kurinye-krylyshki",
+      "description": "Свежие куриные крылышки",
+      "price": 58.00,
+      "discount": 7.00,
+      "stock": 70,
+      "thumbnail": "images/products/2025/kurinye-krylyshki.jpg",
+      "is_active": true,
+      "category_id": 6,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 35,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Лаваш",
+      "slug": "lavash",
+      "description": "Свежий лаваш",
+      "price": 11.00,
+      "discount": 1.00,
+      "stock": 130,
+      "thumbnail": "images/products/2025/lavash.jpg",
+      "is_active": true,
+      "category_id": 7,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 36,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Чай",
+      "slug": "chai",
+      "description": "Черный чай",
+      "price": 14.00,
+      "discount": 2.00,
+      "stock": 150,
+      "thumbnail": "images/products/2025/chai.jpg",
+      "is_active": true,
+      "category_id": 8,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 37,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Мармелад",
+      "slug": "marmelad",
+      "description": "Фруктовый мармелад",
+      "price": 27.00,
+      "discount": 3.00,
+      "stock": 120,
+      "thumbnail": "images/products/2025/marmelad.jpg",
+      "is_active": true,
+      "category_id": 9,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 38,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Замороженные грибы",
+      "slug": "zamorozhennye-griby",
+      "description": "Свежие замороженные грибы",
+      "price": 42.00,
+      "discount": 5.00,
+      "stock": 90,
+      "thumbnail": "images/products/2025/zamorozhennye-griby.jpg",
+      "is_active": true,
+      "category_id": 10,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 39,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Помидор",
+      "slug": "pomidor",
+      "description": "Свежий помидор",
+      "price": 16.00,
+      "discount": 2.00,
+      "stock": 140,
+      "thumbnail": "images/products/2025/pomidor.jpg",
+      "is_active": true,
+      "category_id": 2,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 40,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Киви",
+      "slug": "kivi",
+      "description": "Спелый киви",
+      "price": 26.00,
+      "discount": 3.00,
+      "stock": 160,
+      "thumbnail": "images/products/2025/kivi.jpg",
+      "is_active": true,
+      "category_id": 3,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 41,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Ежевика",
+      "slug": "ezhevika",
+      "description": "Свежая ежевика",
+      "price": 52.00,
+      "discount": 6.00,
+      "stock": 110,
+      "thumbnail": "images/products/2025/ezhevika.jpg",
+      "is_active": true,
+      "category_id": 4,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 42,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Сметана",
+      "slug": "smetana",
+      "description": "Свежая сметана",
+      "price": 35.00,
+      "discount": 4.00,
+      "stock": 100,
+      "thumbnail": "images/products/2025/smetana.jpg",
+      "is_active": true,
+      "category_id": 5,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 43,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Баранина",
+      "slug": "baranina",
+      "description": "Свежая баранина",
+      "price": 72.00,
+      "discount": 8.00,
+      "stock": 80,
+      "thumbnail": "images/products/2025/baranina.jpg",
+      "is_active": true,
+      "category_id": 6,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 44,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Батон",
+      "slug": "baton",
+      "description": "Свежий батон",
+      "price": 13.00,
+      "discount": 2.00,
+      "stock": 150,
+      "thumbnail": "images/products/2025/baton.jpg",
+      "is_active": true,
+      "category_id": 7,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 45,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Кофе",
+      "slug": "kofe",
+      "description": "Натуральный кофе",
+      "price": 20.00,
+      "discount": 3.00,
+      "stock": 170,
+      "thumbnail": "images/products/2025/kofe.jpg",
+      "is_active": true,
+      "category_id": 8,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 46,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Зефир",
+      "slug": "zefir",
+      "description": "Нежный зефир",
+      "price": 30.00,
+      "discount": 4.00,
+      "stock": 140,
+      "thumbnail": "images/products/2025/zefir.jpg",
+      "is_active": true,
+      "category_id": 9,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 47,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Замороженные креветки",
+      "slug": "zamorozhennye-krevetki",
+      "description": "Свежие замороженные креветки",
+      "price": 50.00,
+      "discount": 6.00,
+      "stock": 90,
+      "thumbnail": "images/products/2025/zamorozhennye-krevetki.jpg",
+      "is_active": true,
+      "category_id": 10,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 48,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Редис",
+      "slug": "redis",
+      "description": "Свежий редис",
+      "price": 11.00,
+      "discount": 1.00,
+      "stock": 160,
+      "thumbnail": "images/products/2025/redis.jpg",
+      "is_active": true,
+      "category_id": 2,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 49,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Мандарин",
+      "slug": "mandarin",
+      "description": "Сочный мандарин",
+      "price": 23.00,
+      "discount": 3.00,
+      "stock": 180,
+      "thumbnail": "images/products/2025/mandarin.jpg",
+      "is_active": true,
+      "category_id": 3,
+      "user_id": 27
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 50,
+    "fields": {
+      "created": "2025-02-14T14:00:00Z",
+      "updated": "2025-02-14T14:00:00Z",
+      "title": "Клюква",
+      "slug": "klyukva",
+      "description": "Свежая клюква",
+      "price": 55.00,
+      "discount": 6.00,
+      "stock": 120,
+      "thumbnail": "images/products/2025/klyukva.jpg",
+      "is_active": true,
+      "category_id": 4,
+      "user_id": 27
+    }
+  }
+]
