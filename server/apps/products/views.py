@@ -98,9 +98,7 @@ class ProductListView(APIView):
     def _apply_ordering(self, queryset, request):
         # Сортировка
         sort_by = request.GET.get('ordering')
-        if sort_by and sort_by.lstrip('-') not in self.ALLOWED_ORDER_FIELDS:
-            return queryset.order_by(sort_by)
-        return queryset.annotate(
+        queryset = queryset.annotate(
             popularity_score=ExpressionWrapper(
                 (F('purchase_count') * 0.4) +
                 (F('review_count') * 0.2) +
@@ -109,3 +107,7 @@ class ProductListView(APIView):
                 output_field=FloatField()
             )
         ).order_by('-popularity_score')
+
+        if sort_by and sort_by.lstrip('-') in self.ALLOWED_ORDER_FIELDS:
+            return queryset.order_by(sort_by)
+        return queryset
