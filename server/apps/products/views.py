@@ -1,5 +1,4 @@
 import hashlib
-from decimal import Decimal
 
 from django.db.models import Avg, Count, F, Q, ExpressionWrapper, FloatField
 from rest_framework.views import APIView

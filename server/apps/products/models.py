@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
-from django.core.validators import FileExtensionValidator, MinValueValidator, MaxValueValidator
+from django.core.validators import FileExtensionValidator, MinValueValidator
 
 from apps.services.utils import unique_slugify
 from apps.users.models import User
