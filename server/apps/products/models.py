@@ -41,7 +41,7 @@ class Category(MPTTModel):
         """
         Получаем прямую ссылку на категорию
         """
-        return reverse('blog:post_by_category', kwargs={'slug': self.slug})
+        return reverse('products:category', kwargs={'slug': self.slug})
 
     def __str__(self):
         """
