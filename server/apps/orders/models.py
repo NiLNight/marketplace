@@ -33,6 +33,8 @@ class Order(TimeStampedModel):
             models.Index(fields=['status']),
             models.Index(fields=['-created']),
         ]
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
 
     def __str__(self):
         return f"Order #{self.id} - {self.user.username}"
@@ -51,6 +53,8 @@ class OrderItem(models.Model):
         indexes = [
             models.Index(fields=['order', 'product']),
         ]
+        verbose_name = "Предмет заказа/корзины"
+        verbose_name_plural = "Предметы заказа/корзины"
 
     def __str__(self):
         return f"{self.quantity} x {self.product.title}"
@@ -62,10 +66,11 @@ class Delivery(models.Model):
     is_primary = models.BooleanField(default=False)
 
     class Meta:
-        verbose_name_plural = 'Delivery addresses'
         indexes = [
             models.Index(fields=['user', 'is_primary']),
         ]
+        verbose_name = 'Адрес доставки'
+        verbose_name_plural = 'Адреса доставки'
 
     def __str__(self):
         return f"Delivery address for {self.user.username}"

@@ -154,7 +154,7 @@
       "thumbnail": "images/products/2025/morkovka.jpg",
       "is_active": true,
       "category_id": 2,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -172,7 +172,8 @@
       "thumbnail": "images/products/2025/abrikos.jpg",
       "is_active": true,
       "category_id": 3,
-      "user_id": 27
+      "user_id": 1
+
     }
   },
   {
@@ -190,7 +191,7 @@
       "thumbnail": "images/products/2025/vishnya.jpg",
       "is_active": true,
       "category_id": 4,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -208,7 +209,7 @@
       "thumbnail": "images/products/2025/kartofel.jpg",
       "is_active": true,
       "category_id": 2,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -226,7 +227,7 @@
       "thumbnail": "images/products/2025/yabloko.jpg",
       "is_active": true,
       "category_id": 3,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -244,7 +245,7 @@
       "thumbnail": "images/products/2025/moloko.jpg",
       "is_active": true,
       "category_id": 5,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -262,7 +263,7 @@
       "thumbnail": "images/products/2025/kuritsa.jpg",
       "is_active": true,
       "category_id": 6,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -280,7 +281,7 @@
       "thumbnail": "images/products/2025/hleb.jpg",
       "is_active": true,
       "category_id": 7,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -298,7 +299,7 @@
       "thumbnail": "images/products/2025/sok.jpg",
       "is_active": true,
       "category_id": 8,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -316,7 +317,7 @@
       "thumbnail": "images/products/2025/shokolad.jpg",
       "is_active": true,
       "category_id": 9,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -334,7 +335,7 @@
       "thumbnail": "images/products/2025/zamorozhennye-yagody.jpg",
       "is_active": true,
       "category_id": 10,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -352,7 +353,7 @@
       "thumbnail": "images/products/2025/brokkoli.jpg",
       "is_active": true,
       "category_id": 2,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -370,7 +371,7 @@
       "thumbnail": "images/products/2025/grusha.jpg",
       "is_active": true,
       "category_id": 3,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -388,7 +389,7 @@
       "thumbnail": "images/products/2025/klubnika.jpg",
       "is_active": true,
       "category_id": 4,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -406,7 +407,7 @@
       "thumbnail": "images/products/2025/syr.jpg",
       "is_active": true,
       "category_id": 5,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -424,7 +425,7 @@
       "thumbnail": "images/products/2025/govyadina.jpg",
       "is_active": true,
       "category_id": 6,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -442,7 +443,7 @@
       "thumbnail": "images/products/2025/bulochka.jpg",
       "is_active": true,
       "category_id": 7,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -460,7 +461,7 @@
       "thumbnail": "images/products/2025/voda.jpg",
       "is_active": true,
       "category_id": 8,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -478,7 +479,7 @@
       "thumbnail": "images/products/2025/konfety.jpg",
       "is_active": true,
       "category_id": 9,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -496,7 +497,7 @@
       "thumbnail": "images/products/2025/zamorozhennye-ovoshchi.jpg",
       "is_active": true,
       "category_id": 10,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -514,7 +515,7 @@
       "thumbnail": "images/products/2025/kapusta.jpg",
       "is_active": true,
       "category_id": 2,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -532,7 +533,7 @@
       "thumbnail": "images/products/2025/banan.jpg",
       "is_active": true,
       "category_id": 3,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -550,7 +551,7 @@
       "thumbnail": "images/products/2025/malina.jpg",
       "is_active": true,
       "category_id": 4,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -568,7 +569,7 @@
       "thumbnail": "images/products/2025/yogurt.jpg",
       "is_active": true,
       "category_id": 5,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -586,7 +587,7 @@
       "thumbnail": "images/products/2025/svinina.jpg",
       "is_active": true,
       "category_id": 6,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -604,7 +605,7 @@
       "thumbnail": "images/products/2025/baguette.jpg",
       "is_active": true,
       "category_id": 7,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -622,7 +623,7 @@
       "thumbnail": "images/products/2025/limonad.jpg",
       "is_active": true,
       "category_id": 8,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -640,7 +641,7 @@
       "thumbnail": "images/products/2025/pechene.jpg",
       "is_active": true,
       "category_id": 9,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -658,7 +659,7 @@
       "thumbnail": "images/products/2025/zamorozhennaya-ryba.jpg",
       "is_active": true,
       "category_id": 10,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -676,7 +677,7 @@
       "thumbnail": "images/products/2025/ogurets.jpg",
       "is_active": true,
       "category_id": 2,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -694,7 +695,7 @@
       "thumbnail": "images/products/2025/apelsin.jpg",
       "is_active": true,
       "category_id": 3,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -712,7 +713,7 @@
       "thumbnail": "images/products/2025/chernika.jpg",
       "is_active": true,
       "category_id": 4,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -730,7 +731,7 @@
       "thumbnail": "images/products/2025/tvorog.jpg",
       "is_active": true,
       "category_id": 5,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -748,7 +749,7 @@
       "thumbnail": "images/products/2025/kurinye-krylyshki.jpg",
       "is_active": true,
       "category_id": 6,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -766,7 +767,7 @@
       "thumbnail": "images/products/2025/lavash.jpg",
       "is_active": true,
       "category_id": 7,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -784,7 +785,7 @@
       "thumbnail": "images/products/2025/chai.jpg",
       "is_active": true,
       "category_id": 8,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -802,7 +803,7 @@
       "thumbnail": "images/products/2025/marmelad.jpg",
       "is_active": true,
       "category_id": 9,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -820,7 +821,7 @@
       "thumbnail": "images/products/2025/zamorozhennye-griby.jpg",
       "is_active": true,
       "category_id": 10,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -838,7 +839,7 @@
       "thumbnail": "images/products/2025/pomidor.jpg",
       "is_active": true,
       "category_id": 2,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -856,7 +857,7 @@
       "thumbnail": "images/products/2025/kivi.jpg",
       "is_active": true,
       "category_id": 3,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -874,7 +875,7 @@
       "thumbnail": "images/products/2025/ezhevika.jpg",
       "is_active": true,
       "category_id": 4,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -892,7 +893,7 @@
       "thumbnail": "images/products/2025/smetana.jpg",
       "is_active": true,
       "category_id": 5,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -910,7 +911,7 @@
       "thumbnail": "images/products/2025/baranina.jpg",
       "is_active": true,
       "category_id": 6,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -928,7 +929,7 @@
       "thumbnail": "images/products/2025/baton.jpg",
       "is_active": true,
       "category_id": 7,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -946,7 +947,7 @@
       "thumbnail": "images/products/2025/kofe.jpg",
       "is_active": true,
       "category_id": 8,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -964,7 +965,7 @@
       "thumbnail": "images/products/2025/zefir.jpg",
       "is_active": true,
       "category_id": 9,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -982,7 +983,7 @@
       "thumbnail": "images/products/2025/zamorozhennye-krevetki.jpg",
       "is_active": true,
       "category_id": 10,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -1000,7 +1001,7 @@
       "thumbnail": "images/products/2025/redis.jpg",
       "is_active": true,
       "category_id": 2,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -1018,7 +1019,7 @@
       "thumbnail": "images/products/2025/mandarin.jpg",
       "is_active": true,
       "category_id": 3,
-      "user_id": 27
+      "user_id": 1
     }
   },
   {
@@ -1036,7 +1037,7 @@
       "thumbnail": "images/products/2025/klyukva.jpg",
       "is_active": true,
       "category_id": 4,
-      "user_id": 27
+      "user_id": 1
     }
   }
 ]
