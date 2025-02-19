@@ -12,11 +12,20 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from apps.users.models import UserProfile, EmailVerified
 from apps.users.tasks import send_confirmation_email
 
 User = get_user_model()
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['is_active'] = user.is_active
+        return token
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):

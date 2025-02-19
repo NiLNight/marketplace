@@ -44,13 +44,15 @@ class UserRegistrationView(APIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()  # Создаём пользователя
-        response_data = {
-            "id": user.id,
-            "username": user.username,
-            "email": user.email,
-        }
-        response = Response(response_data, status=status.HTTP_201_CREATED)
-        return set_jwt_cookies(response, user)
+        # Не выдаем токен если пользователь неактивен
+        if user.is_active:
+            response = Response(status=status.HTTP_201_CREATED)
+            return set_jwt_cookies(response, user)
+
+        return Response(
+            {"detail": "Требуется активация аккаунта"},
+            status=status.HTTP_201_CREATED
+        )
 
 
 class UserLoginView(APIView):
@@ -191,6 +193,7 @@ class PasswordResetRequestView(APIView):
     """
     API view для отправки запроса на восстановление пароля.
     """
+    permission_classes = [AllowAny]
     serializer_class = PasswordResetSerializer
 
     def post(self, request):

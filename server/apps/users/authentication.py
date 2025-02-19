@@ -2,8 +2,11 @@
 Кастомная аутентификация JWT с поддержкой cookies
 """
 from django.conf import settings
+from django.http import HttpResponse
+from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import AuthenticationFailed, InvalidToken
+from rest_framework_simplejwt.models import TokenUser
 
 
 class CustomJWTAuthentication(JWTAuthentication):
@@ -36,14 +39,28 @@ class CustomJWTAuthentication(JWTAuthentication):
 
             # Проверка активности пользователя
             if not user.is_active:
-                print({
-                    "detail": "Аккаунт не активирован",
-                    "code": "user_inactive"
-                })
+                self._delete_token_cookies(request)
+                raise AuthenticationFailed(
+                    "Аккаунт деактивирован",
+                    code="user_inactive"
+                )
 
             return user, validated_token
+
         except InvalidToken as e:
+            self._delete_token_cookies(request)
             raise AuthenticationFailed({
                 "detail": f"Неверный токен: {str(e)}",
                 "code": "token_invalid"
             })
+
+    def _delete_token_cookies(self, request):
+        response = HttpResponse()
+        response.delete_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'])
+        return response
+
+
+class CustomTokenUser(TokenUser):
+    @property
+    def is_active(self):
+        return self.token.get('is_active', False)

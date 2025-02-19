@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
+    'debug_toolbar',
     # Приложения
     'apps.core.apps.CoreConfig',
     'apps.users.apps.UsersConfig',
@@ -55,12 +56,13 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',  # Новое
+    # 'corsheaders.middleware.CorsMiddleware',  # Новое
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -130,6 +132,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+INTERNAL_IPS = ['127.0.0.1']
+
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK": lambda request: True,
+}
+
 STATIC_URL = '/static/'
 STATIC_ROOT = (BASE_DIR / 'static')
 STATICFILES_DIRS = [BASE_DIR / 'templates/js/']
@@ -162,6 +170,7 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     'BLACKLIST_AFTER_ROTATION': True,
+    'TOKEN_USER_CLASS': 'apps.user.authentication.CustomTokenUser',
 
     # custom
     "AUTH_COOKIE": "access_token",  # имя cookie
