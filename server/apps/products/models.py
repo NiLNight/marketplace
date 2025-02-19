@@ -63,23 +63,10 @@ class Product(TimeStampedModel):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, blank=True, unique=True)
     description = models.TextField(blank=True)
-    price = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        validators=[MinValueValidator(Decimal(0.00))]
-    )
-    discount = models.DecimalField(
-        default=0.0,
-        max_digits=10,
-        decimal_places=2,
-    )
+    price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal(0.00))])
+    discount = models.DecimalField(default=0.0, max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField(default=0)
-    category = TreeForeignKey(
-        Category,
-        on_delete=models.CASCADE,
-        related_name='products',
-        db_index=True
-    )
+    category = TreeForeignKey(Category, on_delete=models.CASCADE, related_name='products', db_index=True)
     thumbnail = models.ImageField(
         upload_to='images/products/%Y/%m/%d',
         default='images/avatars/default.png',

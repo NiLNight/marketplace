@@ -22,8 +22,8 @@ class ProductListView(APIView):
     pagination_class = ProductPagination
 
     ALLOWED_ORDER_FIELDS = {
-        'popularity_score', 'price',
-        '-created', 'rating_avg'
+        'popularity_score', 'price', '-price'
+        '-created', 'rating_avg', '-rating_avg',
     }
 
     CACHE_TIMEOUT = 60 * 15
@@ -68,7 +68,7 @@ class ProductListView(APIView):
             days_since_created=ExtractDay(Now() - F('created')),
         ).select_related('category').only(
             'title', 'price', 'thumbnail', 'created',
-            'discount', 'category__title', 'is_active'
+            'discount', 'stock', 'category__title', 'category__slug', 'is_active'
         )
 
     def _apply_filters(self, queryset, request):
@@ -106,8 +106,8 @@ class ProductListView(APIView):
                 (1 / (F('days_since_created') + 1) * 0.1),
                 output_field=FloatField()
             )
-        ).order_by('-popularity_score')
+        ).order_by('popularity_score')
 
-        if sort_by and sort_by.lstrip('-') in self.ALLOWED_ORDER_FIELDS:
+        if sort_by and sort_by in self.ALLOWED_ORDER_FIELDS:
             return queryset.order_by(sort_by)
         return queryset
