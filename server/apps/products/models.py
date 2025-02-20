@@ -1,6 +1,7 @@
 import uuid
 from decimal import Decimal
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
 from django.core.validators import FileExtensionValidator, MinValueValidator
@@ -91,11 +92,18 @@ class Product(TimeStampedModel):
 
     @property
     def price_with_discount(self):
+        """Рассчитывает цену с учетом скидки"""
         return self.price * (100 - self.discount) / 100
 
     @property
     def in_stock(self):
+        """Проверяет наличие товара на складе"""
         return self.stock > 0
+
+    def clean(self):
+        """Дополнительная валидация при сохранении"""
+        if self.discount < 0 or self.discount > 100:
+            raise ValidationError("Скидка должна быть в диапазоне 0-100%")
 
     def save(self, *args, **kwargs):
         """
