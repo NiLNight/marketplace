@@ -25,9 +25,10 @@ from apps.users.serializers import (
     PasswordResetSerializer,
     PasswordResetConfirmSerializer
 )
-from apps.users.utils import set_jwt_cookies
-from apps.users.tasks import send_confirmation_email, send_password_reset_email
+from apps.services.user.utils import set_jwt_cookies
+from apps.services.user.tasks import send_confirmation_email, send_password_reset_email
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from apps.services.user import services
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -43,7 +44,12 @@ class UserRegistrationView(APIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = serializer.save()  # Создаём пользователя
+        user = services.register_user(
+            username=serializer.validated_data['username'],
+            email=serializer.validated_data['email'],
+            password=serializer.validated_data['password'],
+        )  # Создаём пользователя
+
         # Не выдаем токен если пользователь неактивен
         if user.is_active:
             response = Response(status=status.HTTP_201_CREATED)
@@ -65,18 +71,17 @@ class UserLoginView(APIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        if not user.is_active:
-            logger.error(f"User {user.email} неактивен")
-            return Response({"error": "Аккаунт не активирован"}, status=403)
+        try:
+            user = services.login_user(
+                email=serializer.validated_data['email'],
+                password=serializer.validated_data['password'],
+            )
+        except Exception as e:
+            return Response({'error': str(e)}, status=400)
 
         response_data = {
             "message": "Login successful",
-            "user": {
-                "id": user.id,
-                "username": user.username,
-                "email": user.email,
-            }
+            "user": {"id": user.id, "username": user.username, "email": user.email}
         }
         response = Response(response_data)
         return set_jwt_cookies(response, user)
@@ -124,6 +129,8 @@ class UserProfileView(APIView):
         return Response(serializer.data)
 
 
+# Активация аккаунта
+
 class ResendCodeView(APIView):
     """
     API view для повторной отправки кода подтверждения.
@@ -133,23 +140,7 @@ class ResendCodeView(APIView):
     def post(self, request):
         email = request.data.get('email')
         try:
-            user = User.objects.get(email=email, is_active=False)
-            # Генерация нового кода подтверждения
-            code = str(random.randint(100000, 999999))
-            # Обновляем запись EmailVerified для данного пользователя
-            updated_count = EmailVerified.objects.filter(user=user).update(
-                confirmation_code=code,
-                code_created_at=timezone.now()
-            )
-            # Если запись не найдена – создаём её
-            if not updated_count:
-                EmailVerified.objects.create(
-                    user=user,
-                    confirmation_code=code,
-                    code_created_at=timezone.now()
-                )
-            # Отправляем асинхронное письмо с кодом (передаём user.email)
-            send_confirmation_email.delay(user.email, code)
+            services.resend_confirmation_code(email)
             return Response({"message": "Новый код отправлен"})
         except User.DoesNotExist:
             return Response({"error": "Аккаунт не найден или активирован"}, status=status.HTTP_400_BAD_REQUEST)
@@ -165,26 +156,10 @@ class ConfirmView(APIView):
         email = request.data.get('email')
         code = request.data.get('code')
         try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            return Response({'error': 'Неверный код или email'}, status=400)
-
-        # Ищем EmailVerified с заданным кодом
-        email_verified = EmailVerified.objects.filter(user=user, confirmation_code=code).first()
-        if not email_verified:
-            return Response({'error': 'Аккаунт активирован или код ещё не отправлен'}, status=400)
-
-        time_diff = (timezone.now() - email_verified.code_created_at).total_seconds()
-        if time_diff > 86400:  # 24 часа
-            return Response({'error': 'Срок действия кода истек'}, status=400)
-
-        # Подтверждаем аккаунт
-        user.is_active = True
-        user.save()
-        # Очищаем код подтверждения
-        email_verified.confirmation_code = None
-        email_verified.save()
-        return Response({'message': 'Аккаунт активирован'})
+            services.confirm_account(email=email, code=code)
+            return Response({'message': 'Аккаунт активирован'})
+        except ValueError as e:
+            return Response({'error': str(e)}, status=400)
 
 
 # Сброс пароля
@@ -199,17 +174,12 @@ class PasswordResetRequestView(APIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        email = serializer.validated_data['email']
         try:
-            user = User.objects.get(email=email)
-            token = PasswordResetTokenGenerator().make_token(user)
-            reset_url = f"http://localhost:8000/reset-password/?token={token}&uid={user.id}"
-            # Отправляем асинхронное письмо
-            send_password_reset_email.delay(user.email, reset_url)
-        except User.DoesNotExist:
-            pass
-        return Response({"detail": "Если указанный email существует, на него отправлено письмо для сброса пароля."},
-                        status=status.HTTP_200_OK)
+            services.request_password_reset(serializer.validated_data['email'])
+            return Response({"detail": "Если указанный email существует, на него отправлено письмо."},
+                            status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
 
 
 class PasswordResetConfirmView(APIView):
@@ -222,7 +192,12 @@ class PasswordResetConfirmView(APIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        user.set_password(serializer.validated_data['new_password'])
-        user.save()
-        return Response({"detail": "Пароль успешно изменён."}, status=status.HTTP_200_OK)
+        try:
+            services.confirm_password_reset(
+                uid=serializer.validated_data['uid'],
+                token=serializer.validated_data['token'],
+                new_password=serializer.validated_data['new_password'],
+            )
+            return Response({"detail": "Пароль успешно изменён."}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)

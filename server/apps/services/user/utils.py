@@ -13,7 +13,7 @@ def set_jwt_cookies(response, user):
     Устанавливает JWT-токены в cookies ответа
     Args:
         response (HttpResponse): Объект ответа
-        user (User): Аутентифицированный пользователь
+        user (user): Аутентифицированный пользователь
     Returns:
         HttpResponse: Ответ с установленными cookies
     """

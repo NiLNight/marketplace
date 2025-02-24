@@ -4,18 +4,13 @@
 - Авторизация
 - Профиль
 """
-import email
-import random
-from django.utils import timezone
-from django.contrib.auth import authenticate, get_user_model
-from django.contrib.auth.password_validation import validate_password
+
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from apps.users.models import UserProfile, EmailVerified
-from apps.users.tasks import send_confirmation_email
+from apps.users.models import UserProfile
 
 User = get_user_model()
 
@@ -32,44 +27,12 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     """
     Сериализатор регистрации пользователя с валидацией пароля.
     """
-    email = serializers.EmailField(
-        required=True,
-        validators=[UniqueValidator(queryset=User.objects.all())]
-    )
-    password = serializers.CharField(
-        write_only=True,
-        required=True,
-        # Если необходимо, можно добавить валидацию пароля:
-        # validators=[validate_password]
-    )
+    email = serializers.EmailField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
+    password = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = User
         fields = ('username', 'email', 'password')
-
-    def create(self, validated_data):
-        """
-        Создает пользователя с хешированием пароля, сохраняет код подтверждения,
-        и отправляет письмо с подтверждением на email.
-        """
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password'],
-            is_active=False,  # Аккаунт будет активирован после подтверждения
-        )
-        # Генерация кода подтверждения
-        code = str(random.randint(100000, 999999))
-        email_verified = EmailVerified(
-            user=user,
-            confirmation_code=code,
-            code_created_at=timezone.now()
-        )
-        email_verified.save()
-
-        # Запуск асинхронной задачи для отправки письма
-        send_confirmation_email.delay(email=user.email, code=code)
-        return user
 
 
 class UserLoginSerializer(serializers.Serializer):
@@ -82,31 +45,6 @@ class UserLoginSerializer(serializers.Serializer):
         write_only=True,
         style={'input_type': 'password'}
     )
-
-    def validate(self, attrs):
-        """
-        Проверяет учетные данные: если пользователь с данным email существует,
-        его аккаунт активен и пароль корректен.
-        """
-        email = attrs.get('email')
-        password = attrs.get('password')
-        user = User.objects.filter(email=email).first()
-        if not user:
-            raise serializers.ValidationError("Неверные учетные данные")
-
-        if not user.is_active:
-            raise serializers.ValidationError("Аккаунт не активирован. Проверьте почту")
-
-        if not user.check_password(password):
-            raise serializers.ValidationError("Неверные учетные данные")
-
-        # Дополнительная аутентификация для корректной работы с backend'ом
-        user = authenticate(username=user.username, password=password)
-        if not user:
-            raise serializers.ValidationError("Неверные учетные данные")
-
-        attrs['user'] = user
-        return attrs
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -159,12 +97,6 @@ class PasswordResetSerializer(serializers.Serializer):
     """
     email = serializers.EmailField()
 
-    def validate_email(self, attrs):
-        if not User.objects.filter(email=attrs).exists():
-            pass
-
-        return attrs
-
 
 class PasswordResetConfirmSerializer(serializers.Serializer):
     """
@@ -173,16 +105,4 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
     uid = serializers.IntegerField()
     token = serializers.CharField()
     new_password = serializers.CharField(write_only=True)
-    new_password2 = serializers.CharField(write_only=True)
 
-    def validate(self, attrs):
-        if attrs['new_password'] != attrs['new_password2']:
-            raise serializers.ValidationError("Пароли не совпадают.")
-        try:
-            user = User.objects.get(id=attrs['uid'])
-        except User.DoesNotExist:
-            raise serializers.ValidationError("Неверные данные.")
-        if not PasswordResetTokenGenerator().check_token(user, attrs['token']):
-            raise serializers.ValidationError("Неверный или просроченный токен.")
-        attrs['user'] = user
-        return attrs
