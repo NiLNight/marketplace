@@ -23,7 +23,7 @@ class ProductListView(APIView):
 
     ALLOWED_ORDER_FIELDS = {
         'popularity_score', 'price', '-price'
-        '-created', 'rating_avg', '-rating_avg',
+                                     '-created', 'rating_avg', '-rating_avg',
     }
 
     CACHE_TIMEOUT = 60 * 15
