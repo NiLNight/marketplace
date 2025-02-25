@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model, authenticate
 from django.utils import timezone
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -116,14 +118,16 @@ def request_password_reset(email):
     except User.DoesNotExist:
         raise ValueError("Пользователь с таким email не найден.")
     token = PasswordResetTokenGenerator().make_token(user)
-    reset_url = f"http://localhost:8000/reset-password/?token={token}&uid={user.id}"
+    uid = urlsafe_base64_encode(force_bytes(user.id))
+    reset_url = f"http://localhost:8000/reset-password/?token={token}&uid={uid}"
     send_password_reset_email.delay(email, reset_url)
     return True
 
 
 def confirm_password_reset(uid, token, new_password):
     """Подтверждение сброса пароля."""
-    user = User.objects.get(id=uid)
+    user_id = force_str(urlsafe_base64_decode(uid))
+    user = User.objects.get(id=user_id)
     if not PasswordResetTokenGenerator().check_token(user, token):
         raise ValueError("Неверный или просроченный токен")
     user.set_password(new_password)

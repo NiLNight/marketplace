@@ -73,9 +73,6 @@ class UserLoginView(APIView):
         except ValueError as e:
             return Response({'error': str(e)},
                             status=status.HTTP_400_BAD_REQUEST)
-        except TokenError:
-            return Response({'error': 'Неверный или просроченный токен'},
-                            status=status.HTTP_400_BAD_REQUEST)
         except Exception:
             return Response({'error': 'Произошла ошибка при выходе'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -156,7 +153,7 @@ class ConfirmView(APIView):
             services.confirm_account(email=email, code=code)
             return Response({'message': 'Аккаунт активирован'})
         except ValueError as e:
-            return Response({'error': str(e)}, status=400)
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 # Сброс пароля

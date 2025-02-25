@@ -91,6 +91,6 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
     """
     Сериализатор для сброса пароля.
     """
-    uid = serializers.IntegerField()
+    uid = serializers.CharField()
     token = serializers.CharField()
     new_password = serializers.CharField(write_only=True)
