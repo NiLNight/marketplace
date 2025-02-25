@@ -1,6 +1,9 @@
 from django.contrib.auth import get_user_model, authenticate
 from django.utils import timezone
-from apps.users.models import EmailVerified
+from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from apps.users.models import EmailVerified, UserProfile
 from apps.services.user.tasks import send_confirmation_email, send_password_reset_email
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 import random
@@ -41,6 +44,40 @@ def login_user(email, password):
     return user
 
 
+def logout_user(refresh_token):
+    """Добавление refresh-токена в чёрный список"""
+    if not refresh_token:
+        raise ValueError("Требуется refresh токен")
+    try:
+        token = RefreshToken(refresh_token)
+        token.blacklist()
+    except TokenError:
+        raise ValueError("Неправильный токен")
+
+
+def update_user_and_profile(user, validated_data):
+    profile_data = validated_data.pop('profile', None)
+    for attr, value in validated_data.items():
+        setattr(user, attr, value)
+    user.save()
+
+    # Если данные профиля переданы, обновляем или создаем профиль
+    if profile_data:
+        if hasattr(user, 'profile') and user.profile is not None:
+            from apps.users.serializers import UserProfileSerializer
+            profile_serializer = UserProfileSerializer(
+                instance=user.profile,
+                data=profile_data,
+                partial=True
+            )
+            profile_serializer.is_valid(raise_exception=True)
+            profile_serializer.save()
+        else:
+            UserProfile.objects.create(user=user, **profile_data)
+
+    return user
+
+
 def resend_confirmation_code(email):
     """Повторная отправка кода подтверждения."""
     user = User.objects.get(email=email, is_active=False)
@@ -69,15 +106,17 @@ def confirm_account(email, code):
     user.save()
     email_verified.confirmation_code = None
     email_verified.save()
-    return User
+    return True
 
 
 def request_password_reset(email):
     """Запрос на сброс пароля."""
-    user = User.objects.get(email=email)
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        raise ValueError("Пользователь с таким email не найден.")
     token = PasswordResetTokenGenerator().make_token(user)
     reset_url = f"http://localhost:8000/reset-password/?token={token}&uid={user.id}"
-    print(reset_url)
     send_password_reset_email.delay(email, reset_url)
     return True
 

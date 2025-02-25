@@ -6,18 +6,14 @@ Views для работы с пользователями:
 - Профиль пользователя
 """
 
-import random
 import logging
-from django.utils import timezone
 from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
-from rest_framework_simplejwt.tokens import RefreshToken
 
-from apps.users.models import EmailVerified
 from apps.users.serializers import (
     UserRegistrationSerializer,
     UserLoginSerializer,
@@ -26,8 +22,6 @@ from apps.users.serializers import (
     PasswordResetConfirmSerializer
 )
 from apps.services.user.utils import set_jwt_cookies
-from apps.services.user.tasks import send_confirmation_email, send_password_reset_email
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from apps.services.user import services
 
 User = get_user_model()
@@ -56,7 +50,7 @@ class UserRegistrationView(APIView):
             return set_jwt_cookies(response, user)
 
         return Response(
-            {"detail": "Требуется активация аккаунта"},
+            {"detail": "Требуется активация аккаунта. Код подтверждения отправлен на ваш email."},
             status=status.HTTP_201_CREATED
         )
 
@@ -76,8 +70,15 @@ class UserLoginView(APIView):
                 email=serializer.validated_data['email'],
                 password=serializer.validated_data['password'],
             )
-        except Exception as e:
-            return Response({'error': str(e)}, status=400)
+        except ValueError as e:
+            return Response({'error': str(e)},
+                            status=status.HTTP_400_BAD_REQUEST)
+        except TokenError:
+            return Response({'error': 'Неверный или просроченный токен'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        except Exception:
+            return Response({'error': 'Произошла ошибка при выходе'},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         response_data = {
             "message": "Login successful",
@@ -95,18 +96,14 @@ class UserLogoutView(APIView):
 
     def post(self, request):
         refresh_token = request.COOKIES.get('refresh_token')
-        if not refresh_token:
-            return Response({"error": "Refresh token missing"}, status=status.HTTP_400_BAD_REQUEST)
         try:
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-        except TokenError as e:
-            return Response({"error": f"Invalid token: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
-
-        response = Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK)
-        response.delete_cookie('access_token')
-        response.delete_cookie('refresh_token')
-        return response
+            services.logout_user(refresh_token)
+            response = Response({"message": "Выход успешно выполнен"}, status=status.HTTP_200_OK)
+            response.delete_cookie('access_token')
+            response.delete_cookie('refresh_token')
+            return response
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserProfileView(APIView):

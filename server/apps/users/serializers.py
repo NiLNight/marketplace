@@ -10,6 +10,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+from apps.services.user import services
 from apps.users.models import UserProfile
 
 User = get_user_model()
@@ -72,23 +73,11 @@ class UserSerializer(serializers.ModelSerializer):
         Обновляет поля пользователя и, если присутствуют данные профиля, обновляет
         или создает профиль через вложенный сериализатор.
         """
-        profile_data = validated_data.pop('profile', None)
-        # Обновляем поля пользователя
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-        instance.save()
-
-        # Если данные профиля переданы, обновляем или создаем профиль
-        if profile_data:
-            if hasattr(instance, 'profile') and instance.profile is not None:
-                profile_serializer = UserProfileSerializer(
-                    instance=instance.profile, data=profile_data, partial=True
-                )
-                profile_serializer.is_valid(raise_exception=True)
-                profile_serializer.save()
-            else:
-                UserProfile.objects.create(user=instance, **profile_data)
-        return instance
+        try:
+            updated_user = services.update_user_and_profile(instance, validated_data)
+            return updated_user
+        except Exception as e:
+            raise serializers.ValidationError(str(e))
 
 
 class PasswordResetSerializer(serializers.Serializer):
@@ -105,4 +94,3 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
     uid = serializers.IntegerField()
     token = serializers.CharField()
     new_password = serializers.CharField(write_only=True)
-
