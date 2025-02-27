@@ -12,7 +12,6 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.exceptions import TokenError
 
 from apps.users.serializers import (
     UserRegistrationSerializer,
@@ -21,8 +20,8 @@ from apps.users.serializers import (
     PasswordResetSerializer,
     PasswordResetConfirmSerializer
 )
-from apps.services.user.utils import set_jwt_cookies
-from apps.services.user import services
+from apps.users.services.utils import set_jwt_cookies
+from apps.users.services import services
 
 User = get_user_model()
 logger = logging.getLogger(__name__)

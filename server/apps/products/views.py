@@ -1,4 +1,4 @@
-from apps.services.products import services
+from apps.products.services import product_services
 from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
 from django.utils.decorators import method_decorator

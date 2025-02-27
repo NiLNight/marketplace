@@ -6,7 +6,7 @@ from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.users.models import EmailVerified, UserProfile
-from apps.services.user.tasks import send_confirmation_email, send_password_reset_email
+from apps.users.services.tasks import send_confirmation_email, send_password_reset_email
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 import random
 

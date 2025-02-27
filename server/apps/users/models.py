@@ -3,7 +3,7 @@ from django.core.validators import RegexValidator, FileExtensionValidator
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from apps.services.utils import unique_slugify
+from apps.core.utils import unique_slugify
 
 
 class EmailVerified(models.Model):
