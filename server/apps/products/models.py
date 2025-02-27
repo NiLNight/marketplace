@@ -76,7 +76,7 @@ class Product(TimeStampedModel):
     )
     is_active = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='products')
-    search_vector = SearchVectorField(null=True)
+    search_vector = SearchVectorField(null=True, blank=True)
 
     objects = ProductManager()
 

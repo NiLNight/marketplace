@@ -37,7 +37,7 @@ class UserRegistrationView(APIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = services.register_user(
+        user = users_services.register_user(
             username=serializer.validated_data['username'],
             email=serializer.validated_data['email'],
             password=serializer.validated_data['password'],
@@ -65,7 +65,7 @@ class UserLoginView(APIView):
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         try:
-            user = services.login_user(
+            user = users_services.login_user(
                 email=serializer.validated_data['email'],
                 password=serializer.validated_data['password'],
             )
@@ -93,7 +93,7 @@ class UserLogoutView(APIView):
     def post(self, request):
         refresh_token = request.COOKIES.get('refresh_token')
         try:
-            services.logout_user(refresh_token)
+            users_services.logout_user(refresh_token)
             response = Response({"message": "Выход успешно выполнен"}, status=status.HTTP_200_OK)
             response.delete_cookie('access_token')
             response.delete_cookie('refresh_token')
@@ -133,7 +133,7 @@ class ResendCodeView(APIView):
     def post(self, request):
         email = request.data.get('email')
         try:
-            services.resend_confirmation_code(email)
+            users_services.resend_confirmation_code(email)
             return Response({"message": "Новый код отправлен"})
         except User.DoesNotExist:
             return Response({"error": "Аккаунт не найден или активирован"}, status=status.HTTP_400_BAD_REQUEST)
@@ -149,7 +149,7 @@ class ConfirmView(APIView):
         email = request.data.get('email')
         code = request.data.get('code')
         try:
-            services.confirm_account(email=email, code=code)
+            users_services.confirm_account(email=email, code=code)
             return Response({'message': 'Аккаунт активирован'})
         except ValueError as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -168,7 +168,7 @@ class PasswordResetRequestView(APIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
-            services.request_password_reset(serializer.validated_data['email'])
+            users_services.request_password_reset(serializer.validated_data['email'])
             return Response({"detail": "Если указанный email существует, на него отправлено письмо."},
                             status=status.HTTP_200_OK)
         except Exception as e:
@@ -186,7 +186,7 @@ class PasswordResetConfirmView(APIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
-            services.confirm_password_reset(
+            users_services.confirm_password_reset(
                 uid=serializer.validated_data['uid'],
                 token=serializer.validated_data['token'],
                 new_password=serializer.validated_data['new_password'],

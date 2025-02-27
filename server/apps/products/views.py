@@ -1,9 +1,10 @@
+from rest_framework import status
 from rest_framework.exceptions import NotFound
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from apps.products.models import Product
 from apps.products.services.query_service import ProductQueryService
+from apps.products.services.product_services import ProductServices
 from apps.products.services.cache_services import CacheServices
 from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
@@ -11,7 +12,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 
-from apps.products.serializers import ProductListSerializer, ProductDetailSerializer
+from apps.products.serializers import ProductListSerializer, ProductDetailSerializer, ProductCreateSerializer
 
 
 class ProductPagination(PageNumberPagination):
@@ -56,3 +57,16 @@ class ProductDetailView(APIView):
         except Exception:
             raise NotFound("Товар не найден")
 
+
+class ProductCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = ProductCreateSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        ProductServices.create_product(
+            user=request.user,
+            data=serializer.validated_data,
+        )
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

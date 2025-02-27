@@ -6,10 +6,10 @@ from apps.products.models import Product
 
 class ProductServices:
     @staticmethod
-    def create_product(user, **data):
+    def create_product(user, data):
         """Создание товара с валидацией"""
         with transaction.atomic():
-            product = Product.objects.create(user=user, **data)
+            product = Product.objects.create(**data, search_vector='test')
             product.full_clean()
             return product
 
