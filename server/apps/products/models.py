@@ -1,6 +1,7 @@
 import uuid
 from decimal import Decimal
 
+from django.contrib.postgres.indexes import GinIndex
 from django.core.exceptions import ValidationError
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
@@ -9,7 +10,7 @@ from django.core.validators import FileExtensionValidator, MinValueValidator
 from apps.core.utils import unique_slugify
 from apps.users.models import User
 from apps.core.models import TimeStampedModel
-from django.contrib.postgres.search import SearchVectorField
+from django.contrib.postgres.search import SearchVectorField, SearchVector
 
 
 class CategoryManager(models.Manager):
@@ -86,6 +87,7 @@ class Product(TimeStampedModel):
             models.Index(fields=['title']),
             models.Index(fields=['-created']),
             models.Index(fields=['description']),
+            GinIndex(fields=['search_vector']),
         ]
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
@@ -114,6 +116,9 @@ class Product(TimeStampedModel):
             while Product.objects.filter(slug=self.slug).exists():
                 self.slug = f"{self.slug}-{uuid.uuid4().hex[:4]}"
         super(Product, self).save(*args, **kwargs)
+        self.search_vector = (SearchVector('title', weight='A') +
+                              SearchVector('description', weight='B'))
+        super(Product, self).save(update_fields=['search_vector'])
 
     def __str__(self):
         return self.title
