@@ -1,11 +1,17 @@
-from apps.products.services import product_services
+from rest_framework.exceptions import NotFound
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+
+from apps.products.models import Product
+from apps.products.services.query_service import ProductQueryService
+from apps.products.services.cache_services import CacheServices
 from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 
-from apps.products.serializers import ProductListSerializer
+from apps.products.serializers import ProductListSerializer, ProductDetailSerializer
 
 
 class ProductPagination(PageNumberPagination):
@@ -21,13 +27,13 @@ class ProductListView(APIView):
 
     @method_decorator(cache_page(CACHE_TIMEOUT))
     def get(self, request):
-        cache_key = services.build_cache_key(request)
+        cache_key = CacheServices.build_cache_key(request)
         cached_response = cache.get(cache_key)
         if cached_response:
             return cached_response
-        queryset = services.get_optimized_queryset()
-        queryset = services.apply_filters(queryset, request)
-        queryset = services.apply_ordering(queryset, request)
+        queryset = ProductQueryService.get_optimized_queryset()
+        queryset = ProductQueryService.apply_filters(queryset, request)
+        queryset = ProductQueryService.apply_ordering(queryset, request)
         paginator = self.pagination_class()
         page = paginator.paginate_queryset(queryset, request)
 
@@ -36,3 +42,17 @@ class ProductListView(APIView):
 
         # cache.set(cache_key, response, self.CACHE_TIMEOUT)
         return response
+
+
+class ProductDetailView(APIView):
+    permission_classes = [AllowAny]
+    serializer_class = ProductDetailSerializer
+
+    def get(self, request, pk):
+        try:
+            product = ProductQueryService.get_optimized_queryset(pk=pk)
+            serializer = self.serializer_class(product)
+            return Response(serializer.data)
+        except Exception:
+            raise NotFound("Товар не найден")
+

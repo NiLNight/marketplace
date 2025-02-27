@@ -10,7 +10,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from apps.users.services import services
+from apps.users.services import users_services
 from apps.users.models import UserProfile
 
 User = get_user_model()

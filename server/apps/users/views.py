@@ -21,7 +21,7 @@ from apps.users.serializers import (
     PasswordResetConfirmSerializer
 )
 from apps.users.services.utils import set_jwt_cookies
-from apps.users.services import services
+from apps.users.services import users_services
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
