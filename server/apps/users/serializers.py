@@ -10,7 +10,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from apps.users.services import users_services
+from services.users_services import UserService
 from apps.users.models import UserProfile
 
 User = get_user_model()
@@ -74,7 +74,7 @@ class UserSerializer(serializers.ModelSerializer):
         или создает профиль через вложенный сериализатор.
         """
         try:
-            updated_user = services.update_user_and_profile(instance, validated_data)
+            updated_user = UserService.update_user_and_profile(instance, validated_data)
             return updated_user
         except Exception as e:
             raise serializers.ValidationError(str(e))
