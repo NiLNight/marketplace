@@ -1,13 +1,13 @@
 from rest_framework import serializers
 from rest_framework.fields import CurrentUserDefault
-
+from apps.products.services.product_services import ProductServices
 from apps.products.models import Product, Category
 
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('id', 'title', 'slug')
+        fields = ['id', 'title', 'slug']
 
 
 class ProductListSerializer(serializers.ModelSerializer):
@@ -22,10 +22,10 @@ class ProductListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = (
+        fields = [
             'id', 'title', 'price', 'price_with_discount', 'in_stock',
             'rating_avg', 'popularity_score', 'thumbnail', 'created', 'category',
-        )
+        ]
 
 
 class ProductCreateSerializer(serializers.ModelSerializer):
@@ -45,6 +45,12 @@ class ProductCreateSerializer(serializers.ModelSerializer):
 
 class ProductDetailSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
+    category_id = serializers.PrimaryKeyRelatedField(
+        source='category',
+        queryset=Category.objects.all(),
+        write_only=True,
+        required=False
+    )
     rating_avg = serializers.FloatField()
     price_with_discount = serializers.DecimalField(
         max_digits=10,
@@ -58,7 +64,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'title', 'description', 'price',
             'price_with_discount', 'stock', 'discount',
-            'category', 'thumbnail', 'created',
+            'category', 'category_id', 'thumbnail', 'created',
             'rating_avg', 'owner', 'is_active'
         ]
 
@@ -67,3 +73,9 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             'id': obj.user.id,
             'username': obj.user.username,
         }
+
+    def update(self, instance, validated_data):
+        try:
+            return ProductServices.update_product(instance, validated_data)
+        except Exception as e:
+            raise serializers.ValidationError(str(e))

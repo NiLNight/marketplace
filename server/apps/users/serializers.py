@@ -74,6 +74,7 @@ class UserSerializer(serializers.ModelSerializer):
         или создает профиль через вложенный сериализатор.
         """
         try:
+            print(validated_data)
             updated_user = UserService.update_user_and_profile(instance, validated_data)
             return updated_user
         except Exception as e:

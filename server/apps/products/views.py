@@ -11,8 +11,13 @@ from rest_framework.pagination import PageNumberPagination
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
+from apps.products.permissions import IsOwnerOrAdmin
 
-from apps.products.serializers import ProductListSerializer, ProductDetailSerializer, ProductCreateSerializer
+from apps.products.serializers import (
+    ProductListSerializer,
+    ProductDetailSerializer,
+    ProductCreateSerializer
+)
 
 
 class ProductPagination(PageNumberPagination):
@@ -45,6 +50,20 @@ class ProductListView(APIView):
         return response
 
 
+class ProductCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = ProductCreateSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        ProductServices.create_product(
+            user=request.user,
+            data=serializer.validated_data,
+        )
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
 class ProductDetailView(APIView):
     permission_classes = [AllowAny]
     serializer_class = ProductDetailSerializer
@@ -58,15 +77,16 @@ class ProductDetailView(APIView):
             raise NotFound("Товар не найден")
 
 
-class ProductCreateView(APIView):
-    permission_classes = [IsAuthenticated]
-    serializer_class = ProductCreateSerializer
+class ProductUpdateView(APIView):
+    permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
+    serializer_class = ProductDetailSerializer
 
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data, context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        ProductServices.create_product(
-            user=request.user,
-            data=serializer.validated_data,
+    def patch(self, request, pk):
+        product = ProductQueryService.get_optimized_queryset(pk=pk)
+        self.check_object_permissions(request, product)
+        serializer = self.serializer_class(
+            product, data=request.data, context={'request': request}, partial=True
         )
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
