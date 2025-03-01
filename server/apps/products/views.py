@@ -58,7 +58,6 @@ class ProductCreateView(APIView):
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         ProductServices.create_product(
-            user=request.user,
             data=serializer.validated_data,
         )
         return Response(serializer.data, status=status.HTTP_201_CREATED)
