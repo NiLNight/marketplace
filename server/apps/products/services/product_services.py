@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from rest_framework import serializers
 from apps.products.models import Product
+from apps.products.services.query_services import ProductQueryService
 
 
 class ProductServices:
@@ -30,8 +31,10 @@ class ProductServices:
             raise serializers.ValidationError(e.message_dict)
 
     @staticmethod
-    def delete_product(product, user):
-        if not (user.is_staff or product.user == user):
-            raise serializers.ValidationError("Нет прав на удаление товара")
-        product.is_active = False
-        product.save()
+    def delete_product(pk):
+        try:
+            product = ProductQueryService.get_optimized_queryset(pk=pk)
+            product.is_active = False
+            product.save()
+        except AttributeError:
+            raise AttributeError('Product is not optimized')

@@ -3,7 +3,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from apps.products.services.query_service import ProductQueryService
+from apps.products.services.query_services import ProductQueryService
 from apps.products.services.product_services import ProductServices
 from apps.products.services.cache_services import CacheServices
 from rest_framework.views import APIView
@@ -89,3 +89,14 @@ class ProductUpdateView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+
+
+class ProductDeleteView(APIView):
+    permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
+
+    def delete(self, request, pk):
+        try:
+            ProductServices.delete_product(pk)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Exception:
+            return Response('Товар удален или не существует', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
