@@ -1,11 +1,12 @@
-from django.core.exceptions import ValidationError
+# product_services.py
 from django.db import transaction
-from rest_framework import serializers
+from rest_framework.exceptions import ValidationError as DRFValidationError
 from apps.products.models import Product
-from apps.products.services.query_services import ProductQueryService
+from apps.products.exceptions import ProductServiceException
 
 
 class ProductServices:
+
     @staticmethod
     def create_product(data):
         try:
@@ -13,28 +14,26 @@ class ProductServices:
                 product = Product.objects.create(**data)
                 product.full_clean()
                 return product
-        except ValidationError as e:
-            raise serializers.ValidationError(e.message_dict)
+        except Exception as e:
+            raise ProductServiceException(f"Ошибка создания продукта: {str(e)}")
 
     @staticmethod
     def update_product(instance, validated_data):
         try:
-            category_data = validated_data.pop('category_id', None)
-            if category_data:
-                instance.category = category_data
-            for attr, value in validated_data.items():
-                setattr(instance, attr, value)
-            instance.full_clean()
-            instance.save()
-            return instance
-        except ValidationError as e:
-            raise serializers.ValidationError(e.message_dict)
+            with transaction.atomic():
+                for field, value in validated_data.items():
+                    setattr(instance, field, value)
+                instance.full_clean()
+                instance.save()
+                return instance
+        except Exception as e:
+            raise ProductServiceException(f"Ошибка обновления продукта: {str(e)}")
 
     @staticmethod
-    def delete_product(pk):
+    def delete_product(instance):
         try:
-            product = ProductQueryService.get_optimized_queryset(pk=pk)
-            product.is_active = False
-            product.save()
-        except AttributeError:
-            raise AttributeError('Product is not optimized')
+            with transaction.atomic():
+                instance.is_active = False
+                instance.save(update_fields=['is_active'])
+        except Exception as e:
+            raise ProductServiceException(f"Ошибка удаления продукта: {str(e)}")
