@@ -4,6 +4,8 @@ from decimal import Decimal
 from django.contrib.postgres.indexes import GinIndex
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from mptt.models import MPTTModel, TreeForeignKey
 from django.core.validators import FileExtensionValidator, MinValueValidator
 
@@ -94,31 +96,36 @@ class Product(TimeStampedModel):
 
     @property
     def price_with_discount(self):
-        """Рассчитывает цену с учетом скидки"""
         return self.price * (100 - self.discount) / 100
 
     @property
     def in_stock(self):
-        """Проверяет наличие товара на складе"""
         return self.stock > 0
 
     def clean(self):
-        """Дополнительная валидация при сохранении"""
         if self.discount < 0 or self.discount > 100:
             raise ValidationError("Скидка должна быть в диапазоне 0-100%")
 
     def save(self, *args, **kwargs):
-        """
-        При сохранении генерируем слаг и проверяем на уникальность
-        """
         if not self.slug:
             self.slug = unique_slugify(self.title)
-            while Product.objects.filter(slug=self.slug).exists():
-                self.slug = f"{self.slug}-{uuid.uuid4().hex[:4]}"
-        super(Product, self).save(*args, **kwargs)
-        self.search_vector = (SearchVector('title', weight='A') +
-                              SearchVector('description', weight='B'))
-        super(Product, self).save(update_fields=['search_vector'])
+            counter = 1
+            while Product.objects.filter(slug=self.slug).exclude(id=self.id).exists():
+                self.slug = unique_slugify(self.title)
+                counter += 1
+                if counter > 10:  # Защита от бесконечного цикла
+                    raise ValidationError("Невозможно сгенерировать уникальный slug")
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
+
+
+@receiver(post_save, sender=Product)
+def update_search_vector(sender, instance, created, update_fields, **kwargs):
+    if created or 'title' in (update_fields or []) or 'description' in (update_fields or []):
+        instance.search_vector = (
+                SearchVector('title', weight='A') +
+                SearchVector('description', weight='B')
+        )
+        instance.save(update_fields=['search_vector'])

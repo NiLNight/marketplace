@@ -42,6 +42,11 @@ class ProductCreateSerializer(serializers.ModelSerializer):
             'category': {'required': True},
         }
 
+    def validate_discount(self, value):
+        if value < 0 or value > 100:
+            raise serializers.ValidationError("Скидка должна быть в диапазоне 0-100%")
+        return value
+
 
 class ProductDetailSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
