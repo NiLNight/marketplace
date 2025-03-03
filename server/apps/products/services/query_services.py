@@ -1,22 +1,20 @@
-# query_services.py (обновленная версия)
+# query_services.py
 from django.db.models import Q, ExpressionWrapper, F, FloatField, Count, Avg
 from django.db.models.functions import Coalesce, ExtractDay, Now
 from apps.products.models import Product, Category
-from apps.products.exceptions import ProductNotFound, InvalidCategoryError  # 🚀 Добавлены кастомные исключения
+from apps.products.exceptions import ProductNotFound, InvalidCategoryError
 
 
 class ProductQueryService:
     ALLOWED_ORDER_FIELDS = {
-        'popularity_score', 'price', '-price',
+        '-popularity_score', 'price', '-price',
         '-created', 'rating_avg', '-rating_avg'
     }
 
-    # 🚀 Переименован метод для ясности
     @classmethod
     def get_base_queryset(cls):
         return Product.objects.filter(is_active=True)
 
-    # 🚀 Разделен на два метода для единичного и списка продуктов
     @classmethod
     def get_product_list(cls):
         return cls._apply_common_annotations(
@@ -34,9 +32,8 @@ class ProductQueryService:
                 cls.get_base_queryset()
             ).get(pk=pk)
         except Product.DoesNotExist:
-            raise ProductNotFound()  # 🚀 Кастомное исключение
+            raise ProductNotFound()
 
-    # 🚀 Вынесена общая логика аннотаций
     @staticmethod
     def _apply_common_annotations(queryset):
         return queryset.annotate(
@@ -48,7 +45,7 @@ class ProductQueryService:
             ),
             review_count=Count('ratings', distinct=True),
             days_since_created=ExtractDay(Now() - F('created')),
-            popularity_score=ExpressionWrapper(  # 🚀 Перенесено из apply_ordering
+            popularity_score=ExpressionWrapper(
                 (F('purchase_count') * 0.4) +
                 (F('review_count') * 0.2) +
                 (F('rating_avg') * 0.3) +
@@ -59,12 +56,6 @@ class ProductQueryService:
 
     @classmethod
     def apply_filters(cls, queryset, request):
-        """
-        🚀 Добавлены:
-        - Валидация параметров
-        - Разделение на приватные методы
-        - Кастомные исключения
-        """
         params = request.GET.dict()
 
         # Фильтр по категории
@@ -84,7 +75,7 @@ class ProductQueryService:
             descendants = category.get_descendants(include_self=True)
             return queryset.filter(category__in=descendants)
         except Category.DoesNotExist:
-            raise InvalidCategoryError()  # 🚀 Замена на кастомное исключение
+            raise InvalidCategoryError()
 
     @staticmethod
     def _filter_by_price(queryset, params):
@@ -100,15 +91,9 @@ class ProductQueryService:
 
     @classmethod
     def apply_ordering(cls, queryset, request):
-        """
-        🚀 Улучшения:
-        - Валидация параметров сортировки
-        - Безопасная обработка входных данных
-        - Дефолтная сортировка по popularity_score
-        """
         sort_by = request.GET.get('ordering')
 
         if sort_by and sort_by not in cls.ALLOWED_ORDER_FIELDS:
-            sort_by = None  # 🚀 Игнорируем некорректные значения
+            sort_by = None
 
         return queryset.order_by(sort_by or 'popularity_score')

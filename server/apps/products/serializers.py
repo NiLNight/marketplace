@@ -7,23 +7,16 @@ from apps.products.services.product_services import ProductServices
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    """
-    Сериализатор категорий с валидацией slug
-    """
+    children = serializers.SerializerMethodField()
 
     class Meta:
         model = Category
-        fields = ['id', 'title', 'slug']
-        extra_kwargs = {
-            'slug': {
-                'validators': [
-                    validators.UniqueValidator(
-                        queryset=Category.objects.all(),
-                        message="Slug должен быть уникальным"
-                    )
-                ]
-            }
-        }
+        fields = ['title', 'slug', 'description', 'parent', 'children']
+
+    def get_children(self, obj):
+        qs = obj.cached_children
+        serializer = CategorySerializer(qs, many=True)
+        return serializer.data
 
 
 class ProductListSerializer(serializers.ModelSerializer):

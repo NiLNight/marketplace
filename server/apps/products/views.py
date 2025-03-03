@@ -1,4 +1,5 @@
 # views.py
+from mptt.utils import get_cached_trees
 from rest_framework import status
 from rest_framework.exceptions import NotFound, ValidationError as DRFValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -8,7 +9,7 @@ from rest_framework.pagination import PageNumberPagination
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 
-from apps.products.models import Product
+from apps.products.models import Product, Category
 from apps.products.services.product_services import ProductServices
 from apps.products.services.query_services import ProductQueryService
 from apps.products.services.cache_services import CacheServices
@@ -17,9 +18,21 @@ from apps.products.permissions import IsOwnerOrAdmin
 from apps.products.serializers import (
     ProductListSerializer,
     ProductDetailSerializer,
-    ProductCreateSerializer
+    ProductCreateSerializer,
+    CategorySerializer
 )
 from apps.products.exceptions import ProductServiceException
+
+
+class CategoryListView(APIView):
+    def get(self, request):
+        try:
+            categories = Category.objects.prefetch_related('children').all()
+            root_nodes = get_cached_trees(categories)
+            serializer = CategorySerializer(root_nodes, many=True)
+            return Response(serializer.data)
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
 
 
 class ProductPagination(PageNumberPagination):
@@ -33,14 +46,14 @@ class BaseProductView(APIView):
     Базовый класс для продуктовых view с общими настройками
     """
     pagination_class = ProductPagination
-    cache_timeout = 60 * 15  # 15 минут
+    CACHE_TIMEOUT = 60 * 15  # 15 минут
 
 
 class ProductListView(BaseProductView):
     serializer_class = ProductListSerializer
     permission_classes = [AllowAny]
 
-    @method_decorator(cache_page(BaseProductView.cache_timeout))
+    @method_decorator(cache_page(BaseProductView.CACHE_TIMEOUT))
     def get(self, request):
         """
         Получение списка продуктов с фильтрацией, сортировкой и пагинацией
@@ -59,6 +72,7 @@ class ProductListView(BaseProductView):
         except ProductServiceException as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
+            print(e)
             return Response(
                 {'error': 'Internal server error'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -80,7 +94,7 @@ class ProductCreateView(BaseProductView):
             )
             serializer.is_valid(raise_exception=True)
 
-            product = ProductServices.create_product(
+            ProductServices.create_product(
                 data=serializer.validated_data,
             )
 

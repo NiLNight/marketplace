@@ -1,26 +1,18 @@
-import uuid
 from decimal import Decimal
-
-from django.contrib.postgres.indexes import GinIndex
+from django.contrib.postgres.indexes import GinIndex, HashIndex
 from django.core.exceptions import ValidationError
-from django.db import models
+from django.db import models, transaction
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from mptt.models import MPTTModel, TreeForeignKey
-from django.core.validators import FileExtensionValidator, MinValueValidator
+from django.core.validators import MinValueValidator
+
+from django.utils.translation import gettext_lazy as _
 
 from apps.core.utils import unique_slugify
 from apps.users.models import User
 from apps.core.models import TimeStampedModel
 from django.contrib.postgres.search import SearchVectorField, SearchVector
-
-
-class CategoryManager(models.Manager):
-    def with_products(self):
-        return self.prefetch_related(
-            models.Prefetch('products',
-                            queryset=Product.objects.active().only('id', 'title')
-                            ))
 
 
 class Category(MPTTModel):
@@ -36,8 +28,6 @@ class Category(MPTTModel):
         db_index=True,
     )
 
-    objects = CategoryManager()
-
     class MPTTMeta:
         order_insertion_by = ['title']
 
@@ -46,12 +36,14 @@ class Category(MPTTModel):
         verbose_name_plural = 'Категории'
         indexes = [
             models.Index(fields=['title']),
+            HashIndex(fields=['slug']),
         ]
 
+    @property
+    def cached_children(self):
+        return getattr(self, '_cached_children', self.children.all())
+
     def __str__(self):
-        """
-        Возвращение заголовка категории
-        """
         return self.title
 
 
@@ -73,14 +65,13 @@ class Product(TimeStampedModel):
     category = TreeForeignKey(Category, on_delete=models.CASCADE, related_name='products', db_index=True)
     thumbnail = models.ImageField(
         upload_to='images/products/%Y/%m/%d',
-        default='images/avatars/default.png',
+        default='images/products/default.png',
         blank=True,
-        validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'webp', 'gif'])]
+        editable=False
     )
     is_active = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='products')
     search_vector = SearchVectorField(null=True, blank=True)
-
     objects = ProductManager()
 
     class Meta:
@@ -88,11 +79,18 @@ class Product(TimeStampedModel):
         indexes = [
             models.Index(fields=['title']),
             models.Index(fields=['-created']),
-            models.Index(fields=['description']),
+            models.Index(fields=['is_active']),
             GinIndex(fields=['search_vector']),
+            models.Index(fields=['price']),
         ]
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['title', 'category'],
+                name='unique_product_category'
+            )
+        ]
 
     @property
     def price_with_discount(self):
@@ -103,19 +101,24 @@ class Product(TimeStampedModel):
         return self.stock > 0
 
     def clean(self):
-        if self.discount < 0 or self.discount > 100:
-            raise ValidationError("Скидка должна быть в диапазоне 0-100%")
+        super().clean()
+        if self.discount and self.price_with_discount < Decimal('0.01'):
+            raise ValidationError(_("Цена со скидкой не может быть меньше 0.01"))
 
     def save(self, *args, **kwargs):
-        if not self.slug:
+        if not self.slug or self.title_changed():
             self.slug = unique_slugify(self.title)
-            counter = 1
-            while Product.objects.filter(slug=self.slug).exclude(id=self.id).exists():
+            if Product.objects.filter(slug=self.slug).exists():
                 self.slug = unique_slugify(self.title)
-                counter += 1
-                if counter > 10:  # Защита от бесконечного цикла
-                    raise ValidationError("Невозможно сгенерировать уникальный slug")
-        super().save(*args, **kwargs)
+
+        with transaction.atomic():
+            super().save(*args, **kwargs)
+
+    def title_changed(self):
+        if not self.pk:
+            return True
+        orig = Product.objects.get(pk=self.pk)
+        return orig.title != self.title
 
     def __str__(self):
         return self.title
@@ -128,4 +131,3 @@ def update_search_vector(sender, instance, created, update_fields, **kwargs):
                 SearchVector('title', weight='A') +
                 SearchVector('description', weight='B')
         )
-        instance.save(update_fields=['search_vector'])
