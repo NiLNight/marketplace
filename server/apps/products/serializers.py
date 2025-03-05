@@ -7,6 +7,9 @@ from apps.products.services.product_services import ProductServices
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для списка категорий
+    """
     children = serializers.SerializerMethodField()
 
     class Meta:
@@ -21,7 +24,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ProductListSerializer(serializers.ModelSerializer):
     """
-    Сериализатор для списка продуктов с оптимизированными запросами
+    Сериализатор для списка продуктов
     """
     category = CategorySerializer()
     rating_avg = serializers.FloatField(read_only=True)
@@ -35,7 +38,7 @@ class ProductListSerializer(serializers.ModelSerializer):
             'stock', 'rating_avg', 'popularity_score',
             'thumbnail', 'created', 'category'
         ]
-        select_related = ['category']  # Оптимизация запросов
+        select_related = ['category']
 
     def get_price_with_discount(self, obj):
         """Динамический расчет цены со скидкой"""
@@ -44,7 +47,7 @@ class ProductListSerializer(serializers.ModelSerializer):
 
 class ProductCreateSerializer(serializers.ModelSerializer):
     """
-    Сериализатор для создания продукта с расширенной валидацией
+    Сериализатор для создания продукта
     """
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
@@ -77,7 +80,7 @@ class ProductCreateSerializer(serializers.ModelSerializer):
 
 class ProductDetailSerializer(serializers.ModelSerializer):
     """
-    Детальный сериализатор продукта с безопасным обновлением
+    Детальный сериализатор продукта
     """
     category = CategorySerializer(read_only=True)
     category_id = serializers.PrimaryKeyRelatedField(

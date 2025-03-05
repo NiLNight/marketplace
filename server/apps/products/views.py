@@ -1,19 +1,19 @@
 # views.py
 from mptt.utils import get_cached_trees
+
 from rest_framework import status
 from rest_framework.exceptions import NotFound, ValidationError as DRFValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
+
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 
 from apps.products.models import Product, Category
 from apps.products.services.product_services import ProductServices
 from apps.products.services.query_services import ProductQueryService
-from apps.products.services.cache_services import CacheServices
-
 from apps.products.permissions import IsOwnerOrAdmin
 from apps.products.serializers import (
     ProductListSerializer,
@@ -115,7 +115,7 @@ class ProductCreateView(BaseProductView):
 class ProductDetailView(BaseProductView):
     serializer_class = ProductDetailSerializer
     permission_classes = [AllowAny]
-    cache_timeout = 60 * 60 * 2  # 2 часа для детальной страницы
+    cache_timeout = 60 * 60 * 2
 
     @method_decorator(cache_page(cache_timeout))
     def get(self, request, pk):

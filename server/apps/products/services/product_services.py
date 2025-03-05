@@ -1,6 +1,5 @@
 # product_services.py
 from django.db import transaction
-from rest_framework.exceptions import ValidationError as DRFValidationError
 from apps.products.models import Product
 from apps.products.exceptions import ProductServiceException
 
