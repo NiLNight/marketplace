@@ -1,4 +1,5 @@
 # views.py
+from django.contrib.postgres.search import SearchQuery, SearchRank
 from mptt.utils import get_cached_trees
 
 from rest_framework import status
@@ -196,3 +197,23 @@ class ProductDeleteView(BaseProductView):
                 {'error': str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+
+class ProductSearchView(BaseProductView):
+    serializer_class = ProductListSerializer
+
+    def get(self, request):
+        search_query = request.GET.get('q', None)
+        if not search_query:
+            return Response({'error': 'Пустой поисковый запрос'}, status=400)
+        try:
+            query = SearchQuery(search_query, config='russian')
+
+            products = Product.objects.annotate(
+                rank=SearchRank('search_vector', query)
+            ).filter(search_vector=query).select_related('category').order_by('-rank')[:50]
+            serializer = self.serializer_class(products, many=True)
+            return Response(serializer.data)
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)

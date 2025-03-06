@@ -129,5 +129,6 @@ def update_search_vector(sender, instance, created, update_fields, **kwargs):
     if created or 'title' in (update_fields or []) or 'description' in (update_fields or []):
         instance.search_vector = (
                 SearchVector('title', weight='A') +
-                SearchVector('description', weight='B')
+                SearchVector('description', weight='B') +
+                SearchVector('category__title', weight='C')
         )
