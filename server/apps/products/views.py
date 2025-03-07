@@ -60,7 +60,11 @@ class ProductListView(BaseProductView):
         Получение списка продуктов с фильтрацией, сортировкой и пагинацией
         """
         try:
-            queryset = ProductQueryService.get_product_list()
+            base_queryset = ProductQueryService.get_product_list()
+            if request.GET.get('q'):
+                queryset = ProductQueryService.search_products(base_queryset, request)
+            else:
+                queryset = base_queryset
             queryset = ProductQueryService.apply_filters(queryset, request)
             queryset = ProductQueryService.apply_ordering(queryset, request)
 
@@ -195,15 +199,3 @@ class ProductDeleteView(BaseProductView):
                 {'error': str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-
-
-class ProductSearchView(BaseProductView):
-    serializer_class = ProductListSerializer
-
-    def get(self, request):
-        try:
-            products = ProductQueryService.search_products(request)
-            serializer = self.serializer_class(products, many=True)
-            return Response(serializer.data)
-        except Exception as e:
-            return Response({'error': str(e)}, status=500)

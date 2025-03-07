@@ -100,13 +100,12 @@ class ProductQueryService:
         return queryset.order_by(sort_by or 'popularity_score')
 
     @staticmethod
-    def search_products(request):
+    def search_products(queryset, request):
         search_query = request.GET.get('q', None)
         if not search_query:
             raise Exception({'error': 'Пустой поисковый запрос'})
-        query = SearchQuery(search_query, config='russian')
-
-        products = Product.objects.annotate(
+        query = SearchQuery(search_query, config='russian', search_type='websearch')
+        return queryset.annotate(
             rank=SearchRank('search_vector', query)
-        ).filter(search_vector=query).select_related('category').order_by('-rank')[:50]
-        return products
+        ).filter(search_vector__search=query).order_by('-rank')
+
