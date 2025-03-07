@@ -94,7 +94,6 @@ class ProductCreateView(BaseProductView):
                 context={'request': request}
             )
             serializer.is_valid(raise_exception=True)
-            print(serializer.validated_data)
             ProductServices.create_product(
                 data=serializer.validated_data,
             )
