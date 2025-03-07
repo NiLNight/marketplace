@@ -60,14 +60,22 @@ class ProductListView(BaseProductView):
         Получение списка продуктов с фильтрацией, сортировкой и пагинацией
         """
         try:
-            base_queryset = ProductQueryService.get_product_list()
+            # Базовый запрос без аннотаций
+            base_queryset = ProductQueryService.get_base_queryset()
+            # Поиск, если есть запрос
             if request.GET.get('q'):
                 queryset = ProductQueryService.search_products(base_queryset, request)
             else:
                 queryset = base_queryset
+
+            # Применяем фильтры и сортировку
             queryset = ProductQueryService.apply_filters(queryset, request)
+
+            # Добавляем аннотации перед сортировкой
+            queryset = ProductQueryService.get_product_list(queryset)
             queryset = ProductQueryService.apply_ordering(queryset, request)
 
+            # Пагинация
             paginator = self.pagination_class()
             page = paginator.paginate_queryset(queryset, request)
 

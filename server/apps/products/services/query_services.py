@@ -17,9 +17,9 @@ class ProductQueryService:
         return Product.objects.filter(is_active=True)
 
     @classmethod
-    def get_product_list(cls):
+    def get_product_list(cls, queryset):
         return cls._apply_common_annotations(
-            cls.get_base_queryset()
+            queryset
         ).select_related('category').only(
             'title', 'price', 'thumbnail', 'created',
             'discount', 'stock', 'category__title',
@@ -107,5 +107,5 @@ class ProductQueryService:
         query = SearchQuery(search_query, config='russian', search_type='websearch')
         return queryset.annotate(
             rank=SearchRank('search_vector', query)
-        ).filter(search_vector__search=query).order_by('-rank')
+        ).filter(search_vector=query).order_by('-rank')
 
