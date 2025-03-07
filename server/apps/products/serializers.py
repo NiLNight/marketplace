@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from rest_framework import serializers, validators
 from rest_framework.exceptions import ValidationError
 
@@ -50,20 +52,20 @@ class ProductCreateSerializer(serializers.ModelSerializer):
     Сериализатор для создания продукта
     """
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
 
     class Meta:
         model = Product
         fields = [
             'title', 'description', 'price', 'discount',
-            'stock', 'category', 'thumbnail', 'user'
+            'stock', 'thumbnail', 'category', 'user'
         ]
         extra_kwargs = {
-            'category': {'required': True},
             'discount': {
                 'required': False,
                 'default': 0,
-                'min_value': 0,
-                'max_value': 100,
+                'min_value': Decimal(0),
+                'max_value': Decimal(100),
                 'help_text': "Процент скидки (0-100)"
             },
             'stock': {'min_value': 0}
@@ -71,7 +73,7 @@ class ProductCreateSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         """Глобальная валидация данных"""
-        if data['price'] <= 0:
+        if data['price'] <= 0.0:
             raise serializers.ValidationError(
                 {"price": "Цена должна быть больше нуля"}
             )

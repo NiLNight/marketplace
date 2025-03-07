@@ -10,8 +10,9 @@ class ProductServices:
     def create_product(data):
         try:
             with transaction.atomic():
-                product = Product.objects.create(**data)
+                product = Product(**data)
                 product.full_clean()
+                product.save()
                 return product
         except Exception as e:
             raise ProductServiceException(f"Ошибка создания продукта: {str(e)}")

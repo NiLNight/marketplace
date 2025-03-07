@@ -1,4 +1,5 @@
 # query_services.py
+from django.contrib.postgres.search import SearchQuery, SearchRank
 from django.db.models import Q, ExpressionWrapper, F, FloatField, Count, Avg
 from django.db.models.functions import Coalesce, ExtractDay, Now
 from apps.products.models import Product, Category
@@ -97,3 +98,15 @@ class ProductQueryService:
             sort_by = None
 
         return queryset.order_by(sort_by or 'popularity_score')
+
+    @staticmethod
+    def search_products(request):
+        search_query = request.GET.get('q', None)
+        if not search_query:
+            raise Exception({'error': 'Пустой поисковый запрос'})
+        query = SearchQuery(search_query, config='russian')
+
+        products = Product.objects.annotate(
+            rank=SearchRank('search_vector', query)
+        ).filter(search_vector=query).select_related('category').order_by('-rank')[:50]
+        return products

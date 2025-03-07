@@ -94,11 +94,10 @@ class ProductCreateView(BaseProductView):
                 context={'request': request}
             )
             serializer.is_valid(raise_exception=True)
-
+            print(serializer.validated_data)
             ProductServices.create_product(
                 data=serializer.validated_data,
             )
-
             # # Инвалидация кэша списка продуктов
             # CacheServices.invalidate_product_list_cache()
 
@@ -203,17 +202,9 @@ class ProductSearchView(BaseProductView):
     serializer_class = ProductListSerializer
 
     def get(self, request):
-        search_query = request.GET.get('q', None)
-        if not search_query:
-            return Response({'error': 'Пустой поисковый запрос'}, status=400)
         try:
-            query = SearchQuery(search_query, config='russian')
-
-            products = Product.objects.annotate(
-                rank=SearchRank('search_vector', query)
-            ).filter(search_vector=query).select_related('category').order_by('-rank')[:50]
+            products = ProductQueryService.search_products(request)
             serializer = self.serializer_class(products, many=True)
             return Response(serializer.data)
-
         except Exception as e:
             return Response({'error': str(e)}, status=500)

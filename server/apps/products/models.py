@@ -2,8 +2,6 @@ from decimal import Decimal
 from django.contrib.postgres.indexes import GinIndex, HashIndex
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from mptt.models import MPTTModel, TreeForeignKey
 from django.core.validators import MinValueValidator
 
@@ -12,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.core.utils import unique_slugify
 from apps.users.models import User
 from apps.core.models import TimeStampedModel
-from django.contrib.postgres.search import SearchVectorField, SearchVector
+from django.contrib.postgres.search import SearchVectorField, SearchVector, Value
 
 
 class Category(MPTTModel):
@@ -85,12 +83,6 @@ class Product(TimeStampedModel):
         ]
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
-        constraints = [
-            models.UniqueConstraint(
-                fields=['title', 'category'],
-                name='unique_product_category'
-            )
-        ]
 
     @property
     def price_with_discount(self):
@@ -111,6 +103,14 @@ class Product(TimeStampedModel):
             if Product.objects.filter(slug=self.slug).exists():
                 self.slug = unique_slugify(self.title)
 
+        category_title = self.category.title if self.category else ''
+
+        self.search_vector = (
+            SearchVector(Value(self.title), weight='A') +
+            SearchVector(Value(self.description), weight='B') +
+            SearchVector(Value(category_title), weight='C')
+        )
+
         with transaction.atomic():
             super().save(*args, **kwargs)
 
@@ -122,13 +122,3 @@ class Product(TimeStampedModel):
 
     def __str__(self):
         return self.title
-
-
-@receiver(post_save, sender=Product)
-def update_search_vector(sender, instance, created, update_fields, **kwargs):
-    if created or 'title' in (update_fields or []) or 'description' in (update_fields or []):
-        instance.search_vector = (
-                SearchVector('title', weight='A') +
-                SearchVector('description', weight='B') +
-                SearchVector('category__title', weight='C')
-        )
