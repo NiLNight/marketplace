@@ -1,8 +1,11 @@
-from django.core.validators import MinValueValidator
 from django.db import models
-from apps.users.models import User
-from apps.products.models import Product
+from django.contrib.auth import get_user_model
+
 from apps.core.models import TimeStampedModel
+from apps.products.models import Product
+from django.core.validators import MinValueValidator
+
+User = get_user_model()
 
 
 class OrderQuerySet(models.QuerySet):
@@ -37,27 +40,46 @@ class Order(TimeStampedModel):
         verbose_name_plural = 'Заказы'
 
     def __str__(self):
-        return f"Order #{self.id} - {self.user.username}"
+        return f"Order #{self.id}"
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items', null=True, blank=True)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_items')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    session_key = models.CharField(max_length=50, null=True, blank=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    price_updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['order', 'product'], name='unique_order_product')
+            models.UniqueConstraint(
+                fields=['user', 'product'],
+                condition=models.Q(order__isnull=True),
+                name='unique_user_product_cart'
+            ),
+            models.UniqueConstraint(
+                fields=['session_key', 'product'],
+                condition=models.Q(order__isnull=True),
+                name='unique_session_product_cart'
+            ),
         ]
         indexes = [
-            models.Index(fields=['order', 'product']),
+            models.Index(fields=['user', 'order']),
+            models.Index(fields=['session_key', 'order']),
         ]
-        verbose_name = "Предмет заказа/корзины"
-        verbose_name_plural = "Предметы заказа/корзины"
 
     def __str__(self):
-        return f"{self.quantity} x {self.product.title}"
+        return f"{self.quantity}x {self.product.title}"
+
+    def update_price(self):
+        """Обновляет цену, если товар еще не в заказе"""
+        if not self.order:
+            new_price = self.product.price * (100 - self.product.discount) / 100
+            if self.price != new_price:
+                self.price = new_price
+                self.save(update_fields=['price', 'price_updated'])
 
 
 class Delivery(models.Model):
@@ -73,4 +95,4 @@ class Delivery(models.Model):
         verbose_name_plural = 'Адреса доставки'
 
     def __str__(self):
-        return f"Delivery address for {self.user.username}"
+        return f"Delivery address for {User.username}"
