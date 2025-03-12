@@ -1,11 +1,11 @@
 from django.urls import path
 
 from apps.carts.views import (
-    CartsView
+    CartsAddView
 )
 
 app_name = 'carts'
 urlpatterns = [
-    path('', CartsView.as_view(), name='cart'),
+    path('add/', CartsAddView.as_view(), name='cart_add'),
     path('<int:pk>/', CartsView.as_view(), name='cart_item'),
 ]

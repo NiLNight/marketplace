@@ -7,7 +7,7 @@ from apps.carts.serializers import CartItemSerializer
 from apps.products.models import Product
 
 
-class CartsView(APIView):
+class CartsAddView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = CartItemSerializer
 
