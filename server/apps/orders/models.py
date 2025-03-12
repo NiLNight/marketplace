@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.db.models import Q
+from rest_framework.exceptions import ValidationError
 
 from apps.core.models import TimeStampedModel
 from apps.products.models import Product
@@ -44,42 +46,42 @@ class Order(TimeStampedModel):
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    session_key = models.CharField(max_length=50, null=True, blank=True)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items', null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cart_items', null=True, blank=True)
+    product = models.ForeignKey(Product, related_name='order_items', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    price_updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         constraints = [
+            # Уникальность товара в корзине для пользователя (order is null)
             models.UniqueConstraint(
                 fields=['user', 'product'],
-                condition=models.Q(order__isnull=True),
-                name='unique_user_product_cart'
+                condition=Q(order__isnull=True),
+                name='unique_cart_product'
             ),
+            # Уникальность товара в заказе (order is not null)
             models.UniqueConstraint(
-                fields=['session_key', 'product'],
-                condition=models.Q(order__isnull=True),
-                name='unique_session_product_cart'
+                fields=['order', 'product'],
+                condition=Q(order__isnull=False),
+                name='unique_order_product'
             ),
         ]
         indexes = [
-            models.Index(fields=['user', 'order']),
-            models.Index(fields=['session_key', 'order']),
+            models.Index(fields=['user', 'product']),
+            models.Index(fields=['order', 'product']),
         ]
+        verbose_name = "Предмет заказа/корзины"
+        verbose_name_plural = "Предметы заказа/корзины"
 
     def __str__(self):
-        return f"{self.quantity}x {self.product.title}"
+        return f"{self.quantity} x {self.product.title}"
 
-    def update_price(self):
-        """Обновляет цену, если товар еще не в заказе"""
-        if not self.order:
-            new_price = self.product.price * (100 - self.product.discount) / 100
-            if self.price != new_price:
-                self.price = new_price
-                self.save(update_fields=['price', 'price_updated'])
+    def clean(self):
+        """Валидация: элемент не может быть одновременно в корзине и в заказе."""
+        if self.user and self.order:
+            raise ValidationError("Элемент не может одновременно принадлежать пользователю (корзина) и заказу.")
+        if not self.user and not self.order:
+            raise ValidationError("Элемент должен быть привязан либо к пользователю, либо к заказу.")
 
 
 class Delivery(models.Model):
