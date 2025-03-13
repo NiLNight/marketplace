@@ -4,7 +4,9 @@ from apps.products.serializers import ProductDetailSerializer
 
 
 class CartItemSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(allow_null=True, required=False)
     product = ProductDetailSerializer()
+    quantity = serializers.IntegerField()
 
     class Meta:
         model = OrderItem

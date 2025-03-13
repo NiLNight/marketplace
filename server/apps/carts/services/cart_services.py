@@ -35,46 +35,50 @@ class CartService:
 
     @staticmethod
     @transaction.atomic
-    def update_cart_item(request, product_id: int, quantity: int) -> OrderItem | None | dict:
+    def update_cart_item(request, product_id: int, quantity: int) -> dict | None:
         """Обновление количества товара в корзине."""
-        try:
-            if request.user.is_authenticated:
+        if request.user.is_authenticated:
+            try:
                 cart_item = OrderItem.objects.get(user=request.user, product_id=product_id, order__isnull=True)
                 if quantity > 0:
                     cart_item.quantity = quantity
                     cart_item.save()
+                    return {'id': cart_item.id, 'product_id': cart_item.product_id, 'quantity': cart_item.quantity}
                 else:
                     cart_item.delete()
                     return None
-                return cart_item
-            else:
-                cart = request.session.get('cart', {})
-                if quantity > 0:
-                    cart[str(product_id)] = quantity
-                else:
-                    if str(product_id) in cart:
-                        del cart[str(product_id)]
-                    return None
+            except OrderItem.DoesNotExist:
+                return None
+        else:
+            cart = request.session.get('cart', {})
+            product_id_str = str(product_id)
+            if quantity > 0:
+                cart[product_id_str] = quantity
+                request.session['cart'] = cart
                 return {'product_id': product_id, 'quantity': quantity}
-        except OrderItem.DoesNotExist:
-            return None
+            else:
+                if product_id_str in cart:
+                    del cart[product_id_str]
+                    request.session['cart'] = cart
+                return None
 
     @staticmethod
     def remove_from_cart(request, product_id: int) -> bool:
         """Удаление товара из корзины."""
-        try:
-            if request.user.is_authenticated:
+        if request.user.is_authenticated:
+            try:
                 cart_item = OrderItem.objects.get(user=request.user, product_id=product_id, order__isnull=True)
                 cart_item.delete()
                 return True
-            else:
-                cart = request.session.get('cart', {})
-                product_id_str = str(product_id)
-                if product_id_str in cart:
-                    del cart[product_id_str]
-                    request.session['cart'] = cart
-                    return True
-        except OrderItem.DoesNotExist:
+            except OrderItem.DoesNotExist:
+                return False
+        else:
+            cart = request.session.get('cart', {})
+            product_id_str = str(product_id)
+            if product_id_str in cart:
+                del cart[product_id_str]
+                request.session['cart'] = cart
+                return True
             return False
 
     @staticmethod
@@ -84,6 +88,7 @@ class CartService:
             return OrderItem.objects.filter(user=request.user, order__isnull=True).select_related('product')
         else:
             cart = request.session.get('cart', {})
+            print(cart)
             product_ids = cart.keys()
             products = Product.objects.filter(id__in=product_ids)
             return [{'product': p, 'quantity': cart[str(p.id)]} for p in products]

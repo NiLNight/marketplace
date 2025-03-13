@@ -46,19 +46,15 @@ class CartsItemUpdateView(APIView):
 
     def patch(self, request, pk):
         quantity = int(request.data.get('quantity', 1))
-        if request.user.is_authenticated:
-            cart_item = CartService.update_cart_item(request, product_id=pk, quantity=quantity)
-            if cart_item:
-                serializer = self.serializer_class(cart_item)
-                return Response(serializer.data)
-        else:
-            cart_item = CartService.update_cart_item(request, product_id=pk, quantity=quantity)
-            product = Product.objects.get(pk=cart_item['product_id'])
-            serializer = self.serializer_class({
-                'id': None,
+        cart_item = CartService.update_cart_item(request, product_id=pk, quantity=quantity)
+        if cart_item:
+            product = Product.objects.filter(id=cart_item['product_id']).select_related('category').first()
+            serializer_data = {
+                'id': cart_item.get('id'),  # None для неавторизованных пользователей
                 'product': product,
                 'quantity': cart_item['quantity']
-            })
+            }
+            serializer = self.serializer_class(serializer_data)
             return Response(serializer.data)
         return Response({"error": "Товар не найден в корзине"}, status=status.HTTP_404_NOT_FOUND)
 
