@@ -35,22 +35,32 @@ class CartService:
 
     @staticmethod
     @transaction.atomic
-    def update_cart_item(user: User, product_id: int, quantity: int) -> OrderItem | None:
+    def update_cart_item(request, product_id: int, quantity: int) -> OrderItem | None | dict:
         """Обновление количества товара в корзине."""
         try:
-            cart_item = OrderItem.objects.get(user=user, product_id=product_id, order__isnull=True)
-            if quantity > 0:
-                cart_item.quantity = quantity
-                cart_item.save()
+            if request.user.is_authenticated:
+                cart_item = OrderItem.objects.get(user=request.user, product_id=product_id, order__isnull=True)
+                if quantity > 0:
+                    cart_item.quantity = quantity
+                    cart_item.save()
+                else:
+                    cart_item.delete()
+                    return None
+                return cart_item
             else:
-                cart_item.delete()
-                return None
-            return cart_item
+                cart = request.session.get('cart', {})
+                if quantity > 0:
+                    cart[str(product_id)] = quantity
+                else:
+                    if str(product_id) in cart:
+                        del cart[str(product_id)]
+                    return None
+                return {'product_id': product_id, 'quantity': quantity}
         except OrderItem.DoesNotExist:
             return None
 
     @staticmethod
-    def remove_from_cart(request, product_id: int):
+    def remove_from_cart(request, product_id: int) -> bool:
         """Удаление товара из корзины."""
         try:
             if request.user.is_authenticated:
