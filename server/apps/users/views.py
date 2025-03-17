@@ -24,6 +24,7 @@ from apps.users.serializers import (
 from apps.users.services.utils import set_jwt_cookies
 from apps.users.services.users_services import UserService, ConfirmPasswordService, ConfirmCodeService
 from config import settings
+from apps.carts.services.cart_services import CartService
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -81,10 +82,13 @@ class UserLoginView(APIView):
                 "user": {"id": user.id, "username": user.username, "email": user.email}
             }
             response = Response(response_data)
+            if request.session.get('cart'):
+                CartService.merge_cart_on_login(request.user, request.session['cart'])
+                del request.session['cart']  # Очистка корзины в сессии
             return set_jwt_cookies(response, user)
         except AuthenticationFailed as e:
             return Response({"error": str(e)}, status=status.HTTP_401_UNAUTHORIZED)
-        except Exception as e:
+        except Exception:
             return Response({"error": "Произошла ошибка при входе"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 

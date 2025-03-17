@@ -95,19 +95,20 @@ class CartService:
 
     @staticmethod
     @transaction.atomic
-    def merge_cart_on_login(user: User, session_cart: dict):
-        for product_id_str, quantity in session_cart.items():
-            try:
-                product_id = int(product_id_str)
-                product = Product.objects.get(id=product_id)
-                cart_item, created = OrderItem.objects.get_or_create(
-                    user=user,
-                    product=product,
-                    order__isnull=True,
-                    defaults={'quantity': quantity}
-                )
-                if not created:
-                    cart_item.quantity += quantity  # Складываем количества при дубликатах
-                    cart_item.save()
-            except (ValueError, Product.DoesNotExist):
-                continue  # Пропускаем некорректные товары
+    def merge_cart_on_login(user, session_cart: dict):
+        if session_cart:
+            for product_id_str, quantity in session_cart.items():
+                try:
+                    product_id = int(product_id_str)
+                    product = Product.objects.get(id=product_id)
+                    cart_item, created = OrderItem.objects.get_or_create(
+                        user=user,
+                        product=product,
+                        order__isnull=True,
+                        defaults={'quantity': quantity}
+                    )
+                    if not created:
+                        cart_item.quantity += quantity  # Складываем количества при дубликатах
+                        cart_item.save()
+                except (ValueError, Product.DoesNotExist):
+                    continue  # Пропускаем некорректные товары
