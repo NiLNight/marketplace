@@ -37,30 +37,15 @@ class CustomJWTAuthentication(JWTAuthentication):
             validated_token = self.get_validated_token(raw_token)
             user = self.get_user(validated_token)
 
-            # Проверка активности пользователя
             if not user.is_active:
-                self._delete_token_cookies(request)
                 raise AuthenticationFailed(
                     "Аккаунт деактивирован",
                     code="user_inactive"
                 )
 
             return user, validated_token
-
         except InvalidToken as e:
-            self._delete_token_cookies(request)
             raise AuthenticationFailed({
                 "detail": f"Неверный токен: {str(e)}",
                 "code": "token_invalid"
             })
-
-    def _delete_token_cookies(self, request):
-        response = HttpResponse()
-        response.delete_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'])
-        return response
-
-
-class CustomTokenUser(TokenUser):
-    @property
-    def is_active(self):
-        return self.token.get('is_active', False)

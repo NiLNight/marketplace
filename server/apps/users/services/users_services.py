@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model, authenticate
 from django.utils import timezone
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -36,15 +37,15 @@ class UserService:
     def login_user(email, password):
         """Аутентификация пользователя."""
         user = User.objects.filter(email=email).first()
-        if not user:
-            raise ValueError("Неверные учетные данные")
+        if user is None:
+            raise AuthenticationFailed("Неверные учетные данные")
         if not user.is_active:
-            raise ValueError("Аккаунт не активирован")
+            raise AuthenticationFailed("Аккаунт не активирован")
         if not user.check_password(password):
-            raise ValueError("Неверные учетные данные")
+            raise AuthenticationFailed("Неверные учетные данные")
         user = authenticate(username=user.username, password=password)
         if not user:
-            raise ValueError("Ошибка аутентификации")
+            raise AuthenticationFailed("Ошибка аутентификации")
         return user
 
     @staticmethod

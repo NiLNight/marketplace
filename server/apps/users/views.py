@@ -9,6 +9,7 @@ Views для работы с пользователями:
 import logging
 from django.contrib.auth import get_user_model
 from rest_framework import status
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -22,6 +23,7 @@ from apps.users.serializers import (
 )
 from apps.users.services.utils import set_jwt_cookies
 from apps.users.services.users_services import UserService, ConfirmPasswordService, ConfirmCodeService
+from config import settings
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -69,19 +71,21 @@ class UserLoginView(APIView):
                 email=serializer.validated_data['email'],
                 password=serializer.validated_data['password'],
             )
-        except ValueError as e:
-            return Response({'error': str(e)},
-                            status=status.HTTP_400_BAD_REQUEST)
-        except Exception:
-            return Response({'error': 'Произошла ошибка при выходе'},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        response_data = {
-            "message": "Login successful",
-            "user": {"id": user.id, "username": user.username, "email": user.email}
-        }
-        response = Response(response_data)
-        return set_jwt_cookies(response, user)
+            if not user.is_active:
+                return Response(
+                    {"error": "Требуется активация аккаунта"},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            response_data = {
+                "message": "Login successful",
+                "user": {"id": user.id, "username": user.username, "email": user.email}
+            }
+            response = Response(response_data)
+            return set_jwt_cookies(response, user)
+        except AuthenticationFailed as e:
+            return Response({"error": str(e)}, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            return Response({"error": "Произошла ошибка при входе"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class UserLogoutView(APIView):
@@ -95,11 +99,11 @@ class UserLogoutView(APIView):
         try:
             UserService.logout_user(refresh_token)
             response = Response({"message": "Выход успешно выполнен"}, status=status.HTTP_200_OK)
-            response.delete_cookie('access_token')
-            response.delete_cookie('refresh_token')
+            response.delete_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'])  # Удаляем access_token
+            response.delete_cookie(settings.SIMPLE_JWT['REFRESH_COOKIE'])  # Удаляем refresh_token, если используется
             return response
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserProfileView(APIView):
