@@ -1,10 +1,8 @@
 from django.db import transaction
 from django.core.exceptions import ValidationError
-from django.db.models import QuerySet
 
 from apps.carts.models import OrderItem
 from apps.products.models import Product
-from apps.users.models import User
 
 
 class CartService:
@@ -16,8 +14,11 @@ class CartService:
         if quantity < 1:
             raise ValidationError("Количество должно быть положительным.")
 
+        product = Product.objects.get(id=product_id)
+        if quantity > product.stock:
+            raise ValidationError('Товар не в наличии')
+
         if request.user.is_authenticated:
-            product = Product.objects.get(id=product_id)
             cart_item, created = OrderItem.objects.get_or_create(
                 user=request.user,
                 product=product,
