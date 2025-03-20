@@ -43,7 +43,7 @@ class OrderItem(models.Model):
 
     def clean(self):
         """Валидация: элемент не может быть одновременно в корзине и в заказе."""
-        if self.user and self.order:
+        if self.order is None and self.user is not None:
             raise ValidationError("Элемент не может одновременно принадлежать пользователю (корзина) и заказу.")
-        if not self.user and not self.order:
+        if self.order is None and self.user is None:
             raise ValidationError("Элемент должен быть привязан либо к пользователю, либо к заказу.")

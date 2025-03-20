@@ -13,13 +13,13 @@ class CartsAddView(APIView):
 
     def post(self, request):
         """Добавление товара в корзину."""
-        product_id = request.data.get('product_id')
-        quantity = int(request.data.get('quantity', 1))
         try:
+            product_id = int(request.data.get('product_id'))
+            quantity = int(request.data.get('quantity', 1))
             CartService.add_to_cart(request, product_id, quantity)
             return Response({"message": "Товар добавлен в корзину"})
-        except ValueError as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except (ValueError, TypeError):
+            return Response({"error": "Некорректные данные"}, status=status.HTTP_400_BAD_REQUEST)
         except Product.DoesNotExist:
             return Response({"error": "Товар не найден"}, status=404)
 
@@ -31,14 +31,10 @@ class CartsGetView(APIView):
     def get(self, request):
         """Получение корзины."""
         cart_items = CartService.get_cart(request)
-        if request.user.is_authenticated:
-            serializer = CartItemSerializer(cart_items, many=True)
-        else:
-            serializer = CartItemSerializer([{
-                'id': None,
-                'product': item['product'],
-                'quantity': item['quantity']
-            } for item in cart_items], many=True)
+        serializer = self.serializer_class(cart_items,
+                                           many=True) if request.user.is_authenticated else self.serializer_class(
+            [{'id': None, 'product': item['product'], 'quantity': item['quantity']} for item in cart_items], many=True
+        )
         return Response(serializer.data)
 
 
@@ -53,7 +49,7 @@ class CartsItemUpdateView(APIView):
         except ValueError as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         if cart_item:
-            product = Product.objects.filter(id=cart_item['product_id']).select_related('category').first()
+            product = Product.objects.select_related('category').get(id=cart_item['product_id'])
             serializer_data = {
                 'id': cart_item.get('id'),  # None для неавторизованных пользователей
                 'product': product,

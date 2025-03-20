@@ -9,6 +9,7 @@ class CartService:
     """Сервис для управления корзиной авторизованных пользователей."""
 
     @staticmethod
+    @transaction.atomic
     def add_to_cart(request, product_id: int, quantity: int = 1):
         """Добавление товара в корзину."""
         if quantity < 1:
