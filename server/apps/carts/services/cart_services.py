@@ -16,7 +16,7 @@ class CartService:
 
         product = Product.objects.get(id=product_id)
         if quantity > product.stock:
-            raise ValidationError('Товар не в наличии')
+            raise ValueError('Товар не в наличии')
 
         if request.user.is_authenticated:
             cart_item, created = OrderItem.objects.get_or_create(
@@ -38,6 +38,9 @@ class CartService:
     @transaction.atomic
     def update_cart_item(request, product_id: int, quantity: int) -> dict | None:
         """Обновление количества товара в корзине."""
+        product = Product.objects.get(id=product_id)
+        if quantity > product.stock:
+            raise ValueError('Товар не в наличии')
         if request.user.is_authenticated:
             try:
                 cart_item = OrderItem.objects.get(user=request.user, product_id=product_id, order__isnull=True)

@@ -18,6 +18,8 @@ class CartsAddView(APIView):
         try:
             CartService.add_to_cart(request, product_id, quantity)
             return Response({"message": "Товар добавлен в корзину"})
+        except ValueError as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except Product.DoesNotExist:
             return Response({"error": "Товар не найден"}, status=404)
 
@@ -46,7 +48,10 @@ class CartsItemUpdateView(APIView):
 
     def patch(self, request, pk):
         quantity = int(request.data.get('quantity', 1))
-        cart_item = CartService.update_cart_item(request, product_id=pk, quantity=quantity)
+        try:
+            cart_item = CartService.update_cart_item(request, product_id=pk, quantity=quantity)
+        except ValueError as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         if cart_item:
             product = Product.objects.filter(id=cart_item['product_id']).select_related('category').first()
             serializer_data = {
