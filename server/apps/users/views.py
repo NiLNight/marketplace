@@ -83,12 +83,13 @@ class UserLoginView(APIView):
             }
             response = Response(response_data)
             if request.session.get('cart'):
-                CartService.merge_cart_on_login(request.user, request.session['cart'])
+                CartService.merge_cart_on_login(user, request.session['cart'])
                 del request.session['cart']  # Очистка корзины в сессии
             return set_jwt_cookies(response, user)
         except AuthenticationFailed as e:
             return Response({"error": str(e)}, status=status.HTTP_401_UNAUTHORIZED)
-        except Exception:
+        except Exception as e:
+            print(e)
             return Response({"error": "Произошла ошибка при входе"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
