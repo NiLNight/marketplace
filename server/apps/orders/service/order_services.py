@@ -33,6 +33,12 @@ class OrderService:
             total_price=total_price,
             delivery=delivery,
         )
+
+        for item in cart_items:
+            item.order = order
+            item.user = None
+            item.save()
+
         order.save()
 
         return order
