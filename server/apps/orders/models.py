@@ -8,6 +8,7 @@ User = get_user_model()
 class Delivery(models.Model):
     user = models.ForeignKey(User, related_name='deliveries', on_delete=models.CASCADE)
     address = models.CharField(max_length=255)
+    cost = models.DecimalField(max_digits=10, decimal_places=2)
     is_primary = models.BooleanField(default=False)
 
     class Meta:
@@ -42,7 +43,6 @@ class Order(TimeStampedModel):
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='pending')
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     delivery = models.ForeignKey(Delivery, related_name='orders', on_delete=models.SET_NULL, null=True)
-    payment = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     objects = OrderQuerySet.as_manager()
 
