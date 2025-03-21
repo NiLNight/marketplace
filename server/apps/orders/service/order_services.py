@@ -11,7 +11,7 @@ User = get_user_model()
 class OrderService:
     @staticmethod
     @transaction.atomic
-    def create_order(user: User, delivery_id: int, requisite_id: int) -> Order:
+    def create_order(user: User, delivery_id: int) -> Order:
         """Создание заказа из корзины."""
         # Получение товаров корзины
         cart_items = OrderItem.objects.filter(user=user, order__isnull=True)
