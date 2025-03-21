@@ -7,8 +7,8 @@ User = get_user_model()
 
 class Delivery(models.Model):
     user = models.ForeignKey(User, related_name='deliveries', on_delete=models.CASCADE)
-    address = models.CharField(max_length=255)
-    cost = models.DecimalField(max_digits=10, decimal_places=2)
+    address = models.CharField(max_length=255, null=True, blank=True)
+    cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     is_primary = models.BooleanField(default=False)
 
     class Meta:
