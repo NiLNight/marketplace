@@ -3,6 +3,8 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from apps.orders.serializers import OrderSerializer
 from apps.orders.service import order_services
 
 
@@ -30,3 +32,13 @@ class OrderCreateView(APIView):
         except Exception as e:
             print(e)
             return Response({"error": "Ошибка сервера"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class OrderListView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = OrderSerializer
+
+    def get(self, request):
+        orders = order_services.OrderService.get_user_orders(user=request.user)
+        serializer = self.serializer_class(orders, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

@@ -42,3 +42,16 @@ class OrderService:
         order.save()
 
         return order
+
+    @staticmethod
+    def get_user_orders(user: User):
+        """Получение заказов пользователя: активные первыми, затем архивные по дате."""
+        active_statuses = ['pending', 'processing', 'shipped']
+        archived_statuses = ['delivered', 'cancelled']
+
+        active_orders = Order.objects.filter(user=user, status__in=active_statuses).order_by('-created')
+        archived_orders = Order.objects.filter(user=user, status__in=archived_statuses).order_by('-created')
+
+        return list(active_orders) + list(archived_orders)
+
+
