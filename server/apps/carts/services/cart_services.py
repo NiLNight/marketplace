@@ -98,7 +98,9 @@ class CartService:
             cart = request.session.get('cart', {})
             print(cart)
             product_ids = cart.keys()
-            products = Product.objects.filter(id__in=product_ids)
+            products = Product.objects.filter(id__in=product_ids).select_related('category').prefetch_related(
+                'category__children'
+            )
             return [{'product': p, 'quantity': cart[str(p.id)]} for p in products]
 
     @staticmethod
