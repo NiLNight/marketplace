@@ -4,7 +4,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.orders.serializers import OrderSerializer
+from apps.orders.serializers import (
+    OrderSerializer,
+    OrderDetailSerializer
+)
 from apps.orders.service import order_services
 
 
@@ -41,4 +44,14 @@ class OrderListView(APIView):
     def get(self, request):
         orders = order_services.OrderService.get_user_orders(user=request.user)
         serializer = self.serializer_class(orders, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class OrderDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = OrderDetailSerializer
+
+    def get(self, request, pk):
+        order = order_services.OrderService.get_order_details(order_id=pk, user=request.user)
+        serializer = self.serializer_class(order)
         return Response(serializer.data, status=status.HTTP_200_OK)

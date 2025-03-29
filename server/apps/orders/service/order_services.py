@@ -55,3 +55,11 @@ class OrderService:
         return list(active_orders) + list(archived_orders)
 
 
+    @staticmethod
+    def get_order_details(order_id: int, user: User):
+        """Получение деталей заказа."""
+        try:
+            order = Order.objects.get(pk=order_id, user=user)
+            return order
+        except Order.DoesNotExist:
+            raise ValidationError('Заказ не найден')
