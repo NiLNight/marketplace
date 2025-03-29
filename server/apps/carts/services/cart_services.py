@@ -90,7 +90,10 @@ class CartService:
     def get_cart(request):
         """Получение содержимого корзины."""
         if request.user.is_authenticated:
-            return OrderItem.objects.filter(user=request.user, order__isnull=True).select_related('product')
+            return (OrderItem.objects.filter(
+                user=request.user, order__isnull=True
+            ).select_related('product', 'product__category').prefetch_related(
+                'product__category__children'))
         else:
             cart = request.session.get('cart', {})
             print(cart)

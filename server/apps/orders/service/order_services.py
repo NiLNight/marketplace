@@ -1,5 +1,6 @@
 from django.db import transaction
 from django.contrib.auth import get_user_model
+from django.db.models import Prefetch
 from rest_framework.exceptions import ValidationError
 
 from apps.carts.models import OrderItem
@@ -54,12 +55,18 @@ class OrderService:
 
         return list(active_orders) + list(archived_orders)
 
-
     @staticmethod
     def get_order_details(order_id: int, user: User):
         """Получение деталей заказа."""
         try:
-            order = Order.objects.get(pk=order_id, user=user)
+            order = Order.objects.prefetch_related(
+                Prefetch(
+                    'order_items',
+                    queryset=OrderItem.objects.select_related('product__category').prefetch_related(
+                        'product__category__children',
+                    )
+                )
+            ).get(pk=order_id, user=user)
             return order
         except Order.DoesNotExist:
             raise ValidationError('Заказ не найден')
