@@ -8,7 +8,7 @@ from apps.orders.serializers import (
     OrderSerializer,
     OrderDetailSerializer
 )
-from apps.orders.service import order_services
+from apps.orders.services import order_services
 
 
 class OrderCreateView(APIView):

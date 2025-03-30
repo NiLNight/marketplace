@@ -55,5 +55,8 @@ class Order(TimeStampedModel):
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
 
+    def save(self, *args, **kwargs):
+        super(Order, self).save(*args, **kwargs)
+
     def __str__(self):
         return f"Order #{self.id} - {User.username}"
