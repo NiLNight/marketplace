@@ -20,19 +20,27 @@ class CartService:
             raise ValueError('Товар не в наличии')
 
         if request.user.is_authenticated:
+            # Для авторизованных пользователей
             cart_item, created = OrderItem.objects.get_or_create(
                 user=request.user,
                 product=product,
                 order__isnull=True,
-                defaults={'quantity': quantity}
+                defaults={'quantity': 0}  # Изначально 0 для проверки лимита
             )
-            if not created:
-                cart_item.quantity += quantity
-                cart_item.save()
+            new_quantity = cart_item.quantity + quantity
+            if new_quantity > 20:
+                raise ValueError(f"Нельзя добавить больше 20 единиц товара {product.title} в корзину.")
+            cart_item.quantity = new_quantity
+            cart_item.save()
         else:
+            # Для неавторизованных пользователей
             cart = request.session.get('cart', {})
             product_id_str = str(product_id)
-            cart[product_id_str] = cart.get(product_id_str, 0) + quantity
+            current_quantity = cart.get(product_id_str, 0)
+            new_quantity = current_quantity + quantity
+            if new_quantity > 20:
+                raise ValueError(f"Нельзя добавить больше 20 единиц товара {product.title} в корзину.")
+            cart[product_id_str] = new_quantity
             request.session['cart'] = cart
 
     @staticmethod
@@ -46,6 +54,8 @@ class CartService:
             try:
                 cart_item = OrderItem.objects.get(user=request.user, product_id=product_id, order__isnull=True)
                 if quantity > 0:
+                    if quantity > 20:
+                        raise ValueError(f"Нельзя добавить больше 20 единиц товара {product.title} в корзину.")
                     cart_item.quantity = quantity
                     cart_item.save()
                     return {'id': cart_item.id, 'product_id': cart_item.product_id, 'quantity': cart_item.quantity}
@@ -58,6 +68,8 @@ class CartService:
             cart = request.session.get('cart', {})
             product_id_str = str(product_id)
             if quantity > 0:
+                if quantity > 20:
+                    raise ValueError(f"Нельзя добавить больше 20 единиц товара {product.title} в корзину.")
                 cart[product_id_str] = quantity
                 request.session['cart'] = cart
                 return {'product_id': product_id, 'quantity': quantity}
@@ -118,7 +130,10 @@ class CartService:
                         defaults={'quantity': quantity}
                     )
                     if not created:
-                        cart_item.quantity += quantity  # Складываем количества при дубликатах
+                        new_quantity = cart_item.quantity + quantity
+                        if new_quantity > 20:
+                            new_quantity = 20
+                        cart_item.quantity = new_quantity  # Складываем количества при дубликатах
                         cart_item.save()
                 except (ValueError, Product.DoesNotExist):
                     continue  # Пропускаем некорректные товары

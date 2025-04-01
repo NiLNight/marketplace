@@ -1,4 +1,5 @@
 from rest_framework import status
+from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -18,8 +19,10 @@ class CartsAddView(APIView):
             quantity = int(request.data.get('quantity', 1))
             CartService.add_to_cart(request, product_id, quantity)
             return Response({"message": "Товар добавлен в корзину"})
-        except (ValueError, TypeError):
-            return Response({"error": "Некорректные данные"}, status=status.HTTP_400_BAD_REQUEST)
+        except ValidationError:
+            return Response({'error': "Некорректное количество товара"})
+        except (ValueError, TypeError) as e:
+            return Response({"error": f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
         except Product.DoesNotExist:
             return Response({"error": "Товар не найден"}, status=404)
 
