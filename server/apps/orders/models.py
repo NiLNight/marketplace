@@ -32,7 +32,6 @@ class OrderQuerySet(models.QuerySet):
 
 class Order(TimeStampedModel):
     STATUS_CHOICES = [
-        ('pending', 'Pending'),
         ('processing', 'Processing'),
         ('shipped', 'Shipped'),
         ('delivered', 'Delivered'),
