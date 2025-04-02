@@ -34,6 +34,12 @@ class OrderService:
             total_price=total_price,
             delivery=delivery,
         )
+        for item in cart_items:
+            product = item.product
+            if product.stock < item.quantity:
+                raise ValidationError(f"Недостаточно товара {product.title} на складе.")
+            product.stock -= item.quantity
+            product.save()
 
         for item in cart_items:
             item.order = order
