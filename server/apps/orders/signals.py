@@ -20,12 +20,10 @@ def order_post_save(sender, instance, created, **kwargs):
         )
     elif hasattr(instance, "__original_status") and instance.status != instance.__original_status:
         if instance.status == 'delivered':
-            print('1')
             NotificationService.send_notification(
                 instance.user, f"Ваш заказ #{instance.id} доставлен!"
             )
         else:
-            print('2')
             NotificationService.send_notification(
                 instance.user, f"Статус заказа #{instance.id} изменен на {instance.status}"
             )
