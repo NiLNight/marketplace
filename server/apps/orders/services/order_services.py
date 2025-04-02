@@ -30,7 +30,7 @@ class OrderService:
 
         order = Order.objects.create(
             user=user,
-            status='pending',
+            status='processing',
             total_price=total_price,
             delivery=delivery,
         )
@@ -41,13 +41,13 @@ class OrderService:
             item.save()
 
         order.save()
-
+        OrderItem.objects.filter(user=user, order__isnull=True).delete()
         return order
 
     @staticmethod
     def get_user_orders(user: User):
         """Получение заказов пользователя: активные первыми, затем архивные по дате."""
-        active_statuses = ['pending', 'processing', 'shipped']
+        active_statuses = ['processing', 'shipped']
         archived_statuses = ['delivered', 'cancelled']
 
         active_orders = Order.objects.filter(user=user, status__in=active_statuses).order_by('-created')
@@ -70,3 +70,12 @@ class OrderService:
             return order
         except Order.DoesNotExist:
             raise ValidationError('Заказ не найден')
+
+    @staticmethod
+    def cancel_order(order_id: int, user: User):
+        order = Order.objects.get(id=order_id, user=user)
+        if order.status in ['processing']:
+            order.status = 'cancelled'
+            order.save()
+        else:
+            raise ValidationError("Нельзя отменить заказ, который уже отправлен или доставлен.")

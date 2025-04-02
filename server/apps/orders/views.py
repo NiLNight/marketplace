@@ -55,3 +55,11 @@ class OrderDetailView(APIView):
         order = order_services.OrderService.get_order_details(order_id=pk, user=request.user)
         serializer = self.serializer_class(order)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class OrderCancelView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        order_services.OrderService.cancel_order(order_id=pk, user=request.user)
+        return Response('Заказ отменен', status=status.HTTP_200_OK)
