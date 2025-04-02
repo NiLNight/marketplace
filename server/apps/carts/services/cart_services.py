@@ -48,14 +48,14 @@ class CartService:
     def update_cart_item(request, product_id: int, quantity: int) -> dict | None:
         """Обновление количества товара в корзине."""
         product = Product.objects.get(id=product_id)
+        if quantity > 20:
+            raise ValueError(f"Нельзя добавить больше 20 единиц товара {product.title} в корзину.")
         if quantity > product.stock:
             raise ValueError('Товар не в наличии')
         if request.user.is_authenticated:
             try:
                 cart_item = OrderItem.objects.get(user=request.user, product_id=product_id, order__isnull=True)
                 if quantity > 0:
-                    if quantity > 20:
-                        raise ValueError(f"Нельзя добавить больше 20 единиц товара {product.title} в корзину.")
                     cart_item.quantity = quantity
                     cart_item.save()
                     return {'id': cart_item.id, 'product_id': cart_item.product_id, 'quantity': cart_item.quantity}
@@ -68,8 +68,6 @@ class CartService:
             cart = request.session.get('cart', {})
             product_id_str = str(product_id)
             if quantity > 0:
-                if quantity > 20:
-                    raise ValueError(f"Нельзя добавить больше 20 единиц товара {product.title} в корзину.")
                 cart[product_id_str] = quantity
                 request.session['cart'] = cart
                 return {'product_id': product_id, 'quantity': quantity}
