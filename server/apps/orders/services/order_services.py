@@ -54,10 +54,19 @@ class OrderService:
     def get_user_orders(user: User, request):
         """Получение заказов пользователя: активные первыми, затем архивные по дате."""
         active_statuses = ['processing', 'shipped']
+        # Фильтрация по статусу
+        if request.GET.get('status') in active_statuses:
+            return Order.objects.filter(user=user, status__in=active_statuses).order_by('-created')
+        elif request.GET.get('status') == 'delivered':
+            return Order.objects.filter(user=user, status='delivered').order_by('-created')
+        elif request.GET.get('status') == 'cancelled':
+            return Order.objects.filter(user=user, status='cancelled').order_by('-created')
 
         active_orders = Order.objects.filter(user=user, status__in=active_statuses).order_by('-created')
         delivered_orders = Order.objects.filter(user=user, status='delivered').order_by('-created')
         cancelled_orders = Order.objects.filter(user=user, status='cancelled').order_by('-created')
+
+        # Сортировка сначала отмененные
         sort_by = request.GET.get('ordering')
         if sort_by == 'd':
             return list(cancelled_orders) + list(delivered_orders) + list(active_orders)
