@@ -50,7 +50,7 @@ class OrderListView(APIView):
     pagination_class = OrdersPagination
 
     def get(self, request):
-        orders = order_services.OrderService.get_user_orders(user=request.user)
+        orders = order_services.OrderService.get_user_orders(user=request.user, request=request)
 
         # Пагинация
         paginator = self.pagination_class()

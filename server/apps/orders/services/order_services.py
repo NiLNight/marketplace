@@ -51,15 +51,17 @@ class OrderService:
         return order
 
     @staticmethod
-    def get_user_orders(user: User):
+    def get_user_orders(user: User, request):
         """Получение заказов пользователя: активные первыми, затем архивные по дате."""
         active_statuses = ['processing', 'shipped']
-        archived_statuses = ['delivered', 'cancelled']
 
         active_orders = Order.objects.filter(user=user, status__in=active_statuses).order_by('-created')
-        archived_orders = Order.objects.filter(user=user, status__in=archived_statuses).order_by('-created')
-
-        return list(active_orders) + list(archived_orders)
+        delivered_orders = Order.objects.filter(user=user, status='delivered').order_by('-created')
+        cancelled_orders = Order.objects.filter(user=user, status='cancelled').order_by('-created')
+        sort_by = request.GET.get('ordering')
+        if sort_by == 'd':
+            return list(cancelled_orders) + list(delivered_orders) + list(active_orders)
+        return list(active_orders) + list(delivered_orders) + list(cancelled_orders)
 
     @staticmethod
     def get_order_details(order_id: int, user: User):
