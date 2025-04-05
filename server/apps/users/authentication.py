@@ -2,11 +2,8 @@
 Кастомная аутентификация JWT с поддержкой cookies
 """
 from django.conf import settings
-from django.http import HttpResponse
-from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import AuthenticationFailed, InvalidToken
-from rest_framework_simplejwt.models import TokenUser
 
 
 class CustomJWTAuthentication(JWTAuthentication):
