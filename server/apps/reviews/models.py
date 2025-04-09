@@ -10,16 +10,16 @@ class Review(models.Model):
     """
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='ratings', verbose_name='Запись')
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Пользователь')
-    value = models.BigIntegerField(default=True, verbose_name='Значение')
+    value = models.BigIntegerField(default=0, choices=[(str(i) for i in range(1, 6))], verbose_name='Оценка')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name='Время добавления')
     ip_address = models.GenericIPAddressField(verbose_name='IP Адрес')
 
     class Meta:
-        unique_together = ('product', 'ip_address')
+        unique_together = ('product', 'user')
         ordering = ['-create_time']
         indexes = [models.Index(fields=['-create_time', 'value'])]
-        verbose_name = 'Рейтинг'
-        verbose_name_plural = 'Рейтинги'
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'
 
     def __str__(self):
-        return self.product.title
+        return f"{self.product.title}: {self.value} ({self.user.username})"
