@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import Rating
+from .models import Review
 
 
-@admin.register(Rating)
+@admin.register(Review)
 class RatingAdmin(admin.ModelAdmin):
     list_display = ('product', 'user', 'value', 'create_time', 'ip_address')
     list_filter = ('value', 'create_time')

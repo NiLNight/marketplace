@@ -4,7 +4,7 @@ from django.db import models
 from apps.products.models import Product
 
 
-class Rating(models.Model):
+class Review(models.Model):
     """
     Модель рейтинга: От 1 до 5
     """
