@@ -1,24 +1,24 @@
 from django.contrib.auth.models import User
 from django.db import models
+from apps.core.models import TimeStampedModel
 from mptt.models import MPTTModel, TreeForeignKey
 
 from apps.products.models import Product
 
 
-class Review(models.Model):
+class Review(TimeStampedModel):
     """
     Модель рейтинга: От 1 до 5
     """
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='ratings', verbose_name='Запись')
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Пользователь')
     value = models.BigIntegerField(default=0, choices=[(str(i) for i in range(1, 6))], verbose_name='Оценка')
-    create_time = models.DateTimeField(auto_now_add=True, verbose_name='Время добавления')
     ip_address = models.GenericIPAddressField(verbose_name='IP Адрес')
 
     class Meta:
         unique_together = ('product', 'user')
-        ordering = ['-create_time']
-        indexes = [models.Index(fields=['-create_time', 'value'])]
+        ordering = ['-created']
+        indexes = [models.Index(fields=['-created', 'value'])]
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
 
