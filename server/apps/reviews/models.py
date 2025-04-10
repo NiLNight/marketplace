@@ -13,6 +13,7 @@ class Review(TimeStampedModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='ratings', verbose_name='Запись')
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Пользователь')
     value = models.BigIntegerField(default=0, choices=[(str(i) for i in range(1, 6))], verbose_name='Оценка')
+    text = models.TextField(blank=True, null=True, verbose_name='Текст отзыва')
     ip_address = models.GenericIPAddressField(verbose_name='IP Адрес')
 
     class Meta:
