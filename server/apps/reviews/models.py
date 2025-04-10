@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from mptt.models import MPTTModel, TreeForeignKey
 
 from apps.products.models import Product
 
@@ -23,3 +24,21 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.product.title}: {self.value} ({self.user.username})"
+
+
+class Comment(MPTTModel):
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    text = models.TextField()
+    create_time = models.DateTimeField(auto_now_add=True)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', on_delete=models.CASCADE)
+
+    class MPTTMeta:
+        order_insertion_by = ['create_time']
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+
+    def __str__(self):
+        return f"{self.review.product.title}: {self.text[:50]}..."
