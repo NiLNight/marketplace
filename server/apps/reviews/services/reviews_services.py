@@ -10,6 +10,7 @@ User = get_user_model()
 class ReviewService:
     @staticmethod
     def create_review(data: dict, user: User):
+        """Создание нового отзыва."""
         try:
             with transaction.atomic():
                 review = Review(
