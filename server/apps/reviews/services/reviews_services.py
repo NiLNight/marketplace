@@ -1,12 +1,15 @@
+from django.contrib.auth import get_user_model
 from django.db import transaction
 from rest_framework.exceptions import ValidationError
 
 from apps.reviews.models import Review
 
+User = get_user_model()
+
 
 class ReviewService:
     @staticmethod
-    def create_review(data, user):
+    def create_review(data: dict, user: User):
         try:
             with transaction.atomic():
                 review = Review(
