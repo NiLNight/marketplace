@@ -21,6 +21,7 @@ class Review(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Пользователь')
     value = models.BigIntegerField(default=0, choices=values, verbose_name='Оценка')
     text = models.TextField(blank=True, null=True, verbose_name='Текст отзыва')
+    image = models.ImageField(upload_to='images/reviews/%Y/%m/%d', blank=True, null=True)
 
     class Meta:
         unique_together = ('product', 'user')
@@ -39,6 +40,8 @@ class Comment(MPTTModel):
     text = models.TextField()
     create_time = models.DateTimeField(auto_now_add=True)
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class MPTTMeta:
         order_insertion_by = ['create_time']
@@ -49,3 +52,21 @@ class Comment(MPTTModel):
 
     def __str__(self):
         return f"{self.review.product.title}: {self.text[:50]}..."
+
+
+class ReviewLike(models.Model):
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='likes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('review', 'user')
+
+
+class CommentLike(models.Model):
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='likes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('comment', 'user')
