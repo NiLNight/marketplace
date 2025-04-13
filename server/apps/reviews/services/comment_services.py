@@ -24,3 +24,16 @@ class CommentService:
                 return comment
         except Exception as e:
             raise ValidationError(f"Ошибка создания комментария: {str(e)}")
+
+    @staticmethod
+    def update_comment(comment, data):
+        """Обновление комментария"""
+        try:
+            with transaction.atomic():
+                for field, value in data.items():
+                    setattr(comment, field, value)
+                comment.full_clean()
+                comment.save()
+                return comment
+        except Exception as e:
+            raise ValidationError(f"Ошибка обновления комментария: {str(e)}")

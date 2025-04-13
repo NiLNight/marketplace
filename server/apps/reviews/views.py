@@ -4,19 +4,23 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.reviews.models import Review
+from apps.reviews.models import Review, Comment
 from apps.reviews.services import reviews_services
 
 from apps.reviews.serializers import (
     ReviewCreateSerializer,
-    ReviewSerializer
+    ReviewSerializer,
+    CommentSerializer,
+    CommentCreateSerializer
 )
+from apps.reviews.services import comment_services
 
 
 class ReviewListView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, pk):
+        """Получение списка отзывов для продукта."""
         reviews = Review.objects.filter(product_id=pk)
         serializer = ReviewSerializer(reviews, many=True)
         return Response(serializer.data)
@@ -47,4 +51,39 @@ class ReviewUpdateView(APIView):
         if serializer.is_valid():
             updated_review = reviews_services.ReviewService.update_review(review, serializer.validated_data)
             return Response(ReviewSerializer(updated_review).data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CommentListView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get(self, request, pk):
+        """Получение списка комментариев для отзыва."""
+        comments = Comment.objects.filter(review_id=pk, parent=None)  # Только корневые
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+
+
+class CommentCreateView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def post(self, request):
+        """Создание нового комментария."""
+        serializer = CommentCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            comment = comment_services.CommentService.create_comment(serializer.validated_data, request.user)
+            return Response(CommentSerializer(comment).data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CommentUpdateView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def patch(self, request, pk):
+        """Обновление комментария."""
+        comment = get_object_or_404(Comment, pk=pk)
+        serializer = CommentCreateSerializer(comment, data=request.data, partial=True)
+        if serializer.is_valid():
+            updated_comment = comment_services.CommentService.update_comment(comment, serializer.validated_data)
+            return Response(CommentSerializer(updated_comment).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
