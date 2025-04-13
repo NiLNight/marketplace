@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -41,7 +42,7 @@ class ReviewCreateView(APIView):
 
 
 class ReviewUpdateView(APIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
     serializer_class = ReviewCreateSerializer
 
     def patch(self, request, pk):
@@ -49,8 +50,12 @@ class ReviewUpdateView(APIView):
         review = get_object_or_404(Review, pk=pk)
         serializer = self.serializer_class(review, data=request.data, partial=True)
         if serializer.is_valid():
-            updated_review = reviews_services.ReviewService.update_review(review, serializer.validated_data)
-            return Response(ReviewSerializer(updated_review).data, status=status.HTTP_200_OK)
+            try:
+                updated_review = reviews_services.ReviewService.update_review(review, serializer.validated_data,
+                                                                              request.user)
+                return Response(ReviewSerializer(updated_review).data, status=status.HTTP_200_OK)
+            except PermissionDenied as e:
+                return Response({'error': str(e)}, status=status.HTTP_403_FORBIDDEN)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -84,6 +89,10 @@ class CommentUpdateView(APIView):
         comment = get_object_or_404(Comment, pk=pk)
         serializer = CommentCreateSerializer(comment, data=request.data, partial=True)
         if serializer.is_valid():
-            updated_comment = comment_services.CommentService.update_comment(comment, serializer.validated_data)
-            return Response(CommentSerializer(updated_comment).data)
+            try:
+                updated_review = comment_services.CommentService.update_comment(comment, serializer.validated_data,
+                                                                                request.user)
+                return Response(CommentSerializer(updated_review).data, status=status.HTTP_200_OK)
+            except PermissionDenied as e:
+                return Response({'error': str(e)}, status=status.HTTP_403_FORBIDDEN)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
