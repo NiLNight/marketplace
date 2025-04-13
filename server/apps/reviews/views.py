@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -11,6 +11,15 @@ from apps.reviews.serializers import (
     ReviewCreateSerializer,
     ReviewSerializer
 )
+
+
+class ReviewListView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, pk):
+        reviews = Review.objects.filter(product_id=pk)
+        serializer = ReviewSerializer(reviews, many=True)
+        return Response(serializer.data)
 
 
 class ReviewCreateView(APIView):
