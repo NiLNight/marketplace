@@ -9,8 +9,8 @@ from apps.reviews.views import (
 )
 
 urlpatterns = [
-    path('<int:pk>/', ReviewListView.as_view(), name='review-list'),
-    path('add/', ReviewCreateView.as_view(), name='review-create'),
+    path('<int:product_id>/', ReviewListView.as_view(), name='review-list'),
+    path('create/', ReviewCreateView.as_view(), name='review-create'),
     path('update/<int:pk>/', ReviewUpdateView.as_view(), name='review-update'),
     path('comment/<int:pk>/', CommentListView.as_view(), name='comment-list'),
     path('comment/create/', CommentCreateView.as_view(), name='comment-create'),
