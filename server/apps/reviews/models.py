@@ -43,7 +43,7 @@ class Comment(MPTTModel):
     updated = models.DateTimeField(auto_now=True)
 
     class MPTTMeta:
-        order_insertion_by = ['create_time']
+        order_insertion_by = ['created']
 
     class Meta:
         verbose_name = 'Комментарий'
