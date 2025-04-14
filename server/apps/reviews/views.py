@@ -18,12 +18,15 @@ from apps.reviews.services import comment_services
 
 
 class ReviewListView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = ReviewSerializer
 
-    def get(self, request, pk):
+    def get(self, request, product_id: int):
         """Получение списка отзывов для продукта."""
-        reviews = Review.objects.filter(product_id=pk)
-        serializer = ReviewSerializer(reviews, many=True)
+        reviews = Review.objects.filter(product_id=product_id)
+        ordering = request.query_params.get('ordering')
+        reviews = reviews_services.ReviewService.apply_ordering(reviews, ordering)
+        serializer = self.serializer_class(reviews, many=True)
         return Response(serializer.data)
 
 
