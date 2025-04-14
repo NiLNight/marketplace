@@ -15,6 +15,7 @@ from apps.reviews.serializers import (
     CommentCreateSerializer
 )
 from apps.reviews.services import comment_services
+from apps.reviews.services import like_services
 
 
 class ReviewListView(APIView):
@@ -37,7 +38,6 @@ class ReviewCreateView(APIView):
     def post(self, request):
         """Создание нового отзыва."""
         serializer = self.serializer_class(data=request.data)
-        print(request.data)
         if serializer.is_valid():
             review = reviews_services.ReviewService.create_review(serializer.validated_data, request.user)
             return Response(ReviewSerializer(review).data, status=status.HTTP_201_CREATED)
@@ -65,9 +65,9 @@ class ReviewUpdateView(APIView):
 class CommentListView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def get(self, request, pk):
+    def get(self, request, review_id: int):
         """Получение списка комментариев для отзыва."""
-        comments = Comment.objects.filter(review_id=pk, parent=None)  # Только корневые
+        comments = Comment.objects.filter(review_id=review_id, parent=None)  # Только корневые
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
 
@@ -87,7 +87,7 @@ class CommentCreateView(APIView):
 class CommentUpdateView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def patch(self, request, pk):
+    def patch(self, request, pk: int):
         """Обновление комментария."""
         comment = get_object_or_404(Comment, pk=pk)
         serializer = CommentCreateSerializer(comment, data=request.data, partial=True)
@@ -99,3 +99,21 @@ class CommentUpdateView(APIView):
             except PermissionDenied as e:
                 return Response({'error': str(e)}, status=status.HTTP_403_FORBIDDEN)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ReviewLikeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk: int):
+        review = get_object_or_404(Review, pk=pk)
+        result = like_services.LikeService.toggle_review_like(review, request.user)
+        return Response(result, status=status.HTTP_200_OK)
+
+
+class CommentLikeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk: int):
+        comment = get_object_or_404(Comment, pk=pk)
+        result = like_services.LikeService.toggle_comment_like(comment, request.user)
+        return Response(result, status=status.HTTP_200_OK)
