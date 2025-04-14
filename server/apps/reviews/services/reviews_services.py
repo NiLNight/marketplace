@@ -1,7 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.db import transaction
+from django.db.models import QuerySet, Count
 from rest_framework.exceptions import ValidationError, PermissionDenied
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from apps.reviews.models import Review
 
 User = get_user_model()
@@ -42,3 +43,13 @@ class ReviewService:
                 return review
         except Exception as e:
             raise ValidationError(f"Ошибка обновления отзыва: {str(e)}")
+
+    @staticmethod
+    def apply_ordering(queryset: QuerySet[Review], ordering: Optional[str]) -> QuerySet[Review]:
+        if ordering == 'likes':
+            return queryset.annotate(like_count=Count('likes')).order_by('like_count')
+        elif ordering == '-likes':
+            return queryset.annotate(like_count=Count('likes')).order_by('-like_count')
+        elif ordering:
+            return queryset.order_by(ordering)
+        return queryset.order_by('-created')
