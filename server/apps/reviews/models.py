@@ -2,31 +2,20 @@ from django.contrib.auth.models import User
 from django.db import models
 from apps.core.models import TimeStampedModel
 from mptt.models import MPTTModel, TreeForeignKey
-
 from apps.products.models import Product
 
 
 class Review(TimeStampedModel):
-    """
-    Модель рейтинга: От 1 до 5
-    """
-    values = [
-        (1, '1'),
-        (2, '2'),
-        (3, '3'),
-        (4, '4'),
-        (5, '5'),
-    ]
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='ratings', verbose_name='Запись')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Пользователь')
-    value = models.BigIntegerField(default=0, choices=values, verbose_name='Оценка')
-    text = models.TextField(blank=True, null=True, verbose_name='Текст отзыва')
-    image = models.ImageField(upload_to='images/reviews/%Y/%m/%d', blank=True, null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews', verbose_name='Продукт')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    value = models.SmallIntegerField(choices=[(i, str(i)) for i in range(1, 6)], verbose_name='Оценка')
+    text = models.TextField(blank=True, verbose_name='Текст отзыва')
+    image = models.ImageField(upload_to='images/reviews/%Y/%m/%d', blank=True, verbose_name='Изображение')
 
     class Meta:
         unique_together = ('product', 'user')
         ordering = ['-created']
-        indexes = [models.Index(fields=['-created', 'value'])]
+        indexes = [models.Index(fields=['product', '-created'])]
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
 
@@ -34,18 +23,17 @@ class Review(TimeStampedModel):
         return f"{self.product.title}: {self.value} ({self.user.username})"
 
 
-class Comment(MPTTModel):
-    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='comments')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
-    text = models.TextField()
+class Comment(MPTTModel, TimeStampedModel):
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='comments', verbose_name='Отзыв')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    text = models.TextField(verbose_name='Текст комментария')
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', on_delete=models.CASCADE)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
 
     class MPTTMeta:
         order_insertion_by = ['created']
 
     class Meta:
+        indexes = [models.Index(fields=['review', 'created'])]
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
 
