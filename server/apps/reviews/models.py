@@ -7,7 +7,7 @@ from apps.products.models import Product
 
 class Review(TimeStampedModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews', verbose_name='Продукт')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews', verbose_name='Пользователь')
     value = models.SmallIntegerField(choices=[(i, str(i)) for i in range(1, 6)], verbose_name='Оценка')
     text = models.TextField(blank=True, verbose_name='Текст отзыва')
     image = models.ImageField(upload_to='images/reviews/%Y/%m/%d', blank=True, verbose_name='Изображение')
@@ -25,7 +25,7 @@ class Review(TimeStampedModel):
 
 class Comment(MPTTModel, TimeStampedModel):
     review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='comments', verbose_name='Отзыв')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments', verbose_name='Пользователь')
     text = models.TextField(verbose_name='Текст комментария')
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', on_delete=models.CASCADE)
 
