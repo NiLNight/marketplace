@@ -11,7 +11,11 @@ class CommentService(BaseService):
     def create_comment(data: Dict[str, Any], user: User) -> Comment:
         """Создание нового комментария."""
         return BaseService.create_instance(
-            Comment, data, user, 'comments', review=data['review'],
+            model_class=Comment,
+            data=data,
+            user=user,
+            cache_key_prefix='comments',
+            review=data['review'],
             parent=data.get('parent')
         )
 
@@ -19,5 +23,9 @@ class CommentService(BaseService):
     def update_comment(comment: Comment, data: Dict[str, Any], user: User) -> Comment:
         """Обновление комментария"""
         return BaseService.update_instance(
-            comment, data, user, {'text'}, 'comments'
+            instance=comment,
+            data=data,
+            user=user,
+            allowed_fields={'text'},
+            cache_key_prefix='comments'
         )
