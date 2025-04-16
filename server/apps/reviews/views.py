@@ -28,12 +28,13 @@ class BaseCreateView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = None
     service_class = None
+    create_method = None
 
     def post(self, request):
-        """"""
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            instance = self.service_class.create_instance(serializer.validated_data, request.user)
+            create_func = getattr(self.service_class, self.create_method)
+            instance = create_func(serializer.validated_data, request.user)
             return Response(self.serializer_class(instance).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -43,13 +44,18 @@ class BaseUpdateView(APIView):
     serializer_class = None
     service_class = None
     model_class = None
+    update_method = None  # Метод сервиса для обновления, будет переопределяться
 
-    def post(self, request, pk: int):
+    def patch(self, request, pk: int):
         instance = get_object_or_404(self.model_class, pk=pk)
         serializer = self.serializer_class(instance, data=request.data, partial=True)
         if serializer.is_valid():
             try:
-                updated_instance = self.service_class.update_instance(instance, serializer.validated_data, request.user)
+                # Вызываем метод обновления, определенный в дочернем классе
+                update_func = getattr(self.service_class, self.update_method)
+                updated_instance = update_func(
+                    instance, serializer.validated_data, request.user
+                )
                 return Response(self.serializer_class(updated_instance).data, status=status.HTTP_200_OK)
             except PermissionDenied as e:
                 return Response({'error': str(e)}, status=status.HTTP_403_FORBIDDEN)
@@ -83,12 +89,14 @@ class ReviewListView(APIView):
 class ReviewCreateView(BaseCreateView):
     serializer_class = ReviewCreateSerializer
     service_class = ReviewService
+    create_method = 'create_review'
 
 
 class ReviewUpdateView(BaseUpdateView):
     serializer_class = ReviewCreateSerializer
     service_class = ReviewService
     model_class = Review
+    update_method = 'update_review'
 
 
 class CommentListView(APIView):
@@ -112,15 +120,17 @@ class CommentListView(APIView):
         return response
 
 
-class CommentCreateView(APIView):
+class CommentCreateView(BaseCreateView):
     serializer_class = CommentCreateSerializer
     service_class = CommentService
+    create_method = 'create_comment'
 
 
-class CommentUpdateView(APIView):
+class CommentUpdateView(BaseUpdateView):
     serializer_class = CommentCreateSerializer
     service_class = CommentService
     model_class = Comment
+    update_method = 'update_comment'
 
 
 class ReviewLikeView(APIView):
