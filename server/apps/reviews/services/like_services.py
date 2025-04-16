@@ -1,9 +1,9 @@
+from typing import Dict
+
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 from rest_framework.exceptions import ValidationError
-from typing import Dict
 from django.core.cache import cache
-from apps.reviews.models import Review, ReviewLike, Comment, CommentLike
 
 User = get_user_model()
 
@@ -14,8 +14,7 @@ class LikeService:
         """Переключает лайк для обзоров и комментариев."""
         try:
             like, created = model_class.objects.get_or_create(
-                **{model_class.__name__.lower().replace('like', ''): instance,
-                   user: user})
+                **{model_class.__name__.lower().replace('like', ''): instance, 'user': user})
             if not created:
                 like.delete()
                 action = 'unliked'
@@ -24,4 +23,4 @@ class LikeService:
             cache.delete(f'{cache_key_prefix}_{instance.pk}')
             return {'action': action}
         except IntegrityError:
-            raise ValidationError('Ошибка при обработке лайка.')
+            raise ValidationError("Ошибка при обработке лайка.")
