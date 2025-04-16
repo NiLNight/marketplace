@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from django.core.cache import cache
-from apps.reviews.models import Review, Comment
+from apps.reviews.models import Review, Comment, ReviewLike, CommentLike
 from apps.reviews.services.reviews_services import ReviewService
 from apps.reviews.services.comment_services import CommentService
 from apps.reviews.services.like_services import LikeService
@@ -22,6 +22,38 @@ class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 100
+
+
+class BaseCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = None
+    service_class = None
+
+    def post(self, request):
+        """"""
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            instance = self.service_class.create_instance(serializer.validated_data, request.user)
+            return Response(self.serializer_class(instance).data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class BaseUpdateView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = None
+    service_class = None
+    model_class = None
+
+    def post(self, request, pk: int):
+        instance = get_object_or_404(self.model_class, pk=pk)
+        serializer = self.serializer_class(instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            try:
+                updated_instance = self.service_class.update_instance(instance, serializer.validated_data, request.user)
+                return Response(self.serializer_class(updated_instance).data, status=status.HTTP_200_OK)
+            except PermissionDenied as e:
+                return Response({'error': str(e)}, status=status.HTTP_403_FORBIDDEN)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ReviewListView(APIView):
@@ -48,34 +80,15 @@ class ReviewListView(APIView):
         return response
 
 
-class ReviewCreateView(APIView):
-    permission_classes = [IsAuthenticated]
+class ReviewCreateView(BaseCreateView):
     serializer_class = ReviewCreateSerializer
-
-    def post(self, request):
-        """Создание нового отзыва."""
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            review = ReviewService.create_review(serializer.validated_data, request.user)
-            return Response(ReviewSerializer(review).data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    service_class = ReviewService
 
 
-class ReviewUpdateView(APIView):
-    permission_classes = [IsAuthenticated]
+class ReviewUpdateView(BaseUpdateView):
     serializer_class = ReviewCreateSerializer
-
-    def patch(self, request, pk: int):
-        """Обновление отзыва."""
-        review = get_object_or_404(Review, pk=pk)
-        serializer = self.serializer_class(review, data=request.data, partial=True)
-        if serializer.is_valid():
-            try:
-                updated_review = ReviewService.update_review(review, serializer.validated_data, request.user)
-                return Response(ReviewSerializer(updated_review).data)
-            except PermissionDenied as e:
-                return Response({'error': str(e)}, status=status.HTTP_403_FORBIDDEN)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    service_class = ReviewService
+    model_class = Review
 
 
 class CommentListView(APIView):
@@ -100,33 +113,14 @@ class CommentListView(APIView):
 
 
 class CommentCreateView(APIView):
-    permission_classes = [IsAuthenticated]
     serializer_class = CommentCreateSerializer
-
-    def post(self, request):
-        """Создание нового комментария."""
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            comment = CommentService.create_comment(serializer.validated_data, request.user)
-            return Response(CommentSerializer(comment).data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    service_class = CommentService
 
 
 class CommentUpdateView(APIView):
-    permission_classes = [IsAuthenticated]
     serializer_class = CommentCreateSerializer
-
-    def patch(self, request, pk: int):
-        """Обновление комментария."""
-        comment = get_object_or_404(Comment, pk=pk)
-        serializer = self.serializer_class(comment, data=request.data, partial=True)
-        if serializer.is_valid():
-            try:
-                updated_comment = CommentService.update_comment(comment, serializer.validated_data, request.user)
-                return Response(CommentSerializer(updated_comment).data)
-            except PermissionDenied as e:
-                return Response({'error': str(e)}, status=status.HTTP_403_FORBIDDEN)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    service_class = CommentService
+    model_class = Comment
 
 
 class ReviewLikeView(APIView):
@@ -135,7 +129,7 @@ class ReviewLikeView(APIView):
     def post(self, request, pk: int):
         """Переключение лайков для отзыва."""
         review = get_object_or_404(Review, pk=pk)
-        result = LikeService.toggle_review_like(review, request.user)
+        result = LikeService.toggle_like(ReviewLike, review, request.user, 'reviews')
         return Response(result)
 
 
@@ -145,5 +139,5 @@ class CommentLikeView(APIView):
     def post(self, request, pk: int):
         """Переключение лайков для комментария."""
         comment = get_object_or_404(Comment, pk=pk)
-        result = LikeService.toggle_comment_like(comment, request.user)
+        result = LikeService.toggle_like(CommentLike, comment, request.user, 'comments')
         return Response(result)

@@ -10,31 +10,18 @@ User = get_user_model()
 
 class LikeService:
     @staticmethod
-    def toggle_review_like(review: Review, user: User) -> Dict[str, str]:
-        """Переключает лайк для обзора."""
+    def toggle_like(model_class, instance, user: User, cache_key_prefix: str) -> Dict[str, str]:
+        """Переключает лайк для обзоров и комментариев."""
         try:
-            like, created = ReviewLike.objects.get_or_create(review=review, user=user)
+            like, created = model_class.objects.get_or_create(
+                **{model_class.__name__.lower().replace('like', ''): instance,
+                   user: user})
             if not created:
                 like.delete()
                 action = 'unliked'
             else:
                 action = 'liked'
-            cache.delete(f'reviews_{review.product.id}')
+            cache.delete(f'{cache_key_prefix}_{instance.pk}')
             return {'action': action}
         except IntegrityError:
             raise ValidationError('Ошибка при обработке лайка.')
-
-    @staticmethod
-    def toggle_comment_like(comment: Comment, user: User) -> Dict[str, str]:
-        """Переключает лайк для комментария."""
-        try:
-            like, created = CommentLike.objects.get_or_create(comment=comment, user=user)
-            if not created:
-                like.delete()
-                action = 'unliked'
-            else:
-                action = 'liked'
-            cache.delete(f'comments_{comment.review.id}')
-            return {'action': action}
-        except IntegrityError:
-            raise ValidationError("Ошибка при обработке лайка.")
