@@ -14,14 +14,22 @@ class ReviewService(BaseService):
     def create_review(data: Dict[str, Any], user: User) -> Review:
         """Создание нового отзыва."""
         return BaseService.create_instance(
-            Review, data, user, 'reviews', product=data['product']
+            model_class=Review,
+            data=data,
+            user=user,
+            cache_key_prefix='reviews',
+            product=data['product']
         )
 
     @staticmethod
     def update_review(review: Review, data: Dict[str, Any], user: User) -> Review:
         """Обновление существующего отзыва."""
         return BaseService.update_instance(
-            review, data, user, {'text', 'value'}, 'reviews'
+            instance=review,
+            data=data,
+            user=user,
+            allowed_fields={'text', 'value'},
+            cache_key_prefix='reviews'
         )
 
     @staticmethod
