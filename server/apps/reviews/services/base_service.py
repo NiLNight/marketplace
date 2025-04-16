@@ -9,7 +9,8 @@ class BaseService:
     def create_instance(model_class, data: Dict[str, Any], user, cache_key_prefix: str, **extra_fields):
         try:
             with transaction.atomic():
-                instance = model_class(user=user, **data, **extra_fields)
+                instance_data = {k: v for k, v in data.items() if k not in extra_fields}
+                instance = model_class(user=user, **instance_data, **extra_fields)
                 instance.full_clean()
                 instance.save()
                 cache.delete(f'{cache_key_prefix}_{instance.pk}')
@@ -20,7 +21,7 @@ class BaseService:
     @staticmethod
     def update_instance(instance, data: Dict[str, Any], user, allowed_fields: set, cache_key_prefix: str):
         if instance.user != user:
-            raise PermissionDenied('Вы не автор.')
+            raise PermissionDenied("Вы не автор.")
         data_to_update = {key: value for key, value in data.items() if key in allowed_fields}
         try:
             with transaction.atomic():
