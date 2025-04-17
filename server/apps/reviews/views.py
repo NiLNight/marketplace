@@ -73,7 +73,7 @@ class ReviewListView(APIView):
         if cached_data:
             return Response(cached_data)
 
-        reviews = Review.objects.filter(product_id=product_id).prefetch_related('likes__user__reviews', 'user')
+        reviews = Review.objects.filter(product_id=product_id).prefetch_related('likes', 'user')
         ordering = request.query_params.get('ordering')
         reviews = ReviewService.apply_ordering(reviews, ordering)
 
@@ -82,7 +82,7 @@ class ReviewListView(APIView):
         serializer = ReviewSerializer(page, many=True)
         response = paginator.get_paginated_response(serializer.data)
 
-        cache.set(cache_key, response.data, timeout=300)  # Кэш на 5 минут
+        # cache.set(cache_key, response.data, timeout=300)  # Кэш на 5 минут
         return response
 
 
@@ -116,7 +116,7 @@ class CommentListView(APIView):
         serializer = CommentSerializer(page, many=True)
         response = paginator.get_paginated_response(serializer.data)
 
-        cache.set(cache_key, response.data, timeout=300)
+        # cache.set(cache_key, response.data, timeout=300)
         return response
 
 
