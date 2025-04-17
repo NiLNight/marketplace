@@ -73,7 +73,7 @@ class ReviewListView(APIView):
         if cached_data:
             return Response(cached_data)
 
-        reviews = Review.objects.filter(product_id=product_id)
+        reviews = Review.objects.filter(product_id=product_id).prefetch_related('likes__user__reviews', 'user')
         ordering = request.query_params.get('ordering')
         reviews = ReviewService.apply_ordering(reviews, ordering)
 
