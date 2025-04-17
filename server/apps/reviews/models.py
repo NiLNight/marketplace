@@ -37,6 +37,10 @@ class Comment(MPTTModel, TimeStampedModel):
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
 
+    @property
+    def cached_children(self):
+        return getattr(self, '_cached_children', self.children.all())
+
     def __str__(self):
         return f"{self.review.product.title}: {self.text[:50]}..."
 

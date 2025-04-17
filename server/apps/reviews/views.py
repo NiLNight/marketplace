@@ -9,6 +9,7 @@ from django.core.cache import cache
 from apps.reviews.models import Review, Comment, ReviewLike, CommentLike
 from apps.reviews.services.reviews_services import ReviewService
 from apps.reviews.services.comment_services import CommentService
+from mptt.utils import get_cached_trees
 from apps.reviews.services.like_services import LikeService
 from apps.reviews.serializers import (
     ReviewCreateSerializer,
@@ -110,9 +111,10 @@ class CommentListView(APIView):
         if cached_data:
             return Response(cached_data)
 
-        comments = Comment.objects.filter(review_id=review_id, parent=None)
+        comments = Comment.objects.prefetch_related('children').filter(review_id=review_id).prefetch_related('user', 'likes')
+        root_nodes = get_cached_trees(comments)
         paginator = self.pagination_class()
-        page = paginator.paginate_queryset(comments, request)
+        page = paginator.paginate_queryset(root_nodes, request)
         serializer = CommentSerializer(page, many=True)
         response = paginator.get_paginated_response(serializer.data)
 

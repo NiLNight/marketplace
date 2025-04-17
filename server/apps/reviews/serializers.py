@@ -24,7 +24,9 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ['id', 'review', 'user', 'text', 'parent', 'created', 'updated', 'children', 'likes_count']
 
     def get_children(self, obj):
-        return CommentSerializer(obj.children.all(), many=True).data
+        queryset = obj.cached_children
+        serializer = CommentSerializer(queryset, many=True)
+        return serializer.data
 
     def get_likes_count(self, obj):
         return obj.likes.count()
