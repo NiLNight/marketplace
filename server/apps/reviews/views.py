@@ -83,7 +83,7 @@ class ReviewListView(APIView):
         serializer = ReviewSerializer(page, many=True)
         response = paginator.get_paginated_response(serializer.data)
 
-        # cache.set(cache_key, response.data, timeout=300)  # Кэш на 5 минут
+        cache.set(cache_key, response.data, timeout=300)  # Кэш на 5 минут
         return response
 
 
@@ -118,7 +118,7 @@ class CommentListView(APIView):
         serializer = CommentSerializer(page, many=True)
         response = paginator.get_paginated_response(serializer.data)
 
-        # cache.set(cache_key, response.data, timeout=300)
+        cache.set(cache_key, response.data, timeout=300)
         return response
 
 
