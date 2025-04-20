@@ -38,13 +38,13 @@ class ProductQueryService:
     @staticmethod
     def _apply_common_annotations(queryset):
         return queryset.annotate(
-            rating_avg=Coalesce(Avg('ratings__value'), 0.0),
+            rating_avg=Coalesce(Avg('reviews__value'), 0.0),
             purchase_count=Count(
                 'order_items',
                 filter=~Q(order_items__order=None),
                 distinct=True
             ),
-            review_count=Count('ratings', distinct=True),
+            review_count=Count('reviews', distinct=True),
             days_since_created=ExtractDay(Now() - F('created')),
             popularity_score=ExpressionWrapper(
                 (F('purchase_count') * 0.4) +
