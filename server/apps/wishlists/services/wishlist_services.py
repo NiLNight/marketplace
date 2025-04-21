@@ -71,3 +71,19 @@ class WishlistService:
                 id__in=product_ids,
                 is_active=True
             ).select_related('category').prefetch_related('category__children')
+
+    @staticmethod
+    @transaction.atomic
+    def merge_wishlist_on_login(user, session_wishlist: list) -> None:
+        """Слияние списка желаний из сессии с данными пользователя при входе."""
+        if session_wishlist:
+            for product_id_str in session_wishlist:
+                try:
+                    product_id = int(product_id_str)
+                    product = Product.objects.get(id=product_id, is_active=True)
+                    WishlistItem.objects.get_or_create(
+                        user=user,
+                        product=product
+                    )
+                except (ValueError, Product.DoesNotExist):
+                    continue  # Пропускаем некорректные или недоступные товары

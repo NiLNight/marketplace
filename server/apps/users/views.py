@@ -23,6 +23,7 @@ from apps.users.serializers import (
 )
 from apps.users.services.utils import set_jwt_cookies
 from apps.users.services.users_services import UserService, ConfirmPasswordService, ConfirmCodeService
+from apps.wishlists.services.wishlist_services import WishlistService
 from config import settings
 from apps.carts.services.cart_services import CartService
 
@@ -85,11 +86,13 @@ class UserLoginView(APIView):
             if request.session.get('cart'):
                 CartService.merge_cart_on_login(user, request.session['cart'])
                 del request.session['cart']  # Очистка корзины в сессии
+            if request.session.get('wishlist'):  # Слияние списка желаний
+                WishlistService.merge_wishlist_on_login(user, request.session['wishlist'])
+                del request.session['wishlist']  # Очистка списка желаний из сессии
             return set_jwt_cookies(response, user)
         except AuthenticationFailed as e:
             return Response({"error": str(e)}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            print(e)
             return Response({"error": "Произошла ошибка при входе"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
