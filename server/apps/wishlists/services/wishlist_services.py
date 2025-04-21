@@ -54,3 +54,20 @@ class WishlistService:
                 request.session['wishlist'] = wishlist
                 return True
             raise WishlistItemNotFound()
+
+    @staticmethod
+    def get_wishlist(request):
+        """Получение содержимого списка желаний."""
+        if request.user.is_authenticated:
+            return WishlistItem.objects.filter(
+                user=request.user
+            ).select_related('product', 'product__category').prefetch_related(
+                'product__category__children'
+            )
+        else:
+            wishlist = request.session.get('wishlist', [])
+            product_ids = [int(pid) for pid in wishlist if pid.isdigit()]
+            return Product.objects.filter(
+                id__in=product_ids,
+                is_active=True
+            ).select_related('category').prefetch_related('category__children')

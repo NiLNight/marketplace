@@ -35,3 +35,20 @@ class WishlistItemDeleteView(APIView):
             return Response({"error": "Товар не найден в списке желаний"}, status=status.HTTP_404_NOT_FOUND)
         except WishlistItemNotFound:
             return Response({"error": "Товар не найден в списке желаний"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class WishlistGetView(APIView):
+    """Представление для получения списка желаний."""
+    permission_classes = [AllowAny]
+    serializer_class = WishlistItemSerializer
+
+    def get(self, request):
+        wishlist_items = WishlistService.get_wishlist(request)
+        if request.user.is_authenticated:
+            serializer = self.serializer_class(wishlist_items, many=True)
+        else:
+            serializer = self.serializer_class(
+                [{'id': None, 'product': item} for item in wishlist_items],
+                many=True
+            )
+        return Response(serializer.data)
