@@ -32,5 +32,25 @@ class WishlistService:
                 wishlist.append(str(product_id))
                 request.session['wishlist'] = wishlist
 
-
-    
+    @staticmethod
+    @transaction.atomic
+    def remove_from_wishlist(request, product_id: int) -> bool:
+        """Удаление товара из списка желаний."""
+        if request.user.is_authenticated:
+            try:
+                wishlist_item = WishlistItem.objects.get(
+                    user=request.user,
+                    product_id=product_id
+                )
+                wishlist_item.delete()
+                return True
+            except WishlistItem.DoesNotExist:
+                raise WishlistItemNotFound()
+        else:
+            wishlist = request.session.get('wishlist', [])
+            product_id_str = str(product_id)
+            if product_id_str in wishlist:
+                wishlist.remove(product_id_str)
+                request.session['wishlist'] = wishlist
+                return True
+            raise WishlistItemNotFound()
