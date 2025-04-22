@@ -1,0 +1,10 @@
+[2025-04-22 21:32:03,854] INFO apps.core.services.cache_services Invalidated cache for prefix: wishlist:None:*
+[2025-04-22 21:40:39,913] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-22 21:40:51,641] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-22 21:40:55,605] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-22 21:40:57,516] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-22 21:40:58,918] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-22 21:40:59,710] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-22 21:41:13,535] DEBUG apps.core.services.cache_services Cache miss for key: product_list:0d98d7faabea2b36a7af195635cbca69
+[2025-04-22 21:41:20,933] DEBUG apps.core.services.cache_services Cache hit for key: product_list:0d98d7faabea2b36a7af195635cbca69
+[2025-04-22 21:41:22,707] DEBUG apps.core.services.cache_services Cache hit for key: product_list:0d98d7faabea2b36a7af195635cbca69
