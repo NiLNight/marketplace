@@ -23,9 +23,11 @@ from apps.products.serializers import (
     CategorySerializer
 )
 from apps.products.exceptions import ProductServiceException
+from apps.core.services.cache_services import CacheService
 
 
 class CategoryListView(APIView):
+    @method_decorator(cache_page(60 * 60))
     def get(self, request):
         try:
             categories = Category.objects.prefetch_related('children').all()
@@ -54,12 +56,16 @@ class ProductListView(BaseProductView):
     serializer_class = ProductListSerializer
     permission_classes = [AllowAny]
 
-    @method_decorator(cache_page(BaseProductView.CACHE_TIMEOUT))
     def get(self, request):
         """
         Получение списка продуктов с фильтрацией, сортировкой и пагинацией
         """
         try:
+            cache_key = CacheService.build_cache_key(request, prefix="product_list")
+            cached_data = CacheService.get_cached_data(cache_key)
+            if cached_data:
+                return Response(cached_data)
+
             # Базовый запрос без аннотаций
             base_queryset = ProductQueryService.get_base_queryset()
             # Поиск, если есть запрос
@@ -80,7 +86,9 @@ class ProductListView(BaseProductView):
             page = paginator.paginate_queryset(queryset, request)
 
             serializer = self.serializer_class(page, many=True)
-            return paginator.get_paginated_response(serializer.data)
+            response_data = paginator.get_paginated_response(serializer.data).data
+            CacheService.set_cached_data(cache_key, response_data, timeout=900)
+            return Response(response_data)
 
         except ProductServiceException as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -109,9 +117,7 @@ class ProductCreateView(BaseProductView):
             ProductServices.create_product(
                 data=serializer.validated_data,
             )
-            # # Инвалидация кэша списка продуктов
-            # CacheServices.invalidate_product_list_cache()
-
+            CacheService.invalidate_cache(prefix="product_list")
             return Response(
                 serializer.data,
                 status=status.HTTP_201_CREATED
@@ -126,16 +132,19 @@ class ProductCreateView(BaseProductView):
 class ProductDetailView(BaseProductView):
     serializer_class = ProductDetailSerializer
     permission_classes = [AllowAny]
-    cache_timeout = 60 * 60 * 2
 
-    @method_decorator(cache_page(cache_timeout))
     def get(self, request, pk):
         """
         Получение детальной информации о продукте
         """
         try:
+            cached_data = CacheService.cache_product_details(pk)
+            if cached_data:
+                return Response(cached_data)
+
             product = ProductQueryService.get_single_product(pk)
             serializer = self.serializer_class(product)
+            CacheService.set_cached_data(f'product_detail:{pk}', serializer.data, timeout=7200)
             return Response(serializer.data)
 
         except Product.DoesNotExist:
@@ -167,9 +176,8 @@ class ProductUpdateView(BaseProductView):
                 product, serializer.validated_data
             )
 
-            # Инвалидация кэшей
-            # CacheServices.invalidate_product_cache(pk)
-            # CacheServices.invalidate_product_list_cache()
+            CacheService.invalidate_cache(prefix="product_detail", pk=product.id)
+            CacheService.invalidate_cache(prefix="product_list")
 
             return Response(self.serializer_class(updated_product).data)
 
@@ -194,9 +202,8 @@ class ProductDeleteView(BaseProductView):
 
             ProductServices.delete_product(product)
 
-            # Инвалидация кэшей
-            # CacheServices.invalidate_product_cache(pk)
-            # CacheServices.invalidate_product_list_cache()
+            CacheService.invalidate_cache(prefix="product_detail", pk=product.id)
+            CacheService.invalidate_cache(prefix="product_list")
 
             return Response("Товар удален", status=status.HTTP_204_NO_CONTENT)
 

@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
-from django.core.cache import cache
+from apps.core.services.cache_services import CacheService
 from apps.reviews.models import Review, Comment, ReviewLike, CommentLike
 from apps.reviews.services.reviews_services import ReviewService
 from apps.reviews.services.comment_services import CommentService
@@ -36,6 +36,10 @@ class BaseCreateView(APIView):
         if serializer.is_valid():
             create_func = getattr(self.service_class, self.create_method)
             instance = create_func(serializer.validated_data, request.user)
+            if self.create_method == 'create_review':
+                CacheService.invalidate_cache(prefix=f"reviews:{instance.product_id}")
+            elif self.create_method == 'create_comment':
+                CacheService.invalidate_cache(prefix=f"comments:{instance.product_id}")
             return Response(self.serializer_class(instance).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -57,6 +61,10 @@ class BaseUpdateView(APIView):
                 updated_instance = update_func(
                     instance, serializer.validated_data, request.user
                 )
+                if self.update_method == 'update_review':
+                    CacheService.invalidate_cache(prefix=f"reviews:{updated_instance.product_id}")
+                elif self.update_method == 'update_comment':
+                    CacheService.invalidate_cache(prefix=f"comments:{updated_instance.product_id}")
                 return Response(self.serializer_class(updated_instance).data, status=status.HTTP_200_OK)
             except PermissionDenied as e:
                 return Response({'error': str(e)}, status=status.HTTP_403_FORBIDDEN)
@@ -69,8 +77,8 @@ class ReviewListView(APIView):
 
     def get(self, request, product_id: int):
         """Получение списка отзывов для продукта."""
-        cache_key = f'reviews_{product_id}'
-        cached_data = cache.get(cache_key)
+        cache_key = CacheService.build_cache_key(request, prefix=f"reviews:{product_id}")
+        cached_data = CacheService.get_cached_data(cache_key)
         if cached_data:
             return Response(cached_data)
 
@@ -81,10 +89,10 @@ class ReviewListView(APIView):
         paginator = self.pagination_class()
         page = paginator.paginate_queryset(reviews, request)
         serializer = ReviewSerializer(page, many=True)
-        response = paginator.get_paginated_response(serializer.data)
+        response_data = paginator.get_paginated_response(serializer.data).data
 
-        cache.set(cache_key, response.data, timeout=300)  # Кэш на 5 минут
-        return response
+        CacheService.set_cached_data(cache_key, response_data, timeout=300)  # Кэш на 5 минут
+        return Response(response_data)
 
 
 class ReviewCreateView(BaseCreateView):
@@ -106,8 +114,8 @@ class CommentListView(APIView):
 
     def get(self, request, review_id: int):
         """Получение списка комментариев для отзыва."""
-        cache_key = f'comments_{review_id}'
-        cached_data = cache.get(cache_key)
+        cache_key = CacheService.build_cache_key(request, prefix=f"comments:{review_id}")
+        cached_data = CacheService.get_cached_data(cache_key)
         if cached_data:
             return Response(cached_data)
 
@@ -116,10 +124,10 @@ class CommentListView(APIView):
         paginator = self.pagination_class()
         page = paginator.paginate_queryset(root_nodes, request)
         serializer = CommentSerializer(page, many=True)
-        response = paginator.get_paginated_response(serializer.data)
+        response_data = paginator.get_paginated_response(serializer.data).data
 
-        cache.set(cache_key, response.data, timeout=300)
-        return response
+        CacheService.set_cached_data(cache_key, response_data, timeout=300)
+        return Response(response_data)
 
 
 class CommentCreateView(BaseCreateView):

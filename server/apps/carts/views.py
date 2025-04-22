@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from apps.carts.services.cart_services import CartService
 from apps.carts.serializers import CartItemSerializer
+from apps.core.services.cache_services import CacheService
 from apps.products.models import Product
 
 
@@ -18,6 +19,7 @@ class CartsAddView(APIView):
             product_id = int(request.data.get('product_id'))
             quantity = int(request.data.get('quantity', 1))
             CartService.add_to_cart(request, product_id, quantity)
+            CacheService.invalidate_cache(prefix=f"cart:{request.user.id}")
             return Response({"message": "Товар добавлен в корзину"})
         except ValidationError:
             return Response({'error': "Некорректное количество товара"})
@@ -33,12 +35,21 @@ class CartsGetView(APIView):
 
     def get(self, request):
         """Получение корзины."""
+        if request.user.is_authenticated:
+            cache_key = f"cart:{request.user.id}"
+            cached_data = CacheService.get_cached_data(cache_key)
+            if cached_data:
+                return Response(cached_data)
+
         cart_items = CartService.get_cart(request)
         serializer = self.serializer_class(cart_items,
                                            many=True) if request.user.is_authenticated else self.serializer_class(
             [{'id': None, 'product': item['product'], 'quantity': item['quantity']} for item in cart_items], many=True
         )
-        return Response(serializer.data)
+        response_data = serializer.data
+        if request.user.is_authenticated:
+            CacheService.set_cached_data(cache_key, response_data, timeout=300)
+        return Response(response_data)
 
 
 class CartsItemUpdateView(APIView):
@@ -59,6 +70,7 @@ class CartsItemUpdateView(APIView):
                 'quantity': cart_item['quantity']
             }
             serializer = self.serializer_class(serializer_data)
+            CacheService.invalidate_cache(prefix=f"cart:{request.user.id}")
             return Response(serializer.data)
         return Response({"error": "Товар не найден в корзине"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -69,5 +81,6 @@ class CartsItemDeleteView(APIView):
     def delete(self, request, pk):
         success = CartService.remove_from_cart(request, product_id=pk)
         if success:
+            CacheService.invalidate_cache(prefix=f"cart:{request.user.id}")
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response({"error": "Товар не найден в корзине"}, status=status.HTTP_404_NOT_FOUND)
