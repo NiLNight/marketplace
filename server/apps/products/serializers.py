@@ -28,7 +28,6 @@ class ProductListSerializer(serializers.ModelSerializer):
     """
     Сериализатор для списка продуктов
     """
-    category = CategorySerializer()
     rating_avg = serializers.FloatField(read_only=True)
     price_with_discount = serializers.SerializerMethodField()
     popularity_score = serializers.FloatField(read_only=True)
@@ -40,7 +39,6 @@ class ProductListSerializer(serializers.ModelSerializer):
             'stock', 'rating_avg', 'popularity_score',
             'thumbnail', 'created', 'category'
         ]
-        select_related = ['category']
 
     def get_price_with_discount(self, obj):
         """Динамический расчет цены со скидкой"""

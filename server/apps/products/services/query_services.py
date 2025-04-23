@@ -1,6 +1,6 @@
 # query_services.py
 from django.contrib.postgres.search import SearchQuery, SearchRank
-from django.db.models import Q, ExpressionWrapper, F, FloatField, Count, Avg
+from django.db.models import Q, ExpressionWrapper, F, FloatField, Count, Avg, Prefetch
 from django.db.models.functions import Coalesce, ExtractDay, Now
 from apps.products.models import Product, Category
 from apps.products.exceptions import ProductNotFound, InvalidCategoryError
@@ -22,8 +22,7 @@ class ProductQueryService:
             queryset
         ).select_related('category').only(
             'title', 'price', 'thumbnail', 'created',
-            'discount', 'stock', 'category__title',
-            'category__slug', 'is_active'
+            'discount', 'stock', 'is_active', 'category_id'
         )
 
     @classmethod
@@ -108,4 +107,3 @@ class ProductQueryService:
         return queryset.annotate(
             rank=SearchRank('search_vector', query)
         ).filter(search_vector=query).order_by('-rank')
-

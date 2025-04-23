@@ -5,4 +5,4 @@
 /.env
 /db.sqlite3
 /media/
-/all_apps.txt
+/all_apps.py
