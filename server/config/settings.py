@@ -242,5 +242,10 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'apps.carts': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        }
     },
 }

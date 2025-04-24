@@ -32,3 +32,83 @@
 [2025-04-24 15:55:47,190] INFO apps.wishlists.services.wishlist_services Product 5 removed from wishlist for user=8
 [2025-04-24 15:55:47,192] INFO apps.core.services.cache_services Invalidated cache for prefix: wishlist:8:*
 [2025-04-24 15:55:47,192] INFO apps.wishlists.views Product 5 removed from wishlist via API for user=8, path=/wishlists/delete/5/
+[2025-04-24 19:31:29,668] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:None:*
+[2025-04-24 19:31:43,197] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:None:*
+[2025-04-24 19:31:51,703] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:None:*
+[2025-04-24 19:32:10,660] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:None:*
+[2025-04-24 19:32:21,488] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:None:*
+[2025-04-24 19:32:30,217] DEBUG apps.core.services.cache_services Cache miss for key: cart:8
+[2025-04-24 19:32:34,782] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-24 19:32:52,031] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:8:*
+[2025-04-24 19:32:54,353] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-24 19:33:04,420] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:8:*
+[2025-04-24 19:33:06,439] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:8:*
+[2025-04-24 19:33:08,431] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-24 19:33:30,843] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-24 19:33:40,792] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-24 19:33:49,082] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:8:*
+[2025-04-24 19:33:53,103] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:8:*
+[2025-04-24 19:33:56,825] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-24 19:34:55,396] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-24 19:34:55,396] INFO apps.carts.views Cache hit for cart, user=8, path=/carts/
+[2025-04-24 19:35:13,596] INFO apps.carts.services.cart_services Attempting to add product 3 to cart for user=8, quantity=5
+[2025-04-24 19:35:13,603] INFO apps.carts.services.cart_services Product 3 added to cart for user=8, new_quantity=10
+[2025-04-24 19:35:13,604] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:8:*
+[2025-04-24 19:35:13,604] INFO apps.carts.views Product 3 added to cart via API for user=8, path=/carts/add/
+[2025-04-24 19:35:46,224] INFO apps.carts.services.cart_services Updating cart item 1 for user=8, new_quantity=10
+[2025-04-24 19:35:46,230] INFO apps.carts.services.cart_services Cart item 1 updated for user=8, quantity=10
+[2025-04-24 19:35:46,234] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:8:*
+[2025-04-24 19:35:46,234] INFO apps.carts.views Cart item 1 updated via API for user=8, quantity=10, path=/carts/1/
+[2025-04-24 22:14:54,230] INFO apps.carts.services.cart_services Retrieved session cart, user=anonymous, items=0
+[2025-04-24 22:14:54,231] INFO apps.carts.views Retrieved cart, user=anonymous, items=0
+[2025-04-24 22:15:11,661] DEBUG apps.core.services.cache_services Cache miss for key: cart:8
+[2025-04-24 22:15:11,665] INFO apps.carts.services.cart_services Retrieved cart, user=8, items=4
+[2025-04-24 22:15:11,677] INFO apps.carts.views Retrieved cart, user=8, items=4
+[2025-04-24 22:18:47,771] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-24 22:18:47,771] INFO apps.carts.views Cache hit for cart, user=8
+[2025-04-24 22:20:26,437] DEBUG apps.core.services.cache_services Cache miss for key: cart:8
+[2025-04-24 22:20:26,442] INFO apps.carts.services.cart_services Retrieved cart, user=8, items=4
+[2025-04-24 22:20:26,454] INFO apps.carts.views Retrieved cart, user=8, items=4
+[2025-04-24 22:21:18,895] INFO apps.carts.services.cart_services Added product 3 to cart, user=8
+[2025-04-24 22:21:18,897] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:8:*
+[2025-04-24 22:21:18,897] INFO apps.carts.views Added product 3 to cart, user=8
+[2025-04-24 22:22:29,408] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-24 22:22:34,634] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-24 22:22:42,035] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-24 22:23:13,884] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-24 22:23:29,082] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-24 22:23:35,399] DEBUG apps.core.services.cache_services Cache miss for key: wishlist:8
+[2025-04-24 22:23:35,408] INFO apps.wishlists.services.wishlist_services Wishlist retrieved for user=8, items_count=9
+[2025-04-24 22:23:35,447] INFO apps.wishlists.views Retrieved cart, user=8, items=9
+[2025-04-24 22:23:45,020] DEBUG apps.core.services.cache_services Cache hit for key: wishlist:8
+[2025-04-24 22:23:51,343] DEBUG apps.core.services.cache_services Cache hit for key: wishlist:8
+[2025-04-24 22:23:52,648] DEBUG apps.core.services.cache_services Cache hit for key: wishlist:8
+[2025-04-24 22:24:23,306] DEBUG apps.core.services.cache_services Cache hit for key: wishlist:8
+[2025-04-24 22:24:39,185] INFO apps.carts.services.cart_services Retrieved session cart, user=anonymous, items=0
+[2025-04-24 22:24:39,187] INFO apps.carts.views Retrieved cart, user=anonymous, items=0
+[2025-04-24 22:24:51,582] INFO apps.carts.services.cart_services Added product 3 to session cart, user=anonymous
+[2025-04-24 22:24:51,583] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:None:*
+[2025-04-24 22:24:51,583] INFO apps.carts.views Added product 3 to cart, user=anonymous
+[2025-04-24 22:25:07,042] INFO apps.carts.services.cart_services Retrieved session cart, user=anonymous, items=1
+[2025-04-24 22:25:07,050] INFO apps.carts.views Retrieved cart, user=anonymous, items=1
+[2025-04-24 22:25:16,376] INFO apps.carts.services.cart_services Merged product 3 to cart, user=8
+[2025-04-24 22:25:18,789] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-24 22:25:36,278] DEBUG apps.core.services.cache_services Cache miss for key: cart:8
+[2025-04-24 22:25:36,281] INFO apps.carts.services.cart_services Retrieved cart, user=8, items=4
+[2025-04-24 22:25:36,323] INFO apps.carts.views Retrieved cart, user=8, items=4
+[2025-04-24 23:14:01,063] INFO apps.carts.services.cart_services Retrieved session cart, user=anonymous, items=0
+[2025-04-24 23:14:01,063] INFO apps.carts.views Retrieved cart, user=anonymous, items=0
+[2025-04-24 23:14:06,161] DEBUG apps.core.services.cache_services Cache miss for key: cart:8
+[2025-04-24 23:14:06,165] INFO apps.carts.services.cart_services Retrieved cart, user=8, items=4
+[2025-04-24 23:14:06,177] INFO apps.carts.views Retrieved cart, user=8, items=4
+[2025-04-24 23:14:09,743] WARNING apps.carts.services.cart_services Quantity limit exceeded for product 3, user=8
+[2025-04-24 23:14:09,743] WARNING apps.carts.utils Cart error: Нельзя добавить больше 20 единиц товара Вишня в корзину., user=8
+[2025-04-24 23:14:14,726] INFO apps.carts.services.cart_services Updated cart item 1, quantity=10, user=8
+[2025-04-24 23:14:14,731] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:8:*
+[2025-04-24 23:14:14,731] INFO apps.carts.views Updated cart item 1, quantity=10, user=8
+[2025-04-24 23:14:19,389] INFO apps.carts.services.cart_services Removed product 1 from cart, user=8
+[2025-04-24 23:14:19,392] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:8:*
+[2025-04-24 23:14:19,392] INFO apps.carts.views Removed product 1 from cart, user=8
+[2025-04-24 23:14:23,549] DEBUG apps.core.services.cache_services Cache miss for key: wishlist:8
+[2025-04-24 23:14:23,551] INFO apps.wishlists.services.wishlist_services Wishlist retrieved for user=8, items_count=9
+[2025-04-24 23:14:23,559] INFO apps.wishlists.views Retrieved wishlist, user=8, items=9

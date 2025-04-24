@@ -11,39 +11,85 @@ User = get_user_model()
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items', null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cart_items', null=True, blank=True)
-    product = models.ForeignKey(Product, related_name='order_items', on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(20)])
+    """Модель для хранения элементов корзины или заказа.
+
+    Представляет товар, добавленный пользователем в корзину или включенный в заказ.
+    Хранит информацию о пользователе, товаре, количестве и связи с заказом.
+    """
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.CASCADE,
+        related_name='order_items',
+        null=True,
+        blank=True,
+        verbose_name='Заказ'
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='cart_items',
+        null=True,
+        blank=True,
+        verbose_name='Пользователь'
+    )
+    product = models.ForeignKey(
+        Product,
+        related_name='order_items',
+        on_delete=models.CASCADE,
+        verbose_name='Товар'
+    )
+    quantity = models.PositiveIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(20)],
+        verbose_name='Количество'
+    )
 
     class Meta:
+        """Метаданные модели OrderItem.
+
+        Определяет уникальные ограничения, индексы и отображаемые названия.
+        """
         constraints = [
             # Уникальность товара в корзине для пользователя (order is null)
             models.UniqueConstraint(
                 fields=['user', 'product'],
                 condition=Q(order__isnull=True),
-                name='unique_cart_product'
+                name='unique_cart_product',
+                violation_error_message='Товар уже находится в корзине пользователя.'
             ),
             # Уникальность товара в заказе (order is not null)
             models.UniqueConstraint(
                 fields=['order', 'product'],
                 condition=Q(order__isnull=False),
-                name='unique_order_product'
+                name='unique_order_product',
+                violation_error_message='Товар уже включен в заказ.'
             ),
         ]
         indexes = [
-            models.Index(fields=['user', 'product']),
-            models.Index(fields=['order', 'product']),
+            models.Index(fields=['user', 'product'], name='idx_user_product'),
+            models.Index(fields=['order', 'product'], name='idx_order_product'),
         ]
-        verbose_name = "Предмет заказа/корзины"
-        verbose_name_plural = "Предметы заказа/корзины"
+        verbose_name = 'Предмет заказа/корзины'
+        verbose_name_plural = 'Предметы заказа/корзины'
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Строковое представление элемента корзины или заказа.
+
+        Returns:
+            str: Количество и название товара.
+        """
         return f"{self.quantity} x {self.product.title}"
 
-    def clean(self):
-        """Валидация: элемент не может быть одновременно в корзине и в заказе."""
-        if self.order is None and self.user is not None:
+    def clean(self) -> None:
+        """Валидация данных элемента перед сохранением.
+
+        Проверяет, что элемент привязан либо к пользователю (корзина), либо к заказу,
+        но не к обоим одновременно.
+
+        Raises:
+            ValidationError: Если элемент одновременно привязан к пользователю и заказу
+                            или не привязан ни к одному из них.
+        """
+        if self.order is not None and self.user is not None:
             raise ValidationError("Элемент не может одновременно принадлежать пользователю (корзина) и заказу.")
         if self.order is None and self.user is None:
             raise ValidationError("Элемент должен быть привязан либо к пользователю, либо к заказу.")

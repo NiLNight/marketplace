@@ -1,5 +1,8 @@
-class CartException(Exception):
-    """Базовое исключение для операций с корзиной"""
+from rest_framework.exceptions import APIException
+
+
+class CartException(APIException):
+    """Базовое исключение для операций с корзиной."""
     default_detail = 'Ошибка корзины'
     status_code = 400
 
@@ -8,17 +11,16 @@ class CartException(Exception):
 
 
 class ProductNotAvailable(CartException):
+    """Исключение, если товар недоступен для добавления в корзину."""
     default_detail = 'Товар недоступен для заказа'
 
 
 class InvalidQuantity(CartException):
+    """Исключение, если указано некорректное количество товара."""
     default_detail = 'Некорректное количество товара'
 
 
 class CartItemNotFound(CartException):
+    """Исключение, если элемент не найден в корзине."""
     default_detail = 'Элемент корзины не найден'
     status_code = 404
-
-
-class CheckoutError(CartException):
-    default_detail = 'Ошибка оформления заказа'
