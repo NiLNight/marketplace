@@ -112,3 +112,21 @@
 [2025-04-24 23:14:23,549] DEBUG apps.core.services.cache_services Cache miss for key: wishlist:8
 [2025-04-24 23:14:23,551] INFO apps.wishlists.services.wishlist_services Wishlist retrieved for user=8, items_count=9
 [2025-04-24 23:14:23,559] INFO apps.wishlists.views Retrieved wishlist, user=8, items=9
+[2025-04-24 23:18:07,894] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-24 23:18:16,680] WARNING apps.carts.services.cart_services Quantity limit exceeded for product 3, user=8
+[2025-04-24 23:18:16,680] WARNING apps.carts.utils Cart error: Нельзя добавить больше 20 единиц товара Вишня в корзину., user=8
+[2025-04-24 23:18:22,360] WARNING apps.carts.services.cart_services Quantity limit exceeded for product 3, user=8
+[2025-04-24 23:18:22,360] WARNING apps.carts.utils Cart error: Нельзя добавить больше 20 единиц товара Вишня в корзину., user=8
+[2025-04-24 23:18:41,568] WARNING apps.carts.services.cart_services Quantity limit exceeded for product 3, user=8
+[2025-04-24 23:18:41,568] WARNING apps.carts.utils Cart error: Нельзя добавить больше 20 единиц товара Вишня в корзину., user=8
+[2025-04-24 23:18:44,819] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-24 23:18:54,915] INFO apps.carts.services.cart_services Added product 20 to cart, user=8
+[2025-04-24 23:18:54,917] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:8:*
+[2025-04-24 23:18:54,917] INFO apps.carts.views Added product 20 to cart, user=8
+[2025-04-24 23:18:56,785] INFO apps.carts.services.cart_services Added product 20 to cart, user=8
+[2025-04-24 23:18:56,787] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:8:*
+[2025-04-24 23:18:56,787] INFO apps.carts.views Added product 20 to cart, user=8
+[2025-04-24 23:18:58,018] WARNING apps.carts.services.cart_services Quantity limit exceeded for product 20, user=8
+[2025-04-24 23:18:58,018] WARNING apps.carts.utils Cart error: Нельзя добавить больше 20 единиц товара Замороженные овощи в корзину., user=8
+[2025-04-24 23:19:06,916] WARNING apps.carts.services.cart_services Product 1 not found in cart, user=8
+[2025-04-24 23:19:06,916] WARNING apps.carts.utils Cart error: Элемент корзины не найден, user=8

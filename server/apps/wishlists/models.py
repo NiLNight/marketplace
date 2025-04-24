@@ -31,6 +31,7 @@ class WishlistItem(TimeStampedModel):
     )
 
     class Meta:
+        """Метаданные модели WishlistItem."""
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'product'],
@@ -45,5 +46,9 @@ class WishlistItem(TimeStampedModel):
         verbose_name_plural = 'Элементы списка желаний'
 
     def __str__(self):
-        """Возвращает строковое представление элемента списка желаний."""
+        """Строковое представление элемента списка желаний.
+
+        Returns:
+            str: Название товара и ID пользователя.
+        """
         return f"{self.product.title} в списке желаний {self.user.username if self.user else 'гостя'}"

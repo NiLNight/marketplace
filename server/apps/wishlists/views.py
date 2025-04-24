@@ -11,6 +11,41 @@ from apps.wishlists.utils import handle_api_errors
 logger = logging.getLogger(__name__)
 
 
+class WishlistGetView(APIView):
+    """Получение списка желаний."""
+    permission_classes = [AllowAny]
+    serializer_class = WishlistItemSerializer
+
+    @handle_api_errors
+    def get(self, request):
+        """Обрабатывает GET-запрос для получения списка желаний.
+
+        Args:
+            request (HttpRequest): Объект запроса.
+
+        Returns:
+            Response: Ответ со списком элементов желаний или ошибкой.
+        """
+        user_id = request.user.id if request.user.is_authenticated else 'anonymous'
+        if request.user.is_authenticated:
+            cache_key = f"wishlist:{request.user.id}"
+            cached_data = CacheService.get_cached_data(cache_key)
+            if cached_data:
+                return Response(cached_data)
+
+        wishlist_items = WishlistService.get_wishlist(request)
+        serializer = self.serializer_class(
+            wishlist_items, many=True
+        ) if request.user.is_authenticated else self.serializer_class(
+            [{'id': None, 'product': item} for item in wishlist_items], many=True
+        )
+        response_data = serializer.data
+        if request.user.is_authenticated:
+            CacheService.set_cached_data(cache_key, response_data, timeout=300)
+        logger.info(f"Retrieved wishlist, user={user_id}, items={len(response_data)}")
+        return Response(response_data)
+
+
 class WishlistAddView(APIView):
     """Добавление товара в список желаний."""
     permission_classes = [AllowAny]
@@ -54,37 +89,3 @@ class WishlistItemDeleteView(APIView):
         CacheService.invalidate_cache(prefix=f"wishlist:{request.user.id}")
         logger.info(f"Product {pk} removed from wishlist via API for user={user_id}, path={request.path}")
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class WishlistGetView(APIView):
-    """Получение списка желаний."""
-    permission_classes = [AllowAny]
-    serializer_class = WishlistItemSerializer
-
-    @handle_api_errors
-    def get(self, request):
-        """Обрабатывает GET-запрос для получения списка желаний.
-
-        Args:
-            request (HttpRequest): Объект запроса.
-
-        Returns:
-            Response: Ответ со списком элементов желаний или ошибкой.
-        """
-        user_id = request.user.id if request.user.is_authenticated else 'anonymous'
-        if request.user.is_authenticated:
-            cache_key = f"wishlist:{request.user.id}"
-            cached_data = CacheService.get_cached_data(cache_key)
-            if cached_data:
-                return Response(cached_data)
-
-        wishlist_items = WishlistService.get_wishlist(request)
-        serializer = self.serializer_class(
-            wishlist_items, many=True
-        ) if request.user.is_authenticated else self.serializer_class(
-            [{'id': None, 'product': item} for item in wishlist_items], many=True
-        )
-        response_data = serializer.data
-        if request.user.is_authenticated:
-            CacheService.set_cached_data(cache_key, response_data, timeout=300)
-        return Response(response_data)
