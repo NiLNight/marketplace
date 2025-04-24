@@ -7,6 +7,14 @@ User = get_user_model()
 
 
 class WishlistItem(TimeStampedModel):
+    """Модель элемента списка желаний.
+
+    Хранит информацию о товаре, добавленном в список желаний пользователем.
+
+    Attributes:
+        user: Связь с пользователем, которому принадлежит элемент.
+        product: Связь с товаром, добавленным в список желаний.
+    """
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -30,9 +38,12 @@ class WishlistItem(TimeStampedModel):
                 name='unique_wishlist_product'
             )
         ]
-
         indexes = [
             models.Index(fields=['user', 'product']),
         ]
         verbose_name = 'Элемент списка желаний'
         verbose_name_plural = 'Элементы списка желаний'
+
+    def __str__(self):
+        """Возвращает строковое представление элемента списка желаний."""
+        return f"{self.product.title} в списке желаний {self.user.username if self.user else 'гостя'}"

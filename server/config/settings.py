@@ -237,5 +237,10 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'apps.wishlists': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
     },
 }

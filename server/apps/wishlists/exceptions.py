@@ -1,5 +1,14 @@
-class WishlistException(Exception):
-    """Базовое исключение для операций со списком желаний."""
+from rest_framework.exceptions import APIException
+
+
+class WishlistException(APIException):
+    """Базовое исключение для операций со списком желаний.
+
+    Attributes:
+        default_detail (str): Сообщение об ошибке по умолчанию.
+        status_code (int): HTTP-код статуса для ошибки.
+        detail (str): Конкретное сообщение об ошибке.
+    """
     default_detail = 'Ошибка списка желаний'
     status_code = 400
 

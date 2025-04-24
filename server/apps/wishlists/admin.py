@@ -1,3 +1,4 @@
 from django.contrib import admin
+from apps.wishlists.models import WishlistItem
 
-# Register your models here.
+admin.site.register(WishlistItem)

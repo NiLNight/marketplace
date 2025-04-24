@@ -1,96 +1,34 @@
-[2025-04-22 21:32:03,854] INFO apps.core.services.cache_services Invalidated cache for prefix: wishlist:None:*
-[2025-04-22 21:40:39,913] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-22 21:40:51,641] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-22 21:40:55,605] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-22 21:40:57,516] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-22 21:40:58,918] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-22 21:40:59,710] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-22 21:41:13,535] DEBUG apps.core.services.cache_services Cache miss for key: product_list:0d98d7faabea2b36a7af195635cbca69
-[2025-04-22 21:41:20,933] DEBUG apps.core.services.cache_services Cache hit for key: product_list:0d98d7faabea2b36a7af195635cbca69
-[2025-04-22 21:41:22,707] DEBUG apps.core.services.cache_services Cache hit for key: product_list:0d98d7faabea2b36a7af195635cbca69
-[2025-04-23 15:34:58,929] DEBUG apps.core.services.cache_services Cache miss for key: product_list:7d99777e65c7bb7f0a798020fc3138ea
-[2025-04-23 15:35:00,829] DEBUG apps.core.services.cache_services Cache hit for key: product_list:7d99777e65c7bb7f0a798020fc3138ea
-[2025-04-23 15:35:08,169] DEBUG apps.core.services.cache_services Cache hit for key: product_list:7d99777e65c7bb7f0a798020fc3138ea
-[2025-04-23 15:35:08,823] DEBUG apps.core.services.cache_services Cache hit for key: product_list:7d99777e65c7bb7f0a798020fc3138ea
-[2025-04-23 15:35:09,452] DEBUG apps.core.services.cache_services Cache hit for key: product_list:7d99777e65c7bb7f0a798020fc3138ea
-[2025-04-23 15:35:10,452] DEBUG apps.core.services.cache_services Cache hit for key: product_list:7d99777e65c7bb7f0a798020fc3138ea
-[2025-04-23 15:35:11,464] DEBUG apps.core.services.cache_services Cache hit for key: product_list:7d99777e65c7bb7f0a798020fc3138ea
-[2025-04-23 15:35:12,670] DEBUG apps.core.services.cache_services Cache hit for key: product_list:7d99777e65c7bb7f0a798020fc3138ea
-[2025-04-23 15:35:18,244] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:35:36,069] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:35:37,276] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:35:38,295] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:41:01,550] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:41:44,061] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:41:54,056] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:41:55,444] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:41:56,208] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:41:56,963] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:42:31,834] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:42:32,676] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:42:33,670] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:42:34,803] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:42:35,756] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:42:48,728] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:44:13,628] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:44:15,466] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:44:29,302] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:44:31,859] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:44:33,430] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:44:34,499] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:46:56,389] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:47:15,676] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:47:16,856] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:47:17,641] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:47:18,748] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:47:24,996] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:49:00,693] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:49:08,968] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:49:11,363] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:49:12,377] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:49:21,768] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:49:24,041] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:50:00,487] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:50:01,401] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:50:02,272] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:50:12,257] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:50:47,132] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:50:48,114] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:52:37,033] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:53:02,914] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 15:53:05,085] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 16:14:13,938] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 16:14:15,303] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 16:14:16,036] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 16:16:33,122] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 16:29:02,808] DEBUG apps.core.services.cache_services Cache miss for key: product_list:7d99777e65c7bb7f0a798020fc3138ea
-[2025-04-23 16:29:07,978] DEBUG apps.core.services.cache_services Cache hit for key: product_list:7d99777e65c7bb7f0a798020fc3138ea
-[2025-04-23 16:29:08,681] DEBUG apps.core.services.cache_services Cache hit for key: product_list:7d99777e65c7bb7f0a798020fc3138ea
-[2025-04-23 16:34:27,632] DEBUG apps.core.services.cache_services Cache hit for key: product_list:7d99777e65c7bb7f0a798020fc3138ea
-[2025-04-23 16:34:28,944] DEBUG apps.core.services.cache_services Cache hit for key: product_list:7d99777e65c7bb7f0a798020fc3138ea
-[2025-04-23 16:35:05,344] DEBUG apps.core.services.cache_services Cache hit for key: product_list:7d99777e65c7bb7f0a798020fc3138ea
-[2025-04-23 16:35:22,111] DEBUG apps.core.services.cache_services Cache hit for key: product_list:7d99777e65c7bb7f0a798020fc3138ea
-[2025-04-23 16:35:23,682] DEBUG apps.core.services.cache_services Cache hit for key: product_list:7d99777e65c7bb7f0a798020fc3138ea
-[2025-04-23 16:35:24,965] DEBUG apps.core.services.cache_services Cache hit for key: product_list:7d99777e65c7bb7f0a798020fc3138ea
-[2025-04-23 16:55:22,221] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 16:55:47,096] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 16:56:07,720] DEBUG apps.core.services.cache_services Cache miss for key: product_list:0d98d7faabea2b36a7af195635cbca69
-[2025-04-23 16:56:14,817] DEBUG apps.core.services.cache_services Cache hit for key: product_list:0d98d7faabea2b36a7af195635cbca69
-[2025-04-23 16:57:32,461] DEBUG apps.core.services.cache_services Cache hit for key: product_list:0d98d7faabea2b36a7af195635cbca69
-[2025-04-23 16:57:36,818] DEBUG apps.core.services.cache_services Cache hit for key: product_list:0d98d7faabea2b36a7af195635cbca69
-[2025-04-23 16:57:56,527] DEBUG apps.core.services.cache_services Cache hit for key: product_list:0d98d7faabea2b36a7af195635cbca69
-[2025-04-23 16:57:57,557] DEBUG apps.core.services.cache_services Cache hit for key: product_list:0d98d7faabea2b36a7af195635cbca69
-[2025-04-23 16:58:08,044] DEBUG apps.core.services.cache_services Cache hit for key: product_list:0d98d7faabea2b36a7af195635cbca69
-[2025-04-23 16:58:09,875] DEBUG apps.core.services.cache_services Cache hit for key: product_list:0d98d7faabea2b36a7af195635cbca69
-[2025-04-23 17:00:14,899] DEBUG apps.core.services.cache_services Cache hit for key: product_list:0d98d7faabea2b36a7af195635cbca69
-[2025-04-23 17:00:27,293] DEBUG apps.core.services.cache_services Cache hit for key: product_list:0d98d7faabea2b36a7af195635cbca69
-[2025-04-23 17:03:18,751] DEBUG apps.core.services.cache_services Cache hit for key: product_list:0d98d7faabea2b36a7af195635cbca69
-[2025-04-23 17:04:26,652] DEBUG apps.core.services.cache_services Cache miss for key: product_list:b1aea45f4cf6b0f4356d5545b5176617
-[2025-04-23 17:04:37,778] DEBUG apps.core.services.cache_services Cache miss for key: product_list:3eca33058d69d3ccfa24dce50c3b5818
-[2025-04-23 17:05:55,609] DEBUG apps.core.services.cache_services Cache hit for key: product_list:3eca33058d69d3ccfa24dce50c3b5818
-[2025-04-23 17:05:57,563] DEBUG apps.core.services.cache_services Cache hit for key: product_list:3eca33058d69d3ccfa24dce50c3b5818
-[2025-04-23 17:06:03,652] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 17:06:06,144] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
-[2025-04-23 17:06:17,583] DEBUG apps.core.services.cache_services Cache hit for key: product_list:0d98d7faabea2b36a7af195635cbca69
-[2025-04-23 17:07:46,944] DEBUG apps.core.services.cache_services Cache miss for key: product_detail:4
-[2025-04-23 17:07:53,264] DEBUG apps.core.services.cache_services Cache hit for key: product_detail:4
+[2025-04-24 15:20:48,502] ERROR apps.wishlists.utils API error: {'product': [ErrorDetail(string='Обязательное поле.', code='required')]}, user=anonymous, path=/wishlists/add/
+[2025-04-24 15:21:00,370] ERROR apps.wishlists.utils API error: {'product': {'non_field_errors': [ErrorDetail(string='Недопустимые данные. Ожидался dictionary, но был получен int.', code='invalid')]}}, user=anonymous, path=/wishlists/add/
+[2025-04-24 15:23:53,110] DEBUG apps.core.services.cache_services Cache miss for key: wishlist:8
+[2025-04-24 15:23:57,333] DEBUG apps.core.services.cache_services Cache hit for key: wishlist:8
+[2025-04-24 15:24:04,685] INFO apps.core.services.cache_services Invalidated cache for prefix: wishlist:8:*
+[2025-04-24 15:41:38,683] INFO apps.wishlists.services.wishlist_services Session wishlist retrieved for user=anonymous, items_count=0
+[2025-04-24 15:41:51,570] DEBUG apps.core.services.cache_services Cache miss for key: wishlist:8
+[2025-04-24 15:41:51,573] INFO apps.wishlists.services.wishlist_services Wishlist retrieved for user=8, items_count=9
+[2025-04-24 15:41:58,877] DEBUG apps.core.services.cache_services Cache hit for key: wishlist:8
+[2025-04-24 15:43:21,525] DEBUG apps.core.services.cache_services Cache hit for key: wishlist:8
+[2025-04-24 15:43:21,525] INFO apps.wishlists.views Wishlist retrieved from cache for user=8, path=/wishlists/
+[2025-04-24 15:43:33,255] ERROR apps.wishlists.utils API error: {'product': {'non_field_errors': [ErrorDetail(string='Недопустимые данные. Ожидался dictionary, но был получен int.', code='invalid')]}}, user=8, path=/wishlists/add/
+[2025-04-24 15:44:07,631] DEBUG apps.core.services.cache_services Cache hit for key: wishlist:8
+[2025-04-24 15:44:07,632] INFO apps.wishlists.views Wishlist retrieved from cache for user=8, path=/wishlists/
+[2025-04-24 15:47:49,549] DEBUG apps.core.services.cache_services Cache miss for key: wishlist:8
+[2025-04-24 15:47:49,552] INFO apps.wishlists.services.wishlist_services Wishlist retrieved for user=8, items_count=9
+[2025-04-24 15:50:10,979] DEBUG apps.core.services.cache_services Cache hit for key: wishlist:8
+[2025-04-24 15:50:13,939] ERROR apps.wishlists.utils Missing key: 'product_id', user=8, path=/wishlists/add/
+[2025-04-24 15:50:47,269] ERROR apps.wishlists.utils Missing key: 'product_id', user=8, path=/wishlists/add/
+[2025-04-24 15:53:31,558] ERROR apps.wishlists.utils Missing key: 'product_id', user=8, path=/wishlists/add/
+[2025-04-24 15:53:33,213] ERROR apps.wishlists.utils Missing key: 'product_id', user=8, path=/wishlists/add/
+[2025-04-24 15:53:50,731] INFO apps.wishlists.services.wishlist_services Product 5 added to wishlist for user=8
+[2025-04-24 15:53:50,738] INFO apps.core.services.cache_services Invalidated cache for prefix: wishlist:8:*
+[2025-04-24 15:53:50,738] INFO apps.wishlists.views Product 5 added to wishlist via API for user=8, path=/wishlists/add/
+[2025-04-24 15:53:55,911] INFO apps.wishlists.services.wishlist_services Product 5 added to wishlist for user=8
+[2025-04-24 15:53:55,913] INFO apps.core.services.cache_services Invalidated cache for prefix: wishlist:8:*
+[2025-04-24 15:53:55,913] INFO apps.wishlists.views Product 5 added to wishlist via API for user=8, path=/wishlists/add/
+[2025-04-24 15:55:00,827] DEBUG apps.core.services.cache_services Cache miss for key: wishlist:8
+[2025-04-24 15:55:00,829] INFO apps.wishlists.services.wishlist_services Wishlist retrieved for user=8, items_count=10
+[2025-04-24 15:55:19,466] INFO apps.wishlists.services.wishlist_services Session wishlist retrieved for user=anonymous, items_count=0
+[2025-04-24 15:55:34,139] WARNING apps.wishlists.utils Wishlist error: Элемент списка желаний не найден, user=anonymous, path=/wishlists/delete/5/
+[2025-04-24 15:55:47,190] INFO apps.wishlists.services.wishlist_services Product 5 removed from wishlist for user=8
+[2025-04-24 15:55:47,192] INFO apps.core.services.cache_services Invalidated cache for prefix: wishlist:8:*
+[2025-04-24 15:55:47,192] INFO apps.wishlists.views Product 5 removed from wishlist via API for user=8, path=/wishlists/delete/5/
