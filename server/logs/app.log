@@ -411,3 +411,84 @@
 [2025-04-25 19:46:03,427] DEBUG apps.core.services.cache_services Cache miss for key: cart:8
 [2025-04-25 19:46:03,430] INFO apps.carts.services.cart_services Retrieved cart, user=8, items=5
 [2025-04-25 19:46:03,442] INFO apps.carts.views Retrieved cart, user=8, items=5
+[2025-04-25 19:46:36,639] INFO apps.carts.services.cart_services Removed product 1 from cart, user=8
+[2025-04-25 19:46:36,641] INFO apps.core.services.cache_services Invalidated cache for key: cart:8
+[2025-04-25 19:46:36,641] INFO apps.carts.views Removed product 1 from cart, user=8
+[2025-04-25 19:46:38,916] DEBUG apps.core.services.cache_services Cache miss for key: cart:8
+[2025-04-25 19:46:38,919] INFO apps.carts.services.cart_services Retrieved cart, user=8, items=4
+[2025-04-25 19:46:38,928] INFO apps.carts.views Retrieved cart, user=8, items=4
+[2025-04-25 19:46:43,863] INFO apps.carts.services.cart_services Added product 1 to cart, user=8
+[2025-04-25 19:46:43,865] INFO apps.core.services.cache_services Invalidated cache for key: cart:8
+[2025-04-25 19:46:43,865] INFO apps.carts.views Added product 1 to cart, user=8
+[2025-04-25 19:46:45,739] DEBUG apps.core.services.cache_services Cache miss for key: cart:8
+[2025-04-25 19:46:45,743] INFO apps.carts.services.cart_services Retrieved cart, user=8, items=5
+[2025-04-25 19:46:45,752] INFO apps.carts.views Retrieved cart, user=8, items=5
+[2025-04-25 19:48:14,427] DEBUG apps.core.services.cache_services Cache miss for key: wishlist:8
+[2025-04-25 19:48:14,435] INFO apps.wishlists.services.wishlist_services Wishlist retrieved for user=8, items_count=9
+[2025-04-25 19:48:14,445] INFO apps.wishlists.views Retrieved wishlist, user=8, items=9
+[2025-04-25 19:48:23,122] INFO apps.wishlists.services.wishlist_services Product 5 added to wishlist for user=8
+[2025-04-25 19:48:23,124] INFO apps.core.services.cache_services Invalidated cache for prefix: wishlist:8:*
+[2025-04-25 19:48:23,124] INFO apps.wishlists.views Product 5 added to wishlist via API for user=8, path=/wishlists/add/
+[2025-04-25 19:48:38,706] DEBUG apps.core.services.cache_services Cache hit for key: wishlist:8
+[2025-04-25 19:48:59,907] INFO apps.wishlists.services.wishlist_services Product 1 added to wishlist for user=8
+[2025-04-25 19:48:59,910] INFO apps.core.services.cache_services Invalidated cache for prefix: wishlist:8:*
+[2025-04-25 19:48:59,910] INFO apps.wishlists.views Product 1 added to wishlist via API for user=8, path=/wishlists/add/
+[2025-04-25 19:49:32,294] INFO apps.wishlists.services.wishlist_services Product 1 added to wishlist for user=8
+[2025-04-25 19:49:32,300] INFO apps.core.services.cache_services Invalidated cache for key: wishlist:1
+[2025-04-25 19:49:32,300] INFO apps.wishlists.views Product 1 added to wishlist via API for user=8, path=/wishlists/add/
+[2025-04-25 19:49:36,363] DEBUG apps.core.services.cache_services Cache hit for key: wishlist:8
+[2025-04-25 19:50:29,266] INFO apps.wishlists.services.wishlist_services Product 1 added to wishlist for user=8
+[2025-04-25 19:50:29,272] INFO apps.core.services.cache_services Invalidated cache for key: wishlist:8
+[2025-04-25 19:50:29,272] INFO apps.wishlists.views Product 1 added to wishlist via API for user=8, path=/wishlists/add/
+[2025-04-25 19:50:31,230] DEBUG apps.core.services.cache_services Cache miss for key: wishlist:8
+[2025-04-25 19:50:31,233] INFO apps.wishlists.services.wishlist_services Wishlist retrieved for user=8, items_count=11
+[2025-04-25 19:50:31,272] INFO apps.wishlists.views Retrieved wishlist, user=8, items=11
+[2025-04-25 19:50:46,193] WARNING apps.wishlists.utils Wishlist error: Товар недоступен для списка желаний, user=8, path=/wishlists/add/
+[2025-04-25 19:50:52,965] INFO apps.wishlists.services.wishlist_services Product 50 added to wishlist for user=8
+[2025-04-25 19:50:52,966] INFO apps.core.services.cache_services Invalidated cache for key: wishlist:8
+[2025-04-25 19:50:52,966] INFO apps.wishlists.views Product 50 added to wishlist via API for user=8, path=/wishlists/add/
+[2025-04-25 19:50:58,388] DEBUG apps.core.services.cache_services Cache miss for key: wishlist:8
+[2025-04-25 19:50:58,390] INFO apps.wishlists.services.wishlist_services Wishlist retrieved for user=8, items_count=12
+[2025-04-25 19:50:58,400] INFO apps.wishlists.views Retrieved wishlist, user=8, items=12
+[2025-04-25 19:51:30,925] INFO apps.wishlists.services.wishlist_services Product 2 added to wishlist for user=8
+[2025-04-25 19:51:30,927] INFO apps.core.services.cache_services Invalidated cache for key: wishlist:8
+[2025-04-25 19:51:30,927] INFO apps.wishlists.views Product 2 added to wishlist via API for user=8, path=/wishlists/add/
+[2025-04-25 19:51:33,023] DEBUG apps.core.services.cache_services Cache miss for key: wishlist:8
+[2025-04-25 19:51:33,026] INFO apps.wishlists.services.wishlist_services Wishlist retrieved for user=8, items_count=13
+[2025-04-25 19:51:33,035] INFO apps.wishlists.views Retrieved wishlist, user=8, items=13
+[2025-04-25 19:51:41,111] INFO apps.wishlists.services.wishlist_services Product 2 removed from wishlist for user=8
+[2025-04-25 19:51:41,113] INFO apps.core.services.cache_services Invalidated cache for prefix: wishlist:8:*
+[2025-04-25 19:51:41,113] INFO apps.wishlists.views Product 2 removed from wishlist via API for user=8, path=/wishlists/delete/2/
+[2025-04-25 19:51:43,577] DEBUG apps.core.services.cache_services Cache hit for key: wishlist:8
+[2025-04-25 19:52:17,521] DEBUG apps.core.services.cache_services Cache hit for key: wishlist:8
+[2025-04-25 19:52:20,302] DEBUG apps.core.services.cache_services Cache hit for key: wishlist:8
+[2025-04-25 19:52:22,589] WARNING apps.wishlists.utils Wishlist error: Элемент списка желаний не найден, user=8, path=/wishlists/delete/2/
+[2025-04-25 19:52:25,179] INFO apps.wishlists.services.wishlist_services Product 2 added to wishlist for user=8
+[2025-04-25 19:52:25,180] INFO apps.core.services.cache_services Invalidated cache for key: wishlist:8
+[2025-04-25 19:52:25,180] INFO apps.wishlists.views Product 2 added to wishlist via API for user=8, path=/wishlists/add/
+[2025-04-25 19:52:27,867] DEBUG apps.core.services.cache_services Cache miss for key: wishlist:8
+[2025-04-25 19:52:27,870] INFO apps.wishlists.services.wishlist_services Wishlist retrieved for user=8, items_count=13
+[2025-04-25 19:52:27,883] INFO apps.wishlists.views Retrieved wishlist, user=8, items=13
+[2025-04-25 19:52:29,763] INFO apps.wishlists.services.wishlist_services Product 2 removed from wishlist for user=8
+[2025-04-25 19:52:29,765] INFO apps.core.services.cache_services Invalidated cache for key: wishlist:8
+[2025-04-25 19:52:29,765] INFO apps.wishlists.views Product 2 removed from wishlist via API for user=8, path=/wishlists/delete/2/
+[2025-04-25 19:52:31,986] DEBUG apps.core.services.cache_services Cache miss for key: wishlist:8
+[2025-04-25 19:52:31,989] INFO apps.wishlists.services.wishlist_services Wishlist retrieved for user=8, items_count=12
+[2025-04-25 19:52:31,998] INFO apps.wishlists.views Retrieved wishlist, user=8, items=12
+[2025-04-25 19:53:00,591] INFO apps.wishlists.services.wishlist_services Session wishlist retrieved for user=anonymous, items_count=0
+[2025-04-25 19:53:00,592] INFO apps.wishlists.views Retrieved wishlist, user=anonymous, items=0
+[2025-04-25 19:53:03,425] INFO apps.wishlists.services.wishlist_services Product 2 added to session wishlist for user=anonymous
+[2025-04-25 19:53:03,426] INFO apps.core.services.cache_services Invalidated cache for key: wishlist:anonymous
+[2025-04-25 19:53:03,426] INFO apps.wishlists.views Product 2 added to wishlist via API for user=anonymous, path=/wishlists/add/
+[2025-04-25 19:53:07,053] INFO apps.wishlists.services.wishlist_services Session wishlist retrieved for user=anonymous, items_count=1
+[2025-04-25 19:53:07,057] INFO apps.wishlists.views Retrieved wishlist, user=anonymous, items=1
+[2025-04-25 19:53:15,590] INFO apps.wishlists.services.wishlist_services Product 3 added to session wishlist for user=anonymous
+[2025-04-25 19:53:15,591] INFO apps.core.services.cache_services Invalidated cache for key: wishlist:anonymous
+[2025-04-25 19:53:15,591] INFO apps.wishlists.views Product 3 added to wishlist via API for user=anonymous, path=/wishlists/add/
+[2025-04-25 19:53:17,745] INFO apps.wishlists.services.wishlist_services Session wishlist retrieved for user=anonymous, items_count=2
+[2025-04-25 19:53:17,750] INFO apps.wishlists.views Retrieved wishlist, user=anonymous, items=2
+[2025-04-25 19:53:23,857] INFO apps.wishlists.services.wishlist_services Product 3 removed from session wishlist for user=anonymous
+[2025-04-25 19:53:23,858] INFO apps.core.services.cache_services Invalidated cache for key: wishlist:anonymous
+[2025-04-25 19:53:23,858] INFO apps.wishlists.views Product 3 removed from wishlist via API for user=anonymous, path=/wishlists/delete/3/
+[2025-04-25 19:53:26,757] INFO apps.wishlists.services.wishlist_services Session wishlist retrieved for user=anonymous, items_count=1
+[2025-04-25 19:53:26,762] INFO apps.wishlists.views Retrieved wishlist, user=anonymous, items=1

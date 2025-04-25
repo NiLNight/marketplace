@@ -64,7 +64,7 @@ class WishlistAddView(APIView):
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         product_id = int(request.data['product_id'])
         WishlistService.add_to_wishlist(request, product_id)
-        CacheService.invalidate_cache(prefix=f"wishlist:{request.user.id}")
+        CacheService.invalidate_cache(prefix=f"wishlist", pk=user_id)
         logger.info(f"Product {product_id} added to wishlist via API for user={user_id}, path={request.path}")
         return Response({"message": "Товар добавлен в список желаний"}, status=status.HTTP_200_OK)
 
@@ -86,6 +86,6 @@ class WishlistItemDeleteView(APIView):
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         WishlistService.remove_from_wishlist(request, product_id=pk)
-        CacheService.invalidate_cache(prefix=f"wishlist:{request.user.id}")
+        CacheService.invalidate_cache(prefix=f"wishlist", pk=user_id)
         logger.info(f"Product {pk} removed from wishlist via API for user={user_id}, path={request.path}")
         return Response(status=status.HTTP_204_NO_CONTENT)
