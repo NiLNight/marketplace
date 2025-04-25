@@ -67,7 +67,7 @@ class CartsAddView(APIView):
         product_id = int(request.data['product_id'])
         quantity = int(request.data.get('quantity', 1))
         CartService.add_to_cart(request, product_id, quantity)
-        CacheService.invalidate_cache(prefix=f"cart:{request.user.id}")
+        CacheService.invalidate_cache(prefix=f"cart", pk=user_id)
         logger.info(f"Added product {product_id} to cart, user={user_id}")
         return Response({"message": "Товар добавлен в корзину"}, status=status.HTTP_200_OK)
 
@@ -99,7 +99,7 @@ class CartsItemUpdateView(APIView):
                 'quantity': cart_item['quantity']
             }
             serializer = self.serializer_class(serializer_data)
-            CacheService.invalidate_cache(prefix=f"cart:{request.user.id}")
+            CacheService.invalidate_cache(prefix=f"cart", pk=user_id)
             logger.info(f"Updated cart item {pk}, quantity={quantity}, user={user_id}")
             return Response(serializer.data)
         logger.warning(f"Cart item {pk} not found, user={user_id}")
@@ -124,7 +124,7 @@ class CartsItemDeleteView(APIView):
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         success = CartService.remove_from_cart(request, product_id=pk)
         if success:
-            CacheService.invalidate_cache(prefix=f"cart:{request.user.id}")
+            CacheService.invalidate_cache(prefix=f"cart", pk=user_id)
             logger.info(f"Removed product {pk} from cart, user={user_id}")
             return Response(status=status.HTTP_204_NO_CONTENT)
         logger.warning(f"Product {pk} not found in cart, user={user_id}")

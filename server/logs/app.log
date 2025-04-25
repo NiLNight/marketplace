@@ -324,3 +324,90 @@
 [2025-04-25 14:29:28,843] INFO apps.orders.services.notification_services Notification successfully sent to bananosoidd@mail.ru
 [2025-04-25 14:29:32,410] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:10:8
 [2025-04-25 14:29:33,471] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:10:8
+[2025-04-25 14:31:59,663] DEBUG apps.orders.signals Tracking status for order=10, user=8
+[2025-04-25 14:31:59,664] INFO apps.orders.signals Processing post_save for order=10, user=8, created=False
+[2025-04-25 14:31:59,664] DEBUG apps.orders.services.notification_services Queueing notification for user=8, email=bananosoidd@mail.ru
+[2025-04-25 14:31:59,696] INFO apps.orders.signals Notification queued for status change, order=10, user=8
+[2025-04-25 14:31:59,697] INFO apps.orders.services.notification_services Sending notification to bananosoidd@mail.ru
+[2025-04-25 14:32:00,876] INFO apps.orders.services.notification_services Notification successfully sent to bananosoidd@mail.ru
+[2025-04-25 14:32:02,448] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:10:8
+[2025-04-25 14:32:09,878] INFO apps.orders.services.order_services Attempting to cancel order=10 for user=8
+[2025-04-25 14:32:09,881] DEBUG apps.orders.signals Tracking status for order=10, user=8
+[2025-04-25 14:32:09,882] INFO apps.orders.signals Processing post_save for order=10, user=8, created=False
+[2025-04-25 14:32:09,882] DEBUG apps.orders.services.notification_services Queueing notification for user=8, email=bananosoidd@mail.ru
+[2025-04-25 14:32:09,887] INFO apps.orders.signals Notification queued for status change, order=10, user=8
+[2025-04-25 14:32:09,887] INFO apps.orders.services.order_services Order 10 successfully cancelled for user=8
+[2025-04-25 14:32:09,888] INFO apps.core.services.cache_services Invalidated cache for key: order_detail:10:8
+[2025-04-25 14:32:09,888] INFO apps.orders.services.notification_services Sending notification to bananosoidd@mail.ru
+[2025-04-25 14:32:09,889] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:8:*
+[2025-04-25 14:32:09,889] INFO apps.orders.views Order 10 cancelled successfully for user=8
+[2025-04-25 14:32:11,104] INFO apps.orders.services.notification_services Notification successfully sent to bananosoidd@mail.ru
+[2025-04-25 14:32:13,122] DEBUG apps.core.services.cache_services Cache miss for key: order_detail:10:8
+[2025-04-25 14:32:13,122] INFO apps.orders.services.order_services Retrieving details for order=10, user=8
+[2025-04-25 14:32:13,133] INFO apps.orders.services.order_services Order 10 details retrieved for user=8
+[2025-04-25 14:32:13,135] INFO apps.orders.views Order 10 details retrieved for user=8
+[2025-04-25 17:41:01,981] INFO apps.carts.services.cart_services Retrieved session cart, user=anonymous, items=0
+[2025-04-25 17:41:01,981] INFO apps.carts.views Retrieved cart, user=anonymous, items=0
+[2025-04-25 17:41:07,680] DEBUG apps.core.services.cache_services Cache miss for key: cart:8
+[2025-04-25 17:41:07,683] INFO apps.carts.services.cart_services Retrieved cart, user=8, items=0
+[2025-04-25 17:41:07,690] INFO apps.carts.views Retrieved cart, user=8, items=0
+[2025-04-25 17:41:11,407] INFO apps.carts.services.cart_services Added product 20 to cart, user=8
+[2025-04-25 17:41:11,409] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:8:*
+[2025-04-25 17:41:11,409] INFO apps.carts.views Added product 20 to cart, user=8
+[2025-04-25 17:41:14,039] DEBUG apps.core.services.cache_services Cache miss for key: cart:8
+[2025-04-25 17:41:14,041] INFO apps.carts.services.cart_services Retrieved cart, user=8, items=1
+[2025-04-25 17:41:14,049] INFO apps.carts.views Retrieved cart, user=8, items=1
+[2025-04-25 17:41:26,189] WARNING apps.carts.services.cart_services Cart item 1 not found, user=8
+[2025-04-25 17:41:26,189] WARNING apps.carts.views Cart item 1 not found, user=8
+[2025-04-25 17:41:26,189] WARNING apps.carts.utils Cart error: Элемент корзины не найден, user=8
+[2025-04-25 17:41:46,273] INFO apps.carts.services.cart_services Updated cart item 20, quantity=10, user=8
+[2025-04-25 17:41:46,277] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:8:*
+[2025-04-25 17:41:46,277] INFO apps.carts.views Updated cart item 20, quantity=10, user=8
+[2025-04-25 17:42:01,286] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-25 17:42:03,413] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-25 17:42:08,991] INFO apps.carts.services.cart_services Updated cart item 20, quantity=11, user=8
+[2025-04-25 17:42:08,995] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:8:*
+[2025-04-25 17:42:08,995] INFO apps.carts.views Updated cart item 20, quantity=11, user=8
+[2025-04-25 17:42:11,580] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-25 19:42:47,472] DEBUG apps.core.services.cache_services Cache miss for key: cart:8
+[2025-04-25 19:42:47,476] INFO apps.carts.services.cart_services Retrieved cart, user=8, items=1
+[2025-04-25 19:42:47,485] INFO apps.carts.views Retrieved cart, user=8, items=1
+[2025-04-25 19:42:52,082] WARNING apps.carts.services.cart_services Quantity limit exceeded for product 20, user=8
+[2025-04-25 19:42:52,083] WARNING apps.carts.utils Cart error: Нельзя добавить больше 20 единиц товара Замороженные овощи в корзину., user=8
+[2025-04-25 19:43:02,112] INFO apps.carts.services.cart_services Added product 30 to cart, user=8
+[2025-04-25 19:43:02,115] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:8:*
+[2025-04-25 19:43:02,115] INFO apps.carts.views Added product 30 to cart, user=8
+[2025-04-25 19:43:05,136] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-25 19:44:03,267] INFO apps.carts.services.cart_services Added product 31 to cart, user=8
+[2025-04-25 19:44:03,276] INFO apps.core.services.cache_services Invalidated cache for key: cart::8
+[2025-04-25 19:44:03,276] INFO apps.carts.views Added product 31 to cart, user=8
+[2025-04-25 19:44:05,848] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-25 19:44:25,002] INFO apps.carts.services.cart_services Added product 41 to cart, user=8
+[2025-04-25 19:44:25,008] INFO apps.core.services.cache_services Invalidated cache for key: cart:8
+[2025-04-25 19:44:25,008] INFO apps.carts.views Added product 41 to cart, user=8
+[2025-04-25 19:44:28,455] DEBUG apps.core.services.cache_services Cache miss for key: cart:8
+[2025-04-25 19:44:28,457] INFO apps.carts.services.cart_services Retrieved cart, user=8, items=4
+[2025-04-25 19:44:28,469] INFO apps.carts.views Retrieved cart, user=8, items=4
+[2025-04-25 19:44:36,609] INFO apps.carts.services.cart_services Updated cart item 20, quantity=11, user=8
+[2025-04-25 19:44:36,614] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:8:*
+[2025-04-25 19:44:36,614] INFO apps.carts.views Updated cart item 20, quantity=11, user=8
+[2025-04-25 19:44:41,259] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-25 19:44:54,152] WARNING apps.carts.services.cart_services Cart item 34 not found, user=8
+[2025-04-25 19:44:54,152] WARNING apps.carts.views Cart item 34 not found, user=8
+[2025-04-25 19:44:54,152] WARNING apps.carts.utils Cart error: Элемент корзины не найден, user=8
+[2025-04-25 19:45:08,265] INFO apps.carts.services.cart_services Updated cart item 41, quantity=11, user=8
+[2025-04-25 19:45:08,270] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:8:*
+[2025-04-25 19:45:08,270] INFO apps.carts.views Updated cart item 41, quantity=11, user=8
+[2025-04-25 19:45:11,839] DEBUG apps.core.services.cache_services Cache hit for key: cart:8
+[2025-04-25 19:45:34,708] INFO apps.carts.services.cart_services Updated cart item 41, quantity=11, user=8
+[2025-04-25 19:45:34,716] INFO apps.core.services.cache_services Invalidated cache for key: cart:8
+[2025-04-25 19:45:34,716] INFO apps.carts.views Updated cart item 41, quantity=11, user=8
+[2025-04-25 19:45:37,010] DEBUG apps.core.services.cache_services Cache miss for key: cart:8
+[2025-04-25 19:45:37,013] INFO apps.carts.services.cart_services Retrieved cart, user=8, items=4
+[2025-04-25 19:45:37,023] INFO apps.carts.views Retrieved cart, user=8, items=4
+[2025-04-25 19:46:00,852] INFO apps.carts.services.cart_services Added product 1 to cart, user=8
+[2025-04-25 19:46:00,859] INFO apps.core.services.cache_services Invalidated cache for key: cart:8
+[2025-04-25 19:46:00,859] INFO apps.carts.views Added product 1 to cart, user=8
+[2025-04-25 19:46:03,427] DEBUG apps.core.services.cache_services Cache miss for key: cart:8
+[2025-04-25 19:46:03,430] INFO apps.carts.services.cart_services Retrieved cart, user=8, items=5
+[2025-04-25 19:46:03,442] INFO apps.carts.views Retrieved cart, user=8, items=5
