@@ -246,6 +246,11 @@ LOGGING = {
             'handlers': ['console', 'file'],
             'level': 'DEBUG',
             'propagate': False,
+        },
+        'apps.orders': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
         }
     },
 }

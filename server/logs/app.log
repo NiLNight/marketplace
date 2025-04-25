@@ -130,3 +130,197 @@
 [2025-04-24 23:18:58,018] WARNING apps.carts.utils Cart error: Нельзя добавить больше 20 единиц товара Замороженные овощи в корзину., user=8
 [2025-04-24 23:19:06,916] WARNING apps.carts.services.cart_services Product 1 not found in cart, user=8
 [2025-04-24 23:19:06,916] WARNING apps.carts.utils Cart error: Элемент корзины не найден, user=8
+[2025-04-25 14:06:13,918] INFO apps.carts.services.cart_services Retrieved session cart, user=anonymous, items=0
+[2025-04-25 14:06:13,919] INFO apps.carts.views Retrieved cart, user=anonymous, items=0
+[2025-04-25 14:07:42,724] DEBUG apps.core.services.cache_services Cache miss for key: order_list:8:0733228cbf3c94f7b08d655e5dd9d159
+[2025-04-25 14:07:44,682] DEBUG apps.core.services.cache_services Cache hit for key: order_list:8:0733228cbf3c94f7b08d655e5dd9d159
+[2025-04-25 14:07:48,856] DEBUG apps.core.services.cache_services Cache miss for key: order_detail:4:8
+[2025-04-25 14:08:04,008] DEBUG apps.core.services.cache_services Cache miss for key: order_detail:4:8
+[2025-04-25 14:08:08,546] DEBUG apps.core.services.cache_services Cache hit for key: order_list:8:0733228cbf3c94f7b08d655e5dd9d159
+[2025-04-25 14:09:01,206] DEBUG apps.core.services.cache_services Cache hit for key: order_list:8:0733228cbf3c94f7b08d655e5dd9d159
+[2025-04-25 14:09:01,206] INFO apps.orders.views Cache hit for order list, user=8
+[2025-04-25 14:09:16,148] DEBUG apps.core.services.cache_services Cache hit for key: order_list:8:0733228cbf3c94f7b08d655e5dd9d159
+[2025-04-25 14:09:16,148] INFO apps.orders.views Cache hit for order list, user=8
+[2025-04-25 14:09:35,212] DEBUG apps.core.services.cache_services Cache hit for key: order_list:8:0733228cbf3c94f7b08d655e5dd9d159
+[2025-04-25 14:10:51,357] DEBUG apps.core.services.cache_services Cache miss for key: order_detail:4:8
+[2025-04-25 14:10:51,357] INFO apps.orders.services.order_services Retrieving details for order=4, user=8
+[2025-04-25 14:10:51,360] WARNING apps.orders.services.order_services Order 4 not found for user=8
+[2025-04-25 14:10:51,360] WARNING apps.orders.utils API error: [ErrorDetail(string='Заказ не найден', code='invalid')], user=8
+[2025-04-25 14:11:11,209] INFO apps.orders.services.order_services Attempting to create order for user=8
+[2025-04-25 14:11:11,308] WARNING apps.orders.services.order_services Delivery 4 not found for user=8
+[2025-04-25 14:11:11,308] WARNING apps.orders.utils API error: [ErrorDetail(string='Указанная доставка не найдена', code='invalid')], user=8
+[2025-04-25 14:13:21,924] DEBUG apps.core.services.cache_services Cache miss for key: order_detail:4:8
+[2025-04-25 14:13:21,924] INFO apps.orders.services.order_services Retrieving details for order=4, user=8
+[2025-04-25 14:13:21,927] WARNING apps.orders.services.order_services Order 4 not found for user=8
+[2025-04-25 14:13:21,927] WARNING apps.orders.utils API error: [ErrorDetail(string='Заказ не найден', code='invalid')], user=8
+[2025-04-25 14:13:24,370] DEBUG apps.core.services.cache_services Cache hit for key: order_list:8:0733228cbf3c94f7b08d655e5dd9d159
+[2025-04-25 14:13:26,433] DEBUG apps.core.services.cache_services Cache hit for key: order_list:8:0733228cbf3c94f7b08d655e5dd9d159
+[2025-04-25 14:13:31,746] DEBUG apps.core.services.cache_services Cache miss for key: order_list:8:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-25 14:13:31,746] INFO apps.orders.services.order_services Retrieving orders for user=8
+[2025-04-25 14:13:31,751] INFO apps.orders.services.order_services Retrieved 0 orders for user=8
+[2025-04-25 14:13:31,752] INFO apps.orders.views Retrieved 0 orders for user=8
+[2025-04-25 14:13:32,948] DEBUG apps.core.services.cache_services Cache hit for key: order_list:8:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-25 14:13:42,164] INFO apps.orders.services.order_services Attempting to create order for user=8
+[2025-04-25 14:13:42,169] WARNING apps.orders.services.order_services Delivery 1 not found for user=8
+[2025-04-25 14:13:42,169] WARNING apps.orders.utils API error: [ErrorDetail(string='Указанная доставка не найдена', code='invalid')], user=8
+[2025-04-25 14:14:38,800] INFO apps.orders.services.order_services Attempting to create order for user=8
+[2025-04-25 14:14:38,809] DEBUG apps.orders.signals Tracking status for order=new, user=8
+[2025-04-25 14:14:38,841] INFO apps.orders.signals Processing post_save for order=9, user=8, created=True
+[2025-04-25 14:14:38,841] DEBUG apps.orders.services.notification_services Queueing notification for user=8, email=bananosoidd@mail.ru
+[2025-04-25 14:14:44,954] ERROR apps.orders.signals Failed to process post_save for order=9, user=8: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение
+[2025-04-25 14:14:45,195] INFO apps.orders.services.order_services Order 9 successfully created for user=8
+[2025-04-25 14:14:45,198] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:8:*
+[2025-04-25 14:14:45,198] INFO apps.orders.views Order 9 created successfully for user=8
+[2025-04-25 14:15:09,744] DEBUG apps.core.services.cache_services Cache miss for key: order_list:8:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-25 14:15:09,744] INFO apps.orders.services.order_services Retrieving orders for user=8
+[2025-04-25 14:15:09,750] INFO apps.orders.services.order_services Retrieved 1 orders for user=8
+[2025-04-25 14:15:09,751] INFO apps.orders.views Retrieved 1 orders for user=8
+[2025-04-25 14:15:18,971] DEBUG apps.core.services.cache_services Cache miss for key: order_detail:9:8
+[2025-04-25 14:15:18,971] INFO apps.orders.services.order_services Retrieving details for order=9, user=8
+[2025-04-25 14:15:18,982] INFO apps.orders.services.order_services Order 9 details retrieved for user=8
+[2025-04-25 14:15:18,983] INFO apps.orders.views Order 9 details retrieved for user=8
+[2025-04-25 14:15:26,586] DEBUG apps.core.services.cache_services Cache miss for key: cart:8
+[2025-04-25 14:15:26,589] INFO apps.carts.services.cart_services Retrieved cart, user=8, items=0
+[2025-04-25 14:15:26,607] INFO apps.carts.views Retrieved cart, user=8, items=0
+[2025-04-25 14:15:38,617] DEBUG apps.core.services.cache_services Cache hit for key: order_list:8:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-25 14:15:51,245] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:9:8
+[2025-04-25 14:15:51,246] INFO apps.orders.views Cache hit for order detail, order=9, user=8
+[2025-04-25 14:16:13,419] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:9:8
+[2025-04-25 14:17:34,401] INFO apps.orders.services.order_services Attempting to cancel order=6 for user=8
+[2025-04-25 14:17:34,404] WARNING apps.orders.services.order_services Order 6 not found for user=8
+[2025-04-25 14:17:34,404] WARNING apps.orders.utils API error: [ErrorDetail(string='Заказ не найден', code='invalid')], user=8
+[2025-04-25 14:17:40,983] INFO apps.orders.services.order_services Attempting to cancel order=9 for user=8
+[2025-04-25 14:17:40,996] DEBUG apps.orders.signals Tracking status for order=9, user=8
+[2025-04-25 14:17:40,998] INFO apps.orders.signals Processing post_save for order=9, user=8, created=False
+[2025-04-25 14:17:40,998] DEBUG apps.orders.services.notification_services Queueing notification for user=8, email=bananosoidd@mail.ru
+[2025-04-25 14:17:47,078] ERROR apps.orders.signals Failed to process post_save for order=9, user=8: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение
+[2025-04-25 14:17:47,078] INFO apps.orders.services.order_services Order 9 successfully cancelled for user=8
+[2025-04-25 14:17:47,080] INFO apps.core.services.cache_services Invalidated cache for prefix: order_detail:9:8:*
+[2025-04-25 14:17:47,081] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:8:*
+[2025-04-25 14:17:47,081] INFO apps.orders.views Order 9 cancelled successfully for user=8
+[2025-04-25 14:18:35,276] DEBUG apps.core.services.cache_services Cache miss for key: order_list:8:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-25 14:18:35,276] INFO apps.orders.services.order_services Retrieving orders for user=8
+[2025-04-25 14:18:35,280] INFO apps.orders.services.order_services Retrieved 1 orders for user=8
+[2025-04-25 14:18:35,285] INFO apps.orders.views Retrieved 1 orders for user=8
+[2025-04-25 14:18:38,729] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:9:8
+[2025-04-25 14:18:44,057] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:9:8
+[2025-04-25 14:18:47,141] DEBUG apps.core.services.cache_services Cache hit for key: order_list:8:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-25 14:19:09,819] INFO apps.orders.services.order_services Attempting to create order for user=8
+[2025-04-25 14:19:09,822] WARNING apps.orders.services.order_services Cart is empty for user=8
+[2025-04-25 14:19:09,823] WARNING apps.orders.utils API error: [ErrorDetail(string='Корзина пуста', code='invalid')], user=8
+[2025-04-25 14:19:33,713] INFO apps.carts.services.cart_services Added product 20 to cart, user=8
+[2025-04-25 14:19:33,715] INFO apps.core.services.cache_services Invalidated cache for prefix: cart:8:*
+[2025-04-25 14:19:33,715] INFO apps.carts.views Added product 20 to cart, user=8
+[2025-04-25 14:19:40,464] INFO apps.orders.services.order_services Attempting to create order for user=8
+[2025-04-25 14:19:40,471] DEBUG apps.orders.signals Tracking status for order=new, user=8
+[2025-04-25 14:19:40,472] INFO apps.orders.signals Processing post_save for order=10, user=8, created=True
+[2025-04-25 14:19:40,472] DEBUG apps.orders.services.notification_services Queueing notification for user=8, email=bananosoidd@mail.ru
+[2025-04-25 14:19:40,492] INFO apps.orders.signals Notification queued for order creation, order=10, user=8
+[2025-04-25 14:19:40,494] INFO apps.orders.services.notification_services Sending notification to bananosoidd@mail.ru
+[2025-04-25 14:19:40,502] INFO apps.orders.services.order_services Order 10 successfully created for user=8
+[2025-04-25 14:19:40,506] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:8:*
+[2025-04-25 14:19:40,506] INFO apps.orders.views Order 10 created successfully for user=8
+[2025-04-25 14:19:42,053] INFO apps.orders.services.notification_services Notification successfully sent to bananosoidd@mail.ru
+[2025-04-25 14:19:44,900] DEBUG apps.core.services.cache_services Cache miss for key: order_list:8:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-25 14:19:44,900] INFO apps.orders.services.order_services Retrieving orders for user=8
+[2025-04-25 14:19:44,904] INFO apps.orders.services.order_services Retrieved 2 orders for user=8
+[2025-04-25 14:19:44,906] INFO apps.orders.views Retrieved 2 orders for user=8
+[2025-04-25 14:19:58,708] DEBUG apps.core.services.cache_services Cache miss for key: order_detail:10:8
+[2025-04-25 14:19:58,708] INFO apps.orders.services.order_services Retrieving details for order=10, user=8
+[2025-04-25 14:19:58,720] INFO apps.orders.services.order_services Order 10 details retrieved for user=8
+[2025-04-25 14:19:58,722] INFO apps.orders.views Order 10 details retrieved for user=8
+[2025-04-25 14:21:02,996] INFO apps.orders.services.order_services Attempting to cancel order=10 for user=8
+[2025-04-25 14:21:02,998] DEBUG apps.orders.signals Tracking status for order=10, user=8
+[2025-04-25 14:21:03,000] INFO apps.orders.signals Processing post_save for order=10, user=8, created=False
+[2025-04-25 14:21:03,000] DEBUG apps.orders.services.notification_services Queueing notification for user=8, email=bananosoidd@mail.ru
+[2025-04-25 14:21:03,004] INFO apps.orders.signals Notification queued for status change, order=10, user=8
+[2025-04-25 14:21:03,004] INFO apps.orders.services.order_services Order 10 successfully cancelled for user=8
+[2025-04-25 14:21:03,006] INFO apps.core.services.cache_services Invalidated cache for prefix: order_detail:10:8:*
+[2025-04-25 14:21:03,006] INFO apps.orders.services.notification_services Sending notification to bananosoidd@mail.ru
+[2025-04-25 14:21:03,007] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:8:*
+[2025-04-25 14:21:03,007] INFO apps.orders.views Order 10 cancelled successfully for user=8
+[2025-04-25 14:21:04,852] INFO apps.orders.services.notification_services Notification successfully sent to bananosoidd@mail.ru
+[2025-04-25 14:22:11,906] DEBUG apps.core.services.cache_services Cache miss for key: order_list:8:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-25 14:22:11,906] INFO apps.orders.services.order_services Retrieving orders for user=8
+[2025-04-25 14:22:11,910] INFO apps.orders.services.order_services Retrieved 2 orders for user=8
+[2025-04-25 14:22:11,912] INFO apps.orders.views Retrieved 2 orders for user=8
+[2025-04-25 14:22:17,701] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:10:8
+[2025-04-25 14:23:14,766] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:9:8
+[2025-04-25 14:23:19,583] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:9:8
+[2025-04-25 14:25:04,482] DEBUG apps.orders.signals Tracking status for order=10, user=8
+[2025-04-25 14:25:04,483] INFO apps.orders.signals Processing post_save for order=10, user=8, created=False
+[2025-04-25 14:25:04,483] DEBUG apps.orders.services.notification_services Queueing notification for user=8, email=bananosoidd@mail.ru
+[2025-04-25 14:25:04,502] INFO apps.orders.signals Notification queued for status change, order=10, user=8
+[2025-04-25 14:25:04,503] INFO apps.orders.services.notification_services Sending notification to bananosoidd@mail.ru
+[2025-04-25 14:25:06,313] INFO apps.orders.services.notification_services Notification successfully sent to bananosoidd@mail.ru
+[2025-04-25 14:25:14,261] DEBUG apps.orders.signals Tracking status for order=9, user=8
+[2025-04-25 14:25:14,262] INFO apps.orders.signals Processing post_save for order=9, user=8, created=False
+[2025-04-25 14:25:14,262] DEBUG apps.orders.services.notification_services Queueing notification for user=8, email=bananosoidd@mail.ru
+[2025-04-25 14:25:14,263] INFO apps.orders.signals Notification queued for status change, order=9, user=8
+[2025-04-25 14:25:14,265] INFO apps.orders.services.notification_services Sending notification to bananosoidd@mail.ru
+[2025-04-25 14:25:15,533] INFO apps.orders.services.notification_services Notification successfully sent to bananosoidd@mail.ru
+[2025-04-25 14:25:21,436] DEBUG apps.core.services.cache_services Cache hit for key: order_list:8:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-25 14:25:22,548] DEBUG apps.core.services.cache_services Cache hit for key: order_list:8:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-25 14:25:27,413] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:9:8
+[2025-04-25 14:25:33,350] INFO apps.orders.services.order_services Attempting to cancel order=10 for user=8
+[2025-04-25 14:25:33,353] DEBUG apps.orders.signals Tracking status for order=10, user=8
+[2025-04-25 14:25:33,354] INFO apps.orders.signals Processing post_save for order=10, user=8, created=False
+[2025-04-25 14:25:33,354] DEBUG apps.orders.services.notification_services Queueing notification for user=8, email=bananosoidd@mail.ru
+[2025-04-25 14:25:33,360] INFO apps.orders.signals Notification queued for status change, order=10, user=8
+[2025-04-25 14:25:33,360] INFO apps.orders.services.order_services Order 10 successfully cancelled for user=8
+[2025-04-25 14:25:33,361] INFO apps.core.services.cache_services Invalidated cache for key: order_detail:10:8:10
+[2025-04-25 14:25:33,361] INFO apps.orders.services.notification_services Sending notification to bananosoidd@mail.ru
+[2025-04-25 14:25:33,362] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:8:*
+[2025-04-25 14:25:33,362] INFO apps.orders.views Order 10 cancelled successfully for user=8
+[2025-04-25 14:25:34,493] INFO apps.orders.services.notification_services Notification successfully sent to bananosoidd@mail.ru
+[2025-04-25 14:25:38,221] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:9:8
+[2025-04-25 14:25:46,991] DEBUG apps.core.services.cache_services Cache miss for key: order_list:8:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-25 14:25:46,991] INFO apps.orders.services.order_services Retrieving orders for user=8
+[2025-04-25 14:25:46,995] INFO apps.orders.services.order_services Retrieved 2 orders for user=8
+[2025-04-25 14:25:46,997] INFO apps.orders.views Retrieved 2 orders for user=8
+[2025-04-25 14:25:54,277] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:10:8
+[2025-04-25 14:25:56,509] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:10:8
+[2025-04-25 14:26:20,177] DEBUG apps.core.services.cache_services Cache hit for key: order_list:8:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-25 14:26:33,305] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:10:8
+[2025-04-25 14:26:34,161] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:10:8
+[2025-04-25 14:27:58,519] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:10:8
+[2025-04-25 14:27:59,962] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:10:8
+[2025-04-25 14:28:08,267] DEBUG apps.orders.signals Tracking status for order=10, user=8
+[2025-04-25 14:28:08,269] INFO apps.orders.signals Processing post_save for order=10, user=8, created=False
+[2025-04-25 14:28:08,269] DEBUG apps.orders.services.notification_services Queueing notification for user=8, email=bananosoidd@mail.ru
+[2025-04-25 14:28:08,269] INFO apps.orders.signals Notification queued for status change, order=10, user=8
+[2025-04-25 14:28:08,270] INFO apps.orders.services.notification_services Sending notification to bananosoidd@mail.ru
+[2025-04-25 14:28:09,578] INFO apps.orders.services.notification_services Notification successfully sent to bananosoidd@mail.ru
+[2025-04-25 14:28:12,549] INFO apps.orders.services.order_services Attempting to cancel order=10 for user=8
+[2025-04-25 14:28:12,552] DEBUG apps.orders.signals Tracking status for order=10, user=8
+[2025-04-25 14:28:12,553] INFO apps.orders.signals Processing post_save for order=10, user=8, created=False
+[2025-04-25 14:28:12,553] DEBUG apps.orders.services.notification_services Queueing notification for user=8, email=bananosoidd@mail.ru
+[2025-04-25 14:28:12,557] INFO apps.orders.signals Notification queued for status change, order=10, user=8
+[2025-04-25 14:28:12,557] INFO apps.orders.services.order_services Order 10 successfully cancelled for user=8
+[2025-04-25 14:28:12,559] INFO apps.core.services.cache_services Invalidated cache for key: order_detail:10:8:10
+[2025-04-25 14:28:12,559] INFO apps.orders.services.notification_services Sending notification to bananosoidd@mail.ru
+[2025-04-25 14:28:12,560] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:8:*
+[2025-04-25 14:28:12,560] INFO apps.orders.views Order 10 cancelled successfully for user=8
+[2025-04-25 14:28:13,885] INFO apps.orders.services.notification_services Notification successfully sent to bananosoidd@mail.ru
+[2025-04-25 14:28:50,781] INFO apps.orders.services.order_services Attempting to cancel order=10 for user=8
+[2025-04-25 14:28:50,784] WARNING apps.orders.services.order_services Cannot cancel order 10 with status=cancelled for user=8
+[2025-04-25 14:28:50,784] WARNING apps.orders.utils API error: [ErrorDetail(string='Нельзя отменить заказ, который уже отправлен или доставлен.', code='invalid')], user=8
+[2025-04-25 14:29:21,807] DEBUG apps.orders.signals Tracking status for order=10, user=8
+[2025-04-25 14:29:21,809] INFO apps.orders.signals Processing post_save for order=10, user=8, created=False
+[2025-04-25 14:29:21,809] DEBUG apps.orders.services.notification_services Queueing notification for user=8, email=bananosoidd@mail.ru
+[2025-04-25 14:29:21,838] INFO apps.orders.signals Notification queued for status change, order=10, user=8
+[2025-04-25 14:29:21,839] INFO apps.orders.services.notification_services Sending notification to bananosoidd@mail.ru
+[2025-04-25 14:29:23,249] INFO apps.orders.services.notification_services Notification successfully sent to bananosoidd@mail.ru
+[2025-04-25 14:29:27,424] INFO apps.orders.services.order_services Attempting to cancel order=10 for user=8
+[2025-04-25 14:29:27,427] DEBUG apps.orders.signals Tracking status for order=10, user=8
+[2025-04-25 14:29:27,429] INFO apps.orders.signals Processing post_save for order=10, user=8, created=False
+[2025-04-25 14:29:27,429] DEBUG apps.orders.services.notification_services Queueing notification for user=8, email=bananosoidd@mail.ru
+[2025-04-25 14:29:27,435] INFO apps.orders.signals Notification queued for status change, order=10, user=8
+[2025-04-25 14:29:27,435] INFO apps.orders.services.order_services Order 10 successfully cancelled for user=8
+[2025-04-25 14:29:27,436] INFO apps.orders.services.notification_services Sending notification to bananosoidd@mail.ru
+[2025-04-25 14:29:27,441] INFO apps.core.services.cache_services Invalidated cache for key: order_detail:8:10
+[2025-04-25 14:29:27,441] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:8:*
+[2025-04-25 14:29:27,441] INFO apps.orders.views Order 10 cancelled successfully for user=8
+[2025-04-25 14:29:28,843] INFO apps.orders.services.notification_services Notification successfully sent to bananosoidd@mail.ru
+[2025-04-25 14:29:32,410] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:10:8
+[2025-04-25 14:29:33,471] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:10:8
