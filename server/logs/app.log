@@ -492,3 +492,64 @@
 [2025-04-25 19:53:23,858] INFO apps.wishlists.views Product 3 removed from wishlist via API for user=anonymous, path=/wishlists/delete/3/
 [2025-04-25 19:53:26,757] INFO apps.wishlists.services.wishlist_services Session wishlist retrieved for user=anonymous, items_count=1
 [2025-04-25 19:53:26,762] INFO apps.wishlists.views Retrieved wishlist, user=anonymous, items=1
+[2025-04-25 19:54:14,760] INFO apps.carts.services.cart_services Retrieved session cart, user=anonymous, items=0
+[2025-04-25 19:54:14,761] INFO apps.carts.views Retrieved cart, user=anonymous, items=0
+[2025-04-25 19:54:18,780] INFO apps.carts.services.cart_services Added product 1 to session cart, user=anonymous
+[2025-04-25 19:54:18,781] INFO apps.core.services.cache_services Invalidated cache for key: cart:anonymous
+[2025-04-25 19:54:18,781] INFO apps.carts.views Added product 1 to cart, user=anonymous
+[2025-04-25 19:54:21,003] INFO apps.carts.services.cart_services Retrieved session cart, user=anonymous, items=1
+[2025-04-25 19:54:21,007] INFO apps.carts.views Retrieved cart, user=anonymous, items=1
+[2025-04-25 19:54:26,551] INFO apps.carts.services.cart_services Updated session cart item 41, quantity=11, user=anonymous
+[2025-04-25 19:54:26,556] INFO apps.core.services.cache_services Invalidated cache for key: cart:anonymous
+[2025-04-25 19:54:26,556] INFO apps.carts.views Updated cart item 41, quantity=11, user=anonymous
+[2025-04-25 19:54:29,592] INFO apps.carts.services.cart_services Retrieved session cart, user=anonymous, items=2
+[2025-04-25 19:54:29,597] INFO apps.carts.views Retrieved cart, user=anonymous, items=2
+[2025-04-25 19:54:33,722] INFO apps.carts.services.cart_services Removed product 1 from session cart, user=anonymous
+[2025-04-25 19:54:33,723] INFO apps.core.services.cache_services Invalidated cache for key: cart:anonymous
+[2025-04-25 19:54:33,723] INFO apps.carts.views Removed product 1 from cart, user=anonymous
+[2025-04-25 19:54:38,267] INFO apps.carts.services.cart_services Retrieved session cart, user=anonymous, items=1
+[2025-04-25 19:54:38,272] INFO apps.carts.views Retrieved cart, user=anonymous, items=1
+[2025-04-25 19:55:03,139] INFO apps.carts.services.cart_services Merged product 41 to cart, user=8
+[2025-04-25 19:55:03,143] INFO apps.wishlists.services.wishlist_services Product 2 merged into wishlist for user=8
+[2025-04-25 19:55:05,001] INFO apps.orders.services.order_services Attempting to create order for user=8
+[2025-04-25 19:55:05,011] DEBUG apps.orders.signals Tracking status for order=new, user=8
+[2025-04-25 19:55:05,012] INFO apps.orders.signals Processing post_save for order=11, user=8, created=True
+[2025-04-25 19:55:05,012] DEBUG apps.orders.services.notification_services Queueing notification for user=8, email=bananosoidd@mail.ru
+[2025-04-25 19:55:05,054] INFO apps.orders.signals Notification queued for order creation, order=11, user=8
+[2025-04-25 19:55:05,062] INFO apps.orders.services.notification_services Sending notification to bananosoidd@mail.ru
+[2025-04-25 19:55:05,101] INFO apps.orders.services.order_services Order 11 successfully created for user=8
+[2025-04-25 19:55:05,104] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:8:*
+[2025-04-25 19:55:05,104] INFO apps.orders.views Order 11 created successfully for user=8
+[2025-04-25 19:55:08,005] DEBUG apps.core.services.cache_services Cache miss for key: order_list:8:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-25 19:55:08,005] INFO apps.orders.services.order_services Retrieving orders for user=8
+[2025-04-25 19:55:08,009] INFO apps.orders.services.order_services Retrieved 3 orders for user=8
+[2025-04-25 19:55:08,010] INFO apps.orders.views Retrieved 3 orders for user=8
+[2025-04-25 19:55:17,761] DEBUG apps.core.services.cache_services Cache miss for key: order_detail:10:8
+[2025-04-25 19:55:17,761] INFO apps.orders.services.order_services Retrieving details for order=10, user=8
+[2025-04-25 19:55:17,771] INFO apps.orders.services.order_services Order 10 details retrieved for user=8
+[2025-04-25 19:55:17,773] INFO apps.orders.views Order 10 details retrieved for user=8
+[2025-04-25 19:55:30,428] INFO apps.orders.services.order_services Attempting to cancel order=10 for user=8
+[2025-04-25 19:55:30,431] WARNING apps.orders.services.order_services Cannot cancel order 10 with status=cancelled for user=8
+[2025-04-25 19:55:30,432] WARNING apps.orders.utils API error: [ErrorDetail(string='Нельзя отменить заказ, который уже отправлен или доставлен.', code='invalid')], user=8
+[2025-04-25 19:55:46,111] DEBUG apps.core.services.cache_services Cache miss for key: order_detail:11:8
+[2025-04-25 19:55:46,111] INFO apps.orders.services.order_services Retrieving details for order=11, user=8
+[2025-04-25 19:55:46,122] INFO apps.orders.services.order_services Order 11 details retrieved for user=8
+[2025-04-25 19:55:46,124] INFO apps.orders.views Order 11 details retrieved for user=8
+[2025-04-25 19:55:56,749] INFO apps.orders.services.order_services Attempting to cancel order=11 for user=8
+[2025-04-25 19:55:56,752] DEBUG apps.orders.signals Tracking status for order=11, user=8
+[2025-04-25 19:55:56,754] INFO apps.orders.signals Processing post_save for order=11, user=8, created=False
+[2025-04-25 19:55:56,754] DEBUG apps.orders.services.notification_services Queueing notification for user=8, email=bananosoidd@mail.ru
+[2025-04-25 19:55:56,755] INFO apps.orders.signals Notification queued for status change, order=11, user=8
+[2025-04-25 19:55:56,755] INFO apps.orders.services.order_services Order 11 successfully cancelled for user=8
+[2025-04-25 19:55:56,756] INFO apps.core.services.cache_services Invalidated cache for key: order_detail:11:8
+[2025-04-25 19:55:56,757] INFO apps.orders.services.notification_services Sending notification to bananosoidd@mail.ru
+[2025-04-25 19:55:56,757] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:8:*
+[2025-04-25 19:55:56,757] INFO apps.orders.views Order 11 cancelled successfully for user=8
+[2025-04-25 19:55:58,849] DEBUG apps.core.services.cache_services Cache miss for key: order_detail:11:8
+[2025-04-25 19:55:58,849] INFO apps.orders.services.order_services Retrieving details for order=11, user=8
+[2025-04-25 19:55:58,859] INFO apps.orders.services.order_services Order 11 details retrieved for user=8
+[2025-04-25 19:55:58,861] INFO apps.orders.views Order 11 details retrieved for user=8
+[2025-04-25 19:56:02,900] DEBUG apps.core.services.cache_services Cache miss for key: order_list:8:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-25 19:56:02,900] INFO apps.orders.services.order_services Retrieving orders for user=8
+[2025-04-25 19:56:02,904] INFO apps.orders.services.order_services Retrieved 3 orders for user=8
+[2025-04-25 19:56:02,905] INFO apps.orders.views Retrieved 3 orders for user=8
