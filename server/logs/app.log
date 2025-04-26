@@ -553,3 +553,16 @@
 [2025-04-25 19:56:02,900] INFO apps.orders.services.order_services Retrieving orders for user=8
 [2025-04-25 19:56:02,904] INFO apps.orders.services.order_services Retrieved 3 orders for user=8
 [2025-04-25 19:56:02,905] INFO apps.orders.views Retrieved 3 orders for user=8
+[2025-04-26 14:53:14,241] DEBUG apps.core.services.cache_services Cache miss for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-26 14:53:18,485] DEBUG apps.core.services.cache_services Cache hit for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-26 15:24:04,785] DEBUG apps.core.services.cache_services Cache miss for key: comments:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-26 15:25:14,740] INFO apps.comments.views Retrieving comments for review=11, user=anonymous
+[2025-04-26 15:25:14,877] DEBUG apps.core.services.cache_services Cache miss for key: comments:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-26 15:25:14,909] ERROR apps.comments.views Error retrieving comments for review=11: отношение "comments_comment" не существует
+LINE 1: ...mment"."tree_id", "comments_comment"."level" FROM "comments_...
+                                                             ^, user=anonymous
+[2025-04-26 15:25:16,240] INFO apps.comments.views Retrieving comments for review=11, user=anonymous
+[2025-04-26 15:25:16,241] DEBUG apps.core.services.cache_services Cache miss for key: comments:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-26 15:25:16,272] ERROR apps.comments.views Error retrieving comments for review=11: отношение "comments_comment" не существует
+LINE 1: ...mment"."tree_id", "comments_comment"."level" FROM "comments_...
+                                                             ^, user=anonymous

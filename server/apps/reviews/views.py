@@ -1,163 +1,170 @@
-from django.shortcuts import get_object_or_404
+import logging
 from rest_framework import status
-from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from apps.core.services.cache_services import CacheService
-from apps.reviews.models import Review, Comment, ReviewLike, CommentLike
+from apps.reviews.models import Review
 from apps.reviews.services.reviews_services import ReviewService
-from apps.reviews.services.comment_services import CommentService
-from mptt.utils import get_cached_trees
 from apps.reviews.services.like_services import LikeService
-from apps.reviews.serializers import (
-    ReviewCreateSerializer,
-    ReviewSerializer,
-    CommentSerializer,
-    CommentCreateSerializer
-)
+from apps.reviews.serializers import ReviewCreateSerializer, ReviewSerializer
+from apps.reviews.utils import handle_api_errors
+from apps.reviews.exceptions import ReviewNotFound, ReviewException
+
+logger = logging.getLogger(__name__)
 
 
 class StandardResultsSetPagination(PageNumberPagination):
+    """Пагинация для списков."""
     page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 100
 
 
-class BaseCreateView(APIView):
-    permission_classes = [IsAuthenticated]
-    serializer_class = None
-    service_class = None
-    create_method = None
-
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            create_func = getattr(self.service_class, self.create_method)
-            instance = create_func(serializer.validated_data, request.user)
-            if self.create_method == 'create_review':
-                CacheService.invalidate_cache(prefix=f"reviews:{instance.product_id}")
-            elif self.create_method == 'create_comment':
-                CacheService.invalidate_cache(prefix=f"comments:{instance.product_id}")
-            return Response(self.serializer_class(instance).data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class BaseUpdateView(APIView):
-    permission_classes = [IsAuthenticated]
-    serializer_class = None
-    service_class = None
-    model_class = None
-    update_method = None  # Метод сервиса для обновления, будет переопределяться
-
-    def patch(self, request, pk: int):
-        instance = get_object_or_404(self.model_class, pk=pk)
-        serializer = self.serializer_class(instance, data=request.data, partial=True)
-        if serializer.is_valid():
-            try:
-                # Вызываем метод обновления, определенный в дочернем классе
-                update_func = getattr(self.service_class, self.update_method)
-                updated_instance = update_func(
-                    instance, serializer.validated_data, request.user
-                )
-                if self.update_method == 'update_review':
-                    CacheService.invalidate_cache(prefix=f"reviews:{updated_instance.product_id}")
-                elif self.update_method == 'update_comment':
-                    CacheService.invalidate_cache(prefix=f"comments:{updated_instance.product_id}")
-                return Response(self.serializer_class(updated_instance).data, status=status.HTTP_200_OK)
-            except PermissionDenied as e:
-                return Response({'error': str(e)}, status=status.HTTP_403_FORBIDDEN)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 class ReviewListView(APIView):
+    """Получение списка отзывов о продукте."""
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = StandardResultsSetPagination
 
+    @handle_api_errors
     def get(self, request, product_id: int):
-        """Получение списка отзывов для продукта."""
+        """Обрабатывает GET-запрос для списка отзывов.
+
+        Args:
+            request: Объект запроса.
+            product_id (int): ID продукта.
+
+        Returns:
+            Response: Пагинированный список отзывов или ошибка.
+        """
+        user_id = request.user.id if request.user.is_authenticated else 'anonymous'
+        logger.info(f"Retrieving reviews for product={product_id}, user={user_id}")
         cache_key = CacheService.build_cache_key(request, prefix=f"reviews:{product_id}")
         cached_data = CacheService.get_cached_data(cache_key)
         if cached_data:
+            logger.debug(f"Cache hit for reviews of product={product_id}, user={user_id}")
             return Response(cached_data)
 
-        reviews = Review.objects.filter(product_id=product_id).prefetch_related('likes', 'user')
-        ordering = request.query_params.get('ordering')
-        reviews = ReviewService.apply_ordering(reviews, ordering)
+        try:
+            reviews = Review.objects.filter(product_id=product_id).prefetch_related('likes', 'user')
+            ordering = request.query_params.get('ordering')
+            reviews = ReviewService.apply_ordering(reviews, ordering)
 
-        paginator = self.pagination_class()
-        page = paginator.paginate_queryset(reviews, request)
-        serializer = ReviewSerializer(page, many=True)
-        response_data = paginator.get_paginated_response(serializer.data).data
+            paginator = self.pagination_class()
+            page = paginator.paginate_queryset(reviews, request)
+            serializer = ReviewSerializer(page, many=True)
+            response_data = paginator.get_paginated_response(serializer.data).data
 
-        CacheService.set_cached_data(cache_key, response_data, timeout=300)  # Кэш на 5 минут
-        return Response(response_data)
-
-
-class ReviewCreateView(BaseCreateView):
-    serializer_class = ReviewCreateSerializer
-    service_class = ReviewService
-    create_method = 'create_review'
-
-
-class ReviewUpdateView(BaseUpdateView):
-    serializer_class = ReviewCreateSerializer
-    service_class = ReviewService
-    model_class = Review
-    update_method = 'update_review'
+            CacheService.set_cached_data(cache_key, response_data, timeout=300)
+            logger.info(f"Retrieved {len(reviews)} reviews for product={product_id}, user={user_id}")
+            return Response(response_data)
+        except Exception as e:
+            logger.error(f"Error retrieving reviews for product={product_id}: {str(e)}, user={user_id}")
+            return Response(
+                {"error": "Внутренняя ошибка сервера", "code": "server_error"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 
-class CommentListView(APIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    pagination_class = StandardResultsSetPagination
+class ReviewCreateView(APIView):
+    """Создание нового отзыва."""
+    permission_classes = [IsAuthenticated]
 
-    def get(self, request, review_id: int):
-        """Получение списка комментариев для отзыва."""
-        cache_key = CacheService.build_cache_key(request, prefix=f"comments:{review_id}")
-        cached_data = CacheService.get_cached_data(cache_key)
-        if cached_data:
-            return Response(cached_data)
+    @handle_api_errors
+    def post(self, request):
+        """Обрабатывает POST-запрос для создания отзыва.
 
-        comments = Comment.objects.prefetch_related('children').filter(review_id=review_id).prefetch_related('user', 'likes')
-        root_nodes = get_cached_trees(comments)
-        paginator = self.pagination_class()
-        page = paginator.paginate_queryset(root_nodes, request)
-        serializer = CommentSerializer(page, many=True)
-        response_data = paginator.get_paginated_response(serializer.data).data
+        Args:
+            request: Объект запроса.
 
-        CacheService.set_cached_data(cache_key, response_data, timeout=300)
-        return Response(response_data)
+        Returns:
+            Response: Данные созданного отзыва или ошибка.
+        """
+        user_id = request.user.id if request.user.is_authenticated else 'anonymous'
+        logger.info(f"Creating review by user={user_id}")
+        serializer = ReviewCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                review = ReviewService.create_review(serializer.validated_data, request.user)
+                CacheService.invalidate_cache(prefix=f"reviews:{review.product_id}")
+                logger.info(f"Created Review {review.id}, user={user_id}")
+                return Response(ReviewSerializer(review).data, status=status.HTTP_201_CREATED)
+            except Exception as e:
+                logger.error(f"Error creating review: {str(e)}, user={user_id}")
+                return Response({"error": str(e), "code": "create_error"}, status=status.HTTP_400_BAD_REQUEST)
+        logger.warning(f"Invalid data for review creation: {serializer.errors}, user={user_id}")
+        return Response({"error": serializer.errors, "code": "validation_error"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CommentCreateView(BaseCreateView):
-    serializer_class = CommentCreateSerializer
-    service_class = CommentService
-    create_method = 'create_comment'
+class ReviewUpdateView(APIView):
+    """Обновление существующего отзыва."""
+    permission_classes = [IsAuthenticated]
 
+    @handle_api_errors
+    def patch(self, request, pk: int):
+        """Обрабатывает PATCH-запрос для обновления отзыва.
 
-class CommentUpdateView(BaseUpdateView):
-    serializer_class = CommentCreateSerializer
-    service_class = CommentService
-    model_class = Comment
-    update_method = 'update_comment'
+        Args:
+            request: Объект запроса.
+            pk (int): ID отзыва.
+
+        Returns:
+            Response: Обновленные данные или ошибка.
+
+        Raises:
+            ReviewNotFound: Если отзыв не найден.
+        """
+        user_id = request.user.id if request.user.is_authenticated else 'anonymous'
+        logger.info(f"Updating Review {pk}, user={user_id}")
+        try:
+            review = Review.objects.get(pk=pk)
+        except Review.DoesNotExist:
+            logger.warning(f"Review {pk} not found, user={user_id}")
+            raise ReviewNotFound()
+        serializer = ReviewCreateSerializer(review, data=request.data, partial=True)
+        if serializer.is_valid():
+            try:
+                updated_review = ReviewService.update_review(review, serializer.validated_data, request.user)
+                CacheService.invalidate_cache(prefix=f"reviews:{updated_review.product_id}")
+                logger.info(f"Updated Review {pk}, user={user_id}")
+                return Response(ReviewSerializer(updated_review).data, status=status.HTTP_200_OK)
+            except Exception as e:
+                logger.error(f"Error updating Review {pk}: {str(e)}, user={user_id}")
+                return Response({"error": str(e), "code": "update_error"}, status=status.HTTP_400_BAD_REQUEST)
+        logger.warning(f"Invalid data for Review {pk}: {serializer.errors}, user={user_id}")
+        return Response({"error": serializer.errors, "code": "validation_error"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ReviewLikeView(APIView):
+    """Управление лайками для отзывов."""
     permission_classes = [IsAuthenticated]
 
+    @handle_api_errors
     def post(self, request, pk: int):
-        """Переключение лайков для отзыва."""
-        review = get_object_or_404(Review, pk=pk)
-        result = LikeService.toggle_like(ReviewLike, review, request.user, 'reviews')
-        return Response(result)
+        """Обрабатывает POST-запрос для переключения лайка отзыва.
 
+        Args:
+            request: Объект запроса.
+            pk (int): ID отзыва.
 
-class CommentLikeView(APIView):
-    permission_classes = [IsAuthenticated]
+        Returns:
+            Response: Результат операции или ошибка.
 
-    def post(self, request, pk: int):
-        """Переключение лайков для комментария."""
-        comment = get_object_or_404(Comment, pk=pk)
-        result = LikeService.toggle_like(CommentLike, comment, request.user, 'comments')
-        return Response(result)
+        Raises:
+            ReviewNotFound: Если отзыв не найден.
+        """
+        user_id = request.user.id if request.user.is_authenticated else 'anonymous'
+        logger.info(f"Toggling like for review={pk}, user={user_id}")
+        try:
+            review = Review.objects.get(pk=pk)
+        except Review.DoesNotExist:
+            logger.warning(f"Review {pk} not found, user={user_id}")
+            raise ReviewNotFound()
+        try:
+            result = LikeService.toggle_like(review, request.user)
+            logger.info(f"Like toggled for review={pk}: {result['action']}, user={user_id}")
+            return Response(result)
+        except ReviewException as e:
+            logger.error(f"Error toggling like for review={pk}: {str(e)}, user={user_id}")
+            return Response({"error": str(e), "code": e.__class__.__name__.lower()}, status=e.status_code)

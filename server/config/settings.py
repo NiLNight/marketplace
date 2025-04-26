@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'apps.users.apps.UsersConfig',
     'apps.products.apps.ProductsConfig',
     'apps.reviews.apps.ReviewsConfig',
+    'apps.comments.apps.CommentsConfig',
     'apps.orders.apps.OrdersConfig',
     'apps.carts.apps.CartsConfig',
     'apps.wishlists.apps.WishlistsConfig',
@@ -248,6 +249,16 @@ LOGGING = {
             'propagate': False,
         },
         'apps.orders': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'apps.reviews': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'apps.comments': {
             'handlers': ['console', 'file'],
             'level': 'DEBUG',
             'propagate': False,
