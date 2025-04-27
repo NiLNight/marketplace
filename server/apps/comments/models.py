@@ -1,9 +1,10 @@
 import logging
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
-from apps.core.models import TimeStampedModel
+from apps.core.models import TimeStampedModel, Like
 from apps.reviews.models import Review
 
 User = get_user_model()
@@ -34,6 +35,12 @@ class Comment(MPTTModel, TimeStampedModel):
         verbose_name='Пользователь'
     )
     text = models.TextField(verbose_name='Текст комментария')
+    likes = GenericRelation(
+        Like,
+        related_query_name='review',
+        content_type_field='content_type',
+        object_id_field='object_id'
+    )
     parent = TreeForeignKey(
         'self',
         null=True,
@@ -67,31 +74,3 @@ class Comment(MPTTModel, TimeStampedModel):
             str: Название продукта и первые 50 символов текста комментария.
         """
         return f"{self.review.product.title}: {self.text[:50]}..."
-
-
-class CommentLike(models.Model):
-    """Модель для лайков комментариев.
-
-    Хранит связь между пользователем и лайкнутым комментарием.
-
-    Атрибуты:
-        comment (ForeignKey): Комментарий, который лайкнули.
-        user (ForeignKey): Пользователь, поставивший лайк.
-        created (DateTimeField): Время создания лайка.
-    """
-    comment = models.ForeignKey(
-        Comment,
-        on_delete=models.CASCADE,
-        related_name='likes'
-    )
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE
-    )
-    created = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-
-        unique_together = ('comment', 'user')
-        verbose_name = 'Лайк комментария'
-        verbose_name_plural = 'Лайки комментариев'

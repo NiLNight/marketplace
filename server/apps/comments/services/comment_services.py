@@ -6,7 +6,6 @@ from typing import Dict, Any, List
 from apps.comments.models import Comment
 from apps.comments.exceptions import CommentNotFound, InvalidCommentData
 from apps.reviews.models import Review
-from django.core.cache import cache
 from mptt.utils import get_cached_trees
 
 User = get_user_model()
@@ -83,7 +82,6 @@ class CommentService:
             if not Review.objects.filter(pk=review_id).exists():
                 logger.warning(f"Review {review_id} not found")
                 raise CommentNotFound("Указанный отзыв не существует.")
-
             comments = Comment.objects.prefetch_related('children', 'user', 'likes').filter(review_id=review_id)
 
             if not comments.exists():
@@ -117,25 +115,16 @@ class CommentService:
         """
         user_id = user.id if user else 'anonymous'
         logger.info(f"Creating comment for review={data.get('review')}, user={user_id}")
-
         try:
-            # Проверка и преобразование входных данных
             validated_data = CommentService._validate_comment_data(data, user_id)
-
-            # Инициализация нового экземпляра комментария
             comment = Comment(
                 user=user,
                 review=validated_data['review'],
                 text=validated_data['text'],
                 parent=validated_data.get('parent')
             )
-
-            # Проверка данных комментария
             comment.full_clean()
             comment.save()
-
-            # Инвалидация кэша для комментариев отзыва
-            cache.delete(f'comments:{comment.review_id}')
             logger.info(f"Created Comment {comment.id}, user={user_id}")
             return comment
 
@@ -167,31 +156,21 @@ class CommentService:
         logger.info(f"Updating comment {comment_id}, user={user_id}")
 
         try:
-            # Получение комментария
             comment = Comment.objects.get(pk=comment_id)
-
-            # Проверка, что пользователь является автором
             if comment.user != user:
                 logger.warning(f"Permission denied for Comment {comment_id}, user={user_id}")
                 raise PermissionDenied("Только автор может обновить комментарий.")
-
-            # Проверка и преобразование входных данных (только текст)
+            # Проверка и преобразование входных данных
             if not data.get('text') or not data['text'].strip():
                 logger.warning(f"Empty comment text for update, user={user_id}")
                 raise InvalidCommentData("Текст комментария не может быть пустым.")
 
-            # Обновление только разрешенных полей
             allowed_fields = {'text'}
             data_to_update = {key: value for key, value in data.items() if key in allowed_fields}
             for field, value in data_to_update.items():
                 setattr(comment, field, value)
-
-            # Проверка и сохранение обновленного комментария
             comment.full_clean()
             comment.save()
-
-            # Инвалидация кэша для комментариев отзыва
-            cache.delete(f'comments:{comment.review_id}')
             logger.info(f"Updated Comment {comment_id}, user={user_id}")
             return comment
 
@@ -222,15 +201,10 @@ class CommentService:
 
         try:
             comment = Comment.objects.get(pk=comment_id)
-
             if comment.user != user:
                 logger.warning(f"Permission denied for Comment {comment_id}, user={user_id}")
                 raise PermissionDenied("Только автор может удалить комментарий.")
-
-            review_id = comment.review_id
             comment.delete()
-
-            cache.delete(f'comments:{review_id}')
             logger.info(f"Deleted Comment {comment_id}, user={user_id}")
 
         except Comment.DoesNotExist:

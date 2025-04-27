@@ -1016,3 +1016,589 @@ LINE 1: ..."."content_type_id", "core_like"."object_id" FROM "core_like...
 [2025-04-27 13:02:52,549] ERROR apps.comments.utils Server error: отношение "core_like" не существует
 LINE 1: ..."."content_type_id", "core_like"."object_id" FROM "core_like...
                                                              ^, user=8, path=/comments/3/like/
+[2025-04-27 13:07:26,959] INFO apps.comments.views Toggling like for comment=3, user=8, path=/comments/3/like/
+[2025-04-27 13:07:26,980] INFO apps.comments.views Like toggled for comment=3: liked, user=8
+[2025-04-27 13:07:28,405] INFO apps.comments.views Toggling like for comment=3, user=8, path=/comments/3/like/
+[2025-04-27 13:07:28,411] INFO apps.comments.views Like toggled for comment=3: unliked, user=8
+[2025-04-27 13:07:29,322] INFO apps.comments.views Toggling like for comment=3, user=8, path=/comments/3/like/
+[2025-04-27 13:07:29,331] INFO apps.comments.views Like toggled for comment=3: liked, user=8
+[2025-04-27 13:08:03,006] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 13:08:03,013] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:08:03,013] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 13:08:03,021] ERROR apps.comments.services.comment_services Error retrieving comments for review=17: Cannot find 'likes' on Comment object, 'likes' is an invalid parameter to prefetch_related()
+[2025-04-27 13:08:03,021] WARNING apps.comments.utils Comment error: Ошибка получения комментариев: Cannot find 'likes' on Comment object, 'likes' is an invalid parameter to prefetch_related(), user=8, path=/comments/17/
+[2025-04-27 13:08:10,742] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 13:08:10,744] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:08:10,744] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 13:08:10,750] ERROR apps.comments.services.comment_services Error retrieving comments for review=17: Cannot find 'likes' on Comment object, 'likes' is an invalid parameter to prefetch_related()
+[2025-04-27 13:08:10,750] WARNING apps.comments.utils Comment error: Ошибка получения комментариев: Cannot find 'likes' on Comment object, 'likes' is an invalid parameter to prefetch_related(), user=8, path=/comments/17/
+[2025-04-27 13:16:54,911] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 13:16:54,912] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:16:54,912] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 13:16:54,919] ERROR apps.comments.services.comment_services Error retrieving comments for review=17: Cannot find 'likes' on Comment object, 'likes' is an invalid parameter to prefetch_related()
+[2025-04-27 13:16:54,919] WARNING apps.comments.utils Comment error: Ошибка получения комментариев: Cannot find 'likes' on Comment object, 'likes' is an invalid parameter to prefetch_related(), user=8, path=/comments/17/
+[2025-04-27 13:16:56,137] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 13:16:56,139] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:16:56,139] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 13:16:56,145] ERROR apps.comments.services.comment_services Error retrieving comments for review=17: Cannot find 'likes' on Comment object, 'likes' is an invalid parameter to prefetch_related()
+[2025-04-27 13:16:56,146] WARNING apps.comments.utils Comment error: Ошибка получения комментариев: Cannot find 'likes' on Comment object, 'likes' is an invalid parameter to prefetch_related(), user=8, path=/comments/17/
+[2025-04-27 13:20:30,979] INFO apps.comments.views Toggling like for comment=3, user=8, path=/comments/3/like/
+[2025-04-27 13:20:30,987] INFO apps.comments.views Like toggled for comment=3: unliked, user=8
+[2025-04-27 13:20:37,269] INFO apps.comments.views Toggling like for comment=3, user=8, path=/comments/3/like/
+[2025-04-27 13:20:37,275] INFO apps.comments.views Like toggled for comment=3: liked, user=8
+[2025-04-27 13:20:38,342] INFO apps.comments.views Toggling like for comment=3, user=8, path=/comments/3/like/
+[2025-04-27 13:20:38,347] INFO apps.comments.views Like toggled for comment=3: unliked, user=8
+[2025-04-27 13:21:48,241] INFO apps.comments.views Toggling like for comment=3, user=8, path=/comments/3/like/
+[2025-04-27 13:21:48,250] INFO apps.comments.views Like toggled for comment=3: liked, user=8
+[2025-04-27 13:21:49,980] INFO apps.comments.views Toggling like for comment=3, user=8, path=/comments/3/like/
+[2025-04-27 13:21:49,984] INFO apps.comments.views Like toggled for comment=3: unliked, user=8
+[2025-04-27 13:23:20,384] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 13:23:20,390] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:23:20,390] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 13:23:20,397] ERROR apps.comments.services.comment_services Error retrieving comments for review=17: Cannot find 'likes' on Comment object, 'likes' is an invalid parameter to prefetch_related()
+[2025-04-27 13:23:20,397] WARNING apps.comments.utils Comment error: Ошибка получения комментариев: Cannot find 'likes' on Comment object, 'likes' is an invalid parameter to prefetch_related(), user=8, path=/comments/17/
+[2025-04-27 13:23:21,731] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 13:23:21,732] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:23:21,732] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 13:23:21,739] ERROR apps.comments.services.comment_services Error retrieving comments for review=17: Cannot find 'likes' on Comment object, 'likes' is an invalid parameter to prefetch_related()
+[2025-04-27 13:23:21,739] WARNING apps.comments.utils Comment error: Ошибка получения комментариев: Cannot find 'likes' on Comment object, 'likes' is an invalid parameter to prefetch_related(), user=8, path=/comments/17/
+[2025-04-27 13:23:51,037] INFO apps.reviews.views Retrieving reviews for product=3, user=8
+[2025-04-27 13:23:51,039] DEBUG apps.core.services.cache_services Cache miss for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:23:51,039] INFO apps.reviews.services.reviews_services Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:23:51,044] INFO apps.reviews.services.reviews_services Retrieved 6 reviews for product=3
+[2025-04-27 13:23:51,067] ERROR apps.comments.utils Server error: Cannot find 'likes' on Review object, 'likes' is an invalid parameter to prefetch_related(), user=8, path=/reviews/3/
+[2025-04-27 13:24:07,471] INFO apps.reviews.views Toggling like for review=11, user=8, path=/reviews/11/like/
+[2025-04-27 13:24:07,480] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:None:*
+[2025-04-27 13:24:07,480] INFO apps.reviews.views Like toggled for review=11: liked, user=8
+[2025-04-27 13:24:08,572] INFO apps.reviews.views Toggling like for review=11, user=8, path=/reviews/11/like/
+[2025-04-27 13:24:08,586] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:None:*
+[2025-04-27 13:24:08,586] INFO apps.reviews.views Like toggled for review=11: unliked, user=8
+[2025-04-27 13:24:12,861] INFO apps.reviews.views Retrieving reviews for product=3, user=8
+[2025-04-27 13:24:12,862] DEBUG apps.core.services.cache_services Cache miss for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:24:12,862] INFO apps.reviews.services.reviews_services Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:24:12,867] INFO apps.reviews.services.reviews_services Retrieved 6 reviews for product=3
+[2025-04-27 13:24:12,870] ERROR apps.comments.utils Server error: Cannot find 'likes' on Review object, 'likes' is an invalid parameter to prefetch_related(), user=8, path=/reviews/3/
+[2025-04-27 13:25:58,058] INFO apps.reviews.views Retrieving reviews for product=3, user=8
+[2025-04-27 13:25:58,064] DEBUG apps.core.services.cache_services Cache miss for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:25:58,065] INFO apps.reviews.services.reviews_services Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:25:58,070] INFO apps.reviews.services.reviews_services Retrieved 6 reviews for product=3
+[2025-04-27 13:25:58,075] ERROR apps.comments.utils Server error: Cannot find 'likes' on Review object, 'likes' is an invalid parameter to prefetch_related(), user=8, path=/reviews/3/
+[2025-04-27 13:28:05,487] INFO apps.reviews.views Retrieving reviews for product=3, user=8
+[2025-04-27 13:28:05,493] DEBUG apps.core.services.cache_services Cache miss for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:28:05,493] INFO apps.reviews.services.reviews_services Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:28:05,500] INFO apps.reviews.services.reviews_services Retrieved 6 reviews for product=3
+[2025-04-27 13:28:05,503] ERROR apps.comments.utils Server error: Cannot find 'likes' on Review object, 'likes' is an invalid parameter to prefetch_related(), user=8, path=/reviews/3/
+[2025-04-27 13:28:48,729] INFO apps.reviews.views Retrieving reviews for product=3, user=8
+[2025-04-27 13:28:48,734] DEBUG apps.core.services.cache_services Cache miss for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:28:48,734] INFO apps.reviews.services.reviews_services Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:28:48,743] INFO apps.reviews.services.reviews_services Retrieved 6 reviews for product=3
+[2025-04-27 13:28:48,746] ERROR apps.comments.utils Server error: Cannot find 'likes' on Review object, 'likes' is an invalid parameter to prefetch_related(), user=8, path=/reviews/3/
+[2025-04-27 13:29:38,492] INFO apps.reviews.views Retrieving reviews for product=3, user=8
+[2025-04-27 13:29:38,498] DEBUG apps.core.services.cache_services Cache miss for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:29:38,498] INFO apps.reviews.services.reviews_services Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:29:38,505] INFO apps.reviews.services.reviews_services Retrieved 6 reviews for product=3
+[2025-04-27 13:29:38,509] ERROR apps.comments.utils Server error: Cannot find 'likes' on Review object, 'likes' is an invalid parameter to prefetch_related(), user=8, path=/reviews/3/
+[2025-04-27 13:29:39,665] INFO apps.reviews.views Retrieving reviews for product=3, user=8
+[2025-04-27 13:29:39,667] DEBUG apps.core.services.cache_services Cache miss for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:29:39,667] INFO apps.reviews.services.reviews_services Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:29:39,673] INFO apps.reviews.services.reviews_services Retrieved 6 reviews for product=3
+[2025-04-27 13:29:39,675] ERROR apps.comments.utils Server error: Cannot find 'likes' on Review object, 'likes' is an invalid parameter to prefetch_related(), user=8, path=/reviews/3/
+[2025-04-27 13:30:27,427] INFO apps.reviews.views Retrieving reviews for product=3, user=8
+[2025-04-27 13:30:27,433] DEBUG apps.core.services.cache_services Cache miss for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:30:27,433] INFO apps.reviews.services.reviews_services Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:30:27,441] INFO apps.reviews.services.reviews_services Retrieved 6 reviews for product=3
+[2025-04-27 13:30:27,445] ERROR apps.comments.utils Server error: Cannot find 'likes' on Review object, 'likes' is an invalid parameter to prefetch_related(), user=8, path=/reviews/3/
+[2025-04-27 13:31:26,715] INFO apps.reviews.views Toggling like for review=11, user=8, path=/reviews/11/like/
+[2025-04-27 13:31:27,168] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:None:*
+[2025-04-27 13:31:27,168] INFO apps.reviews.views Like toggled for review=11: liked, user=8
+[2025-04-27 13:31:29,375] INFO apps.reviews.views Toggling like for review=11, user=8, path=/reviews/11/like/
+[2025-04-27 13:31:29,379] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:None:*
+[2025-04-27 13:31:29,379] INFO apps.reviews.views Like toggled for review=11: unliked, user=8
+[2025-04-27 13:31:31,229] INFO apps.reviews.views Toggling like for review=11, user=8, path=/reviews/11/like/
+[2025-04-27 13:31:31,237] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:None:*
+[2025-04-27 13:31:31,237] INFO apps.reviews.views Like toggled for review=11: liked, user=8
+[2025-04-27 13:32:54,799] INFO apps.reviews.views Toggling like for review=11, user=8, path=/reviews/11/like/
+[2025-04-27 13:32:54,813] INFO apps.core.services.cache_services Invalidated cache for key: reviews:11
+[2025-04-27 13:32:54,813] INFO apps.reviews.views Like toggled for review=11: unliked, user=8
+[2025-04-27 13:33:38,002] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 13:33:38,008] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:33:38,008] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 13:33:38,016] ERROR apps.comments.services.comment_services Error retrieving comments for review=17: Cannot find 'likes' on Comment object, 'likes' is an invalid parameter to prefetch_related()
+[2025-04-27 13:33:38,016] WARNING apps.comments.utils Comment error: Ошибка получения комментариев: Cannot find 'likes' on Comment object, 'likes' is an invalid parameter to prefetch_related(), user=8, path=/comments/17/
+[2025-04-27 13:33:40,147] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 13:33:40,149] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:33:40,149] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 13:33:40,155] ERROR apps.comments.services.comment_services Error retrieving comments for review=17: Cannot find 'likes' on Comment object, 'likes' is an invalid parameter to prefetch_related()
+[2025-04-27 13:33:40,156] WARNING apps.comments.utils Comment error: Ошибка получения комментариев: Cannot find 'likes' on Comment object, 'likes' is an invalid parameter to prefetch_related(), user=8, path=/comments/17/
+[2025-04-27 13:34:05,703] INFO apps.reviews.views Retrieving reviews for product=3, user=8
+[2025-04-27 13:34:05,705] DEBUG apps.core.services.cache_services Cache miss for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:34:05,706] INFO apps.reviews.services.reviews_services Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:34:05,712] INFO apps.reviews.services.reviews_services Retrieved 6 reviews for product=3
+[2025-04-27 13:34:05,715] ERROR apps.comments.utils Server error: Cannot find 'likes' on Review object, 'likes' is an invalid parameter to prefetch_related(), user=8, path=/reviews/3/
+[2025-04-27 13:34:07,126] INFO apps.reviews.views Retrieving reviews for product=3, user=8
+[2025-04-27 13:34:07,128] DEBUG apps.core.services.cache_services Cache miss for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:34:07,128] INFO apps.reviews.services.reviews_services Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:34:07,133] INFO apps.reviews.services.reviews_services Retrieved 6 reviews for product=3
+[2025-04-27 13:34:07,134] ERROR apps.comments.utils Server error: Cannot find 'likes' on Review object, 'likes' is an invalid parameter to prefetch_related(), user=8, path=/reviews/3/
+[2025-04-27 13:34:29,633] INFO apps.reviews.views Retrieving reviews for product=3, user=8
+[2025-04-27 13:34:29,639] DEBUG apps.core.services.cache_services Cache miss for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:34:29,639] INFO apps.reviews.services.reviews_services Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:34:29,646] INFO apps.reviews.services.reviews_services Retrieved 6 reviews for product=3
+[2025-04-27 13:34:29,649] ERROR apps.comments.utils Server error: Cannot find 'likes' on Review object, 'likes' is an invalid parameter to prefetch_related(), user=8, path=/reviews/3/
+[2025-04-27 13:36:09,100] INFO apps.reviews.views Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:36:09,186] DEBUG apps.core.services.cache_services Cache miss for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:36:09,186] INFO apps.reviews.services.reviews_services Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:36:09,222] INFO apps.reviews.services.reviews_services Retrieved 6 reviews for product=3
+[2025-04-27 13:36:09,226] ERROR apps.comments.utils Server error: Cannot find 'like' on Review object, 'like' is an invalid parameter to prefetch_related(), user=anonymous, path=/reviews/3/
+[2025-04-27 13:36:35,288] INFO apps.reviews.views Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:36:35,381] DEBUG apps.core.services.cache_services Cache miss for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:36:35,381] INFO apps.reviews.services.reviews_services Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:36:35,417] INFO apps.reviews.services.reviews_services Retrieved 6 reviews for product=3
+[2025-04-27 13:36:35,421] ERROR apps.comments.utils Server error: Cannot find 'likes' on Review object, 'likes' is an invalid parameter to prefetch_related(), user=anonymous, path=/reviews/3/
+[2025-04-27 13:40:42,685] INFO apps.reviews.views Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:40:42,771] DEBUG apps.core.services.cache_services Cache miss for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:40:42,771] INFO apps.reviews.services.reviews_services Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:40:42,809] INFO apps.reviews.services.reviews_services Retrieved 6 reviews for product=3
+[2025-04-27 13:40:42,813] ERROR apps.comments.utils Server error: Cannot find 'likes_set' on Review object, 'likes_set' is an invalid parameter to prefetch_related(), user=anonymous, path=/reviews/3/
+[2025-04-27 13:40:43,789] INFO apps.reviews.views Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:40:43,791] DEBUG apps.core.services.cache_services Cache miss for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:40:43,791] INFO apps.reviews.services.reviews_services Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:40:43,936] INFO apps.reviews.services.reviews_services Retrieved 6 reviews for product=3
+[2025-04-27 13:40:43,940] ERROR apps.comments.utils Server error: Cannot find 'likes_set' on Review object, 'likes_set' is an invalid parameter to prefetch_related(), user=anonymous, path=/reviews/3/
+[2025-04-27 13:41:48,622] INFO apps.reviews.views Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:41:48,707] DEBUG apps.core.services.cache_services Cache miss for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:41:48,707] INFO apps.reviews.services.reviews_services Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:41:48,742] INFO apps.reviews.services.reviews_services Retrieved 6 reviews for product=3
+[2025-04-27 13:41:48,748] ERROR apps.comments.utils Server error: Cannot find 'likes_set' on Review object, 'likes_set' is an invalid parameter to prefetch_related(), user=anonymous, path=/reviews/3/
+[2025-04-27 13:43:48,043] INFO apps.reviews.views Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:43:48,127] DEBUG apps.core.services.cache_services Cache miss for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:43:48,127] INFO apps.reviews.services.reviews_services Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:43:48,162] INFO apps.reviews.services.reviews_services Retrieved 6 reviews for product=3
+[2025-04-27 13:43:48,166] ERROR apps.comments.utils Server error: Cannot find 'core_likes' on Review object, 'core_likes' is an invalid parameter to prefetch_related(), user=anonymous, path=/reviews/3/
+[2025-04-27 13:49:23,541] INFO apps.reviews.views Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:49:23,628] DEBUG apps.core.services.cache_services Cache miss for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:49:23,628] INFO apps.reviews.services.reviews_services Retrieving reviews for product=3, user=anonymous
+[2025-04-27 13:49:23,668] INFO apps.reviews.services.reviews_services Retrieved 6 reviews for product=3
+[2025-04-27 13:49:23,684] INFO apps.reviews.views Retrieved 6 reviews for product=3, user=anonymous
+[2025-04-27 13:49:38,026] INFO apps.reviews.views Toggling like for review=11, user=8, path=/reviews/11/like/
+[2025-04-27 13:49:38,035] INFO apps.core.services.cache_services Invalidated cache for key: reviews:11
+[2025-04-27 13:49:38,035] INFO apps.reviews.views Like toggled for review=11: liked, user=8
+[2025-04-27 13:49:40,480] INFO apps.reviews.views Retrieving reviews for product=3, user=8
+[2025-04-27 13:49:40,481] DEBUG apps.core.services.cache_services Cache hit for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:50:23,585] INFO apps.reviews.views Toggling like for review=17, user=8, path=/reviews/17/like/
+[2025-04-27 13:50:23,592] INFO apps.core.services.cache_services Invalidated cache for key: reviews:17
+[2025-04-27 13:50:23,592] INFO apps.reviews.views Like toggled for review=17: liked, user=8
+[2025-04-27 13:50:27,830] INFO apps.reviews.views Retrieving reviews for product=3, user=8
+[2025-04-27 13:50:27,831] DEBUG apps.core.services.cache_services Cache hit for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:51:16,859] INFO apps.reviews.views Retrieving reviews for product=3, user=8
+[2025-04-27 13:51:16,865] DEBUG apps.core.services.cache_services Cache hit for key: reviews:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:53:04,293] INFO apps.reviews.views Creating review by user=8, path=/reviews/create/
+[2025-04-27 13:53:04,297] DEBUG apps.reviews.serializers Validating review creation data: {'product': <Product: Картофель>, 'value': 5}
+[2025-04-27 13:53:04,297] INFO apps.reviews.services.reviews_services Creating review for product=Картофель, user=8
+[2025-04-27 13:53:04,302] WARNING apps.reviews.models Review already exists for product 4, user=8
+[2025-04-27 13:53:04,303] ERROR apps.reviews.services.reviews_services Failed to create Review: {'__all__': ['Вы уже оставили отзыв на этот продукт.', 'Отзыв с такими значениями полей Продукт и Пользователь уже существует.']}, data={'product': <Product: Картофель>, 'value': 5}, user=8
+[2025-04-27 13:53:04,303] WARNING apps.comments.utils API error: Ошибка создания отзыва: {'__all__': ['Вы уже оставили отзыв на этот продукт.', 'Отзыв с такими значениями полей Продукт и Пользователь уже существует.']}, user=8, path=/reviews/create/
+[2025-04-27 13:53:20,139] INFO apps.reviews.views Creating review by user=8, path=/reviews/create/
+[2025-04-27 13:53:20,143] DEBUG apps.reviews.serializers Validating review creation data: {'product': <Product: Вишня>, 'value': 5}
+[2025-04-27 13:53:20,143] INFO apps.reviews.services.reviews_services Creating review for product=Вишня, user=8
+[2025-04-27 13:53:20,146] WARNING apps.reviews.models Review already exists for product 3, user=8
+[2025-04-27 13:53:20,147] ERROR apps.reviews.services.reviews_services Failed to create Review: {'__all__': ['Вы уже оставили отзыв на этот продукт.', 'Отзыв с такими значениями полей Продукт и Пользователь уже существует.']}, data={'product': <Product: Вишня>, 'value': 5}, user=8
+[2025-04-27 13:53:20,148] WARNING apps.comments.utils API error: Ошибка создания отзыва: {'__all__': ['Вы уже оставили отзыв на этот продукт.', 'Отзыв с такими значениями полей Продукт и Пользователь уже существует.']}, user=8, path=/reviews/create/
+[2025-04-27 13:53:26,256] INFO apps.reviews.views Creating review by user=8, path=/reviews/create/
+[2025-04-27 13:53:26,259] DEBUG apps.reviews.serializers Validating review creation data: {'product': <Product: Яблоко>, 'value': 5}
+[2025-04-27 13:53:26,259] INFO apps.reviews.services.reviews_services Creating review for product=Яблоко, user=8
+[2025-04-27 13:53:26,264] INFO apps.reviews.models Creating review for product=5, user=8
+[2025-04-27 13:53:26,346] INFO apps.reviews.services.reviews_services Created Review 19, user=8
+[2025-04-27 13:53:26,348] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:5:*
+[2025-04-27 13:53:26,349] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:19:*
+[2025-04-27 13:53:26,349] INFO apps.reviews.views Created Review 19, user=8
+[2025-04-27 13:53:34,784] INFO apps.reviews.views Retrieving reviews for product=5, user=8
+[2025-04-27 13:53:34,785] DEBUG apps.core.services.cache_services Cache miss for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:53:34,785] INFO apps.reviews.services.reviews_services Retrieving reviews for product=5, user=anonymous
+[2025-04-27 13:53:34,791] INFO apps.reviews.services.reviews_services Retrieved 1 reviews for product=5
+[2025-04-27 13:53:34,802] INFO apps.reviews.views Retrieved 1 reviews for product=5, user=8
+[2025-04-27 13:53:51,523] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 13:53:51,531] INFO apps.core.services.cache_services Invalidated cache for key: reviews:19
+[2025-04-27 13:53:51,531] INFO apps.reviews.views Like toggled for review=19: liked, user=8
+[2025-04-27 13:53:54,900] INFO apps.reviews.views Retrieving reviews for product=5, user=8
+[2025-04-27 13:53:54,901] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:54:03,191] INFO apps.reviews.views Retrieving reviews for product=5, user=8
+[2025-04-27 13:54:03,193] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:55:23,738] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 13:55:23,751] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:19:*
+[2025-04-27 13:55:23,751] INFO apps.reviews.views Like toggled for review=19: unliked, user=8
+[2025-04-27 13:55:24,732] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 13:55:24,740] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:19:*
+[2025-04-27 13:55:24,740] INFO apps.reviews.views Like toggled for review=19: liked, user=8
+[2025-04-27 13:55:27,519] INFO apps.reviews.views Retrieving reviews for product=5, user=8
+[2025-04-27 13:55:27,521] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:55:28,424] INFO apps.reviews.views Retrieving reviews for product=5, user=8
+[2025-04-27 13:55:28,425] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:55:29,332] INFO apps.reviews.views Retrieving reviews for product=5, user=8
+[2025-04-27 13:55:29,333] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:55:31,941] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 13:55:31,948] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:19:*
+[2025-04-27 13:55:31,948] INFO apps.reviews.views Like toggled for review=19: unliked, user=8
+[2025-04-27 13:55:36,409] INFO apps.reviews.views Retrieving reviews for product=5, user=8
+[2025-04-27 13:55:36,411] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:55:52,804] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 13:55:52,813] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:19:*
+[2025-04-27 13:55:52,813] INFO apps.reviews.views Like toggled for review=19: liked, user=8
+[2025-04-27 13:58:23,922] INFO apps.reviews.views Retrieving reviews for product=5, user=8
+[2025-04-27 13:58:23,927] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:58:24,864] INFO apps.reviews.views Retrieving reviews for product=5, user=8
+[2025-04-27 13:58:24,866] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:58:27,637] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 13:58:27,645] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:19:*
+[2025-04-27 13:58:27,645] INFO apps.reviews.views Like toggled for review=19: unliked, user=8
+[2025-04-27 13:58:29,774] INFO apps.reviews.views Retrieving reviews for product=5, user=8
+[2025-04-27 13:58:29,775] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:58:31,761] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 13:58:31,771] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:19:*
+[2025-04-27 13:58:31,771] INFO apps.reviews.views Like toggled for review=19: liked, user=8
+[2025-04-27 13:58:34,080] INFO apps.reviews.views Retrieving reviews for product=5, user=8
+[2025-04-27 13:58:34,081] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:59:54,305] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 13:59:54,313] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:19:*
+[2025-04-27 13:59:54,313] INFO apps.reviews.views Like toggled for review=19: unliked, user=8
+[2025-04-27 13:59:56,567] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 13:59:56,576] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:19:*
+[2025-04-27 13:59:56,576] INFO apps.reviews.views Like toggled for review=19: liked, user=8
+[2025-04-27 14:02:21,259] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 14:02:21,268] ERROR apps.comments.utils Server error: 'set' object is not a mapping, user=8, path=/reviews/19/like/
+[2025-04-27 14:02:47,634] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 14:02:47,643] ERROR apps.comments.utils Server error: 'int' object has no attribute 'product_id', user=8, path=/reviews/19/like/
+[2025-04-27 14:02:48,582] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 14:02:48,589] ERROR apps.comments.utils Server error: 'int' object has no attribute 'product_id', user=8, path=/reviews/19/like/
+[2025-04-27 14:02:49,887] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 14:02:49,892] ERROR apps.comments.utils Server error: 'int' object has no attribute 'product_id', user=8, path=/reviews/19/like/
+[2025-04-27 14:03:23,708] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 14:03:23,723] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews::*
+[2025-04-27 14:03:23,723] INFO apps.reviews.views Like toggled for review=19: liked, user=8
+[2025-04-27 14:03:25,649] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 14:03:25,656] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews::*
+[2025-04-27 14:03:25,656] INFO apps.reviews.views Like toggled for review=19: unliked, user=8
+[2025-04-27 14:03:28,987] INFO apps.reviews.views Retrieving reviews for product=5, user=8
+[2025-04-27 14:03:28,988] DEBUG apps.core.services.cache_services Cache miss for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:03:28,988] INFO apps.reviews.services.reviews_services Retrieving reviews for product=5, user=anonymous
+[2025-04-27 14:03:28,994] INFO apps.reviews.services.reviews_services Retrieved 1 reviews for product=5
+[2025-04-27 14:03:29,009] INFO apps.reviews.views Retrieved 1 reviews for product=5, user=8
+[2025-04-27 14:03:29,928] INFO apps.reviews.views Retrieving reviews for product=5, user=8
+[2025-04-27 14:03:29,930] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:04:20,438] INFO apps.reviews.views Retrieving reviews for product=5, user=8
+[2025-04-27 14:04:20,444] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:04:21,789] INFO apps.reviews.views Retrieving reviews for product=5, user=8
+[2025-04-27 14:04:21,790] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:04:33,875] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 14:04:33,884] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews::*
+[2025-04-27 14:04:33,885] INFO apps.reviews.views Like toggled for review=19: liked, user=8
+[2025-04-27 14:04:39,575] INFO apps.reviews.views Retrieving reviews for product=5, user=anonymous
+[2025-04-27 14:04:39,576] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:04:59,706] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 14:04:59,713] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews::*
+[2025-04-27 14:04:59,713] INFO apps.reviews.views Like toggled for review=19: unliked, user=8
+[2025-04-27 14:05:01,330] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 14:05:01,339] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews::*
+[2025-04-27 14:05:01,339] INFO apps.reviews.views Like toggled for review=19: liked, user=8
+[2025-04-27 14:05:45,648] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 14:05:45,662] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews::*
+[2025-04-27 14:05:45,662] INFO apps.reviews.views Like toggled for review=19: unliked, user=8
+[2025-04-27 14:05:47,641] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 14:05:47,651] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews::*
+[2025-04-27 14:05:47,651] INFO apps.reviews.views Like toggled for review=19: liked, user=8
+[2025-04-27 14:05:59,575] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 14:05:59,584] ERROR apps.comments.utils Server error: 'set' object is not a mapping, user=8, path=/reviews/19/like/
+[2025-04-27 14:06:02,083] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 14:06:02,089] ERROR apps.comments.utils Server error: 'set' object is not a mapping, user=8, path=/reviews/19/like/
+[2025-04-27 14:06:25,618] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 14:06:25,632] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews::*
+[2025-04-27 14:06:25,632] INFO apps.reviews.views Like toggled for review=19: unliked, user=8
+[2025-04-27 14:08:58,280] INFO apps.reviews.views Retrieving reviews for product=5, user=8
+[2025-04-27 14:08:58,288] DEBUG apps.core.services.cache_services Cache miss for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:08:58,288] INFO apps.reviews.services.reviews_services Retrieving reviews for product=5, user=anonymous
+[2025-04-27 14:08:58,296] INFO apps.reviews.services.reviews_services Retrieved 1 reviews for product=5
+[2025-04-27 14:08:58,312] INFO apps.reviews.views Retrieved 1 reviews for product=5, user=8
+[2025-04-27 14:09:17,018] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 14:09:17,026] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews::*
+[2025-04-27 14:09:17,026] INFO apps.reviews.views Like toggled for review=19: liked, user=8
+[2025-04-27 14:09:32,349] INFO apps.reviews.views Retrieving reviews for product=5, user=8
+[2025-04-27 14:09:32,350] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:09:46,576] INFO apps.reviews.views Retrieving reviews for product=5, user=8
+[2025-04-27 14:09:46,583] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:09:50,808] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 14:09:50,817] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:*
+[2025-04-27 14:09:50,817] INFO apps.reviews.views Like toggled for review=19: unliked, user=8
+[2025-04-27 14:09:57,542] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-27 14:09:57,551] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:*
+[2025-04-27 14:09:57,551] INFO apps.reviews.views Like toggled for review=19: liked, user=8
+[2025-04-27 14:10:02,838] INFO apps.reviews.views Retrieving reviews for product=5, user=8
+[2025-04-27 14:10:02,840] DEBUG apps.core.services.cache_services Cache miss for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:10:02,840] INFO apps.reviews.services.reviews_services Retrieving reviews for product=5, user=anonymous
+[2025-04-27 14:10:02,845] INFO apps.reviews.services.reviews_services Retrieved 1 reviews for product=5
+[2025-04-27 14:10:02,859] INFO apps.reviews.views Retrieved 1 reviews for product=5, user=8
+[2025-04-27 14:10:04,445] INFO apps.reviews.views Retrieving reviews for product=5, user=8
+[2025-04-27 14:10:04,447] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:10:05,338] INFO apps.reviews.views Retrieving reviews for product=5, user=8
+[2025-04-27 14:10:05,339] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:11:13,151] INFO apps.reviews.views Updating Review 19, user=8, path=/reviews/update/19/
+[2025-04-27 14:11:13,151] DEBUG apps.reviews.serializers Validating review creation data: {'text': 'negro1'}
+[2025-04-27 14:11:13,151] WARNING apps.reviews.serializers Invalid review value None
+[2025-04-27 14:11:13,151] WARNING apps.comments.utils API error: Оценка должна быть целым числом от 1 до 5., user=8, path=/reviews/update/19/
+[2025-04-27 14:12:25,185] INFO apps.reviews.views Updating Review 19, user=8, path=/reviews/update/19/
+[2025-04-27 14:12:25,185] DEBUG apps.reviews.serializers Validating review creation data: {'value': 5, 'text': 'negro1'}
+[2025-04-27 14:12:25,185] INFO apps.reviews.services.reviews_services Updating review 19, user=8
+[2025-04-27 14:12:25,188] WARNING apps.reviews.services.reviews_services Invalid product type <class 'NoneType'>, user=8
+[2025-04-27 14:12:25,188] ERROR apps.reviews.services.reviews_services Failed to update Review 19: Поле product должно быть ID или объектом Product., data={'value': 5, 'text': 'negro1'}, user=8
+[2025-04-27 14:12:25,189] WARNING apps.comments.utils API error: Ошибка обновления отзыва: Поле product должно быть ID или объектом Product., user=8, path=/reviews/update/19/
+[2025-04-27 14:13:45,946] INFO apps.reviews.views Updating Review 19, user=8, path=/reviews/update/19/
+[2025-04-27 14:13:45,946] DEBUG apps.reviews.serializers Validating review creation data: {'value': 5, 'text': 'negro1'}
+[2025-04-27 14:13:45,946] INFO apps.reviews.services.reviews_services Updating review 19, user=8
+[2025-04-27 14:13:45,950] WARNING apps.reviews.services.reviews_services Invalid product type <class 'NoneType'>, user=8
+[2025-04-27 14:13:45,950] ERROR apps.reviews.services.reviews_services Failed to update Review 19: Поле product должно быть ID или объектом Product., data={'value': 5, 'text': 'negro1'}, user=8
+[2025-04-27 14:13:45,951] WARNING apps.comments.utils API error: Ошибка обновления отзыва: Поле product должно быть ID или объектом Product., user=8, path=/reviews/update/19/
+[2025-04-27 14:13:47,144] INFO apps.reviews.views Updating Review 19, user=8, path=/reviews/update/19/
+[2025-04-27 14:13:47,144] DEBUG apps.reviews.serializers Validating review creation data: {'value': 5, 'text': 'negro1'}
+[2025-04-27 14:13:47,144] INFO apps.reviews.services.reviews_services Updating review 19, user=8
+[2025-04-27 14:13:47,147] WARNING apps.reviews.services.reviews_services Invalid product type <class 'NoneType'>, user=8
+[2025-04-27 14:13:47,147] ERROR apps.reviews.services.reviews_services Failed to update Review 19: Поле product должно быть ID или объектом Product., data={'value': 5, 'text': 'negro1'}, user=8
+[2025-04-27 14:13:47,147] WARNING apps.comments.utils API error: Ошибка обновления отзыва: Поле product должно быть ID или объектом Product., user=8, path=/reviews/update/19/
+[2025-04-27 14:15:58,407] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 14:15:58,413] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:15:58,413] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 14:15:58,434] INFO apps.comments.services.comment_services Retrieved 1 comments for review=17
+[2025-04-27 14:15:58,438] INFO apps.comments.views Retrieved 1 comments for review=17, user=8
+[2025-04-27 14:16:17,938] INFO apps.comments.views Updating Comment 3, user=8, path=/comments/update/3/
+[2025-04-27 14:16:17,945] DEBUG apps.comments.serializers Validating comment creation data: {'review': <Review: Вишня: 2 (nookiee)>, 'text': 'Комментарий бананчика 1'}
+[2025-04-27 14:16:17,945] INFO apps.comments.services.comment_services Updating comment 3, user=8
+[2025-04-27 14:16:17,952] INFO apps.comments.services.comment_services Updated Comment 3, user=8
+[2025-04-27 14:16:17,954] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:17:*
+[2025-04-27 14:16:17,954] INFO apps.comments.views Updated Comment 3, user=8
+[2025-04-27 14:16:32,954] INFO apps.comments.views Updating Comment 3, user=8, path=/comments/update/3/
+[2025-04-27 14:16:32,959] DEBUG apps.comments.serializers Validating comment creation data: {'review': <Review: Вишня: 2 (nookiee)>, 'text': 'Комментарий бананчика 11'}
+[2025-04-27 14:16:32,959] INFO apps.comments.services.comment_services Updating comment 3, user=8
+[2025-04-27 14:16:32,965] INFO apps.comments.services.comment_services Updated Comment 3, user=8
+[2025-04-27 14:16:32,967] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:17:*
+[2025-04-27 14:16:32,967] INFO apps.comments.views Updated Comment 3, user=8
+[2025-04-27 14:16:35,444] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 14:16:35,445] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:16:35,445] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 14:16:35,454] INFO apps.comments.services.comment_services Retrieved 1 comments for review=17
+[2025-04-27 14:16:35,455] INFO apps.comments.views Retrieved 1 comments for review=17, user=8
+[2025-04-27 14:16:46,728] INFO apps.comments.views Toggling like for comment=3, user=8, path=/comments/3/like/
+[2025-04-27 14:16:46,736] INFO apps.comments.views Like toggled for comment=3: liked, user=8
+[2025-04-27 14:16:50,063] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 14:16:50,064] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:16:51,560] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 14:16:51,561] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:16:53,867] INFO apps.comments.views Toggling like for comment=3, user=8, path=/comments/3/like/
+[2025-04-27 14:16:53,874] INFO apps.comments.views Like toggled for comment=3: unliked, user=8
+[2025-04-27 14:16:56,261] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 14:16:56,263] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:20:07,366] INFO apps.comments.views Toggling like for comment=3, user=8, path=/comments/3/like/
+[2025-04-27 14:20:07,382] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:3:*
+[2025-04-27 14:20:07,382] INFO apps.comments.views Like toggled for comment=3: liked, user=8
+[2025-04-27 14:20:10,257] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 14:20:10,260] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:20:23,089] INFO apps.comments.views Toggling like for comment=3, user=8, path=/comments/3/like/
+[2025-04-27 14:20:23,102] INFO apps.core.services.cache_services Invalidated cache for prefix: comments::*
+[2025-04-27 14:20:23,102] INFO apps.comments.views Like toggled for comment=3: unliked, user=8
+[2025-04-27 14:20:23,848] INFO apps.comments.views Toggling like for comment=3, user=8, path=/comments/3/like/
+[2025-04-27 14:20:23,857] INFO apps.core.services.cache_services Invalidated cache for prefix: comments::*
+[2025-04-27 14:20:23,857] INFO apps.comments.views Like toggled for comment=3: liked, user=8
+[2025-04-27 14:20:25,892] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 14:20:25,894] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:20:26,729] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 14:20:26,730] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:20:48,493] INFO apps.comments.views Toggling like for comment=3, user=8, path=/comments/3/like/
+[2025-04-27 14:20:48,507] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:*
+[2025-04-27 14:20:48,507] INFO apps.comments.views Like toggled for comment=3: unliked, user=8
+[2025-04-27 14:20:49,371] INFO apps.comments.views Toggling like for comment=3, user=8, path=/comments/3/like/
+[2025-04-27 14:20:49,379] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:*
+[2025-04-27 14:20:49,379] INFO apps.comments.views Like toggled for comment=3: liked, user=8
+[2025-04-27 14:20:52,289] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 14:20:52,291] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:20:52,291] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 14:20:52,301] INFO apps.comments.services.comment_services Retrieved 1 comments for review=17
+[2025-04-27 14:20:52,305] INFO apps.comments.views Retrieved 1 comments for review=17, user=8
+[2025-04-27 14:20:53,491] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 14:20:53,493] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:21:41,473] INFO apps.comments.views Creating comment by user=8
+[2025-04-27 14:21:41,479] DEBUG apps.comments.serializers Validating comment creation data: {'review': <Review: Вишня: 2 (nookiee)>, 'text': 'Комментарий бананчика 3'}
+[2025-04-27 14:21:41,479] INFO apps.comments.services.comment_services Creating comment for review=Вишня: 2 (nookiee), user=8
+[2025-04-27 14:21:41,487] INFO apps.comments.services.comment_services Created Comment 5, user=8
+[2025-04-27 14:21:41,489] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:17:*
+[2025-04-27 14:21:41,489] INFO apps.comments.views Created Comment 5, user=8
+[2025-04-27 14:21:45,554] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 14:21:45,554] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:21:45,555] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 14:21:45,564] INFO apps.comments.services.comment_services Retrieved 2 comments for review=17
+[2025-04-27 14:21:45,566] INFO apps.comments.views Retrieved 2 comments for review=17, user=8
+[2025-04-27 14:22:19,939] INFO apps.comments.views Updating Comment 5, user=8, path=/comments/update/5/
+[2025-04-27 14:22:19,945] DEBUG apps.comments.serializers Validating comment creation data: {'review': <Review: Вишня: 2 (nookiee)>, 'text': 'Комментарий бананчика 11'}
+[2025-04-27 14:22:19,945] INFO apps.comments.services.comment_services Updating comment 5, user=8
+[2025-04-27 14:22:19,950] INFO apps.comments.services.comment_services Updated Comment 5, user=8
+[2025-04-27 14:22:19,952] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:17:*
+[2025-04-27 14:22:19,953] INFO apps.comments.views Updated Comment 5, user=8
+[2025-04-27 14:22:23,367] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 14:22:23,368] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:22:23,368] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 14:22:23,376] INFO apps.comments.services.comment_services Retrieved 2 comments for review=17
+[2025-04-27 14:22:23,379] INFO apps.comments.views Retrieved 2 comments for review=17, user=8
+[2025-04-27 14:22:55,516] INFO apps.comments.views Toggling like for comment=5, user=8, path=/comments/5/like/
+[2025-04-27 14:22:55,524] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:*
+[2025-04-27 14:22:55,524] INFO apps.comments.views Like toggled for comment=5: liked, user=8
+[2025-04-27 14:22:58,946] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 14:22:58,947] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:22:58,947] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 14:22:58,956] INFO apps.comments.services.comment_services Retrieved 2 comments for review=17
+[2025-04-27 14:22:58,958] INFO apps.comments.views Retrieved 2 comments for review=17, user=8
+[2025-04-27 14:23:13,542] INFO apps.comments.views Deleting Comment 5, user=8, path=/comments/delete/5/
+[2025-04-27 14:23:13,542] INFO apps.comments.services.comment_services Deleting comment 5, user=8
+[2025-04-27 14:23:13,550] INFO apps.comments.services.comment_services Deleted Comment 5, user=8
+[2025-04-27 14:23:13,552] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:*
+[2025-04-27 14:23:13,552] INFO apps.comments.views Deleted Comment 5, user=8
+[2025-04-27 14:23:16,919] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 14:23:16,921] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 14:23:16,921] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 14:23:16,930] INFO apps.comments.services.comment_services Retrieved 1 comments for review=17
+[2025-04-27 14:23:16,931] INFO apps.comments.views Retrieved 1 comments for review=17, user=8
+[2025-04-27 23:02:21,901] INFO apps.comments.views Retrieving comments for review=3, user=anonymous
+[2025-04-27 23:02:22,028] DEBUG apps.core.services.cache_services Cache miss for key: comments:3:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 23:02:22,028] INFO apps.comments.services.comment_services Retrieving comments for review=3, user=anonymous
+[2025-04-27 23:02:22,183] WARNING apps.comments.services.comment_services Review 3 not found
+[2025-04-27 23:02:22,183] ERROR apps.comments.services.comment_services Error retrieving comments for review=3: Указанный отзыв не существует.
+[2025-04-27 23:02:22,183] WARNING apps.comments.utils Comment error: Ошибка получения комментариев: Указанный отзыв не существует., user=anonymous, path=/comments/3/
+[2025-04-27 23:02:39,545] INFO apps.comments.views Retrieving comments for review=17, user=anonymous
+[2025-04-27 23:02:39,547] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 23:02:39,547] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 23:02:39,608] INFO apps.comments.services.comment_services Retrieved 1 comments for review=17
+[2025-04-27 23:02:39,617] INFO apps.comments.views Retrieved 1 comments for review=17, user=anonymous
+[2025-04-27 23:03:06,594] INFO apps.comments.views Creating comment by user=8
+[2025-04-27 23:03:06,637] DEBUG apps.comments.serializers Validating comment creation data: {'review': <Review: Вишня: 2 (nookiee)>, 'text': 'Комментарий бананчика 3'}
+[2025-04-27 23:03:06,637] INFO apps.comments.services.comment_services Creating comment for review=Вишня: 2 (nookiee), user=8
+[2025-04-27 23:03:06,669] INFO apps.comments.services.comment_services Created Comment 6, user=8
+[2025-04-27 23:03:06,671] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:17:*
+[2025-04-27 23:03:06,671] INFO apps.comments.views Created Comment 6, user=8
+[2025-04-27 23:03:07,540] INFO apps.comments.views Creating comment by user=8
+[2025-04-27 23:03:07,546] DEBUG apps.comments.serializers Validating comment creation data: {'review': <Review: Вишня: 2 (nookiee)>, 'text': 'Комментарий бананчика 3'}
+[2025-04-27 23:03:07,546] INFO apps.comments.services.comment_services Creating comment for review=Вишня: 2 (nookiee), user=8
+[2025-04-27 23:03:07,552] INFO apps.comments.services.comment_services Created Comment 7, user=8
+[2025-04-27 23:03:07,554] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:17:*
+[2025-04-27 23:03:07,554] INFO apps.comments.views Created Comment 7, user=8
+[2025-04-27 23:03:08,334] INFO apps.comments.views Creating comment by user=8
+[2025-04-27 23:03:08,339] DEBUG apps.comments.serializers Validating comment creation data: {'review': <Review: Вишня: 2 (nookiee)>, 'text': 'Комментарий бананчика 3'}
+[2025-04-27 23:03:08,339] INFO apps.comments.services.comment_services Creating comment for review=Вишня: 2 (nookiee), user=8
+[2025-04-27 23:03:08,346] INFO apps.comments.services.comment_services Created Comment 8, user=8
+[2025-04-27 23:03:08,347] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:17:*
+[2025-04-27 23:03:08,347] INFO apps.comments.views Created Comment 8, user=8
+[2025-04-27 23:03:09,065] INFO apps.comments.views Creating comment by user=8
+[2025-04-27 23:03:09,072] DEBUG apps.comments.serializers Validating comment creation data: {'review': <Review: Вишня: 2 (nookiee)>, 'text': 'Комментарий бананчика 3'}
+[2025-04-27 23:03:09,072] INFO apps.comments.services.comment_services Creating comment for review=Вишня: 2 (nookiee), user=8
+[2025-04-27 23:03:09,077] INFO apps.comments.services.comment_services Created Comment 9, user=8
+[2025-04-27 23:03:09,079] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:17:*
+[2025-04-27 23:03:09,079] INFO apps.comments.views Created Comment 9, user=8
+[2025-04-27 23:03:09,562] INFO apps.comments.views Creating comment by user=8
+[2025-04-27 23:03:09,567] DEBUG apps.comments.serializers Validating comment creation data: {'review': <Review: Вишня: 2 (nookiee)>, 'text': 'Комментарий бананчика 3'}
+[2025-04-27 23:03:09,567] INFO apps.comments.services.comment_services Creating comment for review=Вишня: 2 (nookiee), user=8
+[2025-04-27 23:03:09,574] INFO apps.comments.services.comment_services Created Comment 10, user=8
+[2025-04-27 23:03:09,576] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:17:*
+[2025-04-27 23:03:09,576] INFO apps.comments.views Created Comment 10, user=8
+[2025-04-27 23:03:10,183] INFO apps.comments.views Creating comment by user=8
+[2025-04-27 23:03:10,189] DEBUG apps.comments.serializers Validating comment creation data: {'review': <Review: Вишня: 2 (nookiee)>, 'text': 'Комментарий бананчика 3'}
+[2025-04-27 23:03:10,189] INFO apps.comments.services.comment_services Creating comment for review=Вишня: 2 (nookiee), user=8
+[2025-04-27 23:03:10,195] INFO apps.comments.services.comment_services Created Comment 11, user=8
+[2025-04-27 23:03:10,197] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:17:*
+[2025-04-27 23:03:10,197] INFO apps.comments.views Created Comment 11, user=8
+[2025-04-27 23:03:10,805] INFO apps.comments.views Creating comment by user=8
+[2025-04-27 23:03:10,810] DEBUG apps.comments.serializers Validating comment creation data: {'review': <Review: Вишня: 2 (nookiee)>, 'text': 'Комментарий бананчика 3'}
+[2025-04-27 23:03:10,810] INFO apps.comments.services.comment_services Creating comment for review=Вишня: 2 (nookiee), user=8
+[2025-04-27 23:03:10,816] INFO apps.comments.services.comment_services Created Comment 12, user=8
+[2025-04-27 23:03:10,817] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:17:*
+[2025-04-27 23:03:10,817] INFO apps.comments.views Created Comment 12, user=8
+[2025-04-27 23:03:11,382] INFO apps.comments.views Creating comment by user=8
+[2025-04-27 23:03:11,387] DEBUG apps.comments.serializers Validating comment creation data: {'review': <Review: Вишня: 2 (nookiee)>, 'text': 'Комментарий бананчика 3'}
+[2025-04-27 23:03:11,387] INFO apps.comments.services.comment_services Creating comment for review=Вишня: 2 (nookiee), user=8
+[2025-04-27 23:03:11,393] INFO apps.comments.services.comment_services Created Comment 13, user=8
+[2025-04-27 23:03:11,394] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:17:*
+[2025-04-27 23:03:11,394] INFO apps.comments.views Created Comment 13, user=8
+[2025-04-27 23:03:12,019] INFO apps.comments.views Creating comment by user=8
+[2025-04-27 23:03:12,026] DEBUG apps.comments.serializers Validating comment creation data: {'review': <Review: Вишня: 2 (nookiee)>, 'text': 'Комментарий бананчика 3'}
+[2025-04-27 23:03:12,026] INFO apps.comments.services.comment_services Creating comment for review=Вишня: 2 (nookiee), user=8
+[2025-04-27 23:03:12,034] INFO apps.comments.services.comment_services Created Comment 14, user=8
+[2025-04-27 23:03:12,035] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:17:*
+[2025-04-27 23:03:12,035] INFO apps.comments.views Created Comment 14, user=8
+[2025-04-27 23:03:15,170] INFO apps.comments.views Retrieving comments for review=17, user=anonymous
+[2025-04-27 23:03:15,171] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 23:03:15,171] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 23:03:15,210] INFO apps.comments.services.comment_services Retrieved 10 comments for review=17
+[2025-04-27 23:03:15,212] INFO apps.comments.views Retrieved 10 comments for review=17, user=anonymous
+[2025-04-27 23:04:19,733] INFO apps.comments.views Retrieving comments for review=17, user=anonymous
+[2025-04-27 23:04:19,818] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 23:04:20,736] INFO apps.comments.views Retrieving comments for review=17, user=anonymous
+[2025-04-27 23:04:20,738] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 23:04:28,899] INFO apps.comments.views Creating comment by user=8
+[2025-04-27 23:04:28,907] DEBUG apps.comments.serializers Validating comment creation data: {'review': <Review: Вишня: 2 (nookiee)>, 'text': 'Комментарий бананчика 3'}
+[2025-04-27 23:04:28,907] INFO apps.comments.services.comment_services Creating comment for review=Вишня: 2 (nookiee), user=8
+[2025-04-27 23:04:28,915] INFO apps.comments.services.comment_services Created Comment 15, user=8
+[2025-04-27 23:04:28,917] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:17:*
+[2025-04-27 23:04:28,918] INFO apps.comments.views Created Comment 15, user=8
+[2025-04-27 23:04:31,570] INFO apps.comments.views Retrieving comments for review=17, user=anonymous
+[2025-04-27 23:04:31,571] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 23:04:31,572] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 23:04:31,713] INFO apps.comments.services.comment_services Retrieved 11 comments for review=17
+[2025-04-27 23:04:31,722] INFO apps.comments.views Retrieved 11 comments for review=17, user=anonymous
+[2025-04-27 23:04:49,577] INFO apps.comments.views Retrieving comments for review=17, user=anonymous
+[2025-04-27 23:04:49,667] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 23:04:53,403] INFO apps.comments.views Retrieving comments for review=17, user=anonymous
+[2025-04-27 23:04:53,405] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 23:04:54,055] INFO apps.comments.views Retrieving comments for review=17, user=anonymous
+[2025-04-27 23:04:54,057] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 23:06:05,809] INFO apps.comments.views Creating comment by user=8
+[2025-04-27 23:06:05,818] DEBUG apps.comments.serializers Validating comment creation data: {'review': <Review: Вишня: 2 (nookiee)>, 'text': 'Комментарий бананчика 3'}
+[2025-04-27 23:06:05,818] INFO apps.comments.services.comment_services Creating comment for review=Вишня: 2 (nookiee), user=8
+[2025-04-27 23:06:05,826] INFO apps.comments.services.comment_services Created Comment 16, user=8
+[2025-04-27 23:06:05,834] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:17:*
+[2025-04-27 23:06:05,834] INFO apps.comments.views Created Comment 16, user=8
+[2025-04-27 23:06:08,247] INFO apps.comments.views Retrieving comments for review=17, user=anonymous
+[2025-04-27 23:06:08,249] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 23:06:08,249] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 23:06:08,288] INFO apps.comments.services.comment_services Retrieved 12 comments for review=17
+[2025-04-27 23:06:08,290] INFO apps.comments.views Retrieved 12 comments for review=17, user=anonymous
+[2025-04-27 23:06:12,491] INFO apps.comments.views Retrieving comments for review=17, user=anonymous
+[2025-04-27 23:06:12,493] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 23:07:44,603] INFO apps.comments.views Updating Comment 5, user=8, path=/comments/update/5/
+[2025-04-27 23:07:44,610] DEBUG apps.comments.serializers Validating comment creation data: {'review': <Review: Вишня: 2 (nookiee)>, 'text': 'Комментарий бананчика 000'}
+[2025-04-27 23:07:44,610] INFO apps.comments.services.comment_services Updating comment 5, user=8
+[2025-04-27 23:07:44,612] WARNING apps.comments.services.comment_services Comment 5 not found, user=8
+[2025-04-27 23:07:44,612] WARNING apps.comments.utils Comment error: Комментарий не найден, user=8, path=/comments/update/5/
+[2025-04-27 23:07:52,989] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 23:07:52,996] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 23:08:07,544] INFO apps.comments.views Updating Comment 3, user=8, path=/comments/update/3/
+[2025-04-27 23:08:07,550] DEBUG apps.comments.serializers Validating comment creation data: {'review': <Review: Вишня: 2 (nookiee)>, 'text': 'Комментарий бананчика 000'}
+[2025-04-27 23:08:07,550] INFO apps.comments.services.comment_services Updating comment 3, user=8
+[2025-04-27 23:08:07,556] INFO apps.comments.services.comment_services Updated Comment 3, user=8
+[2025-04-27 23:08:07,558] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:17:*
+[2025-04-27 23:08:07,558] INFO apps.comments.views Updated Comment 3, user=8
+[2025-04-27 23:08:12,489] INFO apps.comments.views Retrieving comments for review=17, user=anonymous
+[2025-04-27 23:08:12,491] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 23:08:12,491] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 23:08:12,531] INFO apps.comments.services.comment_services Retrieved 12 comments for review=17
+[2025-04-27 23:08:12,533] INFO apps.comments.views Retrieved 12 comments for review=17, user=anonymous
+[2025-04-27 23:08:16,460] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 23:08:16,462] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 23:09:11,187] INFO apps.comments.views Deleting Comment 14, user=8, path=/comments/delete/14/
+[2025-04-27 23:09:11,187] INFO apps.comments.services.comment_services Deleting comment 14, user=8
+[2025-04-27 23:09:11,198] INFO apps.comments.services.comment_services Deleted Comment 14, user=8
+[2025-04-27 23:09:11,203] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:*
+[2025-04-27 23:09:11,204] INFO apps.comments.views Deleted Comment 14, user=8
+[2025-04-27 23:09:17,607] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 23:09:17,609] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 23:09:17,609] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 23:09:17,620] INFO apps.comments.services.comment_services Retrieved 11 comments for review=17
+[2025-04-27 23:09:17,624] INFO apps.comments.views Retrieved 11 comments for review=17, user=8
+[2025-04-27 23:09:23,345] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 23:09:23,345] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 23:09:28,707] INFO apps.comments.views Retrieving comments for review=17, user=anonymous
+[2025-04-27 23:09:28,708] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 23:09:35,745] INFO apps.comments.views Retrieving comments for review=17, user=anonymous
+[2025-04-27 23:09:35,746] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e

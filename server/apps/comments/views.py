@@ -1,14 +1,18 @@
 import logging
+
+from django.contrib.contenttypes.models import ContentType
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
+
+from apps.comments.models import Comment
 from apps.core.services.cache_services import CacheService
 from apps.comments.services.comment_services import CommentService
-from apps.comments.services.like_services import LikeService
 from apps.comments.serializers import CommentSerializer, CommentCreateSerializer
 from apps.comments.utils import handle_api_errors
+from apps.core.services.like_services import LikeService
 
 logger = logging.getLogger(__name__)
 
@@ -153,7 +157,7 @@ class CommentLikeView(APIView):
 
         Args:
             request (HttpRequest): Входящий объект запроса.
-            pk (int): ID комментария лайка или снятия лайка.
+            pk (int): ID комментария для лайка или снятия лайка.
 
         Returns:
             Response: Результат операции с лайком или ответ с ошибкой.
@@ -161,7 +165,8 @@ class CommentLikeView(APIView):
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(f"Toggling like for comment={pk}, user={user_id}, path={request.path}")
 
-        result = LikeService.toggle_like(pk, request.user)
-        CacheService.invalidate_cache(prefix=f"comments:{result['review_id']}")
+        content_type = ContentType.objects.get_for_model(Comment)
+        result = LikeService.toggle_like(content_type, pk, request.user)
+        CacheService.invalidate_cache(prefix=f"comments")
         logger.info(f"Like toggled for comment={pk}: {result['action']}, user={user_id}")
         return Response(result, status=status.HTTP_200_OK)

@@ -52,7 +52,6 @@ class LikeService:
                 object_id=object_id,
                 user=user
             )
-
             additional_data = {}
             if not created:
                 # Если лайк уже существует, удаляем его
