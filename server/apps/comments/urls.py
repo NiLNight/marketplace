@@ -3,7 +3,7 @@ from apps.comments.views import (
     CommentListView,
     CommentCreateView,
     CommentUpdateView,
-    CommentLikeView
+    CommentLikeView, CommentDeleteView
 )
 
 urlpatterns = [
@@ -11,4 +11,5 @@ urlpatterns = [
     path('create/', CommentCreateView.as_view(), name='comment-create'),
     path('update/<int:pk>/', CommentUpdateView.as_view(), name='comment-update'),
     path('<int:pk>/like/', CommentLikeView.as_view(), name='comment-like'),
+    path('delete/<int:pk>/', CommentDeleteView.as_view(), name='comment-delete'),
 ]

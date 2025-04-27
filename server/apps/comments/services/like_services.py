@@ -1,47 +1,56 @@
 import logging
 from typing import Dict
 from django.contrib.auth import get_user_model
-from django.db import IntegrityError
-from django.core.cache import cache
-from apps.comments.exceptions import CommentException
-from apps.comments.models import CommentLike
+from django.db import transaction, IntegrityError
+from apps.comments.models import Comment, CommentLike
+from apps.comments.exceptions import CommentNotFound, LikeOperationFailed
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
 
 
 class LikeService:
-    """Сервис для управления лайками к комментариям."""
+    """Сервис для управления лайками комментариев.
+
+    Предоставляет методы для переключения состояния лайков с атомарными операциями и инвалидацией кэша.
+    """
 
     @staticmethod
-    def toggle_like(instance, user: User) -> Dict[str, str]:
+    @transaction.atomic
+    def toggle_like(comment_id: int, user: User) -> Dict[str, str]:
         """Переключает состояние лайка для комментария.
 
-        Создает лайк, если его нет, или удаляет существующий.
+        Создает лайк, если его нет, или удаляет существующий для указанного пользователя и комментария.
 
         Args:
-            instance: Экземпляр комментария.
-            user: Пользователь, ставящий лайк.
+            comment_id (int): ID комментария для лайка или его снятия.
+            user (User): Пользователь, выполняющий действие.
 
         Returns:
-            dict: Результат операции ('liked' или 'unliked').
+            Dict[str, str]: Словарь с действием ('liked' или 'unliked') и ID отзыва.
 
         Raises:
-            CommentException: Если операция не удалась.
+            CommentNotFound: Если комментарий с указанным ID не найден.
+            LikeOperationFailed: Если произошла ошибка целостности данных.
         """
         user_id = user.id if user else 'anonymous'
-        logger.info(f"Toggling like for Comment {instance.id}, user={user_id}")
+        logger.info(f"Toggling like for Comment {comment_id}, user={user_id}")
+
         try:
-            like, created = CommentLike.objects.get_or_create(review=instance, user=user)
+            comment = Comment.objects.get(pk=comment_id)
+            like, created = CommentLike.objects.get_or_create(comment=comment, user=user)
             if not created:
                 like.delete()
                 action = 'unliked'
-                logger.info(f"Unliked Comment {instance.id}, user={user_id}")
+                logger.info(f"Unliked Comment {comment_id}, user={user_id}")
             else:
                 action = 'liked'
-                logger.info(f"Liked Comment {instance.id}, user={user_id}")
-            cache.delete(f'comments:{instance.review_id}')
-            return {'action': action}
+                logger.info(f"Liked Comment {comment_id}, user={user_id}")
+
+            return {'action': action, 'review_id': comment.review_id}
+        except Comment.DoesNotExist:
+            logger.warning(f"Comment {comment_id} not found, user={user_id}")
+            raise CommentNotFound()
         except IntegrityError as e:
-            logger.error(f"Integrity error toggling like for Comment {instance.id}: {str(e)}, user={user_id}")
-            raise CommentException("Ошибка при обработке лайка")
+            logger.error(f"Integrity error toggling like for Comment {comment_id}: {str(e)}, user={user_id}")
+            raise LikeOperationFailed()

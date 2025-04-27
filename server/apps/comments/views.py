@@ -1,170 +1,167 @@
 import logging
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from apps.core.services.cache_services import CacheService
-from apps.comments.models import Comment
 from apps.comments.services.comment_services import CommentService
 from apps.comments.services.like_services import LikeService
 from apps.comments.serializers import CommentSerializer, CommentCreateSerializer
 from apps.comments.utils import handle_api_errors
-from apps.comments.exceptions import CommentNotFound, CommentException
-from mptt.utils import get_cached_trees
 
 logger = logging.getLogger(__name__)
 
 
 class StandardResultsSetPagination(PageNumberPagination):
-    """Пагинация для списков."""
+    """Настройки пагинации для списков комментариев.
+
+    Определяет размер страницы и параметры запроса для пагинированных ответов.
+
+    Атрибуты:
+        page_size (int): Количество элементов на странице по умолчанию.
+        page_size_query_param (str): Параметр запроса для изменения размера страницы.
+        max_page_size (int): Максимально допустимый размер страницы.
+    """
     page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 100
 
 
 class CommentListView(APIView):
-    """Получение списка комментариев к отзыву."""
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    """Представление для получения списка комментариев к отзыву."""
+    permission_classes = [AllowAny]
     pagination_class = StandardResultsSetPagination
+    serializer_class = CommentSerializer
 
     @handle_api_errors
     def get(self, request, review_id: int):
-        """Обрабатывает GET-запрос для списка комментариев.
+        """Обрабатывает GET-запросы для получения пагинированного списка комментариев.
 
         Args:
-            request: Объект запроса.
-            review_id (int): ID отзыва.
+            request (HttpRequest): Входящий объект запроса.
+            review_id (int): ID отзыва для получения комментариев.
 
         Returns:
-            Response: Пагинированный список комментариев или ошибка.
+            Response: Пагинированный список комментариев или ответ с ошибкой.
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(f"Retrieving comments for review={review_id}, user={user_id}")
+
         cache_key = CacheService.build_cache_key(request, prefix=f"comments:{review_id}")
         cached_data = CacheService.get_cached_data(cache_key)
         if cached_data:
-            logger.debug(f"Cache hit for comments of review={review_id}, user={user_id}")
             return Response(cached_data)
 
-        try:
-            comments = Comment.objects.prefetch_related('children').filter(review_id=review_id).prefetch_related('user',
-                                                                                                                 'likes')
-            root_nodes = get_cached_trees(comments)
-            paginator = self.pagination_class()
-            page = paginator.paginate_queryset(root_nodes, request)
-            serializer = CommentSerializer(page, many=True)
-            response_data = paginator.get_paginated_response(serializer.data).data
+        root_nodes = CommentService.get_comments(review_id)
+        paginator = self.pagination_class()
+        page = paginator.paginate_queryset(root_nodes, request)
+        serializer = self.serializer_class(page, many=True)
 
-            CacheService.set_cached_data(cache_key, response_data, timeout=300)
-            logger.info(f"Retrieved {len(root_nodes)} comments for review={review_id}, user={user_id}")
-            return Response(response_data)
-        except Exception as e:
-            logger.error(f"Error retrieving comments for review={review_id}: {str(e)}, user={user_id}")
-            return Response(
-                {"error": "Внутренняя ошибка сервера", "code": "server_error"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+        response_data = paginator.get_paginated_response(serializer.data).data
+        CacheService.set_cached_data(cache_key, response_data, timeout=300)
+        logger.info(f"Retrieved {len(root_nodes)} comments for review={review_id}, user={user_id}")
+        return Response(response_data)
 
 
 class CommentCreateView(APIView):
-    """Создание нового комментария."""
+    """Представление для создания нового комментария."""
     permission_classes = [IsAuthenticated]
+    serializer_class = CommentCreateSerializer
 
     @handle_api_errors
     def post(self, request):
-        """Обрабатывает POST-запрос для создания комментария.
+        """Обрабатывает POST-запросы для создания нового комментария.
 
         Args:
-            request: Объект запроса.
+            request (HttpRequest): Входящий объект запроса с данными комментария.
 
         Returns:
-            Response: Данные созданного комментария или ошибка.
+            Response: Данные созданного комментария или ответ с ошибкой.
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(f"Creating comment by user={user_id}")
-        serializer = CommentCreateSerializer(data=request.data)
-        if serializer.is_valid():
-            try:
-                comment = CommentService.create_comment(serializer.validated_data, request.user)
-                CacheService.invalidate_cache(prefix=f"comments:{comment.review_id}")
-                logger.info(f"Created Comment {comment.id}, user={user_id}")
-                return Response(CommentSerializer(comment).data, status=status.HTTP_201_CREATED)
-            except Exception as e:
-                logger.error(f"Error creating comment: {str(e)}, user={user_id}")
-                return Response({"error": str(e), "code": "create_error"}, status=status.HTTP_400_BAD_REQUEST)
-        logger.warning(f"Invalid data for comment creation: {serializer.errors}, user={user_id}")
-        return Response({"error": serializer.errors, "code": "validation_error"}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        comment = CommentService.create_comment(serializer.validated_data, request.user)
+
+        CacheService.invalidate_cache(prefix=f"comments:{comment.review_id}")
+        logger.info(f"Created Comment {comment.id}, user={user_id}")
+        return Response(CommentSerializer(comment).data, status=status.HTTP_201_CREATED)
 
 
 class CommentUpdateView(APIView):
-    """Обновление существующего комментария."""
+    """Представление для обновления существующего комментария."""
     permission_classes = [IsAuthenticated]
+    serializer_class = CommentCreateSerializer
 
     @handle_api_errors
     def patch(self, request, pk: int):
-        """Обрабатывает PATCH-запрос для обновления комментария.
+        """Обрабатывает PATCH-запросы для обновления комментария.
 
         Args:
-            request: Объект запроса.
-            pk (int): ID комментария.
+            request (HttpRequest): Входящий объект запроса с обновленными данными.
+            pk (int): ID комментария для обновления.
 
         Returns:
-            Response: Обновленные данные или ошибка.
-
-        Raises:
-            CommentNotFound: Если комментарий не найден.
+            Response: Данные обновленного комментария или ответ с ошибкой.
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
-        logger.info(f"Updating Comment {pk}, user={user_id}")
-        try:
-            comment = Comment.objects.get(pk=pk)
-        except Comment.DoesNotExist:
-            logger.warning(f"Comment {pk} not found, user={user_id}")
-            raise CommentNotFound()
-        serializer = CommentCreateSerializer(comment, data=request.data, partial=True)
-        if serializer.is_valid():
-            try:
-                updated_comment = CommentService.update_comment(comment, serializer.validated_data, request.user)
-                CacheService.invalidate_cache(prefix=f"comments:{updated_comment.review_id}")
-                logger.info(f"Updated Comment {pk}, user={user_id}")
-                return Response(CommentSerializer(updated_comment).data, status=status.HTTP_200_OK)
-            except Exception as e:
-                logger.error(f"Error updating Comment {pk}: {str(e)}, user={user_id}")
-                return Response({"error": str(e), "code": "update_error"}, status=status.HTTP_400_BAD_REQUEST)
-        logger.warning(f"Invalid data for Comment {pk}: {serializer.errors}, user={user_id}")
-        return Response({"error": serializer.errors, "code": "validation_error"}, status=status.HTTP_400_BAD_REQUEST)
+        logger.info(f"Updating Comment {pk}, user={user_id}, path={request.path}")
+
+        serializer = self.serializer_class(data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        updated_comment = CommentService.update_comment(pk, serializer.validated_data, request.user)
+        CacheService.invalidate_cache(prefix=f"comments:{updated_comment.review_id}")
+        logger.info(f"Updated Comment {pk}, user={user_id}")
+        return Response(CommentSerializer(updated_comment).data, status=status.HTTP_200_OK)
+
+
+class CommentDeleteView(APIView):
+    """Представление для удаления комментария."""
+    permission_classes = [IsAuthenticated]
+
+    @handle_api_errors
+    def delete(self, request, pk: int):
+        """Обрабатывает DELETE-запросы для удаления комментария.
+
+        Args:
+            request (HttpRequest): Входящий объект запроса.
+            pk (int): ID комментария для удаления.
+
+        Returns:
+            Response: Сообщение об удалении или ответ с ошибкой.
+        """
+        user_id = request.user.id if request.user.is_authenticated else 'anonymous'
+        logger.info(f"Deleting Comment {pk}, user={user_id}, path={request.path}")
+
+        CommentService.delete_comment(pk, request.user)
+        CacheService.invalidate_cache(prefix=f"comments")
+        logger.info(f"Deleted Comment {pk}, user={user_id}")
+        return Response({"message": "Комментарий удален"}, status=status.HTTP_204_NO_CONTENT)
 
 
 class CommentLikeView(APIView):
-    """Управление лайками для комментариев."""
+    """Представление для управления лайками комментариев."""
     permission_classes = [IsAuthenticated]
 
     @handle_api_errors
     def post(self, request, pk: int):
-        """Обрабатывает POST-запрос для переключения лайка комментария.
+        """Обрабатывает POST-запросы для переключения лайка комментария.
 
         Args:
-            request: Объект запроса.
-            pk (int): ID комментария.
+            request (HttpRequest): Входящий объект запроса.
+            pk (int): ID комментария лайка или снятия лайка.
 
         Returns:
-            Response: Результат операции или ошибка.
-
-        Raises:
-            CommentNotFound: Если комментарий не найден.
+            Response: Результат операции с лайком или ответ с ошибкой.
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
-        logger.info(f"Toggling like for comment={pk}, user={user_id}")
-        try:
-            comment = Comment.objects.get(pk=pk)
-        except Comment.DoesNotExist:
-            logger.warning(f"Comment {pk} not found, user={user_id}")
-            raise CommentNotFound()
-        try:
-            result = LikeService.toggle_like(comment, request.user)
-            logger.info(f"Like toggled for comment={pk}: {result['action']}, user={user_id}")
-            return Response(result)
-        except CommentException as e:
-            logger.error(f"Error toggling like for comment={pk}: {str(e)}, user={user_id}")
-            return Response({"error": str(e), "code": e.__class__.__name__.lower()}, status=e.status_code)
+        logger.info(f"Toggling like for comment={pk}, user={user_id}, path={request.path}")
+
+        result = LikeService.toggle_like(pk, request.user)
+        CacheService.invalidate_cache(prefix=f"comments:{result['review_id']}")
+        logger.info(f"Like toggled for comment={pk}: {result['action']}, user={user_id}")
+        return Response(result, status=status.HTTP_200_OK)

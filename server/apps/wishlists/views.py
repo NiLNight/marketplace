@@ -49,7 +49,6 @@ class WishlistGetView(APIView):
 class WishlistAddView(APIView):
     """Добавление товара в список желаний."""
     permission_classes = [AllowAny]
-    serializer_class = WishlistItemSerializer
 
     @handle_api_errors
     def post(self, request):
