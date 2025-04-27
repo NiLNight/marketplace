@@ -992,3 +992,27 @@ LINE 1: ...mment"."tree_id", "comments_comment"."level" FROM "comments_...
 [2025-04-27 10:58:45,420] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
 [2025-04-27 10:58:45,429] INFO apps.comments.services.comment_services Retrieved 2 comments for review=17
 [2025-04-27 10:58:45,433] INFO apps.comments.views Retrieved 2 comments for review=17, user=8
+[2025-04-27 10:59:21,686] INFO apps.comments.views Deleting Comment 4, user=8, path=/comments/delete/4/
+[2025-04-27 10:59:21,686] INFO apps.comments.services.comment_services Deleting comment 4, user=8
+[2025-04-27 10:59:21,695] INFO apps.comments.services.comment_services Deleted Comment 4, user=8
+[2025-04-27 10:59:21,697] INFO apps.core.services.cache_services Invalidated cache for prefix: comments:*
+[2025-04-27 10:59:21,697] INFO apps.comments.views Deleted Comment 4, user=8
+[2025-04-27 10:59:25,552] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 10:59:25,553] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 10:59:25,553] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-04-27 10:59:25,562] INFO apps.comments.services.comment_services Retrieved 1 comments for review=17
+[2025-04-27 10:59:25,563] INFO apps.comments.views Retrieved 1 comments for review=17, user=8
+[2025-04-27 10:59:36,918] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 10:59:36,919] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 10:59:45,100] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 10:59:45,102] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 10:59:45,941] INFO apps.comments.views Retrieving comments for review=17, user=8
+[2025-04-27 10:59:45,943] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-27 13:02:50,578] INFO apps.comments.views Toggling like for comment=3, user=8, path=/comments/3/like/
+[2025-04-27 13:02:50,648] ERROR apps.comments.utils Server error: отношение "core_like" не существует
+LINE 1: ..."."content_type_id", "core_like"."object_id" FROM "core_like...
+                                                             ^, user=8, path=/comments/3/like/
+[2025-04-27 13:02:52,545] INFO apps.comments.views Toggling like for comment=3, user=8, path=/comments/3/like/
+[2025-04-27 13:02:52,549] ERROR apps.comments.utils Server error: отношение "core_like" не существует
+LINE 1: ..."."content_type_id", "core_like"."object_id" FROM "core_like...
+                                                             ^, user=8, path=/comments/3/like/
