@@ -4,7 +4,7 @@ from rest_framework.exceptions import APIException
 class ReviewException(APIException):
     """Базовое исключение для операций с отзывами."""
     status_code = 400
-    default_detail = 'Ошибка отзыва'
+    default_detail = 'Ошибка при обработке отзыва'
     default_code = 'review_error'
 
 
@@ -19,3 +19,9 @@ class InvalidReviewData(ReviewException):
     """Исключение, вызываемое при некорректных данных отзыва."""
     default_detail = 'Некорректные данные отзыва'
     default_code = 'invalid_data'
+
+
+class LikeOperationFailed(ReviewException):
+    """Исключение, вызываемое при ошибке операции с лайком."""
+    default_detail = 'Ошибка при обработке лайка'
+    default_code = 'like_operation_failed'

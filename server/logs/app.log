@@ -1602,3 +1602,191 @@ LINE 1: ..."."content_type_id", "core_like"."object_id" FROM "core_like...
 [2025-04-27 23:09:28,708] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
 [2025-04-27 23:09:35,745] INFO apps.comments.views Retrieving comments for review=17, user=anonymous
 [2025-04-27 23:09:35,746] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-28 17:59:20,616] INFO apps.reviews.views Retrieving reviews for product=5, user=anonymous
+[2025-04-28 17:59:22,645] ERROR apps.comments.utils Server error: Error 10061 connecting to 127.0.0.1:6379. Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение., user=anonymous, path=/reviews/5/
+[2025-04-28 17:59:25,035] INFO apps.reviews.views Retrieving reviews for product=5, user=anonymous
+[2025-04-28 17:59:27,048] ERROR apps.comments.utils Server error: Error 10061 connecting to 127.0.0.1:6379. Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение., user=anonymous, path=/reviews/5/
+[2025-04-28 17:59:46,024] INFO apps.reviews.views Retrieving reviews for product=5, user=anonymous
+[2025-04-28 17:59:46,156] DEBUG apps.core.services.cache_services Cache miss for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-28 17:59:46,156] INFO apps.reviews.services.reviews_services Fetching reviews for product=5, user=anonymous
+[2025-04-28 17:59:46,398] INFO apps.reviews.services.reviews_services Found 1 reviews for product=5
+[2025-04-28 17:59:46,551] INFO apps.reviews.views Retrieved 1 reviews for product=5, user=anonymous
+[2025-04-28 18:03:21,536] INFO apps.reviews.views Retrieving reviews for product=5, user=anonymous
+[2025-04-28 18:03:21,626] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-28 18:03:22,450] INFO apps.reviews.views Retrieving reviews for product=5, user=anonymous
+[2025-04-28 18:03:22,451] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-28 18:06:16,375] INFO apps.reviews.views Fetching reviews for product=5, user=anonymous, path=/reviews/5/
+[2025-04-28 18:06:16,463] DEBUG apps.core.services.cache_services Cache miss for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-28 18:06:16,463] INFO apps.reviews.services.reviews_services Fetching reviews for product=5, user=anonymous
+[2025-04-28 18:06:16,503] INFO apps.reviews.services.reviews_services Found 1 reviews for product=5
+[2025-04-28 18:06:16,516] INFO apps.reviews.views Retrieved 1 reviews for product=5, user=anonymous
+[2025-04-28 18:20:39,679] INFO apps.reviews.views Updating review 19, user=8, path=/reviews/update/19/
+[2025-04-28 18:20:39,680] DEBUG apps.reviews.serializers Validating review data: {'value': 5, 'text': 'negro1'}
+[2025-04-28 18:20:39,680] INFO apps.reviews.services.reviews_services Updating review 19, user=8
+[2025-04-28 18:20:39,693] WARNING apps.reviews.services.reviews_services Invalid product type <class 'NoneType'>, user=8
+[2025-04-28 18:20:39,694] ERROR apps.reviews.services.reviews_services Failed to update review 19: Поле product должно быть ID или объектом Product., user=8
+[2025-04-28 18:20:39,694] WARNING apps.reviews.utils Review error: Ошибка обновления отзыва: Поле product должно быть ID или объектом Product., user=8, path=/reviews/update/19/
+[2025-04-28 18:21:24,679] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-28 18:21:24,749] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:*
+[2025-04-28 18:21:24,749] INFO apps.reviews.views Like toggled for review=19: unliked, user=8
+[2025-04-28 18:21:26,073] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-28 18:21:26,093] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:*
+[2025-04-28 18:21:26,093] INFO apps.reviews.views Like toggled for review=19: liked, user=8
+[2025-04-28 18:21:29,801] INFO apps.reviews.views Fetching reviews for product=5, user=8, path=/reviews/5/
+[2025-04-28 18:21:29,803] DEBUG apps.core.services.cache_services Cache miss for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-28 18:21:29,804] INFO apps.reviews.services.reviews_services Fetching reviews for product=5, user=anonymous
+[2025-04-28 18:21:29,808] INFO apps.reviews.services.reviews_services Found 1 reviews for product=5
+[2025-04-28 18:21:29,821] INFO apps.reviews.views Retrieved 1 reviews for product=5, user=8
+[2025-04-28 18:21:36,422] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-28 18:21:36,428] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:*
+[2025-04-28 18:21:36,429] INFO apps.reviews.views Like toggled for review=19: unliked, user=8
+[2025-04-28 18:21:39,076] INFO apps.reviews.views Fetching reviews for product=5, user=8, path=/reviews/5/
+[2025-04-28 18:21:39,078] DEBUG apps.core.services.cache_services Cache miss for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-28 18:21:39,079] INFO apps.reviews.services.reviews_services Fetching reviews for product=5, user=anonymous
+[2025-04-28 18:21:39,084] INFO apps.reviews.services.reviews_services Found 1 reviews for product=5
+[2025-04-28 18:21:39,092] INFO apps.reviews.views Retrieved 1 reviews for product=5, user=8
+[2025-04-28 18:21:40,952] INFO apps.reviews.views Fetching reviews for product=5, user=8, path=/reviews/5/
+[2025-04-28 18:21:40,953] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-28 18:21:40,953] DEBUG apps.reviews.views Returning cached reviews for product=5
+[2025-04-28 18:22:08,867] INFO apps.reviews.views Fetching reviews for product=5, user=8, path=/reviews/5/
+[2025-04-28 18:22:08,873] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-28 18:24:20,039] INFO apps.reviews.views Updating review 19, user=8, path=/reviews/update/19/
+[2025-04-28 18:24:20,040] DEBUG apps.reviews.serializers Validating review data: {'value': 5, 'text': 'negro1'}
+[2025-04-28 18:24:20,040] INFO apps.reviews.services.reviews_services Updating review 19, user=8
+[2025-04-28 18:24:20,044] WARNING apps.reviews.services.reviews_services Invalid product type <class 'NoneType'>, user=8
+[2025-04-28 18:24:20,044] ERROR apps.reviews.services.reviews_services Failed to update review 19: Поле product должно быть ID или объектом Product., user=8
+[2025-04-28 18:24:20,044] WARNING apps.reviews.utils Review error: Ошибка обновления отзыва: Поле product должно быть ID или объектом Product., user=8, path=/reviews/update/19/
+[2025-04-28 18:25:20,337] INFO apps.reviews.views Updating review 19, user=8, path=/reviews/update/19/
+[2025-04-28 18:25:20,351] DEBUG apps.reviews.serializers Validating review data: {'product': <Product: Конфеты>, 'value': 5, 'text': 'negro1'}
+[2025-04-28 18:25:20,351] INFO apps.reviews.services.reviews_services Updating review 19, user=8
+[2025-04-28 18:25:20,357] INFO apps.reviews.models Updating review for product=5, user=8
+[2025-04-28 18:25:20,359] INFO apps.reviews.models Successfully updating review 19, user=8
+[2025-04-28 18:25:20,359] INFO apps.reviews.services.reviews_services Successfully updated review 19, user=8
+[2025-04-28 18:25:20,362] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:5:*
+[2025-04-28 18:25:20,362] INFO apps.reviews.views Updated review 19, user=8
+[2025-04-28 18:26:58,484] INFO apps.reviews.views Updating review 19, user=8, path=/reviews/update/19/
+[2025-04-28 18:26:58,489] DEBUG apps.reviews.serializers Validating review data: {'product': <Product: Конфеты>, 'value': 5, 'text': 'negro1'}
+[2025-04-28 18:26:58,489] INFO apps.reviews.services.reviews_services Updating review 19, user=8
+[2025-04-28 18:26:58,495] INFO apps.reviews.models Updating review for product=5, user=8
+[2025-04-28 18:26:58,496] INFO apps.reviews.models Successfully updating review 19, user=8
+[2025-04-28 18:26:58,496] INFO apps.reviews.services.reviews_services Successfully updated review 19, user=8
+[2025-04-28 18:26:58,502] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:5:*
+[2025-04-28 18:26:58,502] INFO apps.reviews.views Updated review 19, user=8
+[2025-04-28 18:27:23,163] INFO apps.reviews.views Updating review 19, user=8, path=/reviews/update/19/
+[2025-04-28 18:27:23,164] DEBUG apps.reviews.serializers Validating review data: {'value': 5, 'text': 'negro1'}
+[2025-04-28 18:27:23,164] INFO apps.reviews.services.reviews_services Updating review 19, user=8
+[2025-04-28 18:27:23,166] WARNING apps.reviews.services.reviews_services Invalid product type <class 'NoneType'>, user=8
+[2025-04-28 18:27:23,166] ERROR apps.reviews.services.reviews_services Failed to update review 19: Поле product должно быть ID или объектом Product., user=8
+[2025-04-28 18:27:23,167] WARNING apps.reviews.utils Review error: Ошибка обновления отзыва: Поле product должно быть ID или объектом Product., user=8, path=/reviews/update/19/
+[2025-04-28 18:27:25,316] INFO apps.reviews.views Updating review 19, user=8, path=/reviews/update/19/
+[2025-04-28 18:27:25,317] DEBUG apps.reviews.serializers Validating review data: {'value': 5, 'text': 'negro1'}
+[2025-04-28 18:27:25,317] INFO apps.reviews.services.reviews_services Updating review 19, user=8
+[2025-04-28 18:27:25,319] WARNING apps.reviews.services.reviews_services Invalid product type <class 'NoneType'>, user=8
+[2025-04-28 18:27:25,319] ERROR apps.reviews.services.reviews_services Failed to update review 19: Поле product должно быть ID или объектом Product., user=8
+[2025-04-28 18:27:25,320] WARNING apps.reviews.utils Review error: Ошибка обновления отзыва: Поле product должно быть ID или объектом Product., user=8, path=/reviews/update/19/
+[2025-04-28 18:29:02,586] INFO apps.reviews.views Updating review 19, user=8, path=/reviews/update/19/
+[2025-04-28 18:29:02,588] DEBUG apps.reviews.serializers Validating review data: {'value': 5, 'text': 'negro1'}
+[2025-04-28 18:29:02,588] INFO apps.reviews.services.reviews_services Updating review 19, user=8
+[2025-04-28 18:29:02,592] WARNING apps.reviews.services.reviews_services Invalid product type <class 'NoneType'>, user=8
+[2025-04-28 18:29:02,592] ERROR apps.reviews.services.reviews_services Failed to update review 19: Поле product должно быть ID или объектом Product., user=8
+[2025-04-28 18:29:02,592] WARNING apps.reviews.utils Review error: Ошибка обновления отзыва: Поле product должно быть ID или объектом Product., user=8, path=/reviews/update/19/
+[2025-04-28 18:29:26,409] INFO apps.reviews.views Updating review 19, user=8, path=/reviews/update/19/
+[2025-04-28 18:29:26,410] DEBUG apps.reviews.serializers Validating review data: {'value': 5, 'text': 'negro1'}
+[2025-04-28 18:29:26,410] INFO apps.reviews.services.reviews_services Updating review 19, user=8
+[2025-04-28 18:29:26,415] WARNING apps.reviews.services.reviews_services Invalid product type <class 'NoneType'>, user=8
+[2025-04-28 18:29:26,415] ERROR apps.reviews.services.reviews_services Failed to update review 19: Поле product должно быть ID или объектом Product., user=8
+[2025-04-28 18:29:26,415] WARNING apps.reviews.utils Review error: Ошибка обновления отзыва: Поле product должно быть ID или объектом Product., user=8, path=/reviews/update/19/
+[2025-04-28 18:29:45,143] INFO apps.reviews.views Updating review 19, user=8, path=/reviews/update/19/
+[2025-04-28 18:29:45,144] DEBUG apps.reviews.serializers Validating review data: {'value': 5, 'text': 'negro1'}
+[2025-04-28 18:29:45,144] INFO apps.reviews.services.reviews_services Updating review 19, user=8
+[2025-04-28 18:29:45,147] WARNING apps.reviews.services.reviews_services Invalid product type <class 'NoneType'>, user=8
+[2025-04-28 18:29:45,149] ERROR apps.reviews.services.reviews_services Failed to update review 19: Поле product должно быть ID или объектом Product., user=8
+[2025-04-28 18:29:45,149] WARNING apps.reviews.utils Review error: Ошибка обновления отзыва: Поле product должно быть ID или объектом Product., user=8, path=/reviews/update/19/
+[2025-04-28 18:33:21,059] INFO apps.reviews.views Updating review 19, user=8, path=/reviews/update/19/
+[2025-04-28 18:33:21,060] DEBUG apps.reviews.serializers Validating review data: {'value': 5, 'text': 'negro1'}
+[2025-04-28 18:33:21,060] INFO apps.reviews.services.reviews_services Updating review 19, user=8
+[2025-04-28 18:33:21,069] INFO apps.reviews.models Updating review for product=5, user=8
+[2025-04-28 18:33:21,070] INFO apps.reviews.models Successfully updating review 19, user=8
+[2025-04-28 18:33:21,070] INFO apps.reviews.services.reviews_services Successfully updated review 19, user=8
+[2025-04-28 18:33:21,076] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:5:*
+[2025-04-28 18:33:21,076] INFO apps.reviews.views Updated review 19, user=8
+[2025-04-28 18:33:40,633] INFO apps.reviews.views Fetching reviews for product=5, user=8, path=/reviews/5/
+[2025-04-28 18:33:40,634] DEBUG apps.core.services.cache_services Cache miss for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-28 18:33:40,634] INFO apps.reviews.services.reviews_services Fetching reviews for product=5, user=anonymous
+[2025-04-28 18:33:40,639] INFO apps.reviews.services.reviews_services Found 1 reviews for product=5
+[2025-04-28 18:33:40,649] INFO apps.reviews.views Retrieved 1 reviews for product=5, user=8
+[2025-04-28 18:40:59,967] INFO apps.reviews.views Updating review 19, user=8, path=/reviews/update/19/
+[2025-04-28 18:40:59,968] DEBUG apps.reviews.serializers Validating review data: {'value': 5, 'text': 'negro2'}
+[2025-04-28 18:40:59,968] INFO apps.reviews.services.reviews_services Updating review 19, user=8
+[2025-04-28 18:40:59,976] INFO apps.reviews.models Updating review for product=5, user=8
+[2025-04-28 18:40:59,977] INFO apps.reviews.models Successfully updating review 19, user=8
+[2025-04-28 18:40:59,977] INFO apps.reviews.services.reviews_services Successfully updated review 19, user=8
+[2025-04-28 18:40:59,983] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:5:*
+[2025-04-28 18:40:59,983] INFO apps.reviews.views Updated review 19, user=8
+[2025-04-28 18:41:12,106] INFO apps.reviews.views Fetching reviews for product=5, user=8, path=/reviews/5/
+[2025-04-28 18:41:12,107] DEBUG apps.core.services.cache_services Cache miss for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-28 18:41:12,107] INFO apps.reviews.services.reviews_services Fetching reviews for product=5, user=anonymous
+[2025-04-28 18:41:12,112] INFO apps.reviews.services.reviews_services Found 1 reviews for product=5
+[2025-04-28 18:41:12,121] INFO apps.reviews.views Retrieved 1 reviews for product=5, user=8
+[2025-04-28 18:41:26,326] INFO apps.reviews.views Updating review 15, user=8, path=/reviews/update/15/
+[2025-04-28 18:41:26,326] DEBUG apps.reviews.serializers Validating review data: {'value': 5, 'text': 'negro2'}
+[2025-04-28 18:41:26,326] INFO apps.reviews.services.reviews_services Updating review 15, user=8
+[2025-04-28 18:41:26,330] WARNING apps.reviews.services.reviews_services Permission denied for review 15, user=8
+[2025-04-28 18:41:26,330] ERROR apps.reviews.services.reviews_services Failed to update review 15: Только автор может обновить отзыв., user=8
+[2025-04-28 18:41:26,330] WARNING apps.reviews.utils Review error: Ошибка обновления отзыва: Только автор может обновить отзыв., user=8, path=/reviews/update/15/
+[2025-04-28 18:41:33,495] INFO apps.reviews.views Updating review 157, user=8, path=/reviews/update/157/
+[2025-04-28 18:41:33,495] DEBUG apps.reviews.serializers Validating review data: {'value': 5, 'text': 'negro2'}
+[2025-04-28 18:41:33,495] INFO apps.reviews.services.reviews_services Updating review 157, user=8
+[2025-04-28 18:41:33,497] WARNING apps.reviews.services.reviews_services Review 157 not found, user=8
+[2025-04-28 18:41:33,497] WARNING apps.reviews.utils Review error: Отзыв не найден., user=8, path=/reviews/update/157/
+[2025-04-28 18:42:48,238] INFO apps.reviews.views Updating review 19, user=8, path=/reviews/update/19/
+[2025-04-28 18:42:48,239] DEBUG apps.reviews.serializers Validating review data: {'value': 5, 'text': 'negro2'}
+[2025-04-28 18:42:48,239] INFO apps.reviews.services.reviews_services Updating review 19, user=8
+[2025-04-28 18:42:48,246] INFO apps.reviews.models Updating review for product=5, user=8
+[2025-04-28 18:42:48,246] INFO apps.reviews.models Successfully updating review 19, user=8
+[2025-04-28 18:42:48,247] INFO apps.reviews.services.reviews_services Successfully updated review 19, user=8
+[2025-04-28 18:42:48,249] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:5:*
+[2025-04-28 18:42:48,249] INFO apps.reviews.views Updated review 19, user=8
+[2025-04-28 18:42:51,661] INFO apps.reviews.views Fetching reviews for product=5, user=8, path=/reviews/5/
+[2025-04-28 18:42:51,662] DEBUG apps.core.services.cache_services Cache miss for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-28 18:42:51,663] INFO apps.reviews.services.reviews_services Fetching reviews for product=5, user=anonymous
+[2025-04-28 18:42:51,668] INFO apps.reviews.services.reviews_services Found 1 reviews for product=5
+[2025-04-28 18:42:51,676] INFO apps.reviews.views Retrieved 1 reviews for product=5, user=8
+[2025-04-28 18:42:56,359] INFO apps.reviews.views Fetching reviews for product=5, user=8, path=/reviews/5/
+[2025-04-28 18:42:56,360] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-28 18:43:21,941] INFO apps.reviews.views Creating review, user=8, path=/reviews/create/
+[2025-04-28 18:43:21,945] DEBUG apps.reviews.serializers Validating review data: {'product': <Product: Молоко>, 'value': 5}
+[2025-04-28 18:43:21,945] INFO apps.reviews.services.reviews_services Creating review for product=Молоко, user=8
+[2025-04-28 18:43:21,949] INFO apps.reviews.models Creating review for product=6, user=8
+[2025-04-28 18:43:21,985] INFO apps.reviews.models Successfully creating review 20, user=8
+[2025-04-28 18:43:21,985] INFO apps.reviews.services.reviews_services Successfully created review 20, user=8
+[2025-04-28 18:43:21,987] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:6:*
+[2025-04-28 18:43:21,987] INFO apps.reviews.views Created review 20, user=8
+[2025-04-28 18:43:27,611] INFO apps.reviews.views Fetching reviews for product=6, user=8, path=/reviews/6/
+[2025-04-28 18:43:27,612] DEBUG apps.core.services.cache_services Cache miss for key: reviews:6:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-28 18:43:27,612] INFO apps.reviews.services.reviews_services Fetching reviews for product=6, user=anonymous
+[2025-04-28 18:43:27,617] INFO apps.reviews.services.reviews_services Found 1 reviews for product=6
+[2025-04-28 18:43:27,624] INFO apps.reviews.views Retrieved 1 reviews for product=6, user=8
+[2025-04-28 18:43:33,563] INFO apps.reviews.views Fetching reviews for product=5, user=8, path=/reviews/5/
+[2025-04-28 18:43:33,565] DEBUG apps.core.services.cache_services Cache hit for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-28 18:43:38,804] INFO apps.reviews.views Toggling like for review=19, user=8, path=/reviews/19/like/
+[2025-04-28 18:43:38,813] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:*
+[2025-04-28 18:43:38,813] INFO apps.reviews.views Like toggled for review=19: liked, user=8
+[2025-04-28 18:43:42,190] INFO apps.reviews.views Fetching reviews for product=5, user=8, path=/reviews/5/
+[2025-04-28 18:43:42,192] DEBUG apps.core.services.cache_services Cache miss for key: reviews:5:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-28 18:43:42,192] INFO apps.reviews.services.reviews_services Fetching reviews for product=5, user=anonymous
+[2025-04-28 18:43:42,197] INFO apps.reviews.services.reviews_services Found 1 reviews for product=5
+[2025-04-28 18:43:42,205] INFO apps.reviews.views Retrieved 1 reviews for product=5, user=8
+[2025-04-28 18:43:47,613] INFO apps.reviews.views Fetching reviews for product=6, user=8, path=/reviews/6/
+[2025-04-28 18:43:47,615] DEBUG apps.core.services.cache_services Cache miss for key: reviews:6:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-28 18:43:47,615] INFO apps.reviews.services.reviews_services Fetching reviews for product=6, user=anonymous
+[2025-04-28 18:43:47,620] INFO apps.reviews.services.reviews_services Found 1 reviews for product=6
+[2025-04-28 18:43:47,627] INFO apps.reviews.views Retrieved 1 reviews for product=6, user=8
+[2025-04-28 18:43:55,688] INFO apps.reviews.views Toggling like for review=20, user=8, path=/reviews/20/like/
+[2025-04-28 18:43:55,696] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:*
+[2025-04-28 18:43:55,696] INFO apps.reviews.views Like toggled for review=20: liked, user=8
+[2025-04-28 18:43:58,857] INFO apps.reviews.views Fetching reviews for product=6, user=8, path=/reviews/6/
+[2025-04-28 18:43:58,858] DEBUG apps.core.services.cache_services Cache miss for key: reviews:6:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-28 18:43:58,858] INFO apps.reviews.services.reviews_services Fetching reviews for product=6, user=anonymous
+[2025-04-28 18:43:58,863] INFO apps.reviews.services.reviews_services Found 1 reviews for product=6
+[2025-04-28 18:43:58,872] INFO apps.reviews.views Retrieved 1 reviews for product=6, user=8
