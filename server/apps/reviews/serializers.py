@@ -2,6 +2,8 @@ import logging
 from rest_framework import serializers
 from apps.reviews.models import Review
 from apps.reviews.exceptions import InvalidReviewData
+from apps.products.models import Product
+from django.contrib.contenttypes.models import ContentType
 
 logger = logging.getLogger(__name__)
 
@@ -9,9 +11,15 @@ logger = logging.getLogger(__name__)
 class ReviewSerializer(serializers.ModelSerializer):
     """Сериализатор для отображения отзывов.
 
-    Преобразует объекты Review в JSON, включая данные о пользователе и лайках.
+    Преобразует объекты Review в JSON, включая данные о пользователе, продукте и количестве лайков.
+
+    Атрибуты:
+        user (StringRelatedField): Имя пользователя-автора отзыва.
+        product (StringRelatedField): Название продукта.
+        likes_count (SerializerMethodField): Количество лайков отзыва.
     """
     user = serializers.StringRelatedField()
+    product = serializers.StringRelatedField()
     likes_count = serializers.SerializerMethodField()
 
     class Meta:
@@ -23,34 +31,20 @@ class ReviewSerializer(serializers.ModelSerializer):
         """Возвращает количество лайков для отзыва.
 
         Args:
-            obj: Объект отзыва.
+            obj (Review): Объект отзыва.
 
         Returns:
             int: Количество лайков.
         """
         return obj.likes.count()
 
-    def validate(self, attrs):
-        """Проверка корректности данных перед сериализацией.
-
-        Args:
-            attrs (dict): Данные для сериализации.
-
-        Returns:
-            dict: Валидированные данные.
-
-        Raises:
-            InvalidReviewData: Если оценка вне диапазона 1-5.
-        """
-        logger.debug(f"Validating review data: {attrs}")
-        if 'value' in attrs and (attrs['value'] < 1 or attrs['value'] > 5):
-            logger.warning(f"Invalid review value {attrs['value']}")
-            raise InvalidReviewData("Оценка должна быть от 1 до 5.")
-        return attrs
-
 
 class ReviewCreateSerializer(serializers.ModelSerializer):
-    """Сериализатор для создания отзывов."""
+    """Сериализатор для создания и обновления отзывов.
+
+    Проверяет и обрабатывает данные для создания или обновления отзывов, включая изображения.
+    """
+    image = serializers.ImageField(required=False, allow_null=True)
 
     class Meta:
         model = Review
@@ -58,19 +52,35 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
         read_only_fields = []
 
     def validate(self, attrs):
-        """Проверка данных для создания отзыва.
+        """Проверяет данные для создания или обновления отзыва.
+
+        Убеждается, что оценка корректна, продукт существует, текст не слишком длинный и изображение валидно.
 
         Args:
-            attrs (dict): Данные для создания отзыва.
+            attrs (dict): Данные для проверки.
 
         Returns:
-            dict: Валидированные данные.
+            dict: Проверенные данные.
 
         Raises:
-            InvalidReviewData: Если оценка вне диапазона 1-5.
+            InvalidReviewData: Если данные некорректны (оценка, текст, изображение).
         """
         logger.debug(f"Validating review creation data: {attrs}")
-        if attrs['value'] < 1 or attrs['value'] > 5:
-            logger.warning(f"Invalid review value {attrs['value']}")
-            raise InvalidReviewData("Оценка должна быть от 1 до 5.")
+        value = attrs.get('value')
+        if not isinstance(value, int) or value < 1 or value > 5:
+            logger.warning(f"Invalid review value {value}")
+            raise InvalidReviewData("Оценка должна быть целым числом от 1 до 5.")
+
+        text = attrs.get('text', '')
+        if text and len(text.strip()) > 1000:
+            logger.warning("Review text too long")
+            raise InvalidReviewData("Текст отзыва не должен превышать 1000 символов.")
+
+        image = attrs.get('image')
+        if image:
+            # Проверка размера изображения
+            max_size = 5 * 1024 * 1024  # 5 MB
+            if image.size > max_size:
+                logger.warning(f"Image size {image.size} exceeds limit {max_size}")
+                raise InvalidReviewData("Изображение не должно превышать 5 МБ.")
         return attrs

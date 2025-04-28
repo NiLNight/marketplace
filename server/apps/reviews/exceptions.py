@@ -3,19 +3,19 @@ from rest_framework.exceptions import APIException
 
 class ReviewException(APIException):
     """Базовое исключение для операций с отзывами."""
-    default_detail = 'Ошибка отзыва'
     status_code = 400
-
-    def __init__(self, detail=None):
-        self.detail = detail or self.default_detail
+    default_detail = 'Ошибка отзыва'
+    default_code = 'review_error'
 
 
 class ReviewNotFound(ReviewException):
-    """Исключение, если отзыв не найден."""
-    default_detail = 'Отзыв не найден'
+    """Исключение, вызываемое при отсутствии отзыва."""
     status_code = 404
+    default_detail = 'Отзыв не найден'
+    default_code = 'not_found'
 
 
 class InvalidReviewData(ReviewException):
-    """Исключение, если данные отзыва некорректны."""
+    """Исключение, вызываемое при некорректных данных отзыва."""
     default_detail = 'Некорректные данные отзыва'
+    default_code = 'invalid_data'

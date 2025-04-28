@@ -3,7 +3,7 @@ from django.contrib.postgres.indexes import GinIndex, HashIndex
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from mptt.models import MPTTModel, TreeForeignKey
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, FileExtensionValidator
 
 from django.utils.translation import gettext_lazy as _
 
@@ -65,7 +65,8 @@ class Product(TimeStampedModel):
         upload_to='images/products/%Y/%m/%d',
         default='images/products/default.png',
         blank=True,
-        editable=False
+        editable=False,
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp', 'gif'])]
     )
     is_active = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='products')
