@@ -1803,3 +1803,27 @@ LINE 1: ..."."content_type_id", "core_like"."object_id" FROM "core_like...
 [2025-04-29 15:06:57,364] DEBUG apps.core.services.cache_services Cache hit for key: product_detail:4
 [2025-04-29 15:16:16,502] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
 [2025-04-29 15:16:20,285] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-29 15:21:00,314] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-29 15:21:01,530] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-29 15:40:04,494] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-04-29 15:40:17,674] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-29 15:40:30,972] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-29 15:40:32,025] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-29 15:40:44,328] DEBUG apps.core.services.cache_services Cache miss for key: product_list:0d98d7faabea2b36a7af195635cbca69
+[2025-04-29 16:05:36,561] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-04-29 16:05:42,572] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-29 16:08:07,960] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-29 16:08:56,768] INFO apps.products.views Retrieving product list, user=8, path=/products/list/
+[2025-04-29 16:08:56,775] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-29 16:09:04,265] INFO apps.products.views Retrieving product list, user=8, path=/products/list/
+[2025-04-29 16:09:04,267] DEBUG apps.core.services.cache_services Cache miss for key: product_list:0d98d7faabea2b36a7af195635cbca69
+[2025-04-29 16:09:04,267] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-04-29 16:09:04,268] DEBUG apps.products.services.query_services Applying filters with params={'category': '1', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-04-29 16:09:04,268] DEBUG apps.products.services.query_services Filtering by category_id=1
+[2025-04-29 16:09:04,271] DEBUG apps.products.services.query_services Filtering by price with params={'category': '1', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-04-29 16:09:04,271] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-04-29 16:09:04,271] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-04-29 16:09:04,272] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-04-29 16:09:04,289] INFO apps.products.views Retrieved 20 products, user=8
+[2025-04-29 16:10:02,840] INFO apps.products.views Retrieving product 4, user=8, path=/products/4/
+[2025-04-29 16:10:02,841] DEBUG apps.core.services.cache_services Cache hit for key: product_detail:4

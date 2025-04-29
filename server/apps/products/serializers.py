@@ -77,16 +77,15 @@ class ProductListSerializer(serializers.ModelSerializer):
 class ProductCreateSerializer(serializers.ModelSerializer):
     """Сериализатор для создания и обновления продуктов.
 
-    Включает валидацию и скрытое поле user.
+    Включает валидацию validated_data.
     """
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
 
     class Meta:
         model = Product
         fields = [
             'title', 'description', 'price', 'discount',
-            'stock', 'thumbnail', 'category', 'user'
+            'stock', 'thumbnail', 'category'
         ]
         extra_kwargs = {
             'discount': {

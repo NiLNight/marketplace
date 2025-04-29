@@ -28,14 +28,25 @@ logger = logging.getLogger(__name__)
 
 
 class ProductPagination(PageNumberPagination):
-    """Настройки пагинации для списков продуктов."""
+    """Настройки пагинации для списков продуктов.
+
+    Attributes:
+        page_size (int): Количество продуктов на странице по умолчанию (20).
+        max_page_size (int): Максимальное количество продуктов на странице (100), чтобы ограничить нагрузку.
+        page_size_query_param (str): Параметр запроса для изменения размера страницы (например, 'page_size=50').
+    """
     page_size = 20
     max_page_size = 100
     page_size_query_param = 'page_size'
 
 
 class BaseProductView(APIView):
-    """Базовый класс для представлений продуктов."""
+    """Базовый класс для представлений приложения products.
+
+    Attributes:
+        pagination_class (ProductPagination): Класс пагинации для списков продуктов.
+        CACHE_TIMEOUT (int): Время жизни кэша в секундах (15 минут), используемое для кэширования ответов.
+    """
     pagination_class = ProductPagination
     CACHE_TIMEOUT = 60 * 15  # 15 минут
 
@@ -120,41 +131,6 @@ class ProductListView(BaseProductView):
             raise ProductServiceException(f"Ошибка получения списка продуктов: {str(e)}")
 
 
-class ProductCreateView(BaseProductView):
-    """Представление для создания нового продукта."""
-    serializer_class = ProductCreateSerializer
-    permission_classes = [IsAuthenticated]
-
-    @handle_api_errors
-    def post(self, request: Any) -> Response:
-        """Обрабатывает POST-запрос для создания продукта.
-
-        Args:
-            request: HTTP-запрос с данными продукта.
-
-        Returns:
-            Response с данными созданного продукта.
-
-        Raises:
-            InvalidProductData: Если данные некорректны.
-        """
-        user_id = request.user.id if request.user.is_authenticated else 'anonymous'
-        logger.info(f"Creating product, user={user_id}, path={request.path}")
-        try:
-            serializer = self.serializer_class(data=request.data, context={'request': request})
-            serializer.is_valid(raise_exception=True)
-            product = ProductServices.create_product(serializer.validated_data, request.user)
-            CacheService.invalidate_cache(prefix="product_list")
-            logger.info(f"Successfully created product {product.id}, user={user_id}")
-            return Response(
-                ProductDetailSerializer(product).data,
-                status=status.HTTP_201_CREATED
-            )
-        except Exception as e:
-            logger.error(f"Failed to create product: {str(e)}, user={user_id}")
-            raise InvalidProductData(f"Ошибка создания продукта: {str(e)}")
-
-
 class ProductDetailView(BaseProductView):
     """Представление для получения детальной информации о продукте."""
     serializer_class = ProductDetailSerializer
@@ -190,6 +166,41 @@ class ProductDetailView(BaseProductView):
         except Exception as e:
             logger.error(f"Failed to retrieve product {pk}: {str(e)}, user={user_id}")
             raise ProductNotFound(f"Ошибка получения продукта: {str(e)}")
+
+
+class ProductCreateView(BaseProductView):
+    """Представление для создания нового продукта."""
+    serializer_class = ProductCreateSerializer
+    permission_classes = [IsAuthenticated]
+
+    @handle_api_errors
+    def post(self, request: Any) -> Response:
+        """Обрабатывает POST-запрос для создания продукта.
+
+        Args:
+            request: HTTP-запрос с данными продукта.
+
+        Returns:
+            Response с данными созданного продукта.
+
+        Raises:
+            InvalidProductData: Если данные некорректны.
+        """
+        user_id = request.user.id if request.user.is_authenticated else 'anonymous'
+        logger.info(f"Creating product, user={user_id}, path={request.path}")
+        try:
+            serializer = self.serializer_class(data=request.data, context={'request': request})
+            serializer.is_valid(raise_exception=True)
+            product = ProductServices.create_product(serializer.validated_data, request.user)
+            CacheService.invalidate_cache(prefix="product_list")
+            logger.info(f"Successfully created product {product.id}, user={user_id}")
+            return Response(
+                ProductDetailSerializer(product).data,
+                status=status.HTTP_201_CREATED
+            )
+        except Exception as e:
+            logger.error(f"Failed to create product: {str(e)}, user={user_id}")
+            raise InvalidProductData(f"Ошибка создания продукта: {str(e)}")
 
 
 class ProductUpdateView(BaseProductView):
