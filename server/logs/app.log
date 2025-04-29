@@ -1790,3 +1790,16 @@ LINE 1: ..."."content_type_id", "core_like"."object_id" FROM "core_like...
 [2025-04-28 18:43:58,858] INFO apps.reviews.services.reviews_services Fetching reviews for product=6, user=anonymous
 [2025-04-28 18:43:58,863] INFO apps.reviews.services.reviews_services Found 1 reviews for product=6
 [2025-04-28 18:43:58,872] INFO apps.reviews.views Retrieved 1 reviews for product=6, user=8
+[2025-04-29 15:02:01,943] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-29 15:02:11,805] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-29 15:02:22,777] DEBUG apps.core.services.cache_services Cache miss for key: product_list:0d98d7faabea2b36a7af195635cbca69
+[2025-04-29 15:02:30,370] DEBUG apps.core.services.cache_services Cache hit for key: product_list:0d98d7faabea2b36a7af195635cbca69
+[2025-04-29 15:05:51,956] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-29 15:05:54,735] DEBUG apps.core.services.cache_services Cache hit for key: product_list:0d98d7faabea2b36a7af195635cbca69
+[2025-04-29 15:06:17,334] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-04-29 15:06:31,991] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-29 15:06:34,058] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-29 15:06:54,436] DEBUG apps.core.services.cache_services Cache miss for key: product_detail:4
+[2025-04-29 15:06:57,364] DEBUG apps.core.services.cache_services Cache hit for key: product_detail:4
+[2025-04-29 15:16:16,502] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-29 15:16:20,285] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
