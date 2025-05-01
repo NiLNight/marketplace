@@ -1827,3 +1827,220 @@ LINE 1: ..."."content_type_id", "core_like"."object_id" FROM "core_like...
 [2025-04-29 16:09:04,289] INFO apps.products.views Retrieved 20 products, user=8
 [2025-04-29 16:10:02,840] INFO apps.products.views Retrieving product 4, user=8, path=/products/4/
 [2025-04-29 16:10:02,841] DEBUG apps.core.services.cache_services Cache hit for key: product_detail:4
+[2025-04-29 16:11:42,427] INFO apps.products.views Creating product, user=8, path=/products/create/
+[2025-04-29 16:11:42,433] DEBUG apps.products.serializers Validating product data: {'title': 'Мороженое', 'description': 'Морожкаа', 'price': Decimal('56.00'), 'discount': Decimal('5.00'), 'stock': 1500, 'category': <Category: Ягоды>}
+[2025-04-29 16:11:42,433] INFO apps.products.services.product_services Creating product with data={'title': 'Мороженое', 'description': 'Морожкаа', 'price': Decimal('56.00'), 'discount': Decimal('5.00'), 'stock': 1500, 'category': <Category: Ягоды>}, user=8
+[2025-04-29 16:11:42,440] INFO apps.products.models Creating product with title=Мороженое, user=8
+[2025-04-29 16:11:42,445] INFO apps.products.models Successfully creating product 119, user=8
+[2025-04-29 16:11:42,445] INFO apps.products.services.product_services Successfully created product 119, user=8
+[2025-04-29 16:11:42,453] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-04-29 16:11:42,453] INFO apps.products.views Successfully created product 119, user=8
+[2025-04-29 16:11:42,454] DEBUG apps.products.serializers Retrieving children for category 4
+[2025-04-29 16:12:33,147] INFO apps.products.views Retrieving product list, user=8, path=/products/list/
+[2025-04-29 16:12:33,148] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-29 16:12:33,148] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-04-29 16:12:33,148] DEBUG apps.products.services.query_services Applying filters with params={}
+[2025-04-29 16:12:33,148] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-04-29 16:12:33,148] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-04-29 16:12:33,149] DEBUG apps.products.services.query_services Applying ordering with sort_by=None
+[2025-04-29 16:12:33,163] INFO apps.products.views Retrieved 20 products, user=8
+[2025-04-29 16:13:04,573] INFO apps.products.views Updating product 115, user=8, path=/products/115/update/
+[2025-04-29 16:13:04,573] INFO apps.products.services.query_services Retrieving product with pk=115
+[2025-04-29 16:13:04,573] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-04-29 16:13:04,574] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-04-29 16:13:04,582] INFO apps.products.services.query_services Successfully retrieved product 115
+[2025-04-29 16:13:04,582] DEBUG apps.products.permissions Checking permissions for user=8, obj=Мороженое
+[2025-04-29 16:13:04,583] WARNING apps.products.permissions Permission denied for user=8, obj=Мороженое
+[2025-04-29 16:13:04,583] ERROR apps.products.views Failed to update product 115: У вас недостаточно прав для выполнения данного действия., user=8
+[2025-04-29 16:13:04,583] WARNING apps.products.utils Product error: Ошибка обновления продукта: У вас недостаточно прав для выполнения данного действия., user=8, path=/products/115/update/
+[2025-04-29 16:13:12,831] INFO apps.products.views Updating product 116, user=8, path=/products/116/update/
+[2025-04-29 16:13:12,831] INFO apps.products.services.query_services Retrieving product with pk=116
+[2025-04-29 16:13:12,831] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-04-29 16:13:12,831] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-04-29 16:13:12,838] WARNING apps.products.services.query_services Product 116 not found
+[2025-04-29 16:13:12,838] ERROR apps.products.views Failed to update product 116: Продукт не найден., user=8
+[2025-04-29 16:13:12,838] WARNING apps.products.utils Product error: Ошибка обновления продукта: Продукт не найден., user=8, path=/products/116/update/
+[2025-04-29 16:14:45,885] INFO apps.products.views Retrieving product list, user=8, path=/products/list/
+[2025-04-29 16:14:45,887] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-29 16:14:51,585] INFO apps.products.views Retrieving product list, user=8, path=/products/list/
+[2025-04-29 16:14:51,586] DEBUG apps.core.services.cache_services Cache miss for key: product_list:0d98d7faabea2b36a7af195635cbca69
+[2025-04-29 16:14:51,586] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-04-29 16:14:51,587] DEBUG apps.products.services.query_services Applying filters with params={'category': '1', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-04-29 16:14:51,587] DEBUG apps.products.services.query_services Filtering by category_id=1
+[2025-04-29 16:14:51,589] DEBUG apps.products.services.query_services Filtering by price with params={'category': '1', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-04-29 16:14:51,590] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-04-29 16:14:51,590] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-04-29 16:14:51,590] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-04-29 16:14:51,603] INFO apps.products.views Retrieved 20 products, user=8
+[2025-04-29 16:14:58,230] INFO apps.products.views Retrieving product list, user=8, path=/products/list/
+[2025-04-29 16:14:58,231] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-29 16:15:06,436] INFO apps.products.views Creating product, user=8, path=/products/create/
+[2025-04-29 16:15:06,439] DEBUG apps.products.serializers Validating product data: {'title': 'Мороженое', 'description': 'Морожкаа', 'price': Decimal('56.00'), 'discount': Decimal('5.00'), 'stock': 1500, 'category': <Category: Ягоды>}
+[2025-04-29 16:15:06,439] INFO apps.products.services.product_services Creating product with data={'title': 'Мороженое', 'description': 'Морожкаа', 'price': Decimal('56.00'), 'discount': Decimal('5.00'), 'stock': 1500, 'category': <Category: Ягоды>}, user=8
+[2025-04-29 16:15:06,443] INFO apps.products.models Creating product with title=Мороженое, user=8
+[2025-04-29 16:15:06,448] INFO apps.products.models Successfully creating product 120, user=8
+[2025-04-29 16:15:06,448] INFO apps.products.services.product_services Successfully created product 120, user=8
+[2025-04-29 16:15:06,450] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-04-29 16:15:06,450] INFO apps.products.views Successfully created product 120, user=8
+[2025-04-29 16:15:06,451] DEBUG apps.products.serializers Retrieving children for category 4
+[2025-04-29 16:15:10,071] INFO apps.products.views Retrieving product list, user=8, path=/products/list/
+[2025-04-29 16:15:10,072] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-04-29 16:15:10,072] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-04-29 16:15:10,073] DEBUG apps.products.services.query_services Applying filters with params={}
+[2025-04-29 16:15:10,073] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-04-29 16:15:10,073] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-04-29 16:15:10,073] DEBUG apps.products.services.query_services Applying ordering with sort_by=None
+[2025-04-29 16:15:10,087] INFO apps.products.views Retrieved 20 products, user=8
+[2025-04-29 16:15:17,975] INFO apps.products.views Updating product 116, user=8, path=/products/116/update/
+[2025-04-29 16:15:17,975] INFO apps.products.services.query_services Retrieving product with pk=116
+[2025-04-29 16:15:17,975] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-04-29 16:15:17,975] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-04-29 16:15:17,982] INFO apps.products.services.query_services Successfully retrieved product 116
+[2025-04-29 16:15:17,982] DEBUG apps.products.permissions Checking permissions for user=8, obj=Мороженое
+[2025-04-29 16:15:17,986] INFO apps.products.services.product_services Updating product 116, user=8
+[2025-04-29 16:15:17,988] INFO apps.products.models Updating product with title=Мёд, user=8
+[2025-04-29 16:15:17,993] INFO apps.products.models Successfully updating product 116, user=8
+[2025-04-29 16:15:17,993] INFO apps.products.services.product_services Successfully updated product 116, user=8
+[2025-04-29 16:15:17,993] INFO apps.core.services.cache_services Invalidated cache for key: product_detail:116
+[2025-04-29 16:15:17,995] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-04-29 16:15:17,995] INFO apps.products.views Successfully updated product 116, user=8
+[2025-04-29 16:15:17,996] DEBUG apps.products.serializers Retrieving children for category 9
+[2025-05-01 14:59:16,451] INFO apps.products.views Retrieving product list, user=11, path=/products/list/
+[2025-05-01 14:59:16,481] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-01 14:59:16,481] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-01 14:59:16,481] DEBUG apps.products.services.query_services Applying filters with params={}
+[2025-05-01 14:59:16,481] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-01 14:59:16,482] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-01 14:59:16,482] DEBUG apps.products.services.query_services Applying ordering with sort_by=None
+[2025-05-01 14:59:16,665] INFO apps.products.views Retrieved 20 products, user=11
+[2025-05-01 14:59:26,913] INFO apps.products.views Retrieving product list, user=11, path=/products/list/
+[2025-05-01 14:59:26,914] DEBUG apps.core.services.cache_services Cache miss for key: product_list:0d98d7faabea2b36a7af195635cbca69
+[2025-05-01 14:59:26,914] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-01 14:59:26,915] DEBUG apps.products.services.query_services Applying filters with params={'category': '1', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-01 14:59:26,915] DEBUG apps.products.services.query_services Filtering by category_id=1
+[2025-05-01 14:59:26,925] DEBUG apps.products.services.query_services Filtering by price with params={'category': '1', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-01 14:59:26,925] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-01 14:59:26,925] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-01 14:59:26,926] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-01 14:59:26,942] INFO apps.products.views Retrieved 20 products, user=11
+[2025-05-01 15:00:02,344] INFO apps.products.views Retrieving product 4, user=11, path=/products/4/
+[2025-05-01 15:00:02,346] DEBUG apps.core.services.cache_services Cache miss for key: product_detail:4
+[2025-05-01 15:00:02,346] INFO apps.products.services.query_services Retrieving product with pk=4
+[2025-05-01 15:00:02,346] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-01 15:00:02,346] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-01 15:00:02,370] INFO apps.products.services.query_services Successfully retrieved product 4
+[2025-05-01 15:00:02,373] DEBUG apps.products.serializers Retrieving children for category 2
+[2025-05-01 15:00:02,392] INFO apps.products.views Successfully retrieved product 4, user=11
+[2025-05-01 15:00:10,524] INFO apps.products.views Updating product 116, user=11, path=/products/116/update/
+[2025-05-01 15:00:10,524] INFO apps.products.services.query_services Retrieving product with pk=116
+[2025-05-01 15:00:10,524] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-01 15:00:10,525] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-01 15:00:10,534] INFO apps.products.services.query_services Successfully retrieved product 116
+[2025-05-01 15:00:10,534] DEBUG apps.products.permissions Checking permissions for user=11, obj=Мёд
+[2025-05-01 15:00:10,543] WARNING apps.products.permissions Permission denied for user=11, obj=Мёд
+[2025-05-01 15:00:10,544] ERROR apps.products.views Failed to update product 116: У вас недостаточно прав для выполнения данного действия., user=11
+[2025-05-01 15:00:10,544] WARNING apps.products.utils Product error: Ошибка обновления продукта: У вас недостаточно прав для выполнения данного действия., user=11, path=/products/116/update/
+[2025-05-01 15:00:25,951] INFO apps.products.views Deleting product 60, user=11, path=/products/60/delete/
+[2025-05-01 15:00:25,951] INFO apps.products.services.query_services Retrieving product with pk=60
+[2025-05-01 15:00:25,951] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-01 15:00:25,951] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-01 15:00:25,959] WARNING apps.products.services.query_services Product 60 not found
+[2025-05-01 15:00:25,960] ERROR apps.products.views Failed to delete product 60: Продукт не найден., user=11
+[2025-05-01 15:00:25,960] WARNING apps.products.utils Product error: Ошибка удаления продукта: Продукт не найден., user=11, path=/products/60/delete/
+[2025-05-01 15:00:32,806] INFO apps.products.views Deleting product 50, user=11, path=/products/50/delete/
+[2025-05-01 15:00:32,806] INFO apps.products.services.query_services Retrieving product with pk=50
+[2025-05-01 15:00:32,806] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-01 15:00:32,806] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-01 15:00:32,814] INFO apps.products.services.query_services Successfully retrieved product 50
+[2025-05-01 15:00:32,816] DEBUG apps.products.permissions Checking permissions for user=11, obj=Клюква
+[2025-05-01 15:00:32,817] WARNING apps.products.permissions Permission denied for user=11, obj=Клюква
+[2025-05-01 15:00:32,817] ERROR apps.products.views Failed to delete product 50: У вас недостаточно прав для выполнения данного действия., user=11
+[2025-05-01 15:00:32,817] WARNING apps.products.utils Product error: Ошибка удаления продукта: У вас недостаточно прав для выполнения данного действия., user=11, path=/products/50/delete/
+[2025-05-01 15:01:07,443] INFO apps.reviews.views Fetching reviews for product=6, user=11, path=/reviews/6/
+[2025-05-01 15:01:07,458] DEBUG apps.core.services.cache_services Cache miss for key: reviews:6:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-01 15:01:07,458] INFO apps.reviews.services.reviews_services Fetching reviews for product=6, user=anonymous
+[2025-05-01 15:01:07,503] INFO apps.reviews.services.reviews_services Found 1 reviews for product=6
+[2025-05-01 15:01:07,578] INFO apps.reviews.views Retrieved 1 reviews for product=6, user=11
+[2025-05-01 15:02:01,181] INFO apps.reviews.views Creating review, user=11, path=/reviews/create/
+[2025-05-01 15:02:01,185] DEBUG apps.reviews.serializers Validating review data: {'product': <Product: Курица>, 'value': 5, 'text': 'фигня'}
+[2025-05-01 15:02:01,185] INFO apps.reviews.services.reviews_services Creating review for product=Курица, user=11
+[2025-05-01 15:02:01,207] INFO apps.reviews.models Creating review for product=7, user=11
+[2025-05-01 15:02:01,264] INFO apps.reviews.models Successfully creating review 21, user=11
+[2025-05-01 15:02:01,264] INFO apps.reviews.services.reviews_services Successfully created review 21, user=11
+[2025-05-01 15:02:01,267] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:7:*
+[2025-05-01 15:02:01,267] INFO apps.reviews.views Created review 21, user=11
+[2025-05-01 15:02:09,981] INFO apps.reviews.views Fetching reviews for product=7, user=11, path=/reviews/7/
+[2025-05-01 15:02:09,982] DEBUG apps.core.services.cache_services Cache miss for key: reviews:7:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-01 15:02:09,982] INFO apps.reviews.services.reviews_services Fetching reviews for product=7, user=anonymous
+[2025-05-01 15:02:09,988] INFO apps.reviews.services.reviews_services Found 1 reviews for product=7
+[2025-05-01 15:02:09,996] INFO apps.reviews.views Retrieved 1 reviews for product=7, user=11
+[2025-05-01 15:02:40,624] INFO apps.reviews.views Toggling like for review=21, user=11, path=/reviews/21/like/
+[2025-05-01 15:02:40,670] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:*
+[2025-05-01 15:02:40,670] INFO apps.reviews.views Like toggled for review=21: liked, user=11
+[2025-05-01 15:02:44,858] INFO apps.reviews.views Fetching reviews for product=7, user=11, path=/reviews/7/
+[2025-05-01 15:02:44,859] DEBUG apps.core.services.cache_services Cache miss for key: reviews:7:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-01 15:02:44,859] INFO apps.reviews.services.reviews_services Fetching reviews for product=7, user=anonymous
+[2025-05-01 15:02:44,865] INFO apps.reviews.services.reviews_services Found 1 reviews for product=7
+[2025-05-01 15:02:44,873] INFO apps.reviews.views Retrieved 1 reviews for product=7, user=11
+[2025-05-01 15:02:51,150] INFO apps.reviews.views Toggling like for review=21, user=11, path=/reviews/21/like/
+[2025-05-01 15:02:51,158] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:*
+[2025-05-01 15:02:51,158] INFO apps.reviews.views Like toggled for review=21: unliked, user=11
+[2025-05-01 15:02:53,748] INFO apps.reviews.views Toggling like for review=21, user=11, path=/reviews/21/like/
+[2025-05-01 15:02:53,756] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:*
+[2025-05-01 15:02:53,756] INFO apps.reviews.views Like toggled for review=21: liked, user=11
+[2025-05-01 15:03:08,838] DEBUG apps.core.services.cache_services Cache miss for key: cart:11
+[2025-05-01 15:03:08,847] INFO apps.carts.services.cart_services Retrieved cart, user=11, items=0
+[2025-05-01 15:03:08,854] INFO apps.carts.views Retrieved cart, user=11, items=0
+[2025-05-01 15:03:13,471] INFO apps.carts.services.cart_services Added product 1 to cart, user=11
+[2025-05-01 15:03:13,474] INFO apps.core.services.cache_services Invalidated cache for key: cart:11
+[2025-05-01 15:03:13,474] INFO apps.carts.views Added product 1 to cart, user=11
+[2025-05-01 15:03:17,181] INFO apps.carts.services.cart_services Added product 2 to cart, user=11
+[2025-05-01 15:03:17,184] INFO apps.core.services.cache_services Invalidated cache for key: cart:11
+[2025-05-01 15:03:17,184] INFO apps.carts.views Added product 2 to cart, user=11
+[2025-05-01 15:03:19,760] INFO apps.carts.services.cart_services Added product 3 to cart, user=11
+[2025-05-01 15:03:19,763] INFO apps.core.services.cache_services Invalidated cache for key: cart:11
+[2025-05-01 15:03:19,763] INFO apps.carts.views Added product 3 to cart, user=11
+[2025-05-01 15:03:25,867] INFO apps.carts.services.cart_services Added product 4 to cart, user=11
+[2025-05-01 15:03:25,870] INFO apps.core.services.cache_services Invalidated cache for key: cart:11
+[2025-05-01 15:03:25,870] INFO apps.carts.views Added product 4 to cart, user=11
+[2025-05-01 15:03:27,733] DEBUG apps.core.services.cache_services Cache miss for key: cart:11
+[2025-05-01 15:03:27,736] INFO apps.carts.services.cart_services Retrieved cart, user=11, items=4
+[2025-05-01 15:03:27,744] INFO apps.carts.views Retrieved cart, user=11, items=4
+[2025-05-01 15:03:36,144] WARNING apps.carts.services.cart_services Cart item 41 not found, user=11
+[2025-05-01 15:03:36,144] WARNING apps.carts.views Cart item 41 not found, user=11
+[2025-05-01 15:03:36,144] WARNING apps.carts.utils Cart error: Элемент корзины не найден, user=11
+[2025-05-01 15:04:49,691] INFO apps.wishlists.services.wishlist_services Session wishlist retrieved for user=anonymous, items_count=0
+[2025-05-01 15:04:49,691] INFO apps.wishlists.views Retrieved wishlist, user=anonymous, items=0
+[2025-05-01 15:04:53,488] INFO apps.wishlists.services.wishlist_services Product 3 added to session wishlist for user=anonymous
+[2025-05-01 15:04:53,489] INFO apps.core.services.cache_services Invalidated cache for key: wishlist:anonymous
+[2025-05-01 15:04:53,489] INFO apps.wishlists.views Product 3 added to wishlist via API for user=anonymous, path=/wishlists/add/
+[2025-05-01 15:04:59,124] INFO apps.wishlists.services.wishlist_services Product 4 added to session wishlist for user=anonymous
+[2025-05-01 15:04:59,125] INFO apps.core.services.cache_services Invalidated cache for key: wishlist:anonymous
+[2025-05-01 15:04:59,125] INFO apps.wishlists.views Product 4 added to wishlist via API for user=anonymous, path=/wishlists/add/
+[2025-05-01 15:05:02,588] INFO apps.wishlists.services.wishlist_services Product 5 added to session wishlist for user=anonymous
+[2025-05-01 15:05:02,589] INFO apps.core.services.cache_services Invalidated cache for key: wishlist:anonymous
+[2025-05-01 15:05:02,589] INFO apps.wishlists.views Product 5 added to wishlist via API for user=anonymous, path=/wishlists/add/
+[2025-05-01 15:05:09,211] INFO apps.wishlists.services.wishlist_services Product 6 added to session wishlist for user=anonymous
+[2025-05-01 15:05:09,213] INFO apps.core.services.cache_services Invalidated cache for key: wishlist:anonymous
+[2025-05-01 15:05:09,213] INFO apps.wishlists.views Product 6 added to wishlist via API for user=anonymous, path=/wishlists/add/
+[2025-05-01 15:05:11,994] INFO apps.wishlists.services.wishlist_services Product 7 added to session wishlist for user=anonymous
+[2025-05-01 15:05:11,996] INFO apps.core.services.cache_services Invalidated cache for key: wishlist:anonymous
+[2025-05-01 15:05:11,996] INFO apps.wishlists.views Product 7 added to wishlist via API for user=anonymous, path=/wishlists/add/
+[2025-05-01 15:05:14,274] INFO apps.wishlists.services.wishlist_services Product 8 added to session wishlist for user=anonymous
+[2025-05-01 15:05:14,276] INFO apps.core.services.cache_services Invalidated cache for key: wishlist:anonymous
+[2025-05-01 15:05:14,276] INFO apps.wishlists.views Product 8 added to wishlist via API for user=anonymous, path=/wishlists/add/
+[2025-05-01 15:05:16,539] INFO apps.wishlists.services.wishlist_services Product 9 added to session wishlist for user=anonymous
+[2025-05-01 15:05:16,540] INFO apps.core.services.cache_services Invalidated cache for key: wishlist:anonymous
+[2025-05-01 15:05:16,540] INFO apps.wishlists.views Product 9 added to wishlist via API for user=anonymous, path=/wishlists/add/
+[2025-05-01 15:05:48,150] INFO apps.wishlists.services.wishlist_services Session wishlist retrieved for user=anonymous, items_count=7
+[2025-05-01 15:05:48,156] INFO apps.wishlists.views Retrieved wishlist, user=anonymous, items=7
+[2025-05-01 15:05:57,233] INFO apps.carts.services.cart_services Retrieved session cart, user=anonymous, items=0
+[2025-05-01 15:05:57,233] INFO apps.carts.views Retrieved cart, user=anonymous, items=0
+[2025-05-01 15:06:03,350] INFO apps.wishlists.services.wishlist_services Product 3 merged into wishlist for user=11
+[2025-05-01 15:06:03,353] INFO apps.wishlists.services.wishlist_services Product 4 merged into wishlist for user=11
+[2025-05-01 15:06:03,355] INFO apps.wishlists.services.wishlist_services Product 5 merged into wishlist for user=11
+[2025-05-01 15:06:03,357] INFO apps.wishlists.services.wishlist_services Product 6 merged into wishlist for user=11
+[2025-05-01 15:06:03,360] INFO apps.wishlists.services.wishlist_services Product 7 merged into wishlist for user=11
+[2025-05-01 15:06:03,361] INFO apps.wishlists.services.wishlist_services Product 8 merged into wishlist for user=11
+[2025-05-01 15:06:03,363] INFO apps.wishlists.services.wishlist_services Product 9 merged into wishlist for user=11
+[2025-05-01 15:06:06,555] DEBUG apps.core.services.cache_services Cache hit for key: cart:11
