@@ -2428,3 +2428,283 @@ Write an explicit `.update()` method for serializer `apps.users.serializers.User
 [2025-05-03 18:24:09,496] INFO apps.users.services.users_services User and profile updated successfully for user=11
 [2025-05-03 18:24:09,496] INFO apps.users.serializers User=11 updated successfully
 [2025-05-03 18:24:09,496] INFO apps.users.views Profile updated for user=11
+[2025-05-03 18:35:40,446] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 18:35:40,446] INFO apps.users.views Processing user registration request
+[2025-05-03 18:35:40,589] INFO apps.users.serializers Validating registration data for email=bkmz-2020@inbox.ru
+[2025-05-03 18:35:40,589] INFO apps.users.services.users_services Registering user with email=bkmz-2020@inbox.ru
+[2025-05-03 18:35:40,897] INFO apps.users.models Creating user profile for new user=12
+[2025-05-03 18:35:40,897] INFO apps.users.models Creating user profile for user=12
+[2025-05-03 18:35:40,911] INFO apps.users.models Successfully creating user profile 12, user=12
+[2025-05-03 18:35:40,911] INFO apps.users.models Saving user profile for user=12
+[2025-05-03 18:35:40,911] INFO apps.users.models Updating user profile for user=12
+[2025-05-03 18:35:40,913] INFO apps.users.models Successfully updating user profile 12, user=12
+[2025-05-03 18:35:46,983] ERROR apps.users.services.users_services Failed to register user: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение, email=bkmz-2020@inbox.ru
+[2025-05-03 18:35:46,983] WARNING apps.users.utils User error: Ошибка регистрации: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение, user=anonymous, path=/user/register/
+[2025-05-03 18:38:03,200] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 18:38:03,200] INFO apps.users.views Processing user registration request
+[2025-05-03 18:38:03,234] WARNING apps.users.utils API error: {'email': [ErrorDetail(string='Значения поля должны быть уникальны.', code='unique')]}, user=anonymous, path=/user/register/
+[2025-05-03 18:38:33,772] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 18:38:33,772] INFO apps.users.views Processing user registration request
+[2025-05-03 18:38:33,806] INFO apps.users.serializers Validating registration data for email=bkmz-2020@inbox.ru
+[2025-05-03 18:38:33,806] INFO apps.users.services.users_services Registering user with email=bkmz-2020@inbox.ru
+[2025-05-03 18:38:34,040] INFO apps.users.models Creating user profile for new user=13
+[2025-05-03 18:38:34,040] INFO apps.users.models Creating user profile for user=13
+[2025-05-03 18:38:34,042] INFO apps.users.models Successfully creating user profile 13, user=13
+[2025-05-03 18:38:34,042] INFO apps.users.models Saving user profile for user=13
+[2025-05-03 18:38:34,042] INFO apps.users.models Updating user profile for user=13
+[2025-05-03 18:38:34,044] INFO apps.users.models Successfully updating user profile 13, user=13
+[2025-05-03 18:38:34,069] INFO apps.users.services.users_services User registered successfully, email=bkmz-2020@inbox.ru
+[2025-05-03 18:38:34,069] INFO apps.users.views User 13 registered, awaiting email confirmation
+[2025-05-03 18:38:34,071] INFO apps.users.services.tasks Sending confirmation email to bkmz-2020@inbox.ru
+[2025-05-03 18:38:35,700] INFO apps.users.services.tasks Confirmation email sent to bkmz-2020@inbox.ru
+[2025-05-03 18:38:53,746] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 18:38:56,330] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 18:39:20,860] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 18:39:20,860] INFO apps.users.views Processing resend confirmation code request
+[2025-05-03 18:39:20,860] INFO apps.users.services.users_services Resending confirmation code to email=bkmz-2020@inbox.ru
+[2025-05-03 18:39:20,997] INFO apps.users.services.users_services Confirmation code resent to email=bkmz-2020@inbox.ru
+[2025-05-03 18:39:20,997] INFO apps.users.views Confirmation code resent to bkmz-2020@inbox.ru
+[2025-05-03 18:39:20,999] INFO apps.users.services.tasks Sending confirmation email to bkmz-2020@inbox.ru
+[2025-05-03 18:39:22,208] INFO apps.users.services.tasks Confirmation email sent to bkmz-2020@inbox.ru
+[2025-05-03 18:39:48,427] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 18:39:48,427] INFO apps.users.views Processing account confirmation request
+[2025-05-03 18:39:48,427] INFO apps.users.services.users_services Confirming account for email=bkmz-2020@inbox.ru with code=590753
+[2025-05-03 18:39:48,462] INFO apps.users.models Saving user profile for user=13
+[2025-05-03 18:39:48,463] INFO apps.users.models Updating user profile for user=13
+[2025-05-03 18:39:48,464] INFO apps.users.models Successfully updating user profile 13, user=13
+[2025-05-03 18:39:48,465] INFO apps.users.services.users_services Account confirmed successfully for email=bkmz-2020@inbox.ru
+[2025-05-03 18:39:48,465] INFO apps.users.views Account confirmed for bkmz-2020@inbox.ru
+[2025-05-03 18:39:53,331] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 18:39:57,585] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 18:39:57,585] INFO apps.users.views Processing user login request
+[2025-05-03 18:39:57,586] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-03 18:39:57,586] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-03 18:39:58,079] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-03 18:39:58,081] INFO apps.users.views User 11 logged in successfully
+[2025-05-03 18:39:58,090] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-03 18:40:03,831] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:40:03,831] INFO apps.users.views Fetching profile for user=11
+[2025-05-03 18:40:12,462] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:40:12,462] INFO apps.users.views Processing user login request
+[2025-05-03 18:40:12,463] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-03 18:40:12,463] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-03 18:40:12,928] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-03 18:40:12,931] INFO apps.users.views User 11 logged in successfully
+[2025-05-03 18:40:12,933] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-03 18:40:28,056] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:40:28,056] INFO apps.users.views Processing user login request
+[2025-05-03 18:40:28,056] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-03 18:40:28,057] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-03 18:40:28,513] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-03 18:40:28,515] INFO apps.users.views User 13 logged in successfully
+[2025-05-03 18:40:28,518] INFO apps.users.utils JWT cookies set for user=13
+[2025-05-03 18:40:32,989] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-03 18:40:32,989] INFO apps.users.views Fetching profile for user=13
+[2025-05-03 18:40:37,547] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-03 18:40:37,547] INFO apps.users.views Updating profile for user=13
+[2025-05-03 18:40:37,547] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-03 18:40:37,547] INFO apps.users.serializers Validating user data for user=13
+[2025-05-03 18:40:37,548] WARNING apps.users.serializers Username edem already taken for user=13
+[2025-05-03 18:40:37,548] WARNING apps.users.utils API error: {'username': [ErrorDetail(string='Имя пользователя уже занято.', code='invalid')]}, user=13, path=/user/profile/
+[2025-05-03 18:40:46,270] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-03 18:40:46,271] INFO apps.users.views Updating profile for user=13
+[2025-05-03 18:40:46,271] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-03 18:40:46,271] INFO apps.users.serializers Validating user data for user=13
+[2025-05-03 18:40:46,272] INFO apps.users.serializers Updating user=13 with validated data
+[2025-05-03 18:40:46,272] INFO apps.users.services.users_services Updating user and profile for user=13
+[2025-05-03 18:40:46,274] INFO apps.users.models Saving user profile for user=13
+[2025-05-03 18:40:46,275] INFO apps.users.models Updating user profile for user=13
+[2025-05-03 18:40:46,276] INFO apps.users.models Successfully updating user profile 13, user=13
+[2025-05-03 18:40:46,276] INFO apps.users.services.users_services User and profile updated successfully for user=13
+[2025-05-03 18:40:46,276] INFO apps.users.serializers User=13 updated successfully
+[2025-05-03 18:40:46,276] INFO apps.users.views Profile updated for user=13
+[2025-05-03 18:41:06,685] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-03 18:41:06,686] INFO apps.users.views Processing password reset request
+[2025-05-03 18:41:06,686] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-03 18:41:06,687] INFO apps.users.services.users_services Password reset requested for email=bkmz-2020@inbox.ru
+[2025-05-03 18:41:06,687] INFO apps.users.views Password reset requested for bkmz-2020@inbox.ru
+[2025-05-03 18:41:06,689] INFO apps.users.services.tasks Sending password reset email to bkmz-2020@inbox.ru
+[2025-05-03 18:41:07,996] INFO apps.users.services.tasks Password reset email sent to bkmz-2020@inbox.ru
+[2025-05-03 18:42:11,109] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-03 18:42:11,109] INFO apps.users.views Processing password reset confirmation
+[2025-05-03 18:42:11,110] INFO apps.users.services.users_services Confirming password reset for uid=mtm
+[2025-05-03 18:42:11,110] ERROR apps.users.services.users_services Failed to reset password: 'utf-8' codec can't decode byte 0x9a in position 0: invalid start byte. You passed in b'\x9a\xd9' (<class 'bytes'>)
+[2025-05-03 18:42:11,110] WARNING apps.users.utils User error: Ошибка сброса пароля: 'utf-8' codec can't decode byte 0x9a in position 0: invalid start byte. You passed in b'\x9a\xd9' (<class 'bytes'>), user=13, path=/user/password-reset-confirm/
+[2025-05-03 18:42:42,543] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-03 18:42:42,543] INFO apps.users.views Processing password reset confirmation
+[2025-05-03 18:42:42,543] INFO apps.users.services.users_services Confirming password reset for uid=13
+[2025-05-03 18:42:42,543] ERROR apps.users.services.users_services Failed to reset password: 'utf-8' codec can't decode byte 0xd7 in position 0: unexpected end of data. You passed in b'\xd7' (<class 'bytes'>)
+[2025-05-03 18:42:42,543] WARNING apps.users.utils User error: Ошибка сброса пароля: 'utf-8' codec can't decode byte 0xd7 in position 0: unexpected end of data. You passed in b'\xd7' (<class 'bytes'>), user=13, path=/user/password-reset-confirm/
+[2025-05-03 18:42:53,325] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-03 18:42:53,325] INFO apps.users.views Processing password reset confirmation
+[2025-05-03 18:42:53,325] INFO apps.users.services.users_services Confirming password reset for uid=13
+[2025-05-03 18:42:53,326] ERROR apps.users.services.users_services Failed to reset password: 'utf-8' codec can't decode byte 0xd7 in position 0: unexpected end of data. You passed in b'\xd7' (<class 'bytes'>)
+[2025-05-03 18:42:53,326] WARNING apps.users.utils User error: Ошибка сброса пароля: 'utf-8' codec can't decode byte 0xd7 in position 0: unexpected end of data. You passed in b'\xd7' (<class 'bytes'>), user=13, path=/user/password-reset-confirm/
+[2025-05-03 18:52:12,501] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-03 18:52:12,501] INFO apps.users.views Processing logout for user=13
+[2025-05-03 18:52:12,507] INFO apps.users.services.users_services User logged out successfully
+[2025-05-03 18:52:12,508] INFO apps.users.views User 13 logged out successfully
+[2025-05-03 18:52:15,737] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 18:52:15,738] INFO apps.users.views Processing user login request
+[2025-05-03 18:52:15,738] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-03 18:52:15,738] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-03 18:52:16,266] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-03 18:52:16,268] INFO apps.users.views User 13 logged in successfully
+[2025-05-03 18:52:16,270] INFO apps.users.utils JWT cookies set for user=13
+[2025-05-03 19:05:03,006] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-03 19:05:03,007] INFO apps.users.views Processing password reset confirmation
+[2025-05-03 19:05:03,007] INFO apps.users.services.users_services Confirming password reset for uid=13
+[2025-05-03 19:05:03,007] WARNING apps.users.services.users_services Invalid uid format: 13
+[2025-05-03 19:05:03,007] WARNING apps.users.utils User error: Неверный формат идентификатора пользователя, user=13, path=/user/password-reset-confirm/
+[2025-05-03 19:05:42,375] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-03 19:05:42,375] INFO apps.users.views Processing password reset confirmation
+[2025-05-03 19:05:42,375] INFO apps.users.services.users_services Confirming password reset for uid=13
+[2025-05-03 19:05:42,376] WARNING apps.users.services.users_services Invalid uid format: 13
+[2025-05-03 19:05:42,376] WARNING apps.users.utils User error: Неверный формат идентификатора пользователя, user=13, path=/user/password-reset-confirm/
+[2025-05-03 19:11:01,854] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 19:11:01,854] INFO apps.users.views Processing password reset confirmation
+[2025-05-03 19:11:01,854] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-03 19:11:01,854] WARNING apps.users.serializers Invalid base64 uid: 13
+[2025-05-03 19:11:01,854] WARNING apps.users.utils API error: {'uid': [ErrorDetail(string='Идентификатор пользователя должен быть в формате base64.', code='invalid')]}, user=anonymous, path=/user/password-reset-confirm/
+[2025-05-03 19:11:05,634] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 19:11:05,635] INFO apps.users.views Processing password reset confirmation
+[2025-05-03 19:11:05,635] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-03 19:11:05,635] WARNING apps.users.serializers Invalid base64 uid: 13
+[2025-05-03 19:11:05,635] WARNING apps.users.utils API error: {'uid': [ErrorDetail(string='Идентификатор пользователя должен быть в формате base64.', code='invalid')]}, user=anonymous, path=/user/password-reset-confirm/
+[2025-05-03 19:11:19,368] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 19:11:19,368] INFO apps.users.views Processing password reset confirmation
+[2025-05-03 19:11:19,368] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-03 19:11:19,368] WARNING apps.users.serializers Invalid base64 uid: ЬЕЬ
+[2025-05-03 19:11:19,369] WARNING apps.users.utils API error: {'uid': [ErrorDetail(string='Идентификатор пользователя должен быть в формате base64.', code='invalid')]}, user=anonymous, path=/user/password-reset-confirm/
+[2025-05-03 19:12:33,654] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 19:12:33,655] INFO apps.users.views Processing password reset confirmation
+[2025-05-03 19:12:33,655] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-03 19:12:33,655] INFO apps.users.services.users_services Confirming password reset for uid=MTM=
+[2025-05-03 19:12:34,499] INFO apps.users.models Saving user profile for user=13
+[2025-05-03 19:12:34,502] INFO apps.users.models Updating user profile for user=13
+[2025-05-03 19:12:34,502] INFO apps.users.models Successfully updating user profile 13, user=13
+[2025-05-03 19:12:34,515] INFO apps.users.services.users_services Password reset successfully for user=13
+[2025-05-03 19:12:34,515] INFO apps.users.views Password reset confirmed
+[2025-05-03 19:12:49,272] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 19:12:49,272] INFO apps.users.views Processing password reset confirmation
+[2025-05-03 19:12:49,272] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-03 19:12:49,272] WARNING apps.users.serializers Invalid base64 uid: MTM
+[2025-05-03 19:12:49,272] WARNING apps.users.utils API error: {'uid': [ErrorDetail(string='Идентификатор пользователя должен быть в формате base64.', code='invalid')]}, user=anonymous, path=/user/password-reset-confirm/
+[2025-05-03 19:12:55,935] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 19:12:55,935] INFO apps.users.views Processing password reset confirmation
+[2025-05-03 19:12:55,935] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-03 19:12:55,935] INFO apps.users.services.users_services Confirming password reset for uid=MTM=
+[2025-05-03 19:12:55,967] WARNING apps.users.services.users_services Invalid or expired token for user=13
+[2025-05-03 19:12:55,968] ERROR apps.users.services.users_services Failed to reset password: Неверный или просроченный токен
+[2025-05-03 19:12:55,968] WARNING apps.users.utils User error: Ошибка сброса пароля: Неверный или просроченный токен, user=anonymous, path=/user/password-reset-confirm/
+[2025-05-03 19:13:04,186] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 19:13:04,186] INFO apps.users.views Processing user login request
+[2025-05-03 19:13:04,187] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-03 19:13:04,187] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-03 19:13:04,447] WARNING apps.users.services.users_services Invalid password for email=bkmz-2020@inbox.ru
+[2025-05-03 19:13:04,447] WARNING apps.users.utils User error: Неверные учетные данные, user=anonymous, path=/user/login/
+[2025-05-03 19:13:08,232] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 19:13:08,232] INFO apps.users.views Processing user login request
+[2025-05-03 19:13:08,232] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-03 19:13:08,232] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-03 19:13:08,730] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-03 19:13:08,732] INFO apps.users.views User 13 logged in successfully
+[2025-05-03 19:13:08,741] INFO apps.users.utils JWT cookies set for user=13
+[2025-05-03 19:15:00,373] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-03 19:15:00,373] INFO apps.users.views Processing password reset request
+[2025-05-03 19:15:00,374] INFO apps.users.serializers Validating password reset request for email=bkmz-2020@inbox.ru
+[2025-05-03 19:15:00,374] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-03 19:15:00,410] INFO apps.users.services.users_services Password reset requested for email=bkmz-2020@inbox.ru
+[2025-05-03 19:15:00,411] INFO apps.users.services.tasks Sending password reset email to bkmz-2020@inbox.ru
+[2025-05-03 19:15:00,411] INFO apps.users.views Password reset requested for bkmz-2020@inbox.ru
+[2025-05-03 19:15:01,780] INFO apps.users.services.tasks Password reset email sent to bkmz-2020@inbox.ru
+[2025-05-03 19:15:51,496] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-03 19:15:51,497] INFO apps.users.views Processing password reset request
+[2025-05-03 19:15:51,498] INFO apps.users.serializers Validating password reset request for email=bkmz-2020@inbox.ru
+[2025-05-03 19:15:51,498] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-03 19:15:51,523] INFO apps.users.services.users_services Password reset requested for email=bkmz-2020@inbox.ru
+[2025-05-03 19:15:51,523] INFO apps.users.views Password reset requested for bkmz-2020@inbox.ru
+[2025-05-03 19:15:51,524] INFO apps.users.services.tasks Sending password reset email to bkmz-2020@inbox.ru
+[2025-05-03 19:15:52,767] INFO apps.users.services.tasks Password reset email sent to bkmz-2020@inbox.ru
+[2025-05-03 19:16:18,972] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 19:16:24,696] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 19:16:24,696] INFO apps.users.views Processing password reset confirmation
+[2025-05-03 19:16:24,696] WARNING apps.users.utils API error: {'uid': [ErrorDetail(string='Обязательное поле.', code='required')], 'token': [ErrorDetail(string='Обязательное поле.', code='required')], 'new_password': [ErrorDetail(string='Обязательное поле.', code='required')]}, user=anonymous, path=/user/password-reset-confirm/
+[2025-05-03 19:17:00,194] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-03 19:17:00,194] INFO apps.users.views Processing password reset request
+[2025-05-03 19:17:00,195] INFO apps.users.serializers Validating password reset request for email=bkmz-2020@inbox.ru
+[2025-05-03 19:17:00,195] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-03 19:17:00,231] INFO apps.users.services.users_services Password reset requested for email=bkmz-2020@inbox.ru
+[2025-05-03 19:17:00,231] INFO apps.users.views Password reset requested for bkmz-2020@inbox.ru
+[2025-05-03 19:17:00,232] INFO apps.users.services.tasks Sending password reset email to bkmz-2020@inbox.ru
+[2025-05-03 19:17:01,491] INFO apps.users.services.tasks Password reset email sent to bkmz-2020@inbox.ru
+[2025-05-03 19:17:05,836] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 19:17:34,972] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 19:17:34,973] INFO apps.users.views Processing password reset confirmation
+[2025-05-03 19:17:34,973] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-03 19:17:34,973] WARNING apps.users.serializers Invalid base64 uid: MTM
+[2025-05-03 19:17:34,973] WARNING apps.users.utils API error: {'uid': [ErrorDetail(string='Идентификатор пользователя должен быть в формате base64.', code='invalid')]}, user=anonymous, path=/user/password-reset-confirm/
+[2025-05-03 19:17:44,156] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 19:17:44,156] INFO apps.users.views Processing password reset confirmation
+[2025-05-03 19:17:44,157] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-03 19:17:44,157] INFO apps.users.services.users_services Confirming password reset for uid=MTM=
+[2025-05-03 19:17:44,422] INFO apps.users.models Saving user profile for user=13
+[2025-05-03 19:17:44,424] INFO apps.users.models Updating user profile for user=13
+[2025-05-03 19:17:44,425] INFO apps.users.models Successfully updating user profile 13, user=13
+[2025-05-03 19:17:44,429] INFO apps.users.services.users_services Password reset successfully for user=13
+[2025-05-03 19:17:44,429] INFO apps.users.views Password reset confirmed
+[2025-05-03 19:21:40,578] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-03 19:21:40,578] INFO apps.users.views Processing password reset confirmation
+[2025-05-03 19:21:40,578] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-03 19:21:40,578] WARNING apps.users.serializers Missing uid or token in query parameters
+[2025-05-03 19:21:40,578] WARNING apps.users.utils API error: {'error': [ErrorDetail(string='Требуются параметры uid и token в URL.', code='invalid')]}, user=13, path=/user/password-reset-confirm/
+[2025-05-03 19:21:56,789] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-03 19:21:56,789] INFO apps.users.views Processing password reset confirmation
+[2025-05-03 19:21:56,789] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-03 19:21:56,789] WARNING apps.users.serializers Missing uid or token in query parameters
+[2025-05-03 19:21:56,789] WARNING apps.users.utils API error: {'error': [ErrorDetail(string='Требуются параметры uid и token в URL.', code='invalid')]}, user=13, path=/user/password-reset-confirm/
+[2025-05-03 19:27:50,493] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-03 19:27:50,494] INFO apps.users.views Processing password reset request for email=bkmz-2020@inbox.ru
+[2025-05-03 19:27:50,495] INFO apps.users.serializers Validating password reset request for email=bkmz-2020@inbox.ru
+[2025-05-03 19:27:50,495] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-03 19:27:50,541] INFO apps.users.services.users_services Password reset requested for email=bkmz-2020@inbox.ru
+[2025-05-03 19:27:50,541] INFO apps.users.views Password reset requested for bkmz-2020@inbox.ru
+[2025-05-03 19:27:50,542] INFO apps.users.services.tasks Sending password reset email to bkmz-2020@inbox.ru
+[2025-05-03 19:27:51,898] INFO apps.users.services.tasks Password reset email sent to bkmz-2020@inbox.ru
+[2025-05-03 19:27:56,347] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 19:28:03,637] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-03 19:28:03,637] INFO apps.users.views Processing password reset confirmation for uid=MTM
+[2025-05-03 19:28:03,637] WARNING apps.users.utils API error: {'new_password': [ErrorDetail(string='Обязательное поле.', code='required')]}, user=13, path=/user/password-reset-confirm/
+[2025-05-03 19:28:16,297] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 19:28:16,297] INFO apps.users.views Processing password reset confirmation for uid=MTM
+[2025-05-03 19:28:16,298] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-03 19:28:16,298] WARNING apps.users.serializers Invalid base64 uid: MTM
+[2025-05-03 19:28:16,298] WARNING apps.users.utils API error: {'uid': [ErrorDetail(string='Идентификатор пользователя должен быть в формате base64.', code='invalid')]}, user=anonymous, path=/user/password-reset-confirm/
+[2025-05-03 19:34:10,927] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 19:34:10,927] INFO apps.users.views Processing password reset confirmation for uid=MTM
+[2025-05-03 19:34:10,927] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-03 19:34:10,927] INFO apps.users.services.users_services Confirming password reset for uid=MTM=
+[2025-05-03 19:34:11,890] INFO apps.users.models Saving user profile for user=13
+[2025-05-03 19:34:11,893] INFO apps.users.models Updating user profile for user=13
+[2025-05-03 19:34:11,894] INFO apps.users.models Successfully updating user profile 13, user=13
+[2025-05-03 19:34:11,899] INFO apps.users.services.users_services Password reset successfully for user=13
+[2025-05-03 19:34:11,899] INFO apps.users.views Password reset confirmed
+[2025-05-03 19:34:52,469] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 19:34:52,469] INFO apps.users.views Processing password reset request for email=bkmz-2020@inbox.ru
+[2025-05-03 19:34:52,470] INFO apps.users.serializers Validating password reset request for email=bkmz-2020@inbox.ru
+[2025-05-03 19:34:52,470] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-03 19:34:52,586] INFO apps.users.services.users_services Generated uid=MTM for user=13
+[2025-05-03 19:34:52,619] INFO apps.users.services.users_services Password reset requested for email=bkmz-2020@inbox.ru
+[2025-05-03 19:34:52,619] INFO apps.users.views Password reset requested for bkmz-2020@inbox.ru
+[2025-05-03 19:34:52,620] INFO apps.users.services.tasks Sending password reset email to bkmz-2020@inbox.ru
+[2025-05-03 19:34:53,855] INFO apps.users.services.tasks Password reset email sent to bkmz-2020@inbox.ru
+[2025-05-03 19:35:56,325] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 19:35:56,326] INFO apps.users.views Processing password reset request for email=bkmz-2020@inbox.ru
+[2025-05-03 19:35:56,326] INFO apps.users.serializers Validating password reset request for email=bkmz-2020@inbox.ru
+[2025-05-03 19:35:56,327] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-03 19:35:56,438] INFO apps.users.services.users_services Generated uid=MTM for user=13
+[2025-05-03 19:35:56,457] INFO apps.users.services.users_services Password reset requested for email=bkmz-2020@inbox.ru
+[2025-05-03 19:35:56,457] INFO apps.users.views Password reset requested for bkmz-2020@inbox.ru
+[2025-05-03 19:35:56,458] INFO apps.users.services.tasks Sending password reset email to bkmz-2020@inbox.ru
+[2025-05-03 19:35:57,619] INFO apps.users.services.tasks Password reset email sent to bkmz-2020@inbox.ru
+[2025-05-03 19:36:03,619] DEBUG apps.users.authentication No token provided in request

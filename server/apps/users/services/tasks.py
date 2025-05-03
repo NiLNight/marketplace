@@ -18,7 +18,7 @@ def send_confirmation_email(self, email: str, code: str):
     Raises:
         SMTPException: Если отправка письма не удалась, повторяется через 60 секунд.
     """
-    logger.info(f"Sending confirmation email to {email}")
+    logger.info(f"Sending confirmation email to {email} with code={code}")
     try:
         send_mail(
             subject="Ваш код подтверждения",
@@ -44,7 +44,7 @@ def send_password_reset_email(self, email: str, reset_url: str):
     Raises:
         SMTPException: Если отправка письма не удалась, повторяется через 60 секунд.
     """
-    logger.info(f"Sending password reset email to {email}")
+    logger.info(f"Sending password reset email to {email} with reset_url={reset_url}")
     try:
         send_mail(
             subject="Сброс пароля",

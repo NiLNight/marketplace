@@ -20,14 +20,27 @@ logger = logging.getLogger(__name__)
 
 
 class UserRegistrationView(APIView):
-    """Представление для регистрации нового пользователя."""
+    """API-представление для регистрации новых пользователей.
+
+    Обрабатывает запросы на создание учетной записи и отправку кода подтверждения.
+    """
     permission_classes = [AllowAny]
     serializer_class = UserRegistrationSerializer
 
     @handle_api_errors
     def post(self, request):
-        """Обрабатывает POST-запрос для регистрации пользователя."""
-        logger.info("Processing user registration request")
+        """Регистрирует нового пользователя.
+
+        Args:
+            request (Request): HTTP-запрос с данными пользователя (username, email, password).
+
+        Returns:
+            Response: Ответ с сообщением об успешной регистрации или необходимости активации.
+
+        Raises:
+            serializers.ValidationError: Если данные некорректны.
+        """
+        logger.info(f"Processing registration request for email={request.data.get('email')}")
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = UserService.register_user(
@@ -46,14 +59,29 @@ class UserRegistrationView(APIView):
 
 
 class UserLoginView(APIView):
-    """Представление для аутентификации пользователя."""
+    """API-представление для аутентификации пользователей.
+
+    Обрабатывает запросы на вход и слияние корзины/списка желаний из сессии.
+    """
     permission_classes = [AllowAny]
     serializer_class = UserLoginSerializer
 
     @handle_api_errors
     def post(self, request):
-        """Обрабатывает POST-запрос для входа пользователя."""
-        logger.info("Processing user login request")
+        """Аутентифицирует пользователя.
+
+        Args:
+            request (Request): HTTP-запрос с данными для входа (email, password).
+
+        Returns:
+            Response: Ответ с данными пользователя и JWT-токенами.
+
+        Raises:
+            serializers.ValidationError: Если данные некорректны.
+            AuthenticationFailed: Если аутентификация не удалась.
+            AccountNotActivated: Если аккаунт не активирован.
+        """
+        logger.info(f"Processing login request for email={request.data.get('email')}")
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = UserService.login_user(
@@ -71,11 +99,13 @@ class UserLoginView(APIView):
             "user": {"id": user.id, "username": user.username, "email": user.email}
         }
         response = Response(response_data)
+        # Слияние корзины из сессии, если она существует
         if request.session.get('cart'):
             from apps.carts.services.cart_services import CartService
             CartService.merge_cart_on_login(user, request.session['cart'])
             del request.session['cart']
             logger.info(f"Cart merged for user={user.id}")
+        # Слияние списка желаний из сессии, если он существует
         if request.session.get('wishlist'):
             from apps.wishlists.services.wishlist_services import WishlistService
             WishlistService.merge_wishlist_on_login(user, request.session['wishlist'])
@@ -86,12 +116,25 @@ class UserLoginView(APIView):
 
 
 class UserLogoutView(APIView):
-    """Представление для выхода пользователя."""
+    """API-представление для выхода пользователей.
+
+    Обрабатывает запросы на завершение сессии и инвалидацию токенов.
+    """
     permission_classes = [IsAuthenticated]
 
     @handle_api_errors
     def post(self, request):
-        """Обрабатывает POST-запрос для выхода пользователя."""
+        """Выполняет выход пользователя.
+
+        Args:
+            request (Request): HTTP-запрос с refresh-токеном.
+
+        Returns:
+            Response: Ответ с подтверждением выхода.
+
+        Raises:
+            InvalidUserData: Если refresh-токен недействителен.
+        """
         logger.info(f"Processing logout for user={request.user.id}")
         refresh_token = request.COOKIES.get('refresh_token')
         UserService.logout_user(refresh_token)
@@ -103,13 +146,26 @@ class UserLogoutView(APIView):
 
 
 class UserProfileView(APIView):
-    """Представление для получения и обновления профиля пользователя."""
+    """API-представление для управления профилем пользователя.
+
+    Позволяет получать и обновлять данные профиля аутентифицированного пользователя.
+    """
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
 
     @handle_api_errors
     def get(self, request):
-        """Обрабатывает GET-запрос для получения профиля."""
+        """Возвращает данные профиля пользователя.
+
+        Args:
+            request (Request): HTTP-запрос от аутентифицированного пользователя.
+
+        Returns:
+            Response: Ответ с данными профиля.
+
+        Raises:
+            serializers.ValidationError: Если данные сериализатора некорректны.
+        """
         logger.info(f"Fetching profile for user={request.user.id}")
         user = request.user
         serializer = self.serializer_class(user)
@@ -117,7 +173,18 @@ class UserProfileView(APIView):
 
     @handle_api_errors
     def patch(self, request):
-        """Обрабатывает PATCH-запрос для обновления профиля."""
+        """Обновляет данные профиля пользователя.
+
+        Args:
+            request (Request): HTTP-запрос с частичными данными профиля.
+
+        Returns:
+            Response: Ответ с обновленными данными профиля.
+
+        Raises:
+            serializers.ValidationError: Если данные некорректны.
+            InvalidUserData: Если обновление профиля не удалось.
+        """
         logger.info(f"Updating profile for user={request.user.id}")
         user = request.user
         serializer = self.serializer_class(user, data=request.data, partial=True)
@@ -128,13 +195,26 @@ class UserProfileView(APIView):
 
 
 class ResendCodeView(APIView):
-    """Представление для повторной отправки кода подтверждения."""
+    """API-представление для повторной отправки кода подтверждения.
+
+    Обрабатывает запросы на повторную отправку кода для активации аккаунта.
+    """
     permission_classes = [AllowAny]
 
     @handle_api_errors
     def post(self, request):
-        """Обрабатывает POST-запрос для повторной отправки кода."""
-        logger.info("Processing resend confirmation code request")
+        """Отправляет новый код подтверждения.
+
+        Args:
+            request (Request): HTTP-запрос с email пользователя.
+
+        Returns:
+            Response: Ответ с подтверждением отправки кода.
+
+        Raises:
+            UserNotFound: Если пользователь не найден или уже активирован.
+        """
+        logger.info(f"Processing resend code request for email={request.data.get('email')}")
         email = request.data.get('email')
         ConfirmCodeService.resend_confirmation_code(email)
         logger.info(f"Confirmation code resent to {email}")
@@ -142,13 +222,27 @@ class ResendCodeView(APIView):
 
 
 class ConfirmView(APIView):
-    """Представление для подтверждения регистрации пользователя."""
+    """API-представление для подтверждения регистрации.
+
+    Активирует аккаунт пользователя по email и коду подтверждения.
+    """
     permission_classes = [AllowAny]
 
     @handle_api_errors
     def post(self, request):
-        """Обрабатывает POST-запрос для активации аккаунта."""
-        logger.info("Processing account confirmation request")
+        """Активирует аккаунт пользователя.
+
+        Args:
+            request (Request): HTTP-запрос с email и кодом подтверждения.
+
+        Returns:
+            Response: Ответ с подтверждением активации.
+
+        Raises:
+            UserNotFound: Если пользователь не найден.
+            InvalidUserData: Если код неверный или истек срок действия.
+        """
+        logger.info(f"Processing confirmation request for email={request.data.get('email')}")
         email = request.data.get('email')
         code = request.data.get('code')
         ConfirmCodeService.confirm_account(email=email, code=code)
@@ -157,14 +251,28 @@ class ConfirmView(APIView):
 
 
 class PasswordResetRequestView(APIView):
-    """Представление для запроса сброса пароля."""
+    """API-представление для запроса сброса пароля.
+
+    Обрабатывает запросы на отправку письма для сброса пароля.
+    """
     permission_classes = [AllowAny]
     serializer_class = PasswordResetSerializer
 
     @handle_api_errors
     def post(self, request):
-        """Обрабатывает POST-запрос для запроса сброса пароля."""
-        logger.info("Processing password reset request")
+        """Отправляет письмо для сброса пароля.
+
+        Args:
+            request (Request): HTTP-запрос с email пользователя.
+
+        Returns:
+            Response: Ответ с подтверждением отправки письма.
+
+        Raises:
+            serializers.ValidationError: Если email некорректен.
+            UserNotFound: Если пользователь не найден.
+        """
+        logger.info(f"Processing password reset request for email={request.data.get('email')}")
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         ConfirmPasswordService.request_password_reset(serializer.validated_data['email'])
@@ -176,15 +284,35 @@ class PasswordResetRequestView(APIView):
 
 
 class PasswordResetConfirmView(APIView):
-    """Представление для подтверждения сброса пароля."""
+    """API-представление для подтверждения сброса пароля.
+
+    Обрабатывает запросы на изменение пароля с использованием uid и token из URL.
+    """
     serializer_class = PasswordResetConfirmSerializer
     permission_classes = [AllowAny]
 
     @handle_api_errors
     def post(self, request):
-        """Обрабатывает POST-запрос для изменения пароля."""
-        logger.info("Processing password reset confirmation")
-        serializer = self.serializer_class(data=request.data)
+        """Изменяет пароль пользователя.
+
+        Args:
+            request (Request): HTTP-запрос с new_password в теле и uid, token в GET-параметрах.
+
+        Returns:
+            Response: Ответ с подтверждением изменения пароля.
+
+        Raises:
+            serializers.ValidationError: Если данные некорректны или uid не в формате base64.
+            InvalidUserData: Если uid, token или данные недействительны.
+            UserNotFound: Если пользователь не найден.
+        """
+        logger.info(f"Processing password reset confirmation for uid={request.query_params.get('uid')}")
+        uid = request.query_params.get('uid')
+        token = request.query_params.get('token')
+        serializer = self.serializer_class(
+            data=request.data,
+            context={'uid': uid, 'token': token}
+        )
         serializer.is_valid(raise_exception=True)
         ConfirmPasswordService.confirm_password_reset(
             uid=serializer.validated_data['uid'],

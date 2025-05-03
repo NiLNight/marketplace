@@ -1,4 +1,5 @@
 import logging
+import binascii
 from django.contrib.auth import get_user_model, authenticate
 from django.utils import timezone
 from django.utils.encoding import force_bytes, force_str
@@ -23,7 +24,19 @@ class UserService:
 
     @staticmethod
     def register_user(username: str, email: str, password: str) -> User:
-        """Регистрация нового пользователя."""
+        """Регистрация нового пользователя.
+
+        Args:
+            username (str): Имя пользователя.
+            email (str): Адрес электронной почты.
+            password (str): Пароль пользователя.
+
+        Returns:
+            User: Созданный пользователь.
+
+        Raises:
+            InvalidUserData: Если регистрация не удалась.
+        """
         logger.info(f"Registering user with email={email}")
         try:
             user = User.objects.create_user(
@@ -47,7 +60,19 @@ class UserService:
 
     @staticmethod
     def login_user(email: str, password: str) -> User:
-        """Аутентификация пользователя."""
+        """Аутентификация пользователя.
+
+        Args:
+            email (str): Адрес электронной почты.
+            password (str): Пароль пользователя.
+
+        Returns:
+            User: Аутентифицированный пользователь.
+
+        Raises:
+            AuthenticationFailed: Если аутентификация не удалась.
+            AccountNotActivated: Если аккаунт не активирован.
+        """
         logger.info(f"Attempting to log in user with email={email}")
         user = User.objects.filter(email=email).first()
         if user is None:
@@ -68,7 +93,14 @@ class UserService:
 
     @staticmethod
     def logout_user(refresh_token: str) -> None:
-        """Выход пользователя с инвалидацией refresh-токена."""
+        """Выход пользователя с инвалидацией refresh-токена.
+
+        Args:
+            refresh_token (str): Refresh-токен для инвалидации.
+
+        Raises:
+            InvalidUserData: Если токен недействителен.
+        """
         if not refresh_token:
             logger.warning("Refresh token is required")
             raise InvalidUserData("Требуется refresh токен")
@@ -144,7 +176,14 @@ class ConfirmCodeService:
 
     @staticmethod
     def resend_confirmation_code(email: str) -> None:
-        """Повторная отправка кода подтверждения."""
+        """Повторная отправка кода подтверждения.
+
+        Args:
+            email (str): Адрес электронной почты.
+
+        Raises:
+            UserNotFound: Если пользователь не найден или уже активирован.
+        """
         logger.info(f"Resending confirmation code to email={email}")
         try:
             user = User.objects.get(email=email, is_active=False)
@@ -164,7 +203,16 @@ class ConfirmCodeService:
 
     @staticmethod
     def confirm_account(email: str, code: str) -> None:
-        """Подтверждение аккаунта."""
+        """Подтверждение аккаунта.
+
+        Args:
+            email (str): Адрес электронной почты.
+            code (str): Код подтверждения.
+
+        Raises:
+            UserNotFound: Если пользователь не найден.
+            InvalidUserData: Если код неверный или истек срок действия.
+        """
         logger.info(f"Confirming account for email={email} with code={code}")
         try:
             user = User.objects.get(email=email)
@@ -191,13 +239,21 @@ class ConfirmPasswordService:
 
     @staticmethod
     def request_password_reset(email: str) -> None:
-        """Запрос на сброс пароля."""
+        """Запрос на сброс пароля.
+
+        Args:
+            email (str): Адрес электронной почты.
+
+        Raises:
+            UserNotFound: Если пользователь не найден.
+        """
         logger.info(f"Requesting password reset for email={email}")
         try:
             user = User.objects.get(email=email)
             token = PasswordResetTokenGenerator().make_token(user)
             uid = urlsafe_base64_encode(force_bytes(user.id))
-            reset_url = f"http://localhost:8000/reset-password/?token={token}&uid={uid}"
+            logger.info(f"Generated uid={uid} for user={user.id}")
+            reset_url = f"http://localhost:8000/user/password-reset-confirm/?token={token}&uid={uid}"
             send_password_reset_email.delay(email, reset_url)
             logger.info(f"Password reset requested for email={email}")
         except User.DoesNotExist:
@@ -206,7 +262,20 @@ class ConfirmPasswordService:
 
     @staticmethod
     def confirm_password_reset(uid: str, token: str, new_password: str) -> User:
-        """Подтверждение сброса пароля."""
+        """Подтверждение сброса пароля.
+
+        Args:
+            uid (str): Уникальный идентификатор пользователя (base64).
+            token (str): Токен для сброса пароля.
+            new_password (str): Новый пароль.
+
+        Returns:
+            User: Пользователь с обновленным паролем.
+
+        Raises:
+            InvalidUserData: Если uid, токен или данные некорректны.
+            UserNotFound: Если пользователь не найден.
+        """
         logger.info(f"Confirming password reset for uid={uid}")
         try:
             user_id = force_str(urlsafe_base64_decode(uid))
@@ -218,6 +287,9 @@ class ConfirmPasswordService:
             user.save()
             logger.info(f"Password reset successfully for user={user_id}")
             return user
+        except (binascii.Error, ValueError):
+            logger.warning(f"Invalid base64 uid: {uid}")
+            raise InvalidUserData("Идентификатор пользователя должен быть в формате base64")
         except User.DoesNotExist:
             logger.warning(f"User not found for uid={uid}")
             raise UserNotFound("Пользователь не найден")
