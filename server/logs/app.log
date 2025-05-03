@@ -2044,3 +2044,147 @@ LINE 1: ..."."content_type_id", "core_like"."object_id" FROM "core_like...
 [2025-05-01 15:06:03,361] INFO apps.wishlists.services.wishlist_services Product 8 merged into wishlist for user=11
 [2025-05-01 15:06:03,363] INFO apps.wishlists.services.wishlist_services Product 9 merged into wishlist for user=11
 [2025-05-01 15:06:06,555] DEBUG apps.core.services.cache_services Cache hit for key: cart:11
+[2025-05-02 18:56:30,714] INFO apps.users.authentication Successful authentication for user 11
+[2025-05-02 18:56:30,714] INFO apps.users.views Updating profile for user 11, path=/user/profile/
+[2025-05-02 18:56:30,718] DEBUG apps.users.serializers Validating profile data: {}
+[2025-05-02 18:56:30,718] DEBUG apps.users.serializers Validating user data: {'username': 'edem', 'first_name': '', 'last_name': '', 'profile': {}}
+[2025-05-02 18:56:30,718] ERROR apps.users.utils Unexpected error: The `.update()` method does not support writable nested fields by default.
+Write an explicit `.update()` method for serializer `apps.users.serializers.UserSerializer`, or set `read_only=True` on nested serializer fields., user=11, path=/user/profile/
+[2025-05-02 18:58:29,596] INFO apps.users.authentication Successful authentication for user 11
+[2025-05-02 18:58:29,596] INFO apps.users.views Confirming account, user=11, path=/user/confirm-code/
+[2025-05-02 18:58:29,597] INFO apps.users.services.users_services Confirming account for email=edem100@list.ru, code=551762
+[2025-05-02 18:58:29,612] WARNING apps.users.services.users_services Invalid confirmation code for user 11
+[2025-05-02 18:58:29,613] ERROR apps.users.services.users_services Failed to confirm account for email=edem100@list.ru: Неверный код подтверждения
+[2025-05-02 18:58:29,613] ERROR apps.users.utils User service error: Ошибка подтверждения аккаунта: Неверный код подтверждения, user=11, path=/user/confirm-code/
+[2025-05-02 18:58:48,734] INFO apps.users.authentication Successful authentication for user 11
+[2025-05-02 18:58:48,734] INFO apps.users.views Resending confirmation code, user=11, path=/user/resend-code/
+[2025-05-02 18:58:48,734] INFO apps.users.services.users_services Resending confirmation code to edem100@list.ru
+[2025-05-02 18:58:48,736] WARNING apps.users.services.users_services User with email=edem100@list.ru not found or already active
+[2025-05-02 18:58:48,736] ERROR apps.users.services.users_services Failed to resend confirmation code to edem100@list.ru: Аккаунт не найден или уже активирован
+[2025-05-02 18:58:48,736] ERROR apps.users.utils User service error: Ошибка отправки кода подтверждения: Аккаунт не найден или уже активирован, user=11, path=/user/resend-code/
+[2025-05-02 18:58:55,275] INFO apps.users.authentication Successful authentication for user 11
+[2025-05-02 18:58:55,275] INFO apps.users.views Requesting password reset, user=11, path=/user/password-reset/
+[2025-05-02 18:58:55,276] DEBUG apps.users.serializers Validating password reset data: {'email': 'edem100@list.ru'}
+[2025-05-02 18:58:55,276] INFO apps.users.services.users_services Requesting password reset for email=edem100@list.ru
+[2025-05-02 18:59:01,384] ERROR apps.users.services.users_services Failed to request password reset for email=edem100@list.ru: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение
+[2025-05-02 18:59:01,384] ERROR apps.users.utils User service error: Ошибка запроса сброса пароля: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение, user=11, path=/user/password-reset/
+[2025-05-02 19:00:43,911] INFO apps.users.authentication Successful authentication for user 11
+[2025-05-02 19:00:43,911] INFO apps.users.views Requesting password reset, user=11, path=/user/password-reset/
+[2025-05-02 19:00:43,911] DEBUG apps.users.serializers Validating password reset data: {'email': 'edem100@list.ru'}
+[2025-05-02 19:00:43,911] INFO apps.users.services.users_services Requesting password reset for email=edem100@list.ru
+[2025-05-02 19:00:43,937] INFO apps.users.services.users_services Password reset requested for user 11
+[2025-05-02 19:00:43,937] INFO apps.users.views Password reset requested for email=edem100@list.ru
+[2025-05-02 19:00:43,946] INFO apps.users.services.tasks Sending password reset email to edem100@list.ru, url=http://localhost:8000/reset-password/?token=cp6vh7-1c552a4a6deeedc430a1af7e11eff089&uid=MTE
+[2025-05-02 19:01:57,564] INFO apps.users.authentication Successful authentication for user 11
+[2025-05-02 19:01:57,564] INFO apps.users.views Confirming password reset, user=11, path=/user/password-reset-confirm/
+[2025-05-02 19:01:57,564] ERROR apps.users.utils Unexpected error: {'new_password': [ErrorDetail(string='Убедитесь, что это значение содержит не менее 8 символов.', code='min_length')]}, user=11, path=/user/password-reset-confirm/
+[2025-05-02 19:31:46,893] INFO apps.users.authentication No token provided in request
+[2025-05-02 19:31:46,893] INFO apps.users.utils Processing request for user=anonymous, path=/user/password-reset-confirm/
+[2025-05-02 19:31:46,893] INFO apps.users.views Confirming password reset, user=anonymous, data={'uid': '8', 'token': 'clqv6t-67a547ae52b0944c68ee3403a78d9c0b', 'new_password': '1234'}
+[2025-05-02 19:31:46,893] ERROR apps.users.views Failed to confirm password reset: {'new_password': [ErrorDetail(string='Убедитесь, что это значение содержит не менее 8 символов.', code='min_length')]}, user=anonymous
+[2025-05-02 19:31:46,893] ERROR apps.users.utils User service error: Ошибка сброса пароля: {'new_password': [ErrorDetail(string='Убедитесь, что это значение содержит не менее 8 символов.', code='min_length')]}, user=anonymous, path=/user/password-reset-confirm/
+[2025-05-02 19:32:05,184] INFO apps.users.authentication No token provided in request
+[2025-05-02 19:32:05,184] INFO apps.users.utils Processing request for user=anonymous, path=/user/login/
+[2025-05-02 19:32:05,184] INFO apps.users.views Attempting login with data={'email': 'edem100@list.ru', 'password': '123'}, user=anonymous
+[2025-05-02 19:32:05,186] DEBUG apps.users.serializers Validating login data: {'email': 'edem100@list.ru', 'password': '123'}
+[2025-05-02 19:32:05,186] INFO apps.users.services.users_services Attempting login for email=edem100@list.ru
+[2025-05-02 19:32:05,769] INFO apps.users.services.users_services Successfully logged in user 11
+[2025-05-02 19:32:05,772] INFO apps.users.views Successfully logged in user 11, user=anonymous
+[2025-05-02 19:32:05,772] INFO apps.users.utils Setting JWT cookies for user 11
+[2025-05-02 19:32:06,370] INFO apps.users.utils Successfully set JWT cookies for user 11
+[2025-05-02 19:32:10,192] INFO apps.users.authentication Successful authentication for user 11
+[2025-05-02 19:32:10,192] INFO apps.users.utils Processing request for user=11, path=/user/logout/
+[2025-05-02 19:32:10,192] INFO apps.users.views Attempting logout, user=11
+[2025-05-02 19:32:10,192] INFO apps.users.services.users_services Attempting logout with refresh_token=eyJhbGciOi...
+[2025-05-02 19:32:10,224] INFO apps.users.services.users_services Successfully logged out user
+[2025-05-02 19:32:10,224] INFO apps.users.views Successfully logged out user 11
+[2025-05-02 19:32:23,747] INFO apps.users.authentication No token provided in request
+[2025-05-02 19:32:23,747] INFO apps.users.utils Processing request for user=anonymous, path=/user/register/
+[2025-05-02 19:32:23,747] INFO apps.users.views Creating user with data={'username': 'edem', 'email': 'edem100@list.ru', 'password': '123'}, user=anonymous
+[2025-05-02 19:32:23,781] ERROR apps.users.views Failed to create user: {'username': [ErrorDetail(string='Пользователь с таким именем уже существует.', code='unique')], 'email': [ErrorDetail(string='Email уже зарегистрирован', code='unique')], 'password': [ErrorDetail(string='Убедитесь, что это значение содержит не менее 8 символов.', code='min_length')]}, user=anonymous
+[2025-05-02 19:32:23,781] ERROR apps.users.utils User service error: Ошибка создания пользователя: {'username': [ErrorDetail(string='Пользователь с таким именем уже существует.', code='unique')], 'email': [ErrorDetail(string='Email уже зарегистрирован', code='unique')], 'password': [ErrorDetail(string='Убедитесь, что это значение содержит не менее 8 символов.', code='min_length')]}, user=anonymous, path=/user/register/
+[2025-05-02 19:32:45,398] INFO apps.users.authentication No token provided in request
+[2025-05-02 19:32:50,379] INFO apps.users.authentication No token provided in request
+[2025-05-02 19:32:50,379] INFO apps.users.utils Processing request for user=anonymous, path=/user/login/
+[2025-05-02 19:32:50,379] INFO apps.users.views Attempting login with data={'email': 'edem100@list.ru', 'password': '123'}, user=anonymous
+[2025-05-02 19:32:50,379] DEBUG apps.users.serializers Validating login data: {'email': 'edem100@list.ru', 'password': '123'}
+[2025-05-02 19:32:50,379] INFO apps.users.services.users_services Attempting login for email=edem100@list.ru
+[2025-05-02 19:32:50,888] INFO apps.users.services.users_services Successfully logged in user 11
+[2025-05-02 19:32:50,891] INFO apps.users.views Successfully logged in user 11, user=anonymous
+[2025-05-02 19:32:50,891] INFO apps.users.utils Setting JWT cookies for user 11
+[2025-05-02 19:32:50,893] INFO apps.users.utils Successfully set JWT cookies for user 11
+[2025-05-02 19:32:55,331] INFO apps.users.authentication Successful authentication for user 11
+[2025-05-02 19:32:55,331] INFO apps.users.utils Processing request for user=11, path=/user/register/
+[2025-05-02 19:32:55,331] INFO apps.users.views Creating user with data={'username': 'edem', 'email': 'edem100@list.ru', 'password': '123'}, user=11
+[2025-05-02 19:32:55,333] ERROR apps.users.views Failed to create user: {'username': [ErrorDetail(string='Пользователь с таким именем уже существует.', code='unique')], 'email': [ErrorDetail(string='Email уже зарегистрирован', code='unique')], 'password': [ErrorDetail(string='Убедитесь, что это значение содержит не менее 8 символов.', code='min_length')]}, user=11
+[2025-05-02 19:32:55,333] ERROR apps.users.utils User service error: Ошибка создания пользователя: {'username': [ErrorDetail(string='Пользователь с таким именем уже существует.', code='unique')], 'email': [ErrorDetail(string='Email уже зарегистрирован', code='unique')], 'password': [ErrorDetail(string='Убедитесь, что это значение содержит не менее 8 символов.', code='min_length')]}, user=11, path=/user/register/
+[2025-05-02 19:32:58,567] INFO apps.users.authentication Successful authentication for user 11
+[2025-05-02 19:32:58,568] INFO apps.users.utils Processing request for user=11, path=/user/profile/
+[2025-05-02 19:32:58,568] INFO apps.users.views Retrieving profile for user 11
+[2025-05-02 19:32:58,568] INFO apps.users.views Successfully retrieved profile for user 11
+[2025-05-02 19:33:04,392] INFO apps.users.authentication Successful authentication for user 11
+[2025-05-02 19:33:04,392] INFO apps.users.utils Processing request for user=11, path=/user/profile/
+[2025-05-02 19:33:04,392] INFO apps.users.views Updating profile for user 11, data={'username': 'edem', 'email': 'test2@gmail.com', 'first_name': '', 'last_name': '', 'profile': {'public_id': 'test2-27ba2326'}}
+[2025-05-02 19:33:04,395] DEBUG apps.users.serializers Validating profile data: {}
+[2025-05-02 19:33:04,395] DEBUG apps.users.serializers Validating user data: {'username': 'edem', 'first_name': '', 'last_name': '', 'profile': {}}
+[2025-05-02 19:33:04,395] ERROR apps.users.views Failed to update profile for user 11: The `.update()` method does not support writable nested fields by default.
+Write an explicit `.update()` method for serializer `apps.users.serializers.UserSerializer`, or set `read_only=True` on nested serializer fields.
+[2025-05-02 19:33:04,395] ERROR apps.users.utils User service error: Ошибка обновления профиля: The `.update()` method does not support writable nested fields by default.
+Write an explicit `.update()` method for serializer `apps.users.serializers.UserSerializer`, or set `read_only=True` on nested serializer fields., user=11, path=/user/profile/
+[2025-05-02 19:36:13,105] INFO apps.users.authentication Successful authentication for user 11
+[2025-05-02 19:36:13,105] INFO apps.products.views Retrieving product list, user=11, path=/products/list/
+[2025-05-02 19:36:15,153] ERROR apps.products.views Failed to retrieve product list: Error 10061 connecting to 127.0.0.1:6379. Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение., user=11
+[2025-05-02 19:36:15,153] WARNING apps.products.utils Product error: Ошибка получения списка продуктов: Error 10061 connecting to 127.0.0.1:6379. Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение., user=11, path=/products/list/
+[2025-05-03 16:44:41,008] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 16:44:41,008] INFO apps.users.views Processing user login request
+[2025-05-03 16:44:41,009] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-03 16:44:41,836] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-03 16:44:41,883] INFO apps.users.views User 11 logged in successfully
+[2025-05-03 16:44:42,015] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-03 16:44:58,394] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 16:44:58,394] INFO apps.users.views Processing user registration request
+[2025-05-03 16:44:58,423] WARNING apps.users.utils API error: {'username': [ErrorDetail(string='Пользователь с таким именем уже существует.', code='unique')], 'email': [ErrorDetail(string='Значения поля должны быть уникальны.', code='unique')]}, user=11, path=/user/register/
+[2025-05-03 16:45:23,775] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 16:45:23,775] INFO apps.users.views Fetching profile for user=11
+[2025-05-03 16:45:54,270] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 16:45:54,270] INFO apps.users.views Updating profile for user=11
+[2025-05-03 16:45:54,272] INFO apps.users.serializers Updating user=11 with validated data
+[2025-05-03 16:45:54,272] INFO apps.users.services.users_services Updating user and profile for user=11
+[2025-05-03 16:45:54,329] INFO apps.users.models Saving user profile for user=11
+[2025-05-03 16:45:54,348] INFO apps.users.models Updating user profile for user=11
+[2025-05-03 16:45:54,350] INFO apps.users.models Successfully updating user profile 11, user=11
+[2025-05-03 16:45:54,350] INFO apps.users.models Updating user profile for user=11
+[2025-05-03 16:45:54,351] INFO apps.users.models Successfully updating user profile 11, user=11
+[2025-05-03 16:45:54,351] INFO apps.users.services.users_services User and profile updated successfully for user=11
+[2025-05-03 16:45:54,351] INFO apps.users.serializers User=11 updated successfully
+[2025-05-03 16:45:54,351] INFO apps.users.views Profile updated for user=11
+[2025-05-03 16:46:27,709] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 16:46:27,709] INFO apps.users.views Processing account confirmation request
+[2025-05-03 16:46:27,709] INFO apps.users.services.users_services Confirming account for email=edem100@list.ru with code=551762
+[2025-05-03 16:46:27,710] WARNING apps.users.services.users_services User not found for email=edem100@list.ru
+[2025-05-03 16:46:27,710] WARNING apps.users.utils User error: Пользователь не найден, user=11, path=/user/confirm-code/
+[2025-05-03 16:46:36,925] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 16:46:36,925] INFO apps.users.views Processing resend confirmation code request
+[2025-05-03 16:46:36,925] INFO apps.users.services.users_services Resending confirmation code to email=edem100@list.ru
+[2025-05-03 16:46:36,925] WARNING apps.users.services.users_services User not found or already activated for email=edem100@list.ru
+[2025-05-03 16:46:36,925] WARNING apps.users.utils User error: Аккаунт не найден или уже активирован, user=11, path=/user/resend-code/
+[2025-05-03 16:46:42,964] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 16:46:42,964] INFO apps.users.views Processing password reset request
+[2025-05-03 16:46:42,964] INFO apps.users.services.users_services Requesting password reset for email=edem100@list.ru
+[2025-05-03 16:46:42,965] WARNING apps.users.services.users_services User not found for email=edem100@list.ru
+[2025-05-03 16:46:42,965] WARNING apps.users.utils User error: Пользователь с таким email не найден, user=11, path=/user/password-reset/
+[2025-05-03 16:46:53,331] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 16:46:53,331] INFO apps.users.views Processing password reset confirmation
+[2025-05-03 16:46:53,331] INFO apps.users.services.users_services Confirming password reset for uid=8
+[2025-05-03 16:46:53,332] ERROR apps.users.services.users_services Failed to reset password: Invalid base64-encoded string: number of data characters (1) cannot be 1 more than a multiple of 4
+[2025-05-03 16:46:53,332] WARNING apps.users.utils User error: Ошибка сброса пароля: Invalid base64-encoded string: number of data characters (1) cannot be 1 more than a multiple of 4, user=11, path=/user/password-reset-confirm/
+[2025-05-03 16:47:09,042] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 16:47:09,043] INFO apps.users.views Processing logout for user=11
+[2025-05-03 16:47:09,085] INFO apps.users.services.users_services User logged out successfully
+[2025-05-03 16:47:09,085] INFO apps.users.views User 11 logged out successfully
+[2025-05-03 16:47:13,133] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 16:47:17,527] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 16:47:17,527] INFO apps.users.views Processing user login request
+[2025-05-03 16:47:17,527] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-03 16:47:17,561] WARNING apps.users.services.users_services User not found with email=edem100@list.ru
+[2025-05-03 16:47:17,561] WARNING apps.users.utils User error: Неверные учетные данные, user=anonymous, path=/user/login/

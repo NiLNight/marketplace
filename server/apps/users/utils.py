@@ -1,52 +1,19 @@
-from datetime import datetime
-from django.conf import settings
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.exceptions import APIException
-from functools import wraps
-from apps.users.exceptions import UserServiceException, UserNotFound
 import logging
+from datetime import datetime
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.conf import settings
+from functools import wraps
+from rest_framework.response import Response
+from rest_framework import status
+from django.core.exceptions import ValidationError
+from rest_framework.exceptions import APIException, PermissionDenied
+from apps.users.exceptions import UserException
 
 logger = logging.getLogger(__name__)
 
 
-def handle_user_api_errors(view_func):
-    """Декоратор для обработки ошибок в представлениях пользователей.
-
-    Логирует ошибки и преобразует исключения в стандартизированные ответы API.
-
-    Args:
-        view_func: Функция представления.
-
-    Returns:
-        Обернутая функция, которая обрабатывает ошибки.
-
-    Raises:
-        APIException: Для клиентских ошибок (400, 404 и т.д.).
-        Exception: Для серверных ошибок (500).
-    """
-
-    @wraps(view_func)
-    def wrapped_view(*args, **kwargs):
-        request = args[1]  # request всегда второй аргумент в APIView
-        user_id = request.user.id if request.user.is_authenticated else 'anonymous'
-        try:
-            return view_func(*args, **kwargs)
-        except UserNotFound as e:
-            logger.error(f"User not found: {str(e)}, user={user_id}, path={request.path}")
-            raise APIException(detail=str(e), code=e.default_code)
-        except UserServiceException as e:
-            logger.error(f"User service error: {str(e)}, user={user_id}, path={request.path}")
-            raise APIException(detail=str(e), code=e.default_code)
-        except Exception as e:
-            logger.error(f"Unexpected error: {str(e)}, user={user_id}, path={request.path}")
-            raise APIException(detail="Внутренняя ошибка сервера", code="internal_server_error")
-
-    return wrapped_view
-
-
 def set_jwt_cookies(response, user):
-    """
-    Устанавливает JWT-токены в cookies ответа.
+    """Устанавливает JWT-токены в cookies ответа.
 
     Args:
         response (HttpResponse): Объект ответа.
@@ -55,7 +22,6 @@ def set_jwt_cookies(response, user):
     Returns:
         HttpResponse: Ответ с установленными cookies.
     """
-    logger.debug(f"Setting JWT cookies for user {user.id}")
     refresh = RefreshToken.for_user(user)
     access_token = str(refresh.access_token)
     refresh_token = str(refresh)
@@ -82,5 +48,63 @@ def set_jwt_cookies(response, user):
         **cookie_params
     )
 
-    logger.info(f"JWT cookies set successfully for user {user.id}")
+    logger.info(f"JWT cookies set for user={user.id}")
     return response
+
+
+def handle_api_errors(view_func):
+    """Декоратор для обработки ошибок в API-представлениях приложения users.
+
+    Логирует ошибки и возвращает стандартизированные HTTP-ответы.
+
+    Args:
+        view_func: Функция представления для обертки.
+
+    Returns:
+        Обернутая функция с обработкой ошибок.
+    """
+
+    @wraps(view_func)
+    def wrapper(self, request, *args, **kwargs):
+        user_id = request.user.id if request.user.is_authenticated else 'anonymous'
+        path = request.path
+        try:
+            return view_func(self, request, *args, **kwargs)
+        except KeyError as e:
+            logger.warning(f"Missing key: {str(e)}, user={user_id}, path={path}")
+            return Response(
+                {"error": f"Отсутствует ключ: {str(e)}", "code": "missing_key"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except (ValidationError, ValueError) as e:
+            logger.warning(f"Invalid data: {str(e)}, user={user_id}, path={path}")
+            return Response(
+                {"error": str(e), "code": "validation_error"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except PermissionDenied as e:
+            logger.warning(f"Permission denied: {str(e)}, user={user_id}, path={path}")
+            return Response(
+                {"error": str(e), "code": "permission_denied"},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        except UserException as e:
+            logger.warning(f"User error: {e.detail}, user={user_id}, path={path}")
+            return Response(
+                {"error": e.detail, "code": e.default_code},
+                status=e.status_code
+            )
+        except APIException as e:
+            logger.warning(f"API error: {e.detail}, user={user_id}, path={path}")
+            return Response(
+                {"error": e.detail, "code": e.default_code},
+                status=e.status_code
+            )
+        except Exception as e:
+            logger.error(f"Server error: {str(e)}, user={user_id}, path={path}")
+            return Response(
+                {"error": "Внутренняя ошибка сервера", "code": "server_error"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+    return wrapper

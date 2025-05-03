@@ -1,21 +1,28 @@
-import logging
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from apps.users.models import UserProfile
-from apps.users.exceptions import UserServiceException
+from apps.users.models import UserProfile, EmailVerified
+from apps.users.exceptions import InvalidUserData
+from apps.users.services.users_services import UserService
+import logging
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    """Сериализатор для генерации JWT-токенов с дополнительными данными."""
+    """Сериализатор для получения JWT-токенов.
+
+    Добавляет информацию о статусе активности пользователя в токен.
+
+    Args:
+        user (User): Пользователь, для которого генерируется токен.
+    """
 
     @classmethod
     def get_token(cls, user):
-        logger.debug(f"Generating token for user {user.id}")
+        logger.info(f"Generating token for user={user.id}")
         token = super().get_token(user)
         token['is_active'] = user.is_active
         return token
@@ -24,154 +31,237 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 class UserRegistrationSerializer(serializers.ModelSerializer):
     """Сериализатор для регистрации пользователя.
 
-    Валидирует username, email и password.
+    Преобразует данные для создания нового пользователя, включая имя, email и пароль.
+    Используется в API для обработки запросов на регистрацию.
     """
     email = serializers.EmailField(
         required=True,
-        validators=[UniqueValidator(queryset=User.objects.all(), message="Email уже зарегистрирован")]
+        validators=[UniqueValidator(queryset=User.objects.all())],
+        help_text='Уникальный адрес электронной почты пользователя.'
     )
-    password = serializers.CharField(write_only=True, required=True, min_length=8)
+    password = serializers.CharField(
+        write_only=True,
+        required=True,
+        help_text='Пароль пользователя.'
+    )
+    username = serializers.CharField(
+        required=True,
+        help_text='Имя пользователя.'
+    )
 
     class Meta:
+        """Метаданные сериализатора UserRegistrationSerializer."""
         model = User
         fields = ['username', 'email', 'password']
+        read_only_fields = []
 
-    def validate(self, data):
-        """Проверяет данные для регистрации.
+    def validate(self, attrs):
+        """Проверка корректности данных перед регистрацией.
 
         Args:
-            data: Данные для валидации.
+            attrs (dict): Данные для сериализации.
 
         Returns:
-            Проверенные данные.
+            dict: Валидированные данные.
 
         Raises:
-            UserServiceException: Если данные некорректны.
+            serializers.ValidationError: Если данные некорректны.
         """
-        logger.debug(f"Validating registration data: {data}")
-        try:
-            return data
-        except Exception as e:
-            logger.error(f"Validation error during registration: {str(e)}")
-            raise UserServiceException(f"Ошибка валидации данных: {str(e)}")
+        logger.info(f"Validating registration data for email={attrs.get('email')}")
+        return attrs
 
 
 class UserLoginSerializer(serializers.Serializer):
     """Сериализатор для аутентификации пользователя.
 
-    Валидирует email и password.
+    Обрабатывает данные для входа пользователя, включая email и пароль.
+    Используется в API для обработки запросов на вход.
     """
-    email = serializers.EmailField(required=True)
+    email = serializers.EmailField(
+        required=True,
+        help_text='Адрес электронной почты пользователя.'
+    )
     password = serializers.CharField(
         max_length=128,
         write_only=True,
-        required=True,
-        style={'input_type': 'password'}
+        style={'input_type': 'password'},
+        help_text='Пароль пользователя.'
     )
 
-    def validate(self, data):
-        """Проверяет данные для входа.
+    class Meta:
+        """Метаданные сериализатора UserLoginSerializer."""
+        fields = ['email', 'password']
+
+    def validate(self, attrs):
+        """Проверка корректности данных для входа.
 
         Args:
-            data: Данные для валидации.
+            attrs (dict): Данные для сериализации.
 
         Returns:
-            Проверенные данные.
+            dict: Валидированные данные.
 
         Raises:
-            UserServiceException: Если данные некорректны.
+            serializers.ValidationError: Если данные некорректны.
         """
-        logger.debug(f"Validating login data: {data}")
-        try:
-            return data
-        except Exception as e:
-            logger.error(f"Validation error during login: {str(e)}")
-            raise UserServiceException(f"Ошибка валидации данных: {str(e)}")
+        logger.info(f"Validating login data for email={attrs.get('email')}")
+        return attrs
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    """Сериализатор для профиля пользователя."""
+    """Сериализатор для профиля пользователя.
+
+    Преобразует данные профиля пользователя, включая публичный ID, телефон, дату рождения и аватар.
+    Используется в API для отображения и обновления профиля.
+    """
+    public_id = serializers.CharField(
+        read_only=True,
+        help_text='Уникальный публичный идентификатор профиля.'
+    )
+    phone = serializers.CharField(
+        required=False,
+        allow_null=True,
+        allow_blank=True,
+        help_text='Номер телефона пользователя.'
+    )
+    birth_date = serializers.DateField(
+        required=False,
+        allow_null=True,
+        help_text='Дата рождения пользователя.'
+    )
+    avatar = serializers.ImageField(
+        required=False,
+        allow_null=True,
+        help_text='Аватар пользователя.'
+    )
 
     class Meta:
+        """Метаданные сериализатора UserProfileSerializer."""
         model = UserProfile
         fields = ['public_id', 'phone', 'birth_date', 'avatar']
         read_only_fields = ['public_id']
 
+    def validate(self, attrs):
+        """Проверка корректности данных профиля.
+
+        Args:
+            attrs (dict): Данные для сериализации.
+
+        Returns:
+            dict: Валидированные данные.
+
+        Raises:
+            serializers.ValidationError: Если данные некорректны.
+        """
+        logger.info(f"Validating profile data for user={self.instance.user.id if self.instance else 'new'}")
+        return attrs
+
 
 class UserSerializer(serializers.ModelSerializer):
-    """Сериализатор для пользователя с вложенным профилем."""
-    profile = UserProfileSerializer(required=False)
+    """Сериализатор для пользователя с вложенным профилем.
+
+    Преобразует данные пользователя и его профиля для API-ответов.
+    Используется для отображения и обновления информации о пользователе.
+    """
+    profile = UserProfileSerializer(
+        required=False,
+        help_text='Данные профиля пользователя.'
+    )
+    username = serializers.CharField(
+        help_text='Имя пользователя.'
+    )
+    email = serializers.EmailField(
+        help_text='Адрес электронной почты пользователя.'
+    )
+    first_name = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        help_text='Имя пользователя.'
+    )
+    last_name = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        help_text='Фамилия пользователя.'
+    )
 
     class Meta:
+        """Метаданные сериализатора UserSerializer."""
         model = User
         fields = ['username', 'email', 'first_name', 'last_name', 'profile']
         read_only_fields = ['email']
 
-    def validate(self, data):
-        """Проверяет данные для обновления пользователя.
+    def validate(self, attrs):
+        """Проверка корректности данных пользователя.
 
         Args:
-            data: Данные для валидации.
+            attrs (dict): Данные для сериализации.
 
         Returns:
-            Проверенные данные.
+            dict: Валидированные данные.
 
         Raises:
-            UserServiceException: Если данные некорректны.
+            serializers.ValidationError: Если данные некорректны.
         """
-        logger.debug(f"Validating user data: {data}")
+        logger.info(f"Validating user data for user={self.instance.id if self.instance else 'new'}")
+        return attrs
+
+    def update(self, instance, validated_data):
+        """Обновляет пользователя и его профиль.
+
+        Args:
+            instance (User): Пользователь.
+            validated_data (dict): Проверенные данные.
+
+        Returns:
+            User: Обновленный пользователь.
+
+        Raises:
+            serializers.ValidationError: Если данные некорректны.
+        """
+        logger.info(f"Updating user={instance.id} with validated data")
         try:
-            return data
-        except Exception as e:
-            logger.error(f"Validation error during user update: {str(e)}")
-            raise UserServiceException(f"Ошибка валидации данных: {str(e)}")
+            updated_user = UserService.update_user_and_profile(instance, validated_data)
+            logger.info(f"User={instance.id} updated successfully")
+            return updated_user
+        except InvalidUserData as e:
+            logger.error(f"Failed to update user={instance.id}: {str(e)}")
+            raise serializers.ValidationError(str(e))
 
 
 class PasswordResetSerializer(serializers.Serializer):
-    """Сериализатор для запроса сброса пароля."""
-    email = serializers.EmailField(required=True)
+    """Сериализатор для запроса сброса пароля.
 
-    def validate(self, data):
-        """Проверяет email для сброса пароля.
+    Обрабатывает email для отправки ссылки на сброс пароля.
+    """
+    email = serializers.EmailField(
+        required=True,
+        help_text='Адрес электронной почты пользователя.'
+    )
 
-        Args:
-            data: Данные для валидации.
-
-        Returns:
-            Проверенные данные.
-
-        Raises:
-            UserServiceException: Если email некорректен.
-        """
-        logger.debug(f"Validating password reset data: {data}")
-        try:
-            return data
-        except Exception as e:
-            logger.error(f"Validation error during password reset: {str(e)}")
-            raise UserServiceException(f"Ошибка валидации данных: {str(e)}")
+    class Meta:
+        """Метаданные сериализатора PasswordResetSerializer."""
+        fields = ['email']
 
 
 class PasswordResetConfirmSerializer(serializers.Serializer):
-    """Сериализатор для подтверждения сброса пароля."""
-    uid = serializers.CharField(required=True)
-    token = serializers.CharField(required=True)
-    new_password = serializers.CharField(write_only=True, required=True, min_length=8)
+    """Сериализатор для подтверждения сброса пароля.
 
-    def validate(self, data):
-        """Проверяет данные для сброса пароля.
+    Обрабатывает данные для изменения пароля через токен и UID.
+    """
+    uid = serializers.CharField(
+        required=True,
+        help_text='Уникальный идентификатор пользователя (base64).'
+    )
+    token = serializers.CharField(
+        required=True,
+        help_text='Токен для сброса пароля.'
+    )
+    new_password = serializers.CharField(
+        write_only=True,
+        required=True,
+        help_text='Новый пароль пользователя.'
+    )
 
-        Args:
-            data: Данные для валидации.
-
-        Returns:
-            Проверенные данные.
-
-        Raises:
-            UserServiceException: Если данные некорректны.
-        """
-        logger.debug(f"Validating password reset confirm data: {data}")
-        try:
-            return data
-        except Exception as e:
-            logger.error(f"Validation error during password reset confirm: {str(e)}")
-            raise UserServiceException(f"Ошибка валидации данных: {str(e)}")
+    class Meta:
+        """Метаданные сериализатора PasswordResetConfirmSerializer."""
+        fields = ['uid', 'token', 'new_password']
