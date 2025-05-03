@@ -82,16 +82,41 @@ class UserService:
 
     @staticmethod
     def update_user_and_profile(user: User, validated_data: dict) -> User:
-        """Обновление пользователя и его профиля."""
+        """Обновление пользователя и его профиля.
+
+        Запрещает изменение email и public_id.
+
+        Args:
+            user (User): Пользователь для обновления.
+            validated_data (dict): Проверенные данные.
+
+        Returns:
+            User: Обновленный пользователь.
+
+        Raises:
+            InvalidUserData: Если данные некорректны.
+        """
         logger.info(f"Updating user and profile for user={user.id}")
         profile_data = validated_data.pop('profile', None)
+
+        # Игнорировать попытки изменения email
+        if 'email' in validated_data:
+            logger.warning(f"Attempt to change email for user={user.id}, ignored")
+            validated_data.pop('email')
+
+        # Обновление полей пользователя
         for attr, value in validated_data.items():
             setattr(user, attr, value)
         user.save()
 
+        # Обновление профиля
         if profile_data:
             from apps.users.serializers import UserProfileSerializer
             if hasattr(user, 'profile') and user.profile is not None:
+                # Игнорировать попытки изменения public_id
+                if 'public_id' in profile_data:
+                    logger.warning(f"Attempt to change public_id for user={user.id}, ignored")
+                    profile_data.pop('public_id')
                 profile_serializer = UserProfileSerializer(
                     instance=user.profile,
                     data=profile_data,
@@ -104,6 +129,8 @@ class UserService:
                     raise InvalidUserData("Некорректные данные профиля")
             else:
                 try:
+                    # Игнорировать public_id при создании профиля
+                    profile_data.pop('public_id', None)
                     UserProfile.objects.create(user=user, **profile_data)
                 except Exception as e:
                     logger.error(f"Failed to create profile: {str(e)}")

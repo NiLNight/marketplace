@@ -171,6 +171,7 @@ class UserSerializer(serializers.ModelSerializer):
         help_text='Имя пользователя.'
     )
     email = serializers.EmailField(
+        read_only=True,
         help_text='Адрес электронной почты пользователя.'
     )
     first_name = serializers.CharField(
@@ -193,6 +194,8 @@ class UserSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         """Проверка корректности данных пользователя.
 
+        Проверяет уникальность username при обновлении.
+
         Args:
             attrs (dict): Данные для сериализации.
 
@@ -200,9 +203,14 @@ class UserSerializer(serializers.ModelSerializer):
             dict: Валидированные данные.
 
         Raises:
-            serializers.ValidationError: Если данные некорректны.
+            serializers.ValidationError: Если username уже занят другим пользователем.
         """
         logger.info(f"Validating user data for user={self.instance.id if self.instance else 'new'}")
+        username = attrs.get('username')
+        if username and self.instance:
+            if User.objects.exclude(id=self.instance.id).filter(username=username).exists():
+                logger.warning(f"Username {username} already taken for user={self.instance.id}")
+                raise serializers.ValidationError({"username": "Имя пользователя уже занято."})
         return attrs
 
     def update(self, instance, validated_data):

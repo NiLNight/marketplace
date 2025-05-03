@@ -2188,3 +2188,243 @@ Write an explicit `.update()` method for serializer `apps.users.serializers.User
 [2025-05-03 16:47:17,527] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
 [2025-05-03 16:47:17,561] WARNING apps.users.services.users_services User not found with email=edem100@list.ru
 [2025-05-03 16:47:17,561] WARNING apps.users.utils User error: Неверные учетные данные, user=anonymous, path=/user/login/
+[2025-05-03 17:38:20,692] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 17:38:20,692] INFO apps.users.views Processing user login request
+[2025-05-03 17:38:20,693] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-03 17:38:20,693] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-03 17:38:21,321] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-03 17:38:21,333] INFO apps.users.views User 11 logged in successfully
+[2025-05-03 17:38:21,352] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-03 17:56:23,922] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 17:56:23,922] INFO apps.users.views Processing user registration request
+[2025-05-03 17:56:23,985] WARNING apps.users.utils API error: {'email': [ErrorDetail(string='Значения поля должны быть уникальны.', code='unique')]}, user=anonymous, path=/user/register/
+[2025-05-03 17:56:33,535] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 17:56:37,422] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 17:56:37,422] INFO apps.users.views Processing user login request
+[2025-05-03 17:56:37,422] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-03 17:56:37,422] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-03 17:56:37,942] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-03 17:56:37,944] INFO apps.users.views User 11 logged in successfully
+[2025-05-03 17:56:37,947] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-03 17:56:40,819] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 17:56:40,819] INFO apps.users.views Fetching profile for user=11
+[2025-05-03 17:57:05,021] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 17:57:05,022] INFO apps.users.views Updating profile for user=11
+[2025-05-03 17:57:05,022] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-03 17:57:05,022] INFO apps.users.serializers Validating user data for user=11
+[2025-05-03 17:57:05,022] INFO apps.users.serializers Updating user=11 with validated data
+[2025-05-03 17:57:05,022] INFO apps.users.services.users_services Updating user and profile for user=11
+[2025-05-03 17:57:05,025] INFO apps.users.models Saving user profile for user=11
+[2025-05-03 17:57:05,035] INFO apps.users.models Updating user profile for user=11
+[2025-05-03 17:57:05,050] INFO apps.users.models Successfully updating user profile 11, user=11
+[2025-05-03 17:57:05,050] INFO apps.users.services.users_services User and profile updated successfully for user=11
+[2025-05-03 17:57:05,050] INFO apps.users.serializers User=11 updated successfully
+[2025-05-03 17:57:05,050] INFO apps.users.views Profile updated for user=11
+[2025-05-03 17:57:13,120] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 17:57:13,121] INFO apps.users.views Updating profile for user=11
+[2025-05-03 17:57:13,121] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-03 17:57:13,121] INFO apps.users.serializers Validating user data for user=11
+[2025-05-03 17:57:13,121] INFO apps.users.serializers Updating user=11 with validated data
+[2025-05-03 17:57:13,121] INFO apps.users.services.users_services Updating user and profile for user=11
+[2025-05-03 17:57:13,123] INFO apps.users.models Saving user profile for user=11
+[2025-05-03 17:57:13,124] INFO apps.users.models Updating user profile for user=11
+[2025-05-03 17:57:13,126] INFO apps.users.models Successfully updating user profile 11, user=11
+[2025-05-03 17:57:13,126] INFO apps.users.services.users_services User and profile updated successfully for user=11
+[2025-05-03 17:57:13,126] INFO apps.users.serializers User=11 updated successfully
+[2025-05-03 17:57:13,126] INFO apps.users.views Profile updated for user=11
+[2025-05-03 18:00:46,472] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:00:46,472] INFO apps.users.views Processing account confirmation request
+[2025-05-03 18:00:46,472] INFO apps.users.services.users_services Confirming account for email=edem100@list.ru with code=551762
+[2025-05-03 18:00:46,547] WARNING apps.users.services.users_services Invalid confirmation code for email=edem100@list.ru
+[2025-05-03 18:00:46,547] WARNING apps.users.utils User error: Неверный код, user=11, path=/user/confirm-code/
+[2025-05-03 18:00:51,472] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:00:51,472] INFO apps.users.views Processing resend confirmation code request
+[2025-05-03 18:00:51,472] INFO apps.users.services.users_services Resending confirmation code to email=edem100@list.ru
+[2025-05-03 18:00:51,473] WARNING apps.users.services.users_services User not found or already activated for email=edem100@list.ru
+[2025-05-03 18:00:51,473] WARNING apps.users.utils User error: Аккаунт не найден или уже активирован, user=11, path=/user/resend-code/
+[2025-05-03 18:00:56,961] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:00:56,961] INFO apps.users.views Processing password reset request
+[2025-05-03 18:00:56,961] INFO apps.users.services.users_services Requesting password reset for email=edem100@list.ru
+[2025-05-03 18:01:03,038] ERROR apps.users.utils Server error: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение, user=11, path=/user/password-reset/
+[2025-05-03 18:01:07,432] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:01:07,432] INFO apps.users.views Processing password reset confirmation
+[2025-05-03 18:01:07,433] INFO apps.users.services.users_services Confirming password reset for uid=8
+[2025-05-03 18:01:07,433] ERROR apps.users.services.users_services Failed to reset password: Invalid base64-encoded string: number of data characters (1) cannot be 1 more than a multiple of 4
+[2025-05-03 18:01:07,433] WARNING apps.users.utils User error: Ошибка сброса пароля: Invalid base64-encoded string: number of data characters (1) cannot be 1 more than a multiple of 4, user=11, path=/user/password-reset-confirm/
+[2025-05-03 18:01:19,284] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:01:19,284] INFO apps.users.views Processing logout for user=11
+[2025-05-03 18:01:19,289] INFO apps.users.services.users_services User logged out successfully
+[2025-05-03 18:01:19,289] INFO apps.users.views User 11 logged out successfully
+[2025-05-03 18:01:22,347] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 18:01:22,347] INFO apps.users.views Processing user login request
+[2025-05-03 18:01:22,348] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-03 18:01:22,348] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-03 18:01:22,852] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-03 18:01:22,855] INFO apps.users.views User 11 logged in successfully
+[2025-05-03 18:01:22,857] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-03 18:18:10,079] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 18:18:13,187] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 18:18:13,187] INFO apps.users.views Processing user login request
+[2025-05-03 18:18:13,188] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-03 18:18:13,188] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-03 18:18:13,711] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-03 18:18:13,713] INFO apps.users.views User 11 logged in successfully
+[2025-05-03 18:18:13,715] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-03 18:18:16,309] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:18:16,310] INFO apps.users.views Fetching profile for user=11
+[2025-05-03 18:18:19,637] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:18:19,638] INFO apps.users.views Updating profile for user=11
+[2025-05-03 18:18:19,638] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-03 18:18:19,638] INFO apps.users.serializers Validating user data for user=11
+[2025-05-03 18:18:19,638] INFO apps.users.serializers Updating user=11 with validated data
+[2025-05-03 18:18:19,638] INFO apps.users.services.users_services Updating user and profile for user=11
+[2025-05-03 18:18:19,640] INFO apps.users.models Saving user profile for user=11
+[2025-05-03 18:18:19,642] INFO apps.users.models Updating user profile for user=11
+[2025-05-03 18:18:19,643] INFO apps.users.models Successfully updating user profile 11, user=11
+[2025-05-03 18:18:19,643] INFO apps.users.services.users_services User and profile updated successfully for user=11
+[2025-05-03 18:18:19,643] INFO apps.users.serializers User=11 updated successfully
+[2025-05-03 18:18:19,643] INFO apps.users.views Profile updated for user=11
+[2025-05-03 18:18:21,787] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:18:21,787] INFO apps.users.views Updating profile for user=11
+[2025-05-03 18:18:21,787] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-03 18:18:21,787] INFO apps.users.serializers Validating user data for user=11
+[2025-05-03 18:18:21,787] INFO apps.users.serializers Updating user=11 with validated data
+[2025-05-03 18:18:21,787] INFO apps.users.services.users_services Updating user and profile for user=11
+[2025-05-03 18:18:21,789] INFO apps.users.models Saving user profile for user=11
+[2025-05-03 18:18:21,790] INFO apps.users.models Updating user profile for user=11
+[2025-05-03 18:18:21,791] INFO apps.users.models Successfully updating user profile 11, user=11
+[2025-05-03 18:18:21,791] INFO apps.users.services.users_services User and profile updated successfully for user=11
+[2025-05-03 18:18:21,791] INFO apps.users.serializers User=11 updated successfully
+[2025-05-03 18:18:21,791] INFO apps.users.views Profile updated for user=11
+[2025-05-03 18:21:22,457] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:21:22,457] INFO apps.users.views Updating profile for user=11
+[2025-05-03 18:21:22,459] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-03 18:21:22,459] INFO apps.users.serializers Validating user data for user=11
+[2025-05-03 18:21:22,460] INFO apps.users.serializers Updating user=11 with validated data
+[2025-05-03 18:21:22,460] INFO apps.users.services.users_services Updating user and profile for user=11
+[2025-05-03 18:21:22,462] INFO apps.users.models Saving user profile for user=11
+[2025-05-03 18:21:22,464] INFO apps.users.models Updating user profile for user=11
+[2025-05-03 18:21:22,465] INFO apps.users.models Successfully updating user profile 11, user=11
+[2025-05-03 18:21:22,465] INFO apps.users.services.users_services User and profile updated successfully for user=11
+[2025-05-03 18:21:22,465] INFO apps.users.serializers User=11 updated successfully
+[2025-05-03 18:21:22,465] INFO apps.users.views Profile updated for user=11
+[2025-05-03 18:21:30,819] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:21:30,819] INFO apps.users.views Updating profile for user=11
+[2025-05-03 18:21:30,820] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-03 18:21:30,820] INFO apps.users.serializers Validating user data for user=11
+[2025-05-03 18:21:30,821] INFO apps.users.serializers Updating user=11 with validated data
+[2025-05-03 18:21:30,821] INFO apps.users.services.users_services Updating user and profile for user=11
+[2025-05-03 18:21:30,822] INFO apps.users.models Saving user profile for user=11
+[2025-05-03 18:21:30,824] INFO apps.users.models Updating user profile for user=11
+[2025-05-03 18:21:30,825] INFO apps.users.models Successfully updating user profile 11, user=11
+[2025-05-03 18:21:30,825] INFO apps.users.services.users_services User and profile updated successfully for user=11
+[2025-05-03 18:21:30,825] INFO apps.users.serializers User=11 updated successfully
+[2025-05-03 18:21:30,825] INFO apps.users.views Profile updated for user=11
+[2025-05-03 18:21:33,654] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:21:33,654] INFO apps.users.views Updating profile for user=11
+[2025-05-03 18:21:33,655] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-03 18:21:33,655] INFO apps.users.serializers Validating user data for user=11
+[2025-05-03 18:21:33,656] INFO apps.users.serializers Updating user=11 with validated data
+[2025-05-03 18:21:33,656] INFO apps.users.services.users_services Updating user and profile for user=11
+[2025-05-03 18:21:33,657] INFO apps.users.models Saving user profile for user=11
+[2025-05-03 18:21:33,659] INFO apps.users.models Updating user profile for user=11
+[2025-05-03 18:21:33,660] INFO apps.users.models Successfully updating user profile 11, user=11
+[2025-05-03 18:21:33,660] INFO apps.users.services.users_services User and profile updated successfully for user=11
+[2025-05-03 18:21:33,660] INFO apps.users.serializers User=11 updated successfully
+[2025-05-03 18:21:33,660] INFO apps.users.views Profile updated for user=11
+[2025-05-03 18:21:43,098] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:21:43,099] INFO apps.users.views Updating profile for user=11
+[2025-05-03 18:21:43,099] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-03 18:21:43,100] INFO apps.users.serializers Validating user data for user=11
+[2025-05-03 18:21:43,101] INFO apps.users.serializers Updating user=11 with validated data
+[2025-05-03 18:21:43,101] INFO apps.users.services.users_services Updating user and profile for user=11
+[2025-05-03 18:21:43,102] INFO apps.users.models Saving user profile for user=11
+[2025-05-03 18:21:43,103] INFO apps.users.models Updating user profile for user=11
+[2025-05-03 18:21:43,104] INFO apps.users.models Successfully updating user profile 11, user=11
+[2025-05-03 18:21:43,104] INFO apps.users.services.users_services User and profile updated successfully for user=11
+[2025-05-03 18:21:43,104] INFO apps.users.serializers User=11 updated successfully
+[2025-05-03 18:21:43,104] INFO apps.users.views Profile updated for user=11
+[2025-05-03 18:21:49,393] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:21:49,393] INFO apps.users.views Updating profile for user=11
+[2025-05-03 18:21:49,394] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-03 18:21:49,394] INFO apps.users.serializers Validating user data for user=11
+[2025-05-03 18:21:49,396] INFO apps.users.serializers Updating user=11 with validated data
+[2025-05-03 18:21:49,396] INFO apps.users.services.users_services Updating user and profile for user=11
+[2025-05-03 18:21:49,397] INFO apps.users.models Saving user profile for user=11
+[2025-05-03 18:21:49,398] INFO apps.users.models Updating user profile for user=11
+[2025-05-03 18:21:49,399] INFO apps.users.models Successfully updating user profile 11, user=11
+[2025-05-03 18:21:49,399] INFO apps.users.services.users_services User and profile updated successfully for user=11
+[2025-05-03 18:21:49,399] INFO apps.users.serializers User=11 updated successfully
+[2025-05-03 18:21:49,399] INFO apps.users.views Profile updated for user=11
+[2025-05-03 18:21:55,762] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:21:55,762] INFO apps.users.views Updating profile for user=11
+[2025-05-03 18:21:55,762] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-03 18:21:55,762] INFO apps.users.serializers Validating user data for user=11
+[2025-05-03 18:21:55,763] INFO apps.users.serializers Updating user=11 with validated data
+[2025-05-03 18:21:55,763] INFO apps.users.services.users_services Updating user and profile for user=11
+[2025-05-03 18:21:55,764] INFO apps.users.models Saving user profile for user=11
+[2025-05-03 18:21:55,766] INFO apps.users.models Updating user profile for user=11
+[2025-05-03 18:21:55,767] INFO apps.users.models Successfully updating user profile 11, user=11
+[2025-05-03 18:21:55,767] INFO apps.users.services.users_services User and profile updated successfully for user=11
+[2025-05-03 18:21:55,767] INFO apps.users.serializers User=11 updated successfully
+[2025-05-03 18:21:55,767] INFO apps.users.views Profile updated for user=11
+[2025-05-03 18:21:57,135] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:21:57,135] INFO apps.users.views Updating profile for user=11
+[2025-05-03 18:21:57,136] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-03 18:21:57,136] INFO apps.users.serializers Validating user data for user=11
+[2025-05-03 18:21:57,137] INFO apps.users.serializers Updating user=11 with validated data
+[2025-05-03 18:21:57,137] INFO apps.users.services.users_services Updating user and profile for user=11
+[2025-05-03 18:21:57,139] INFO apps.users.models Saving user profile for user=11
+[2025-05-03 18:21:57,141] INFO apps.users.models Updating user profile for user=11
+[2025-05-03 18:21:57,142] INFO apps.users.models Successfully updating user profile 11, user=11
+[2025-05-03 18:21:57,142] INFO apps.users.services.users_services User and profile updated successfully for user=11
+[2025-05-03 18:21:57,142] INFO apps.users.serializers User=11 updated successfully
+[2025-05-03 18:21:57,142] INFO apps.users.views Profile updated for user=11
+[2025-05-03 18:22:03,841] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:22:03,841] INFO apps.users.views Updating profile for user=11
+[2025-05-03 18:22:03,842] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-03 18:22:03,842] INFO apps.users.serializers Validating user data for user=11
+[2025-05-03 18:22:03,843] INFO apps.users.serializers Updating user=11 with validated data
+[2025-05-03 18:22:03,843] INFO apps.users.services.users_services Updating user and profile for user=11
+[2025-05-03 18:22:03,845] INFO apps.users.models Saving user profile for user=11
+[2025-05-03 18:22:03,846] INFO apps.users.models Updating user profile for user=11
+[2025-05-03 18:22:03,848] INFO apps.users.models Successfully updating user profile 11, user=11
+[2025-05-03 18:22:03,848] INFO apps.users.services.users_services User and profile updated successfully for user=11
+[2025-05-03 18:22:03,848] INFO apps.users.serializers User=11 updated successfully
+[2025-05-03 18:22:03,848] INFO apps.users.views Profile updated for user=11
+[2025-05-03 18:22:07,944] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:22:07,944] INFO apps.users.views Updating profile for user=11
+[2025-05-03 18:22:07,944] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-03 18:22:07,945] INFO apps.users.serializers Validating user data for user=11
+[2025-05-03 18:22:07,946] INFO apps.users.serializers Updating user=11 with validated data
+[2025-05-03 18:22:07,946] INFO apps.users.services.users_services Updating user and profile for user=11
+[2025-05-03 18:22:07,947] INFO apps.users.models Saving user profile for user=11
+[2025-05-03 18:22:07,949] INFO apps.users.models Updating user profile for user=11
+[2025-05-03 18:22:07,950] INFO apps.users.models Successfully updating user profile 11, user=11
+[2025-05-03 18:22:07,950] INFO apps.users.services.users_services User and profile updated successfully for user=11
+[2025-05-03 18:22:07,950] INFO apps.users.serializers User=11 updated successfully
+[2025-05-03 18:22:07,950] INFO apps.users.views Profile updated for user=11
+[2025-05-03 18:22:12,488] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:22:12,488] INFO apps.users.views Updating profile for user=11
+[2025-05-03 18:22:12,488] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-03 18:22:12,488] INFO apps.users.serializers Validating user data for user=11
+[2025-05-03 18:22:12,490] INFO apps.users.serializers Updating user=11 with validated data
+[2025-05-03 18:22:12,490] INFO apps.users.services.users_services Updating user and profile for user=11
+[2025-05-03 18:22:12,491] INFO apps.users.models Saving user profile for user=11
+[2025-05-03 18:22:12,492] INFO apps.users.models Updating user profile for user=11
+[2025-05-03 18:22:12,493] INFO apps.users.models Successfully updating user profile 11, user=11
+[2025-05-03 18:22:12,493] INFO apps.users.services.users_services User and profile updated successfully for user=11
+[2025-05-03 18:22:12,493] INFO apps.users.serializers User=11 updated successfully
+[2025-05-03 18:22:12,493] INFO apps.users.views Profile updated for user=11
+[2025-05-03 18:24:09,489] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-03 18:24:09,489] INFO apps.users.views Updating profile for user=11
+[2025-05-03 18:24:09,489] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-03 18:24:09,489] INFO apps.users.serializers Validating user data for user=11
+[2025-05-03 18:24:09,492] INFO apps.users.serializers Updating user=11 with validated data
+[2025-05-03 18:24:09,492] INFO apps.users.services.users_services Updating user and profile for user=11
+[2025-05-03 18:24:09,494] INFO apps.users.models Saving user profile for user=11
+[2025-05-03 18:24:09,496] INFO apps.users.models Updating user profile for user=11
+[2025-05-03 18:24:09,496] INFO apps.users.models Successfully updating user profile 11, user=11
+[2025-05-03 18:24:09,496] INFO apps.users.services.users_services User and profile updated successfully for user=11
+[2025-05-03 18:24:09,496] INFO apps.users.serializers User=11 updated successfully
+[2025-05-03 18:24:09,496] INFO apps.users.views Profile updated for user=11
