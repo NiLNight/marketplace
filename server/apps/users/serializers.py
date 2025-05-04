@@ -6,8 +6,6 @@ from apps.users.models import UserProfile, EmailVerified
 from apps.users.exceptions import InvalidUserData
 from apps.users.services.users_services import UserService
 import logging
-import base64
-import binascii
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -286,8 +284,6 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
     def validate(self, attrs):
         """Проверка корректности данных для подтверждения сброса пароля.
 
-        Проверяет, что uid является валидной строкой base64, и добавляет uid и token из контекста.
-
         Args:
             attrs (dict): Данные для сериализации (new_password).
 
@@ -295,24 +291,11 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
             dict: Валидированные данные, включая uid и token.
 
         Raises:
-            serializers.ValidationError: Если uid или token отсутствуют или uid не в формате base64.
+            serializers.ValidationError: Если данные некорректны.
         """
         logger.info(f"Validating password reset confirmation data")
         uid = self.context.get('uid')
         token = self.context.get('token')
-
-        if not uid or not token:
-            logger.warning(f"Missing uid or token in query parameters")
-            raise serializers.ValidationError({"error": "Требуются параметры uid и token в URL."})
-
-        # Попытка восстановить padding для uid
-        try:
-            padded_uid = uid + '=' * (4 - len(uid) % 4) if len(uid) % 4 != 0 else uid
-            base64.b64decode(padded_uid, validate=True)
-            attrs['uid'] = padded_uid
-        except (binascii.Error, TypeError, ValueError):
-            logger.warning(f"Invalid base64 uid: {uid}")
-            raise serializers.ValidationError({"uid": "Идентификатор пользователя должен быть в формате base64."})
-
+        attrs['uid'] = uid
         attrs['token'] = token
         return attrs

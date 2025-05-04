@@ -302,13 +302,17 @@ class PasswordResetConfirmView(APIView):
             Response: Ответ с подтверждением изменения пароля.
 
         Raises:
-            serializers.ValidationError: Если данные некорректны или uid не в формате base64.
+            serializers.ValidationError: Если данные некорректны.
             InvalidUserData: Если uid, token или данные недействительны.
             UserNotFound: Если пользователь не найден.
         """
         logger.info(f"Processing password reset confirmation for uid={request.query_params.get('uid')}")
         uid = request.query_params.get('uid')
         token = request.query_params.get('token')
+
+        # Валидация параметров в сервисе
+        ConfirmPasswordService.validate_reset_params(uid, token)
+
         serializer = self.serializer_class(
             data=request.data,
             context={'uid': uid, 'token': token}

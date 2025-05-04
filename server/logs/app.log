@@ -2708,3 +2708,39 @@ Write an explicit `.update()` method for serializer `apps.users.serializers.User
 [2025-05-03 19:35:56,458] INFO apps.users.services.tasks Sending password reset email to bkmz-2020@inbox.ru
 [2025-05-03 19:35:57,619] INFO apps.users.services.tasks Password reset email sent to bkmz-2020@inbox.ru
 [2025-05-03 19:36:03,619] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 19:36:26,585] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 19:36:26,585] INFO apps.users.views Processing password reset confirmation for uid=MTM
+[2025-05-03 19:36:26,586] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-03 19:36:26,586] INFO apps.users.services.users_services Confirming password reset for uid=MTM=
+[2025-05-03 19:36:26,860] INFO apps.users.models Saving user profile for user=13
+[2025-05-03 19:36:26,862] INFO apps.users.models Updating user profile for user=13
+[2025-05-03 19:36:26,863] INFO apps.users.models Successfully updating user profile 13, user=13
+[2025-05-03 19:36:26,870] INFO apps.users.services.users_services Password reset successfully for user=13
+[2025-05-03 19:36:26,870] INFO apps.users.views Password reset confirmed
+[2025-05-03 19:36:30,068] DEBUG apps.users.authentication No token provided in request
+[2025-05-03 19:36:30,068] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-03 19:36:30,068] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-03 19:36:30,068] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-03 19:36:30,696] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-03 19:36:30,699] INFO apps.users.views User 13 logged in successfully
+[2025-05-03 19:36:30,709] INFO apps.users.utils JWT cookies set for user=13
+[2025-05-03 19:36:32,821] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-03 19:36:32,821] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-03 19:36:32,821] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-03 19:36:32,821] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-03 19:36:33,304] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-03 19:36:33,308] INFO apps.users.views User 13 logged in successfully
+[2025-05-03 19:36:33,310] INFO apps.users.utils JWT cookies set for user=13
+[2025-05-03 19:36:36,170] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-03 19:36:36,170] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-03 19:36:36,170] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-03 19:36:36,170] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-03 19:36:36,403] WARNING apps.users.services.users_services Invalid password for email=bkmz-2020@inbox.ru
+[2025-05-03 19:36:36,403] WARNING apps.users.utils User error: Неверные учетные данные, user=13, path=/user/login/
+[2025-05-03 19:36:41,676] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-03 19:36:41,676] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-03 19:36:41,676] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-03 19:36:41,676] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-03 19:36:42,135] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-03 19:36:42,138] INFO apps.users.views User 13 logged in successfully
+[2025-05-03 19:36:42,141] INFO apps.users.utils JWT cookies set for user=13
