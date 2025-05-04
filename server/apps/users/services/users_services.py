@@ -254,7 +254,7 @@ class ConfirmPasswordService:
             token = PasswordResetTokenGenerator().make_token(user)
             uid = urlsafe_base64_encode(force_bytes(user.id))
             logger.info(f"Generated uid={uid} for user={user.id}")
-            reset_url = f"http://localhost:8000/reset-password/?token={token}&uid={uid}"
+            reset_url = f"http://localhost:8000/user/password-reset-confirm/?token={token}&uid={uid}"
             send_password_reset_email.delay(email, reset_url)
             logger.info(f"Password reset requested for email={email}")
         except User.DoesNotExist:

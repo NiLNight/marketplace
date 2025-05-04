@@ -2744,3 +2744,33 @@ Write an explicit `.update()` method for serializer `apps.users.serializers.User
 [2025-05-03 19:36:42,135] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
 [2025-05-03 19:36:42,138] INFO apps.users.views User 13 logged in successfully
 [2025-05-03 19:36:42,141] INFO apps.users.utils JWT cookies set for user=13
+[2025-05-04 15:35:07,346] DEBUG apps.users.authentication No token provided in request
+[2025-05-04 15:35:07,347] INFO apps.users.views Processing password reset request for email=bkmz-2020@inbox.ru
+[2025-05-04 15:35:07,348] INFO apps.users.serializers Validating password reset request for email=bkmz-2020@inbox.ru
+[2025-05-04 15:35:07,348] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-04 15:35:07,657] INFO apps.users.services.users_services Generated uid=MTM for user=13
+[2025-05-04 15:35:07,701] INFO apps.users.services.users_services Password reset requested for email=bkmz-2020@inbox.ru
+[2025-05-04 15:35:07,701] INFO apps.users.views Password reset requested for bkmz-2020@inbox.ru
+[2025-05-04 15:35:07,709] INFO apps.users.services.tasks Sending password reset email to bkmz-2020@inbox.ru with reset_url=http://localhost:8000/reset-password/?token=cpabaj-c0ed34ef9295ad6a2ba4543fac6feb2e&uid=MTM
+[2025-05-04 15:35:09,220] INFO apps.users.services.tasks Password reset email sent to bkmz-2020@inbox.ru
+[2025-05-04 15:36:04,752] DEBUG apps.users.authentication No token provided in request
+[2025-05-04 15:36:04,752] INFO apps.users.views Processing password reset request for email=bkmz-2020@inbox.ru
+[2025-05-04 15:36:04,754] INFO apps.users.serializers Validating password reset request for email=bkmz-2020@inbox.ru
+[2025-05-04 15:36:04,754] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-04 15:36:04,878] INFO apps.users.services.users_services Generated uid=MTM for user=13
+[2025-05-04 15:36:04,917] INFO apps.users.services.users_services Password reset requested for email=bkmz-2020@inbox.ru
+[2025-05-04 15:36:04,918] INFO apps.users.views Password reset requested for bkmz-2020@inbox.ru
+[2025-05-04 15:36:04,919] INFO apps.users.services.tasks Sending password reset email to bkmz-2020@inbox.ru with reset_url=http://localhost:8000/user/password-reset-confirm/?token=cpabc4-a2a3bcbc9a12f6bc1e4469c9a4ec6b02&uid=MTM
+[2025-05-04 15:36:06,145] INFO apps.users.services.tasks Password reset email sent to bkmz-2020@inbox.ru
+[2025-05-04 15:36:12,137] DEBUG apps.users.authentication No token provided in request
+[2025-05-04 15:36:20,866] DEBUG apps.users.authentication No token provided in request
+[2025-05-04 15:36:20,866] INFO apps.users.views Processing password reset confirmation for uid=MTM
+[2025-05-04 15:36:20,866] INFO apps.users.services.users_services Validating reset parameters for uid=MTM
+[2025-05-04 15:36:20,866] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-04 15:36:20,866] INFO apps.users.services.users_services Confirming password reset for uid=MTM
+[2025-05-04 15:36:20,866] INFO apps.users.services.users_services Validating reset parameters for uid=MTM
+[2025-05-04 15:36:21,301] INFO apps.users.models Saving user profile for user=13
+[2025-05-04 15:36:21,336] INFO apps.users.models Updating user profile for user=13
+[2025-05-04 15:36:21,346] INFO apps.users.models Successfully updating user profile 13, user=13
+[2025-05-04 15:36:21,358] INFO apps.users.services.users_services Password reset successfully for user=13
+[2025-05-04 15:36:21,358] INFO apps.users.views Password reset confirmed
