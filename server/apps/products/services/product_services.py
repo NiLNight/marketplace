@@ -1,9 +1,11 @@
 import logging
 from django.db import transaction
 from django.contrib.auth import get_user_model
+
+from apps.products.documents import ProductDocument
 from apps.products.models import Product
 from apps.products.exceptions import ProductServiceException, ProductNotFound
-from typing import Dict, Any
+from typing import Dict, Any, Optional, List
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -102,3 +104,70 @@ class ProductServices:
         except Exception as e:
             logger.error(f"Failed to delete product {instance.id}: {str(e)}, user={user_id}")
             raise ProductServiceException(f"Ошибка удаления продукта: {str(e)}")
+
+    @staticmethod
+    def search_products(
+            query: Optional[str] = None,
+            category_id: Optional[int] = None,
+            min_price: Optional[float] = None,
+            max_price: Optional[float] = None,
+            min_discount: Optional[float] = None,
+            in_stock: Optional[bool] = None
+    ) -> List[Dict[str, Any]]:
+        """Поиск продуктов в Elasticsearch с фильтрацией.
+
+        Args:
+            query: Поисковый запрос для полей title и description.
+            category_id: ID категории для фильтрации.
+            min_price: Минимальная цена (с учётом скидки).
+            max_price: Максимальная цена (с учётом скидки).
+            min_discount: Минимальная скидка (в процентах).
+            in_stock: Фильтр по наличию на складе.
+
+        Returns:
+            Список словарей с данными продуктов.
+
+        Raises:
+            ProductServiceException: Если поиск не удался.
+        """
+        logger.info(
+            f"Searching products with query={query}, category_id={category_id}, "
+            f"min_price={min_price}, max_price={max_price}, min_discount={min_discount}, in_stock={in_stock}"
+        )
+        try:
+            search = ProductDocument.search()  # Убрали .filter('term', is_active=True)
+
+            if query:
+                search = search.query(
+                    'multi_match',
+                    query=query,
+                    fields=['title^2', 'description', 'category.title'],
+                    fuzziness='AUTO'
+                )
+
+            if category_id:
+                search = search.filter('term', **{'category.id': category_id})
+
+            if min_price is not None or max_price is not None:
+                price_range = {}
+                if min_price is not None:
+                    price_range['gte'] = min_price
+                if max_price is not None:
+                    price_range['lte'] = max_price
+                search = search.filter('range', price_with_discount=price_range)
+
+            if min_discount is not None:
+                search = search.filter('range', discount={'gte': min_discount})
+
+            if in_stock:
+                search = search.filter('range', stock={'gt': 0})
+
+            response = search.execute()
+            results = [hit.to_dict() for hit in response]
+            logger.info(f"Successfully completed search, found {len(results)} products")
+            return results
+        except Exception as e:
+            logger.exception(
+                f"Failed to search products with query={query}, error={str(e)}"
+            )
+            raise ProductServiceException(f"Ошибка поиска продуктов: {str(e)}")

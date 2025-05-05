@@ -2774,3 +2774,473 @@ Write an explicit `.update()` method for serializer `apps.users.serializers.User
 [2025-05-04 15:36:21,346] INFO apps.users.models Successfully updating user profile 13, user=13
 [2025-05-04 15:36:21,358] INFO apps.users.services.users_services Password reset successfully for user=13
 [2025-05-04 15:36:21,358] INFO apps.users.views Password reset confirmed
+[2025-05-05 18:29:56,356] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 18:29:56,356] INFO apps.products.views Processing search request with query=, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 18:29:56,356] ERROR apps.products.views Search view failed with query=, user=anonymous, error=type object 'ProductServices' has no attribute 'search_products'
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\views.py", line 310, in get
+    results = ProductServices.search_products(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'ProductServices' has no attribute 'search_products'
+[2025-05-05 18:36:23,344] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 18:36:23,344] INFO apps.products.views Processing search request with query=, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 18:36:23,344] INFO apps.products.services.product_services Searching products with query=, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 18:36:23,681] INFO apps.products.services.product_services Successfully completed search, found 10 products
+[2025-05-05 18:36:23,681] INFO apps.products.views Successfully returned 10 search results, user=anonymous
+[2025-05-05 18:38:12,038] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 18:38:12,038] INFO apps.products.views Processing search request with query=мороженое, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 18:38:12,038] INFO apps.products.services.product_services Searching products with query=мороженое, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 18:38:12,119] INFO apps.products.services.product_services Successfully completed search, found 10 products
+[2025-05-05 18:38:12,119] INFO apps.products.views Successfully returned 10 search results, user=anonymous
+[2025-05-05 18:38:23,402] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 18:38:23,402] INFO apps.products.views Processing search request with query=мясо, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 18:38:23,402] INFO apps.products.services.product_services Searching products with query=мясо, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 18:38:23,412] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 18:38:23,412] INFO apps.products.views Successfully returned 0 search results, user=anonymous
+[2025-05-05 18:40:34,144] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 18:40:38,767] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 18:40:38,767] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-05 18:40:38,768] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-05 18:40:38,768] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-05 18:40:39,429] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-05 18:40:39,432] INFO apps.users.views User 13 logged in successfully
+[2025-05-05 18:40:39,523] INFO apps.users.utils JWT cookies set for user=13
+[2025-05-05 18:40:42,537] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 18:40:42,537] INFO apps.products.views Creating product, user=13, path=/products/create/
+[2025-05-05 18:40:42,569] DEBUG apps.products.serializers Validating product data: {'title': 'Чача', 'description': 'Вкусно', 'price': Decimal('56.00'), 'discount': Decimal('5.00'), 'stock': 1500, 'category': <Category: Продукты>}
+[2025-05-05 18:40:42,569] INFO apps.products.services.product_services Creating product with data={'title': 'Чача', 'description': 'Вкусно', 'price': Decimal('56.00'), 'discount': Decimal('5.00'), 'stock': 1500, 'category': <Category: Продукты>}, user=13
+[2025-05-05 18:40:42,583] INFO apps.products.models Creating product with title=Чача, user=13
+[2025-05-05 18:40:42,907] INFO apps.products.signals Creating product in Elasticsearch with title=Чача, user=13
+[2025-05-05 18:40:42,910] INFO apps.products.models Successfully creating product 121, user=13
+[2025-05-05 18:40:42,910] INFO apps.products.services.product_services Successfully created product 121, user=13
+[2025-05-05 18:40:44,941] ERROR apps.products.views Failed to create product: Error 10061 connecting to 127.0.0.1:6379. Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение., user=13
+[2025-05-05 18:40:44,941] WARNING apps.products.utils Product error: Ошибка создания продукта: Error 10061 connecting to 127.0.0.1:6379. Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение., user=13, path=/products/create/
+[2025-05-05 18:41:24,238] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 18:41:24,238] INFO apps.products.views Creating product, user=13, path=/products/create/
+[2025-05-05 18:41:24,242] DEBUG apps.products.serializers Validating product data: {'title': 'Чача', 'description': 'Вкусно', 'price': Decimal('56.00'), 'discount': Decimal('5.00'), 'stock': 1500, 'category': <Category: Продукты>}
+[2025-05-05 18:41:24,242] INFO apps.products.services.product_services Creating product with data={'title': 'Чача', 'description': 'Вкусно', 'price': Decimal('56.00'), 'discount': Decimal('5.00'), 'stock': 1500, 'category': <Category: Продукты>}, user=13
+[2025-05-05 18:41:24,246] INFO apps.products.models Creating product with title=Чача, user=13
+[2025-05-05 18:41:24,318] INFO apps.products.signals Creating product in Elasticsearch with title=Чача, user=13
+[2025-05-05 18:41:24,319] INFO apps.products.models Successfully creating product 122, user=13
+[2025-05-05 18:41:24,320] INFO apps.products.services.product_services Successfully created product 122, user=13
+[2025-05-05 18:41:24,324] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-05-05 18:41:24,324] INFO apps.products.views Successfully created product 122, user=13
+[2025-05-05 18:41:24,325] DEBUG apps.products.serializers Retrieving children for category 1
+[2025-05-05 18:41:24,336] DEBUG apps.products.serializers Retrieving children for category 2
+[2025-05-05 18:41:24,338] DEBUG apps.products.serializers Retrieving children for category 3
+[2025-05-05 18:41:24,340] DEBUG apps.products.serializers Retrieving children for category 4
+[2025-05-05 18:41:24,340] DEBUG apps.products.serializers Retrieving children for category 5
+[2025-05-05 18:41:24,341] DEBUG apps.products.serializers Retrieving children for category 6
+[2025-05-05 18:41:24,342] DEBUG apps.products.serializers Retrieving children for category 7
+[2025-05-05 18:41:24,343] DEBUG apps.products.serializers Retrieving children for category 8
+[2025-05-05 18:41:24,344] DEBUG apps.products.serializers Retrieving children for category 9
+[2025-05-05 18:41:24,345] DEBUG apps.products.serializers Retrieving children for category 10
+[2025-05-05 18:41:24,345] DEBUG apps.products.serializers Retrieving children for category 13
+[2025-05-05 18:41:51,391] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 18:41:51,391] INFO apps.products.views Creating product, user=13, path=/products/create/
+[2025-05-05 18:41:51,395] DEBUG apps.products.serializers Validating product data: {'title': 'Чача', 'description': 'Вкусно', 'price': Decimal('56.00'), 'discount': Decimal('5.00'), 'stock': 1500, 'category': <Category: Овощи>}
+[2025-05-05 18:41:51,395] INFO apps.products.services.product_services Creating product with data={'title': 'Чача', 'description': 'Вкусно', 'price': Decimal('56.00'), 'discount': Decimal('5.00'), 'stock': 1500, 'category': <Category: Овощи>}, user=13
+[2025-05-05 18:41:51,400] INFO apps.products.models Creating product with title=Чача, user=13
+[2025-05-05 18:41:51,498] INFO apps.products.signals Creating product in Elasticsearch with title=Чача, user=13
+[2025-05-05 18:41:51,500] INFO apps.products.models Successfully creating product 123, user=13
+[2025-05-05 18:41:51,500] INFO apps.products.services.product_services Successfully created product 123, user=13
+[2025-05-05 18:41:51,503] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-05-05 18:41:51,503] INFO apps.products.views Successfully created product 123, user=13
+[2025-05-05 18:41:51,505] DEBUG apps.products.serializers Retrieving children for category 2
+[2025-05-05 18:42:10,640] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 18:42:10,641] INFO apps.products.views Processing search request with query=мясо, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 18:42:10,641] INFO apps.products.services.product_services Searching products with query=мясо, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 18:42:10,701] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 18:42:10,702] INFO apps.products.views Successfully returned 0 search results, user=13
+[2025-05-05 18:42:17,738] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 18:42:17,738] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 18:42:17,738] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 18:42:17,790] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 18:42:17,790] INFO apps.products.views Successfully returned 0 search results, user=13
+[2025-05-05 18:42:19,449] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 18:42:19,449] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 18:42:19,449] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 18:42:19,500] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 18:42:19,500] INFO apps.products.views Successfully returned 0 search results, user=13
+[2025-05-05 18:44:43,752] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 18:44:43,752] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 18:44:43,752] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 18:44:43,805] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 18:44:43,805] INFO apps.products.views Successfully returned 0 search results, user=13
+[2025-05-05 18:44:44,877] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 18:44:44,878] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 18:44:44,878] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 18:44:44,938] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 18:44:44,938] INFO apps.products.views Successfully returned 0 search results, user=13
+[2025-05-05 18:45:12,232] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 18:45:12,232] INFO apps.products.views Creating product, user=13, path=/products/create/
+[2025-05-05 18:45:12,235] DEBUG apps.products.serializers Validating product data: {'title': 'Чача', 'description': 'Вкусно', 'price': Decimal('56.00'), 'discount': Decimal('5.00'), 'stock': 1500, 'category': <Category: Овощи>}
+[2025-05-05 18:45:12,235] INFO apps.products.services.product_services Creating product with data={'title': 'Чача', 'description': 'Вкусно', 'price': Decimal('56.00'), 'discount': Decimal('5.00'), 'stock': 1500, 'category': <Category: Овощи>}, user=13
+[2025-05-05 18:45:12,241] INFO apps.products.models Creating product with title=Чача, user=13
+[2025-05-05 18:45:12,325] INFO apps.products.signals Creating product in Elasticsearch with title=Чача, user=13
+[2025-05-05 18:45:12,327] INFO apps.products.models Successfully creating product 124, user=13
+[2025-05-05 18:45:12,327] INFO apps.products.services.product_services Successfully created product 124, user=13
+[2025-05-05 18:45:12,330] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-05-05 18:45:12,330] INFO apps.products.views Successfully created product 124, user=13
+[2025-05-05 18:45:12,331] DEBUG apps.products.serializers Retrieving children for category 2
+[2025-05-05 18:45:20,732] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 18:45:20,732] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 18:45:20,733] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 18:45:20,784] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 18:45:20,784] INFO apps.products.views Successfully returned 0 search results, user=13
+[2025-05-05 18:45:21,889] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 18:45:21,889] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 18:45:21,889] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 18:45:21,944] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 18:45:21,945] INFO apps.products.views Successfully returned 0 search results, user=13
+[2025-05-05 18:45:30,133] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 18:45:30,133] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 18:45:30,133] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 18:45:30,155] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 18:45:30,155] INFO apps.products.views Successfully returned 0 search results, user=13
+[2025-05-05 18:45:32,718] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 18:45:32,718] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 18:45:32,718] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 18:45:32,773] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 18:45:32,773] INFO apps.products.views Successfully returned 0 search results, user=13
+[2025-05-05 18:50:13,604] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 18:50:13,604] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 18:50:13,604] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 18:50:13,662] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 18:50:13,662] INFO apps.products.views Successfully returned 0 search results, user=13
+[2025-05-05 18:50:14,718] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 18:50:14,718] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 18:50:14,718] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 18:50:14,781] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 18:50:14,781] INFO apps.products.views Successfully returned 0 search results, user=13
+[2025-05-05 18:50:15,667] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 18:50:15,667] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 18:50:15,667] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 18:50:15,721] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 18:50:15,721] INFO apps.products.views Successfully returned 0 search results, user=13
+[2025-05-05 18:51:22,962] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 18:51:22,962] INFO apps.products.views Processing search request with query=вкусно, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 18:51:22,962] INFO apps.products.services.product_services Searching products with query=вкусно, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 18:51:23,038] INFO apps.products.services.product_services Successfully completed search, found 1 products
+[2025-05-05 18:51:23,038] INFO apps.products.views Successfully returned 1 search results, user=13
+[2025-05-05 18:51:31,582] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 18:51:31,582] INFO apps.products.views Processing search request with query=мясо, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 18:51:31,582] INFO apps.products.services.product_services Searching products with query=мясо, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 18:51:31,639] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 18:51:31,639] INFO apps.products.views Successfully returned 0 search results, user=13
+[2025-05-05 18:51:38,277] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 18:51:38,277] INFO apps.products.views Processing search request with query=печенье, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 18:51:38,277] INFO apps.products.services.product_services Searching products with query=печенье, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 18:51:38,342] INFO apps.products.services.product_services Successfully completed search, found 1 products
+[2025-05-05 18:51:38,342] INFO apps.products.views Successfully returned 1 search results, user=13
+[2025-05-05 18:51:45,594] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 18:51:45,594] INFO apps.products.views Processing search request with query=мед, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 18:51:45,594] INFO apps.products.services.product_services Searching products with query=мед, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 18:51:45,649] INFO apps.products.services.product_services Successfully completed search, found 1 products
+[2025-05-05 18:51:45,649] INFO apps.products.views Successfully returned 1 search results, user=13
+[2025-05-05 18:52:19,894] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 18:52:19,894] INFO apps.products.views Processing search request with query=вкусно, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 18:52:19,894] INFO apps.products.services.product_services Searching products with query=вкусно, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 18:52:19,959] INFO apps.products.services.product_services Successfully completed search, found 1 products
+[2025-05-05 18:52:19,959] INFO apps.products.views Successfully returned 1 search results, user=13
+[2025-05-05 20:05:18,292] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 20:05:18,292] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 20:05:18,292] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 20:05:18,352] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 20:05:18,353] INFO apps.products.views Successfully returned 0 search results, user=anonymous
+[2025-05-05 20:05:19,408] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 20:05:19,408] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 20:05:19,408] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 20:05:19,475] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 20:05:19,475] INFO apps.products.views Successfully returned 0 search results, user=anonymous
+[2025-05-05 20:05:40,459] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 20:05:40,459] INFO apps.products.views Processing search request with query=чай, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 20:05:40,459] INFO apps.products.services.product_services Searching products with query=чай, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 20:05:40,514] INFO apps.products.services.product_services Successfully completed search, found 1 products
+[2025-05-05 20:05:40,514] INFO apps.products.views Successfully returned 1 search results, user=anonymous
+[2025-05-05 20:06:18,170] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 20:06:18,170] INFO apps.products.views Processing search request with query=свежий, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 20:06:18,170] INFO apps.products.services.product_services Searching products with query=свежий, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 20:06:18,229] INFO apps.products.services.product_services Successfully completed search, found 10 products
+[2025-05-05 20:06:18,229] INFO apps.products.views Successfully returned 10 search results, user=anonymous
+[2025-05-05 20:06:58,510] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 20:06:58,510] INFO apps.products.views Processing search request with query=обычная, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 20:06:58,510] INFO apps.products.services.product_services Searching products with query=обычная, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 20:06:58,575] INFO apps.products.services.product_services Successfully completed search, found 1 products
+[2025-05-05 20:06:58,575] INFO apps.products.views Successfully returned 1 search results, user=anonymous
+[2025-05-05 20:07:08,919] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 20:07:08,919] INFO apps.products.views Processing search request with query=морковка, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 20:07:08,919] INFO apps.products.services.product_services Searching products with query=морковка, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 20:07:08,976] INFO apps.products.services.product_services Successfully completed search, found 1 products
+[2025-05-05 20:07:08,976] INFO apps.products.views Successfully returned 1 search results, user=anonymous
+[2025-05-05 20:07:28,982] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 20:07:28,982] INFO apps.products.views Processing search request with query=курица, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 20:07:28,982] INFO apps.products.services.product_services Searching products with query=курица, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 20:07:29,044] INFO apps.products.services.product_services Successfully completed search, found 1 products
+[2025-05-05 20:07:29,044] INFO apps.products.views Successfully returned 1 search results, user=anonymous
+[2025-05-05 20:08:21,819] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 20:08:21,819] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 20:08:21,819] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 20:08:21,876] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 20:08:21,876] INFO apps.products.views Successfully returned 0 search results, user=anonymous
+[2025-05-05 20:08:47,219] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 20:08:47,219] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 20:08:47,219] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 20:08:47,284] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 20:08:47,284] INFO apps.products.views Successfully returned 0 search results, user=anonymous
+[2025-05-05 20:08:48,081] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 20:08:48,081] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 20:08:48,081] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 20:08:48,135] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 20:08:48,135] INFO apps.products.views Successfully returned 0 search results, user=anonymous
+[2025-05-05 20:09:05,367] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 20:09:05,367] INFO apps.products.views Processing search request with query=вкусно, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 20:09:05,367] INFO apps.products.services.product_services Searching products with query=вкусно, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 20:09:05,432] INFO apps.products.services.product_services Successfully completed search, found 1 products
+[2025-05-05 20:09:05,432] INFO apps.products.views Successfully returned 1 search results, user=anonymous
+[2025-05-05 20:09:12,527] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 20:09:12,528] INFO apps.products.views Processing search request with query=вкусное, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 20:09:12,528] INFO apps.products.services.product_services Searching products with query=вкусное, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 20:09:12,595] INFO apps.products.services.product_services Successfully completed search, found 1 products
+[2025-05-05 20:09:12,595] INFO apps.products.views Successfully returned 1 search results, user=anonymous
+[2025-05-05 20:09:20,319] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 20:09:20,320] INFO apps.products.views Processing search request with query=вкус, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 20:09:20,320] INFO apps.products.services.product_services Searching products with query=вкус, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 20:09:20,374] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 20:09:20,374] INFO apps.products.views Successfully returned 0 search results, user=anonymous
+[2025-05-05 20:09:26,387] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 20:09:26,387] INFO apps.products.views Processing search request with query=вкусный, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 20:09:26,387] INFO apps.products.services.product_services Searching products with query=вкусный, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 20:09:26,450] INFO apps.products.services.product_services Successfully completed search, found 1 products
+[2025-05-05 20:09:26,450] INFO apps.products.views Successfully returned 1 search results, user=anonymous
+[2025-05-05 20:09:38,831] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 20:09:38,831] INFO apps.products.views Processing search request with query=печенько, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 20:09:38,831] INFO apps.products.services.product_services Searching products with query=печенько, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 20:09:38,890] INFO apps.products.services.product_services Successfully completed search, found 1 products
+[2025-05-05 20:09:38,890] INFO apps.products.views Successfully returned 1 search results, user=anonymous
+[2025-05-05 20:09:49,115] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 20:09:49,116] INFO apps.products.views Processing search request with query=печенишко, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 20:09:49,116] INFO apps.products.services.product_services Searching products with query=печенишко, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 20:09:49,191] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 20:09:49,191] INFO apps.products.views Successfully returned 0 search results, user=anonymous
+[2025-05-05 20:09:58,307] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 20:09:58,307] INFO apps.products.views Processing search request with query=чич, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 20:09:58,307] INFO apps.products.services.product_services Searching products with query=чич, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 20:09:58,361] INFO apps.products.services.product_services Successfully completed search, found 0 products
+[2025-05-05 20:09:58,361] INFO apps.products.views Successfully returned 0 search results, user=anonymous
+[2025-05-05 20:11:57,354] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 20:11:57,354] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 20:11:57,354] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 20:11:57,492] INFO apps.products.services.product_services Successfully completed search, found 4 products
+[2025-05-05 20:11:57,492] INFO apps.products.views Successfully returned 4 search results, user=anonymous
+[2025-05-05 21:46:26,825] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 21:46:26,825] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 21:46:26,825] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 21:46:26,914] INFO apps.products.services.product_services Successfully completed search, found 4 products
+[2025-05-05 21:46:26,914] INFO apps.products.views Successfully returned 4 search results, user=anonymous
+[2025-05-05 21:55:22,470] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 21:55:22,470] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 21:55:22,470] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 21:55:22,578] INFO apps.products.services.product_services Successfully completed search, found 4 products
+[2025-05-05 21:55:22,578] INFO apps.products.views Successfully returned 4 search results, user=anonymous
+[2025-05-05 21:56:21,682] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 21:56:21,683] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 21:56:21,683] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 21:56:21,741] INFO apps.products.services.product_services Successfully completed search, found 4 products
+[2025-05-05 21:56:21,741] INFO apps.products.views Successfully returned 4 search results, user=anonymous
+[2025-05-05 21:56:40,391] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 21:56:40,391] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 21:56:40,391] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 21:56:40,439] INFO apps.products.services.product_services Successfully completed search, found 4 products
+[2025-05-05 21:56:40,439] INFO apps.products.views Successfully returned 4 search results, user=anonymous
+[2025-05-05 21:56:53,468] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 21:56:53,468] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 21:56:53,468] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 21:56:53,592] INFO apps.products.services.product_services Successfully completed search, found 4 products
+[2025-05-05 21:56:53,592] INFO apps.products.views Successfully returned 4 search results, user=anonymous
+[2025-05-05 21:58:38,854] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 21:58:38,854] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 21:58:38,854] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 21:58:38,907] INFO apps.products.services.product_services Successfully completed search, found 4 products
+[2025-05-05 21:58:38,907] INFO apps.products.views Successfully returned 4 search results, user=anonymous
+[2025-05-05 22:01:04,458] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 22:01:04,458] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 22:01:04,458] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 22:01:04,589] INFO apps.products.services.product_services Successfully completed search, found 4 products
+[2025-05-05 22:01:04,589] INFO apps.products.views Successfully returned 4 search results, user=anonymous
+[2025-05-05 22:01:08,482] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 22:01:08,482] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 22:01:08,482] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 22:01:08,539] INFO apps.products.services.product_services Successfully completed search, found 4 products
+[2025-05-05 22:01:08,539] INFO apps.products.views Successfully returned 4 search results, user=anonymous
+[2025-05-05 22:01:27,343] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 22:01:27,343] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 22:01:27,343] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 22:01:27,398] INFO apps.products.services.product_services Successfully completed search, found 4 products
+[2025-05-05 22:01:27,398] INFO apps.products.views Successfully returned 4 search results, user=anonymous
+[2025-05-05 22:01:31,949] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 22:01:31,949] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 22:01:31,949] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 22:01:31,998] INFO apps.products.services.product_services Successfully completed search, found 4 products
+[2025-05-05 22:01:31,998] INFO apps.products.views Successfully returned 4 search results, user=anonymous
+[2025-05-05 22:01:54,034] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 22:01:54,034] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 22:01:54,034] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 22:01:54,098] INFO apps.products.services.product_services Successfully completed search, found 4 products
+[2025-05-05 22:01:54,098] INFO apps.products.views Successfully returned 4 search results, user=anonymous
+[2025-05-05 22:02:00,161] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 22:02:00,161] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-05 22:02:00,162] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-05 22:02:00,162] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-05 22:02:00,681] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-05 22:02:00,683] INFO apps.users.views User 13 logged in successfully
+[2025-05-05 22:02:00,693] INFO apps.users.utils JWT cookies set for user=13
+[2025-05-05 22:02:26,043] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 22:02:26,043] INFO apps.products.views Updating product 124, user=13, path=/products/124/update/
+[2025-05-05 22:02:26,044] INFO apps.products.services.query_services Retrieving product with pk=124
+[2025-05-05 22:02:26,044] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-05 22:02:26,044] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-05 22:02:26,153] INFO apps.products.services.query_services Successfully retrieved product 124
+[2025-05-05 22:02:26,153] DEBUG apps.products.permissions Checking permissions for user=13, obj=Чача
+[2025-05-05 22:02:26,165] INFO apps.products.services.product_services Updating product 124, user=13
+[2025-05-05 22:02:26,168] INFO apps.products.models Updating product with title=Мёд, user=13
+[2025-05-05 22:02:26,327] INFO apps.products.signals Updating product in Elasticsearch with title=Мёд, user=13
+[2025-05-05 22:02:26,353] INFO apps.products.signals Successfully updating product in Elasticsearch 124, user=13
+[2025-05-05 22:02:26,354] INFO apps.products.models Successfully updating product 124, user=13
+[2025-05-05 22:02:26,354] INFO apps.products.services.product_services Successfully updated product 124, user=13
+[2025-05-05 22:02:26,369] INFO apps.core.services.cache_services Invalidated cache for key: product_detail:124
+[2025-05-05 22:02:26,370] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-05-05 22:02:26,370] INFO apps.products.views Successfully updated product 124, user=13
+[2025-05-05 22:02:26,371] DEBUG apps.products.serializers Retrieving children for category 9
+[2025-05-05 22:02:41,222] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 22:02:41,222] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 22:02:41,222] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 22:02:41,288] INFO apps.products.services.product_services Successfully completed search, found 3 products
+[2025-05-05 22:02:41,288] INFO apps.products.views Successfully returned 3 search results, user=13
+[2025-05-05 22:02:55,305] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 22:02:55,305] INFO apps.products.views Processing search request with query=мед, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 22:02:55,305] INFO apps.products.services.product_services Searching products with query=мед, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 22:02:55,354] INFO apps.products.services.product_services Successfully completed search, found 2 products
+[2025-05-05 22:02:55,354] INFO apps.products.views Successfully returned 2 search results, user=13
+[2025-05-05 22:03:37,497] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 22:03:37,497] INFO apps.products.views Updating product 124, user=13, path=/products/124/update/
+[2025-05-05 22:03:37,497] INFO apps.products.services.query_services Retrieving product with pk=124
+[2025-05-05 22:03:37,497] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-05 22:03:37,497] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-05 22:03:37,505] INFO apps.products.services.query_services Successfully retrieved product 124
+[2025-05-05 22:03:37,505] DEBUG apps.products.permissions Checking permissions for user=13, obj=Мёд
+[2025-05-05 22:03:37,508] INFO apps.products.services.product_services Updating product 124, user=13
+[2025-05-05 22:03:37,510] INFO apps.products.models Updating product with title=чача, user=13
+[2025-05-05 22:03:37,596] INFO apps.products.signals Updating product in Elasticsearch with title=чача, user=13
+[2025-05-05 22:03:37,672] INFO apps.products.signals Successfully updating product in Elasticsearch 124, user=13
+[2025-05-05 22:03:37,672] INFO apps.products.models Successfully updating product 124, user=13
+[2025-05-05 22:03:37,672] INFO apps.products.services.product_services Successfully updated product 124, user=13
+[2025-05-05 22:03:37,674] INFO apps.core.services.cache_services Invalidated cache for key: product_detail:124
+[2025-05-05 22:03:37,675] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-05-05 22:03:37,675] INFO apps.products.views Successfully updated product 124, user=13
+[2025-05-05 22:03:37,676] DEBUG apps.products.serializers Retrieving children for category 9
+[2025-05-05 22:03:53,999] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 22:03:53,999] INFO apps.products.views Processing search request with query=мед, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 22:03:53,999] INFO apps.products.services.product_services Searching products with query=мед, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 22:03:54,052] INFO apps.products.services.product_services Successfully completed search, found 1 products
+[2025-05-05 22:03:54,052] INFO apps.products.views Successfully returned 1 search results, user=13
+[2025-05-05 22:04:03,318] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 22:04:03,318] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 22:04:03,318] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 22:04:03,371] INFO apps.products.services.product_services Successfully completed search, found 4 products
+[2025-05-05 22:04:03,371] INFO apps.products.views Successfully returned 4 search results, user=13
+[2025-05-05 22:04:47,143] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 22:04:47,143] INFO apps.products.views Creating product, user=13, path=/products/create/
+[2025-05-05 22:04:47,146] DEBUG apps.products.serializers Validating product data: {'title': 'Чача', 'description': 'Вкусно', 'price': Decimal('56.00'), 'discount': Decimal('5.00'), 'stock': 1500, 'category': <Category: Овощи>}
+[2025-05-05 22:04:47,146] INFO apps.products.services.product_services Creating product with data={'title': 'Чача', 'description': 'Вкусно', 'price': Decimal('56.00'), 'discount': Decimal('5.00'), 'stock': 1500, 'category': <Category: Овощи>}, user=13
+[2025-05-05 22:04:47,150] INFO apps.products.models Creating product with title=Чача, user=13
+[2025-05-05 22:04:47,225] INFO apps.products.signals Creating product in Elasticsearch with title=Чача, user=13
+[2025-05-05 22:04:47,295] INFO apps.products.signals Successfully creating product in Elasticsearch 125, user=13
+[2025-05-05 22:04:47,296] INFO apps.products.models Successfully creating product 125, user=13
+[2025-05-05 22:04:47,296] INFO apps.products.services.product_services Successfully created product 125, user=13
+[2025-05-05 22:04:47,297] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-05-05 22:04:47,297] INFO apps.products.views Successfully created product 125, user=13
+[2025-05-05 22:04:47,298] DEBUG apps.products.serializers Retrieving children for category 2
+[2025-05-05 22:05:03,478] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 22:05:03,478] INFO apps.products.views Creating product, user=13, path=/products/create/
+[2025-05-05 22:05:03,481] DEBUG apps.products.serializers Validating product data: {'title': 'Чача', 'description': 'Вкусно', 'price': Decimal('56.00'), 'discount': Decimal('5.00'), 'stock': 1500, 'category': <Category: Овощи>}
+[2025-05-05 22:05:03,481] INFO apps.products.services.product_services Creating product with data={'title': 'Чача', 'description': 'Вкусно', 'price': Decimal('56.00'), 'discount': Decimal('5.00'), 'stock': 1500, 'category': <Category: Овощи>}, user=13
+[2025-05-05 22:05:03,485] INFO apps.products.models Creating product with title=Чача, user=13
+[2025-05-05 22:05:03,553] INFO apps.products.signals Creating product in Elasticsearch with title=Чача, user=13
+[2025-05-05 22:05:03,623] INFO apps.products.signals Successfully creating product in Elasticsearch 126, user=13
+[2025-05-05 22:05:03,624] INFO apps.products.models Successfully creating product 126, user=13
+[2025-05-05 22:05:03,624] INFO apps.products.services.product_services Successfully created product 126, user=13
+[2025-05-05 22:05:03,626] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-05-05 22:05:03,626] INFO apps.products.views Successfully created product 126, user=13
+[2025-05-05 22:05:03,627] DEBUG apps.products.serializers Retrieving children for category 2
+[2025-05-05 22:05:37,887] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 22:05:37,887] INFO apps.products.views Updating product 124, user=13, path=/products/124/update/
+[2025-05-05 22:05:37,887] INFO apps.products.services.query_services Retrieving product with pk=124
+[2025-05-05 22:05:37,887] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-05 22:05:37,887] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-05 22:05:37,894] INFO apps.products.services.query_services Successfully retrieved product 124
+[2025-05-05 22:05:37,895] DEBUG apps.products.permissions Checking permissions for user=13, obj=чача
+[2025-05-05 22:05:37,898] INFO apps.products.services.product_services Updating product 124, user=13
+[2025-05-05 22:05:37,901] INFO apps.products.models Updating product with title=чача, user=13
+[2025-05-05 22:05:37,972] INFO apps.products.signals Updating product in Elasticsearch with title=чача, user=13
+[2025-05-05 22:05:38,043] INFO apps.products.signals Successfully updating product in Elasticsearch 124, user=13
+[2025-05-05 22:05:38,044] INFO apps.products.models Successfully updating product 124, user=13
+[2025-05-05 22:05:38,044] INFO apps.products.services.product_services Successfully updated product 124, user=13
+[2025-05-05 22:05:38,046] INFO apps.core.services.cache_services Invalidated cache for key: product_detail:124
+[2025-05-05 22:05:38,047] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-05-05 22:05:38,047] INFO apps.products.views Successfully updated product 124, user=13
+[2025-05-05 22:05:38,048] DEBUG apps.products.serializers Retrieving children for category 9
+[2025-05-05 22:05:45,998] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 22:05:45,999] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 22:05:45,999] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 22:05:46,059] INFO apps.products.services.product_services Successfully completed search, found 6 products
+[2025-05-05 22:05:46,059] INFO apps.products.views Successfully returned 6 search results, user=13
+[2025-05-05 22:06:49,370] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 22:06:49,371] INFO apps.products.views Updating product 124, user=13, path=/products/124/update/
+[2025-05-05 22:06:49,371] INFO apps.products.services.query_services Retrieving product with pk=124
+[2025-05-05 22:06:49,371] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-05 22:06:49,371] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-05 22:06:49,380] INFO apps.products.services.query_services Successfully retrieved product 124
+[2025-05-05 22:06:49,380] DEBUG apps.products.permissions Checking permissions for user=13, obj=чача
+[2025-05-05 22:06:49,386] INFO apps.products.services.product_services Updating product 124, user=13
+[2025-05-05 22:06:49,390] INFO apps.products.models Updating product with title=Мёд, user=13
+[2025-05-05 22:06:49,604] INFO apps.products.signals Updating product in Elasticsearch with title=Мёд, user=13
+[2025-05-05 22:06:49,606] INFO apps.products.signals Skipping Elasticsearch update for product 124, user=13
+[2025-05-05 22:06:49,607] INFO apps.products.models Successfully updating product 124, user=13
+[2025-05-05 22:06:49,607] INFO apps.products.services.product_services Successfully updated product 124, user=13
+[2025-05-05 22:06:49,618] INFO apps.core.services.cache_services Invalidated cache for key: product_detail:124
+[2025-05-05 22:06:49,619] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-05-05 22:06:49,619] INFO apps.products.views Successfully updated product 124, user=13
+[2025-05-05 22:06:49,620] DEBUG apps.products.serializers Retrieving children for category 9
+[2025-05-05 22:07:02,287] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 22:07:02,287] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 22:07:02,287] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 22:07:02,298] INFO apps.products.services.product_services Successfully completed search, found 5 products
+[2025-05-05 22:07:02,299] INFO apps.products.views Successfully returned 5 search results, user=13
+[2025-05-05 22:08:47,026] INFO apps.products.models Updating product with title=Чача, user=13
+[2025-05-05 22:08:47,074] INFO apps.products.signals Updating product in Elasticsearch with title=Чача, user=13
+[2025-05-05 22:08:47,075] INFO apps.products.signals Skipping Elasticsearch update for product 126, user=13
+[2025-05-05 22:08:47,076] INFO apps.products.models Successfully updating product 126, user=13
+[2025-05-05 22:09:03,089] INFO apps.products.models Updating product with title=Чача, user=13
+[2025-05-05 22:09:03,164] INFO apps.products.signals Updating product in Elasticsearch with title=Чача, user=13
+[2025-05-05 22:09:03,165] INFO apps.products.signals Skipping Elasticsearch update for product 125, user=13
+[2025-05-05 22:09:03,166] INFO apps.products.models Successfully updating product 125, user=13
+[2025-05-05 22:09:20,747] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-05 22:09:20,747] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=13
+[2025-05-05 22:09:20,747] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 22:09:20,798] INFO apps.products.services.product_services Successfully completed search, found 5 products
+[2025-05-05 22:09:20,799] INFO apps.products.views Successfully returned 5 search results, user=13
+[2025-05-05 22:17:41,444] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 22:17:41,444] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 22:17:41,444] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 22:17:41,639] INFO apps.products.services.product_services Successfully completed search, found 5 products
+[2025-05-05 22:17:41,639] INFO apps.products.views Successfully returned 5 search results, user=anonymous
+[2025-05-05 22:17:59,606] INFO apps.products.models Updating product with title=Чача, user=13
+[2025-05-05 22:17:59,686] INFO apps.products.signals Updating product in Elasticsearch with title=Чача, user=13, is_active=False
+[2025-05-05 22:17:59,688] INFO apps.products.signals Skipping Elasticsearch update for product 126, user=13
+[2025-05-05 22:17:59,688] INFO apps.products.models Successfully updating product 126, user=13
+[2025-05-05 22:18:05,310] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 22:18:05,310] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 22:18:05,310] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 22:18:05,367] INFO apps.products.services.product_services Successfully completed search, found 5 products
+[2025-05-05 22:18:05,367] INFO apps.products.views Successfully returned 5 search results, user=anonymous

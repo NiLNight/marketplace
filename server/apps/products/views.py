@@ -1,5 +1,4 @@
 import logging
-from django.contrib.postgres.search import SearchQuery, SearchRank
 from mptt.utils import get_cached_trees
 from rest_framework import status
 from rest_framework.views import APIView
@@ -277,3 +276,56 @@ class ProductDeleteView(BaseProductView):
         except Exception as e:
             logger.error(f"Failed to delete product {pk}: {str(e)}, user={user_id}")
             raise ProductServiceException(f"Ошибка удаления продукта: {str(e)}")
+
+
+class ProductSearchView(APIView):
+    """Представление для поиска продуктов через Elasticsearch."""
+    permission_classes = [AllowAny]
+
+    @handle_api_errors
+    def get(self, request):
+        """Обрабатывает GET-запрос для поиска продуктов.
+
+        Args:
+            request: HTTP-запрос с параметрами q, category_id, min_price, max_price, min_discount, in_stock.
+
+        Returns:
+            Response: Список найденных продуктов или ошибка.
+        """
+        query = request.query_params.get('q', '')
+        category_id = request.query_params.get('category_id', None)
+        min_price = request.query_params.get('min_price', None)
+        max_price = request.query_params.get('max_price', None)
+        min_discount = request.query_params.get('min_discount', None)
+        in_stock = request.query_params.get('in_stock', None)
+
+        user_id = request.user.id if request.user.is_authenticated else 'anonymous'
+        logger.info(
+            f"Processing search request with query={query}, category_id={category_id}, "
+            f"min_price={min_price}, max_price={max_price}, min_discount={min_discount}, "
+            f"in_stock={in_stock}, user={user_id}"
+        )
+
+        try:
+            results = ProductServices.search_products(
+                query=query,
+                category_id=int(category_id) if category_id else None,
+                min_price=float(min_price) if min_price else None,
+                max_price=float(max_price) if max_price else None,
+                min_discount=float(min_discount) if min_discount else None,
+                in_stock=bool(in_stock.lower() == 'true') if in_stock else None
+            )
+            logger.info(f"Successfully returned {len(results)} search results, user={user_id}")
+            return Response(results, status=status.HTTP_200_OK)
+        except ValueError as e:
+            logger.warning(f"Invalid search parameters: {str(e)}, user={user_id}")
+            return Response(
+                {"error": "Некорректные параметры поиска", "code": "invalid_params"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            logger.exception(f"Search view failed with query={query}, user={user_id}, error={str(e)}")
+            return Response(
+                {"error": str(e), "code": "search_error"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

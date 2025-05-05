@@ -240,6 +240,25 @@ class Product(TimeStampedModel):
         orig = Product.objects.get(pk=self.pk)
         return orig.title != self.title
 
+    def should_update_elasticsearch(self) -> bool:
+        """Проверяет, нужно ли обновлять документ в Elasticsearch.
+
+        Returns:
+            True, если изменились поля, влияющие на поиск.
+        """
+        if not self.pk:
+            return True
+        orig = Product.objects.get(pk=self.pk)
+        return (
+                orig.title != self.title or
+                orig.description != self.description or
+                orig.category_id != self.category_id or
+                orig.price != self.price or
+                orig.discount != self.discount or
+                orig.is_active != self.is_active or
+                orig.stock != self.stock
+        )
+
     def __str__(self) -> str:
         """Возвращает строковое представление продукта.
 

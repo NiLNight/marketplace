@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     'debug_toolbar',
+    'django_elasticsearch_dsl',
     # Приложения
     'apps.core.apps.CoreConfig',
     'apps.users.apps.UsersConfig',
@@ -274,5 +275,14 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         }
+    },
+}
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'http://localhost:9200',
+        'http_auth': ('elastic', str(os.environ.get('ELASTICSEARCH_PASSWORD'))),
+        'verify_certs': False,
+        'timeout': 30,
     },
 }
