@@ -296,41 +296,21 @@ class ProductSearchView(BaseProductView):
         Raises:
             ProductServiceException: Если поиск не удался или параметры некорректны.
         """
-        query = request.query_params.get('q', '')
-        category_id = request.query_params.get('category_id', None)
-        min_price = request.query_params.get('min_price', None)
-        max_price = request.query_params.get('max_price', None)
-        min_discount = request.query_params.get('min_discount', None)
-        in_stock = request.query_params.get('in_stock', None)
-        page = request.query_params.get('page', 1)
-        page_size = request.query_params.get('page_size', 20)
-        ordering = request.query_params.get('ordering', None)
-
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
-        logger.info(
-            f"Processing search request with query={query}, category_id={category_id}, "
-            f"min_price={min_price}, max_price={max_price}, min_discount={min_discount}, "
-            f"in_stock={in_stock}, page={page}, page_size={page_size}, ordering={ordering}, user={user_id}"
-        )
-
+        logger.info(f"Retrieving product search, user={user_id}, path={request.path}")
         try:
             cache_key = CacheService.build_cache_key(request, prefix="product_search")
             cached_data = CacheService.get_cached_data(cache_key)
             if cached_data:
-                logger.info(f"Returning cached search results for {cache_key}")
                 return Response(cached_data)
 
-            queryset = ProductQueryService.search_products(
-                query=query,
-                category_id=int(category_id) if category_id else None,
-                min_price=float(min_price) if min_price else None,
-                max_price=float(max_price) if max_price else None,
-                min_discount=float(min_discount) if min_discount else None,
-                in_stock=bool(in_stock.lower() == 'true') if in_stock else None,
-                page=int(page),
-                page_size=int(page_size),
-                ordering=ordering
-            )
+            # Выполняем поиск через Elasticsearch и получаем QuerySet
+            queryset = ProductQueryService.search_products(request)
+
+            # Применяем те же шаги обработки, что и в ProductListView
+            queryset = ProductQueryService.apply_filters(queryset, request)
+            queryset = ProductQueryService.get_product_list(queryset)
+            queryset = ProductQueryService.apply_ordering(queryset, request)
 
             paginator = self.pagination_class()
             page = paginator.paginate_queryset(queryset, request)
@@ -338,7 +318,7 @@ class ProductSearchView(BaseProductView):
 
             response_data = paginator.get_paginated_response(serializer.data).data
             CacheService.set_cached_data(cache_key, response_data, timeout=self.CACHE_TIMEOUT)
-            logger.info(f"Successfully returned search results, total={response_data['count']}, user={user_id}")
+            logger.info(f"Retrieved {len(page)} products, user={user_id}")
             return Response(response_data)
         except ValueError as e:
             logger.warning(f"Invalid search parameters: {str(e)}, user={user_id}")
@@ -347,7 +327,7 @@ class ProductSearchView(BaseProductView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         except Exception as e:
-            logger.exception(f"Search view failed with query={query}, user={user_id}, error={str(e)}")
+            logger.exception(f"Search view failed, user={user_id}, error={str(e)}")
             return Response(
                 {"error": str(e), "code": "search_error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR

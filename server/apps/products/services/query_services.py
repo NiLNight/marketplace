@@ -1,12 +1,12 @@
 import logging
 from django.contrib.postgres.search import SearchQuery, SearchRank
-from django.db.models import Q, ExpressionWrapper, F, FloatField, Count, Avg, Prefetch
+from django.db.models import Q, ExpressionWrapper, F, FloatField, Count, Avg, Case, When, IntegerField
 from django.db.models.functions import Coalesce, ExtractDay, Now
 from apps.products.models import Product, Category
 from apps.products.exceptions import ProductNotFound, InvalidCategoryError, ProductServiceException
 from apps.products.documents import ProductDocument
 from apps.core.services.cache_services import CacheService
-from typing import Any, Dict, Optional
+from typing import Any, Optional, Union
 
 logger = logging.getLogger(__name__)
 
@@ -106,6 +106,87 @@ class ProductQueryService:
         )
 
     @classmethod
+    def apply_common_filters(
+            cls,
+            source: Union[Any, Any],
+            category_id: Optional[int] = None,
+            min_price: Optional[float] = None,
+            max_price: Optional[float] = None,
+            min_discount: Optional[float] = None,
+            in_stock: Optional[bool] = None
+    ) -> Union[Any, Any]:
+        """Применяет общие фильтры к QuerySet или объекту поиска Elasticsearch.
+
+        Args:
+            source: QuerySet (для PostgreSQL) или объект Search (для Elasticsearch).
+            category_id: ID категории для фильтрации.
+            min_price: Минимальная цена (с учётом скидки для Elasticsearch).
+            max_price: Максимальная цена (с учётом скидки для Elasticsearch).
+            min_discount: Минимальная скидка (в процентах).
+            in_stock: Фильтр по наличию на складе.
+
+        Returns:
+            Отфильтрованный QuerySet или объект Search.
+
+        Raises:
+            InvalidCategoryError: Если категория или параметры некорректны.
+        """
+        logger.debug(
+            f"Applying common filters with category_id={category_id}, "
+            f"min_price={min_price}, max_price={max_price}, min_discount={min_discount}, in_stock={in_stock}"
+        )
+        try:
+            if isinstance(source, ProductDocument.search().__class__):  # Elasticsearch
+                if category_id:
+                    try:
+                        category = Category.objects.get(pk=category_id)
+                        descendants = category.get_descendants(include_self=True)
+                        source = source.filter('terms', **{'category.id': [c.id for c in descendants]})
+                    except Category.DoesNotExist:
+                        logger.warning(f"Category {category_id} not found")
+                        raise InvalidCategoryError("Категория не найдена.")
+
+                if min_price is not None or max_price is not None:
+                    price_range = {}
+                    if min_price is not None:
+                        price_range['gte'] = min_price
+                    if max_price is not None:
+                        price_range['lte'] = max_price
+                    source = source.filter('range', price_with_discount=price_range)
+
+                if min_discount is not None:
+                    source = source.filter('range', discount={'gte': min_discount})
+
+                if in_stock:
+                    source = source.filter('range', stock={'gt': 0})
+
+            else:  # PostgreSQL QuerySet
+                if category_id:
+                    try:
+                        category = Category.objects.get(pk=category_id)
+                        descendants = category.get_descendants(include_self=True)
+                        source = source.filter(category__in=descendants)
+                    except Category.DoesNotExist:
+                        logger.warning(f"Category {category_id} not found")
+                        raise InvalidCategoryError("Категория не найдена.")
+
+                if min_price is not None:
+                    source = source.filter(price__gte=min_price)
+                if max_price is not None:
+                    source = source.filter(price__lte=max_price)
+
+                if min_discount is not None:
+                    source = source.filter(discount__gte=min_discount)
+
+                if in_stock:
+                    source = source.filter(stock__gt=0)
+
+            return source
+        except (TypeError, ValueError) as e:
+            logger.warning(f"Invalid filter parameters: {str(e)}")
+            raise InvalidCategoryError(f"Некорректные параметры фильтрации: {str(e)}")
+
+    @classmethod
     def apply_filters(cls, queryset: Any, request: Any) -> Any:
         """Применяет фильтры к QuerySet на основе параметров запроса.
 
@@ -117,67 +198,22 @@ class ProductQueryService:
             Отфильтрованный QuerySet.
 
         Raises:
-            InvalidCategoryError: Если категория или параметры цены некорректны.
+            InvalidCategoryError: Если параметры фильтрации некорректны.
         """
         params = request.GET.dict()
         logger.debug(f"Applying filters with params={params}")
 
-        if category_id := params.get('category'):
-            queryset = cls._filter_by_category(queryset, category_id)
-
-        if any(key in params for key in ['price__gte', 'price__lte']):
-            queryset = cls._filter_by_price(queryset, params)
-
-        return queryset
-
-    @staticmethod
-    def _filter_by_category(queryset: Any, category_id: str) -> Any:
-        """Фильтрует продукты по категории и ее потомкам.
-
-        Args:
-            queryset: QuerySet продуктов.
-            category_id: Идентификатор категории.
-
-        Returns:
-            Отфильтрованный QuerySet.
-
-        Raises:
-            InvalidCategoryError: Если категория не существует.
-        """
-        logger.debug(f"Filtering by category_id={category_id}")
-        try:
-            category = Category.objects.get(pk=category_id)
-            descendants = category.get_descendants(include_self=True)
-            return queryset.filter(category__in=descendants)
-        except Category.DoesNotExist:
-            logger.warning(f"Category {category_id} not found")
-            raise InvalidCategoryError("Категория не найдена.")
-
-    @staticmethod
-    def _filter_by_price(queryset: Any, params: Dict[str, str]) -> Any:
-        """Фильтрует продукты по диапазону цен.
-
-        Args:
-            queryset: QuerySet продуктов.
-            params: Параметры запроса с ценами.
-
-        Returns:
-            Отфильтрованный QuerySet.
-
-        Raises:
-            InvalidCategoryError: Если параметры цены некорректны.
-        """
-        logger.debug(f"Filtering by price with params={params}")
-        try:
-            price_filters = {}
-            if min_price := params.get('price__gte'):
-                price_filters['price__gte'] = float(min_price)
-            if max_price := params.get('price__lte'):
-                price_filters['price__lte'] = float(max_price)
-            return queryset.filter(**price_filters)
-        except (TypeError, ValueError) as e:
-            logger.warning(f"Invalid price parameters: {str(e)}")
-            raise InvalidCategoryError(f"Некорректные параметры цены: {str(e)}")
+        return cls.apply_common_filters(
+            queryset,
+            category_id=int(params.get('category_id') or params.get('category')) if params.get(
+                'category_id') or params.get('category') else None,
+            min_price=float(params.get('min_price') or params.get('price__gte')) if params.get(
+                'min_price') or params.get('price__gte') else None,
+            max_price=float(params.get('max_price') or params.get('price__lte')) if params.get(
+                'max_price') or params.get('price__lte') else None,
+            min_discount=float(params.get('min_discount')) if params.get('min_discount') else None,
+            in_stock=bool(params.get('in_stock').lower() == 'true') if params.get('in_stock') else None
+        )
 
     @classmethod
     def apply_ordering(cls, queryset: Any, request: Any) -> Any:
@@ -200,53 +236,52 @@ class ProductQueryService:
         return queryset.order_by(sort_by or 'popularity_score')
 
     @classmethod
-    def search_products(
-            cls,
-            query: Optional[str] = None,
-            category_id: Optional[int] = None,
-            min_price: Optional[float] = None,
-            max_price: Optional[float] = None,
-            min_discount: Optional[float] = None,
-            in_stock: Optional[bool] = None,
-            page: int = 1,
-            page_size: int = 20,
-            ordering: Optional[str] = None
-    ) -> Any:
-        """Поиск продуктов в Elasticsearch с фильтрацией, пагинацией и сортировкой.
+    def search_products(cls, request: Any) -> Any:
+        """Поиск продуктов в Elasticsearch с фильтрацией и пагинацией.
 
         Args:
-            query: Поисковый запрос для полей title и description.
-            category_id: ID категории для фильтрации.
-            min_price: Минимальная цена (с учётом скидки).
-            max_price: Максимальная цена (с учётом скидки).
-            min_discount: Минимальная скидка (в процентах).
-            in_stock: Фильтр по наличию на складе.
-            page: Номер страницы.
-            page_size: Количество элементов на странице.
-            ordering: Поле для сортировки (например, 'price', '-price').
+            request: HTTP-запрос с параметрами q, category_id, min_price, max_price, min_discount, in_stock, page, page_size, ordering.
 
         Returns:
-            QuerySet с результатами поиска.
+            QuerySet с результатами поиска, сохраняющий порядок из Elasticsearch.
 
         Raises:
             ProductServiceException: Если поиск не удался или параметры некорректны.
         """
+        query = request.GET.get('q', '')
+        page = int(request.GET.get('page', 1))
+        page_size = int(request.GET.get('page_size', 20))
+        ordering = request.GET.get('ordering', None)
+
         logger.info(
-            f"Searching products with query={query}, category_id={category_id}, "
-            f"min_price={min_price}, max_price={max_price}, min_discount={min_discount}, "
-            f"in_stock={in_stock}, page={page}, page_size={page_size}, ordering={ordering}"
+            f"Searching products with query={query}, page={page}, page_size={page_size}, ordering={ordering}"
         )
         try:
             # Проверка параметров пагинации
             if page < 1 or page_size < 1 or page_size > cls.LARGE_PAGE_SIZE:
                 raise ValueError("Некорректные параметры пагинации")
 
-            # Проверка кэша
+            # Извлечение параметров фильтрации
+            params = request.GET.dict()
+            category_id = int(params.get('category_id') or params.get('category')) if params.get(
+                'category_id') or params.get('category') else None
+            min_price = float(params.get('min_price') or params.get('price__gte')) if params.get(
+                'min_price') or params.get('price__gte') else None
+            max_price = float(params.get('max_price') or params.get('price__lte')) if params.get(
+                'max_price') or params.get('price__lte') else None
+            min_discount = float(params.get('min_discount')) if params.get('min_discount') else None
+            in_stock = bool(params.get('in_stock').lower() == 'true') if params.get('in_stock') else None
+
+            # Формирование ключа кэша
             cache_key = f"search:{query}:{category_id}:{min_price}:{max_price}:{min_discount}:{in_stock}:{page}:{page_size}:{ordering}"
             cached_ids = CacheService.get_cached_data(cache_key)
             if cached_ids:
-                queryset = cls.get_base_queryset().filter(id__in=cached_ids)
-                return cls.get_product_list(queryset)
+                logger.info(f"Returning cached search results for {cache_key}")
+                preserved_order = Case(*[When(id=id, then=pos) for pos, id in enumerate(cached_ids)],
+                                       output_field=IntegerField())
+                queryset = cls.get_base_queryset().filter(id__in=cached_ids).annotate(order=preserved_order).order_by(
+                    'order')
+                return queryset
 
             search = ProductDocument.search().filter('term', is_active=True)
 
@@ -260,22 +295,15 @@ class ProductQueryService:
             elif not query and not any([category_id, min_price, max_price, min_discount, in_stock]):
                 search = search.sort('-popularity_score')
 
-            if category_id:
-                search = search.filter('term', **{'category.id': category_id})
-
-            if min_price is not None or max_price is not None:
-                price_range = {}
-                if min_price is not None:
-                    price_range['gte'] = min_price
-                if max_price is not None:
-                    price_range['lte'] = max_price
-                search = search.filter('range', price_with_discount=price_range)
-
-            if min_discount is not None:
-                search = search.filter('range', discount={'gte': min_discount})
-
-            if in_stock:
-                search = search.filter('range', stock={'gt': 0})
+            # Применение фильтров в Elasticsearch
+            search = cls.apply_common_filters(
+                search,
+                category_id=category_id,
+                min_price=min_price,
+                max_price=max_price,
+                min_discount=min_discount,
+                in_stock=in_stock
+            )
 
             # Применение сортировки
             if ordering and ordering in cls.ALLOWED_ORDER_FIELDS:
@@ -296,9 +324,12 @@ class ProductQueryService:
             CacheService.set_cached_data(cache_key, product_ids, timeout=300)  # 5 минут
             logger.info(f"Successfully completed search, found {len(product_ids)} products, total={total}")
 
-            # Возвращаем QuerySet для сериализации
-            queryset = cls.get_base_queryset().filter(id__in=product_ids)
-            return cls.get_product_list(queryset)
+            # Формируем QuerySet с сохранением порядка
+            preserved_order = Case(*[When(id=id, then=pos) for pos, id in enumerate(product_ids)],
+                                   output_field=IntegerField())
+            queryset = cls.get_base_queryset().filter(id__in=product_ids).annotate(order=preserved_order).order_by(
+                'order')
+            return queryset
         except ValueError as e:
             logger.warning(f"Invalid search parameters: {str(e)}")
             raise ProductServiceException(f"Некорректные параметры поиска: {str(e)}")

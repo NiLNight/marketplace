@@ -119,6 +119,7 @@ class ReviewUpdateView(APIView):
 
         review = ReviewService.update_review(pk, serializer.validated_data, request.user)
         CacheService.invalidate_cache(prefix=f"reviews:{review.product_id}")
+        CacheService.invalidate_cache(prefix="product_list")
         logger.info(f"Updated review {pk}, user={user_id}")
         return Response(ReviewSerializer(review).data, status=status.HTTP_200_OK)
 

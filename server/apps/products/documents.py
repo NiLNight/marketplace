@@ -1,7 +1,7 @@
 import logging
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
-from django.db.models import Avg
+from django.db.models import Avg, Count
 from django.utils import timezone
 from apps.products.models import Product
 
@@ -28,6 +28,7 @@ class ProductDocument(Document):
     })
     is_active = fields.BooleanField()
     popularity_score = fields.FloatField()
+    rating_avg = fields.FloatField()
 
     class Index:
         """Конфигурация индекса для Elasticsearch."""
@@ -119,6 +120,22 @@ class ProductDocument(Document):
             return float(popularity_score)
         except Exception as e:
             logger.error(f"Failed to prepare popularity_score for product {instance.id}: {str(e)}")
+            return 0.0
+
+    def prepare_rating_avg(self, instance):
+        """Вычисляет средний рейтинг для индексации.
+
+        Args:
+            instance: Экземпляр Product.
+
+        Returns:
+            Float-значение среднего рейтинга.
+        """
+        try:
+            rating_avg = instance.reviews.aggregate(Avg('value'))['value__avg'] or 0.0
+            return float(rating_avg)
+        except Exception as e:
+            logger.error(f"Failed to prepare rating_avg for product {instance.id}: {str(e)}")
             return 0.0
 
     def save(self, **kwargs):
