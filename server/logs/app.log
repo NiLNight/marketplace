@@ -3967,3 +3967,49 @@ apps.products.exceptions.ProductServiceException: Ошибка поиска продуктов: Conne
 [2025-05-06 11:24:15,896] DEBUG apps.core.services.cache_services Cache hit for key: search:чача:None:None:None:None:None:1:20:None
 [2025-05-06 11:24:15,896] INFO apps.products.services.query_services Returning cached search results for search:чача:None:None:None:None:None:1:20:None
 [2025-05-06 11:24:15,896] INFO apps.products.views Successfully returned search results, total=5, user=anonymous
+[2025-05-06 11:27:48,338] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 11:27:48,338] INFO apps.products.views Retrieving product list, user=anonymous, path=/products/list/
+[2025-05-06 11:27:48,444] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-06 11:35:56,302] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 11:35:56,302] INFO apps.products.views Retrieving product list, user=anonymous, path=/products/list/
+[2025-05-06 11:35:56,446] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-06 11:36:02,252] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 11:36:02,252] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, page=1, page_size=20, ordering=None, user=anonymous
+[2025-05-06 11:36:02,252] INFO apps.products.services.query_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, page=1, page_size=20, ordering=None
+[2025-05-06 11:36:02,253] DEBUG apps.core.services.cache_services Cache miss for key: search:чача:None:None:None:None:None:1:20:None
+[2025-05-06 11:36:02,412] INFO apps.products.services.query_services Successfully completed search, found 5 products, total=5
+[2025-05-06 11:36:02,412] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-06 11:36:02,413] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-06 11:36:02,413] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-06 11:36:02,414] ERROR apps.products.views Search view failed with query=чача, user=anonymous, error=QuerySet indices must be integers or slices, not str.
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\views.py", line 327, in get
+    logger.info(f"Successfully returned search results, total={results['total']}, user={user_id}")
+                                                               ~~~~~~~^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\django\db\models\query.py", line 420, in __getitem__
+    raise TypeError(
+TypeError: QuerySet indices must be integers or slices, not str.
+[2025-05-06 11:36:05,575] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 11:36:05,575] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, page=1, page_size=20, ordering=None, user=anonymous
+[2025-05-06 11:36:05,575] INFO apps.products.services.query_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, page=1, page_size=20, ordering=None
+[2025-05-06 11:36:05,577] DEBUG apps.core.services.cache_services Cache hit for key: search:чача:None:None:None:None:None:1:20:None
+[2025-05-06 11:36:05,577] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-06 11:36:05,577] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-06 11:36:05,577] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-06 11:36:05,578] ERROR apps.products.views Search view failed with query=чача, user=anonymous, error=QuerySet indices must be integers or slices, not str.
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\views.py", line 327, in get
+    logger.info(f"Successfully returned search results, total={results['total']}, user={user_id}")
+                                                               ~~~~~~~^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\django\db\models\query.py", line 420, in __getitem__
+    raise TypeError(
+TypeError: QuerySet indices must be integers or slices, not str.
+[2025-05-06 11:37:23,628] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 11:37:23,628] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, page=1, page_size=20, ordering=None, user=anonymous
+[2025-05-06 11:37:23,731] DEBUG apps.core.services.cache_services Cache miss for key: product_search:710a72661e6eb8270dfd8634ff427f04
+[2025-05-06 11:37:23,731] INFO apps.products.services.query_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, page=1, page_size=20, ordering=None
+[2025-05-06 11:37:23,732] DEBUG apps.core.services.cache_services Cache hit for key: search:чача:None:None:None:None:None:1:20:None
+[2025-05-06 11:37:23,732] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-06 11:37:23,732] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-06 11:37:23,732] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-06 11:37:23,801] INFO apps.products.views Successfully returned search results, total=5, user=anonymous

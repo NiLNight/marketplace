@@ -199,8 +199,9 @@ class ProductQueryService:
 
         return queryset.order_by(sort_by or 'popularity_score')
 
-    @staticmethod
+    @classmethod
     def search_products(
+            cls,
             query: Optional[str] = None,
             category_id: Optional[int] = None,
             min_price: Optional[float] = None,
@@ -210,7 +211,7 @@ class ProductQueryService:
             page: int = 1,
             page_size: int = 20,
             ordering: Optional[str] = None
-    ) -> Dict[str, Any]:
+    ) -> Any:
         """Поиск продуктов в Elasticsearch с фильтрацией, пагинацией и сортировкой.
 
         Args:
@@ -225,7 +226,7 @@ class ProductQueryService:
             ordering: Поле для сортировки (например, 'price', '-price').
 
         Returns:
-            Словарь с результатами поиска, включая пагинацию.
+            QuerySet с результатами поиска.
 
         Raises:
             ProductServiceException: Если поиск не удался или параметры некорректны.
@@ -237,15 +238,15 @@ class ProductQueryService:
         )
         try:
             # Проверка параметров пагинации
-            if page < 1 or page_size < 1 or page_size > ProductQueryService.LARGE_PAGE_SIZE:
+            if page < 1 or page_size < 1 or page_size > cls.LARGE_PAGE_SIZE:
                 raise ValueError("Некорректные параметры пагинации")
 
             # Проверка кэша
             cache_key = f"search:{query}:{category_id}:{min_price}:{max_price}:{min_discount}:{in_stock}:{page}:{page_size}:{ordering}"
-            cached_result = CacheService.get_cached_data(cache_key)
-            if cached_result:
-                logger.info(f"Returning cached search results for {cache_key}")
-                return cached_result
+            cached_ids = CacheService.get_cached_data(cache_key)
+            if cached_ids:
+                queryset = cls.get_base_queryset().filter(id__in=cached_ids)
+                return cls.get_product_list(queryset)
 
             search = ProductDocument.search().filter('term', is_active=True)
 
@@ -257,7 +258,6 @@ class ProductQueryService:
                     fuzziness='AUTO'
                 )
             elif not query and not any([category_id, min_price, max_price, min_discount, in_stock]):
-                # Если запрос пустой и нет фильтров, сортируем по популярности
                 search = search.sort('-popularity_score')
 
             if category_id:
@@ -278,7 +278,7 @@ class ProductQueryService:
                 search = search.filter('range', stock={'gt': 0})
 
             # Применение сортировки
-            if ordering and ordering in ProductQueryService.ALLOWED_ORDER_FIELDS:
+            if ordering and ordering in cls.ALLOWED_ORDER_FIELDS:
                 search = search.sort(ordering)
             elif not query:
                 search = search.sort('-popularity_score')
@@ -289,20 +289,16 @@ class ProductQueryService:
             search = search[start:end]
 
             response = search.execute()
-            results = [hit.to_dict() for hit in response]
-            total = response.hits.total.value if hasattr(response.hits, 'total') else len(results)
+            product_ids = [hit.id for hit in response]
+            total = response.hits.total.value if hasattr(response.hits, 'total') else len(product_ids)
 
-            result_dict = {
-                'results': results,
-                'total': total,
-                'page': page,
-                'page_size': page_size
-            }
+            # Сохранение ID в кэш
+            CacheService.set_cached_data(cache_key, product_ids, timeout=300)  # 5 минут
+            logger.info(f"Successfully completed search, found {len(product_ids)} products, total={total}")
 
-            # Сохранение в кэш
-            CacheService.set_cached_data(cache_key, result_dict, timeout=300)  # 5 минут
-            logger.info(f"Successfully completed search, found {len(results)} products")
-            return result_dict
+            # Возвращаем QuerySet для сериализации
+            queryset = cls.get_base_queryset().filter(id__in=product_ids)
+            return cls.get_product_list(queryset)
         except ValueError as e:
             logger.warning(f"Invalid search parameters: {str(e)}")
             raise ProductServiceException(f"Некорректные параметры поиска: {str(e)}")

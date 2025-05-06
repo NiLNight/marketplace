@@ -278,19 +278,20 @@ class ProductDeleteView(BaseProductView):
             raise ProductServiceException(f"Ошибка удаления продукта: {str(e)}")
 
 
-class ProductSearchView(APIView):
+class ProductSearchView(BaseProductView):
     """Представление для поиска продуктов через Elasticsearch."""
+    serializer_class = ProductListSerializer
     permission_classes = [AllowAny]
 
     @handle_api_errors
-    def get(self, request):
+    def get(self, request: Any) -> Response:
         """Обрабатывает GET-запрос для поиска продуктов.
 
         Args:
             request: HTTP-запрос с параметрами q, category_id, min_price, max_price, min_discount, in_stock, page, page_size, ordering.
 
         Returns:
-            Response: Список найденных продуктов с пагинацией или ошибка.
+            Response: Пагинированный список найденных продуктов.
 
         Raises:
             ProductServiceException: Если поиск не удался или параметры некорректны.
@@ -313,7 +314,13 @@ class ProductSearchView(APIView):
         )
 
         try:
-            results = ProductQueryService.search_products(
+            cache_key = CacheService.build_cache_key(request, prefix="product_search")
+            cached_data = CacheService.get_cached_data(cache_key)
+            if cached_data:
+                logger.info(f"Returning cached search results for {cache_key}")
+                return Response(cached_data)
+
+            queryset = ProductQueryService.search_products(
                 query=query,
                 category_id=int(category_id) if category_id else None,
                 min_price=float(min_price) if min_price else None,
@@ -324,8 +331,15 @@ class ProductSearchView(APIView):
                 page_size=int(page_size),
                 ordering=ordering
             )
-            logger.info(f"Successfully returned search results, total={results['total']}, user={user_id}")
-            return Response(results, status=status.HTTP_200_OK)
+
+            paginator = self.pagination_class()
+            page = paginator.paginate_queryset(queryset, request)
+            serializer = self.serializer_class(page, many=True)
+
+            response_data = paginator.get_paginated_response(serializer.data).data
+            CacheService.set_cached_data(cache_key, response_data, timeout=self.CACHE_TIMEOUT)
+            logger.info(f"Successfully returned search results, total={response_data['count']}, user={user_id}")
+            return Response(response_data)
         except ValueError as e:
             logger.warning(f"Invalid search parameters: {str(e)}, user={user_id}")
             return Response(
