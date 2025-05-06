@@ -3253,3 +3253,717 @@ AttributeError: type object 'ProductServices' has no attribute 'search_products'
 [2025-05-05 22:18:34,809] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
 [2025-05-05 22:18:34,865] INFO apps.products.services.product_services Successfully completed search, found 5 products
 [2025-05-05 22:18:34,865] INFO apps.products.views Successfully returned 5 search results, user=anonymous
+[2025-05-06 10:23:09,567] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 10:23:09,567] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-06 10:23:09,568] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-06 10:23:26,077] ERROR apps.products.services.product_services Failed to search products with query=чача, error=Connection error caused by: ConnectionError(Connection error caused by: NewConnectionError(<urllib3.connection.HTTPConnection object at 0x000001EEAF2609B0>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение))
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_node\_http_urllib3.py", line 167, in perform_request
+    response = self.pool.urlopen(
+               ^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\retry.py", line 449, in increment
+    raise reraise(type(error), error, _stacktrace)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\util.py", line 39, in reraise
+    raise value
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 493, in _make_request
+    conn.request(
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 445, in request
+    self.endheaders()
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 1331, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 1091, in _send_output
+    self.send(msg)
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 1035, in send
+    self.connect()
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 276, in connect
+    self.sock = self._new_conn()
+                ^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 213, in _new_conn
+    raise NewConnectionError(
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPConnection object at 0x000001EEAF2613A0>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\services\product_services.py", line 165, in search_products
+    response = search.execute()
+               ^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch_dsl\_sync\search.py", line 88, in execute
+    es.search(index=self._index, body=self.to_dict(), **self._params)
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\utils.py", line 455, in wrapped
+    return api(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\__init__.py", line 5061, in search
+    return self.perform_request(  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\_base.py", line 271, in perform_request
+    response = self._perform_request(
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\_base.py", line 316, in _perform_request
+    meta, resp_body = self.transport.perform_request(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_transport.py", line 342, in perform_request
+    resp = node.perform_request(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_node\_http_urllib3.py", line 202, in perform_request
+    raise err from e
+elastic_transport.ConnectionError: Connection error caused by: ConnectionError(Connection error caused by: NewConnectionError(<urllib3.connection.HTTPConnection object at 0x000001EEAF2609B0>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение))
+[2025-05-06 10:23:26,163] ERROR apps.products.views Search view failed with query=чача, user=anonymous, error=Ошибка поиска продуктов: Connection error caused by: ConnectionError(Connection error caused by: NewConnectionError(<urllib3.connection.HTTPConnection object at 0x000001EEAF2609B0>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение))
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_node\_http_urllib3.py", line 167, in perform_request
+    response = self.pool.urlopen(
+               ^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\retry.py", line 449, in increment
+    raise reraise(type(error), error, _stacktrace)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\util.py", line 39, in reraise
+    raise value
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 493, in _make_request
+    conn.request(
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 445, in request
+    self.endheaders()
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 1331, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 1091, in _send_output
+    self.send(msg)
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 1035, in send
+    self.connect()
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 276, in connect
+    self.sock = self._new_conn()
+                ^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 213, in _new_conn
+    raise NewConnectionError(
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPConnection object at 0x000001EEAF2613A0>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\services\product_services.py", line 165, in search_products
+    response = search.execute()
+               ^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch_dsl\_sync\search.py", line 88, in execute
+    es.search(index=self._index, body=self.to_dict(), **self._params)
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\utils.py", line 455, in wrapped
+    return api(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\__init__.py", line 5061, in search
+    return self.perform_request(  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\_base.py", line 271, in perform_request
+    response = self._perform_request(
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\_base.py", line 316, in _perform_request
+    meta, resp_body = self.transport.perform_request(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_transport.py", line 342, in perform_request
+    resp = node.perform_request(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_node\_http_urllib3.py", line 202, in perform_request
+    raise err from e
+elastic_transport.ConnectionError: Connection error caused by: ConnectionError(Connection error caused by: NewConnectionError(<urllib3.connection.HTTPConnection object at 0x000001EEAF2609B0>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\views.py", line 310, in get
+    results = ProductServices.search_products(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\services\product_services.py", line 173, in search_products
+    raise ProductServiceException(f"Ошибка поиска продуктов: {str(e)}")
+apps.products.exceptions.ProductServiceException: Ошибка поиска продуктов: Connection error caused by: ConnectionError(Connection error caused by: NewConnectionError(<urllib3.connection.HTTPConnection object at 0x000001EEAF2609B0>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение))
+[2025-05-06 10:23:59,394] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 10:23:59,394] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-06 10:23:59,394] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-06 10:24:15,665] ERROR apps.products.services.product_services Failed to search products with query=чача, error=Connection error caused by: ConnectionError(Connection error caused by: NewConnectionError(<urllib3.connection.HTTPConnection object at 0x000001EEAF35EA50>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение))
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_node\_http_urllib3.py", line 167, in perform_request
+    response = self.pool.urlopen(
+               ^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\retry.py", line 449, in increment
+    raise reraise(type(error), error, _stacktrace)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\util.py", line 39, in reraise
+    raise value
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 493, in _make_request
+    conn.request(
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 445, in request
+    self.endheaders()
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 1331, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 1091, in _send_output
+    self.send(msg)
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 1035, in send
+    self.connect()
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 276, in connect
+    self.sock = self._new_conn()
+                ^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 213, in _new_conn
+    raise NewConnectionError(
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPConnection object at 0x000001EEAF35C830>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\services\product_services.py", line 165, in search_products
+    response = search.execute()
+               ^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch_dsl\_sync\search.py", line 88, in execute
+    es.search(index=self._index, body=self.to_dict(), **self._params)
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\utils.py", line 455, in wrapped
+    return api(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\__init__.py", line 5061, in search
+    return self.perform_request(  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\_base.py", line 271, in perform_request
+    response = self._perform_request(
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\_base.py", line 316, in _perform_request
+    meta, resp_body = self.transport.perform_request(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_transport.py", line 342, in perform_request
+    resp = node.perform_request(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_node\_http_urllib3.py", line 202, in perform_request
+    raise err from e
+elastic_transport.ConnectionError: Connection error caused by: ConnectionError(Connection error caused by: NewConnectionError(<urllib3.connection.HTTPConnection object at 0x000001EEAF35EA50>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение))
+[2025-05-06 10:24:15,667] ERROR apps.products.views Search view failed with query=чача, user=anonymous, error=Ошибка поиска продуктов: Connection error caused by: ConnectionError(Connection error caused by: NewConnectionError(<urllib3.connection.HTTPConnection object at 0x000001EEAF35EA50>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение))
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_node\_http_urllib3.py", line 167, in perform_request
+    response = self.pool.urlopen(
+               ^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\retry.py", line 449, in increment
+    raise reraise(type(error), error, _stacktrace)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\util.py", line 39, in reraise
+    raise value
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 493, in _make_request
+    conn.request(
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 445, in request
+    self.endheaders()
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 1331, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 1091, in _send_output
+    self.send(msg)
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 1035, in send
+    self.connect()
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 276, in connect
+    self.sock = self._new_conn()
+                ^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 213, in _new_conn
+    raise NewConnectionError(
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPConnection object at 0x000001EEAF35C830>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\services\product_services.py", line 165, in search_products
+    response = search.execute()
+               ^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch_dsl\_sync\search.py", line 88, in execute
+    es.search(index=self._index, body=self.to_dict(), **self._params)
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\utils.py", line 455, in wrapped
+    return api(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\__init__.py", line 5061, in search
+    return self.perform_request(  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\_base.py", line 271, in perform_request
+    response = self._perform_request(
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\_base.py", line 316, in _perform_request
+    meta, resp_body = self.transport.perform_request(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_transport.py", line 342, in perform_request
+    resp = node.perform_request(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_node\_http_urllib3.py", line 202, in perform_request
+    raise err from e
+elastic_transport.ConnectionError: Connection error caused by: ConnectionError(Connection error caused by: NewConnectionError(<urllib3.connection.HTTPConnection object at 0x000001EEAF35EA50>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\views.py", line 310, in get
+    results = ProductServices.search_products(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\services\product_services.py", line 173, in search_products
+    raise ProductServiceException(f"Ошибка поиска продуктов: {str(e)}")
+apps.products.exceptions.ProductServiceException: Ошибка поиска продуктов: Connection error caused by: ConnectionError(Connection error caused by: NewConnectionError(<urllib3.connection.HTTPConnection object at 0x000001EEAF35EA50>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение))
+[2025-05-06 10:25:11,755] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 10:25:11,755] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-06 10:25:11,755] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-06 10:25:11,775] ERROR apps.products.services.product_services Failed to search products with query=чача, error=Connection error caused by: ConnectionError(Connection error caused by: ProtocolError(('Connection aborted.', ConnectionAbortedError(10053, 'Программа на вашем хост-компьютере разорвала установленное подключение', None, 10053, None))))
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+               ^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 516, in getresponse
+    httplib_response = super().getresponse()
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 1428, in getresponse
+    response.begin()
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 331, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 300, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_node\_http_urllib3.py", line 167, in perform_request
+    response = self.pool.urlopen(
+               ^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\retry.py", line 449, in increment
+    raise reraise(type(error), error, _stacktrace)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\util.py", line 38, in reraise
+    raise value.with_traceback(tb)
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+               ^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 516, in getresponse
+    httplib_response = super().getresponse()
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 1428, in getresponse
+    response.begin()
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 331, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 300, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+urllib3.exceptions.ProtocolError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\services\product_services.py", line 165, in search_products
+    response = search.execute()
+               ^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch_dsl\_sync\search.py", line 88, in execute
+    es.search(index=self._index, body=self.to_dict(), **self._params)
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\utils.py", line 455, in wrapped
+    return api(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\__init__.py", line 5061, in search
+    return self.perform_request(  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\_base.py", line 271, in perform_request
+    response = self._perform_request(
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\_base.py", line 316, in _perform_request
+    meta, resp_body = self.transport.perform_request(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_transport.py", line 342, in perform_request
+    resp = node.perform_request(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_node\_http_urllib3.py", line 202, in perform_request
+    raise err from e
+elastic_transport.ConnectionError: Connection error caused by: ConnectionError(Connection error caused by: ProtocolError(('Connection aborted.', ConnectionAbortedError(10053, 'Программа на вашем хост-компьютере разорвала установленное подключение', None, 10053, None))))
+[2025-05-06 10:25:11,781] ERROR apps.products.views Search view failed with query=чача, user=anonymous, error=Ошибка поиска продуктов: Connection error caused by: ConnectionError(Connection error caused by: ProtocolError(('Connection aborted.', ConnectionAbortedError(10053, 'Программа на вашем хост-компьютере разорвала установленное подключение', None, 10053, None))))
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+               ^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 516, in getresponse
+    httplib_response = super().getresponse()
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 1428, in getresponse
+    response.begin()
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 331, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 300, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_node\_http_urllib3.py", line 167, in perform_request
+    response = self.pool.urlopen(
+               ^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\retry.py", line 449, in increment
+    raise reraise(type(error), error, _stacktrace)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\util.py", line 38, in reraise
+    raise value.with_traceback(tb)
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+               ^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 516, in getresponse
+    httplib_response = super().getresponse()
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 1428, in getresponse
+    response.begin()
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 331, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 300, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+urllib3.exceptions.ProtocolError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\services\product_services.py", line 165, in search_products
+    response = search.execute()
+               ^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch_dsl\_sync\search.py", line 88, in execute
+    es.search(index=self._index, body=self.to_dict(), **self._params)
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\utils.py", line 455, in wrapped
+    return api(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\__init__.py", line 5061, in search
+    return self.perform_request(  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\_base.py", line 271, in perform_request
+    response = self._perform_request(
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\_base.py", line 316, in _perform_request
+    meta, resp_body = self.transport.perform_request(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_transport.py", line 342, in perform_request
+    resp = node.perform_request(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_node\_http_urllib3.py", line 202, in perform_request
+    raise err from e
+elastic_transport.ConnectionError: Connection error caused by: ConnectionError(Connection error caused by: ProtocolError(('Connection aborted.', ConnectionAbortedError(10053, 'Программа на вашем хост-компьютере разорвала установленное подключение', None, 10053, None))))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\views.py", line 310, in get
+    results = ProductServices.search_products(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\services\product_services.py", line 173, in search_products
+    raise ProductServiceException(f"Ошибка поиска продуктов: {str(e)}")
+apps.products.exceptions.ProductServiceException: Ошибка поиска продуктов: Connection error caused by: ConnectionError(Connection error caused by: ProtocolError(('Connection aborted.', ConnectionAbortedError(10053, 'Программа на вашем хост-компьютере разорвала установленное подключение', None, 10053, None))))
+[2025-05-06 10:25:16,611] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 10:25:16,613] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-06 10:25:16,613] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-06 10:25:16,681] ERROR apps.products.services.product_services Failed to search products with query=чача, error=Connection error caused by: ConnectionError(Connection error caused by: ProtocolError(('Connection aborted.', ConnectionAbortedError(10053, 'Программа на вашем хост-компьютере разорвала установленное подключение', None, 10053, None))))
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 493, in _make_request
+    conn.request(
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 459, in request
+    self.send(chunk)
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 1055, in send
+    self.sock.sendall(data)
+ConnectionAbortedError: [WinError 10053] Программа на вашем хост-компьютере разорвала установленное подключение
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_node\_http_urllib3.py", line 167, in perform_request
+    response = self.pool.urlopen(
+               ^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\retry.py", line 449, in increment
+    raise reraise(type(error), error, _stacktrace)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\util.py", line 38, in reraise
+    raise value.with_traceback(tb)
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 493, in _make_request
+    conn.request(
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 459, in request
+    self.send(chunk)
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 1055, in send
+    self.sock.sendall(data)
+urllib3.exceptions.ProtocolError: ('Connection aborted.', ConnectionAbortedError(10053, 'Программа на вашем хост-компьютере разорвала установленное подключение', None, 10053, None))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\services\product_services.py", line 165, in search_products
+    response = search.execute()
+               ^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch_dsl\_sync\search.py", line 88, in execute
+    es.search(index=self._index, body=self.to_dict(), **self._params)
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\utils.py", line 455, in wrapped
+    return api(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\__init__.py", line 5061, in search
+    return self.perform_request(  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\_base.py", line 271, in perform_request
+    response = self._perform_request(
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\_base.py", line 316, in _perform_request
+    meta, resp_body = self.transport.perform_request(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_transport.py", line 342, in perform_request
+    resp = node.perform_request(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_node\_http_urllib3.py", line 202, in perform_request
+    raise err from e
+elastic_transport.ConnectionError: Connection error caused by: ConnectionError(Connection error caused by: ProtocolError(('Connection aborted.', ConnectionAbortedError(10053, 'Программа на вашем хост-компьютере разорвала установленное подключение', None, 10053, None))))
+[2025-05-06 10:25:16,684] ERROR apps.products.views Search view failed with query=чача, user=anonymous, error=Ошибка поиска продуктов: Connection error caused by: ConnectionError(Connection error caused by: ProtocolError(('Connection aborted.', ConnectionAbortedError(10053, 'Программа на вашем хост-компьютере разорвала установленное подключение', None, 10053, None))))
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 493, in _make_request
+    conn.request(
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 459, in request
+    self.send(chunk)
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 1055, in send
+    self.sock.sendall(data)
+ConnectionAbortedError: [WinError 10053] Программа на вашем хост-компьютере разорвала установленное подключение
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_node\_http_urllib3.py", line 167, in perform_request
+    response = self.pool.urlopen(
+               ^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\retry.py", line 449, in increment
+    raise reraise(type(error), error, _stacktrace)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\util\util.py", line 38, in reraise
+    raise value.with_traceback(tb)
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connectionpool.py", line 493, in _make_request
+    conn.request(
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\urllib3\connection.py", line 459, in request
+    self.send(chunk)
+  File "C:\Users\Home\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 1055, in send
+    self.sock.sendall(data)
+urllib3.exceptions.ProtocolError: ('Connection aborted.', ConnectionAbortedError(10053, 'Программа на вашем хост-компьютере разорвала установленное подключение', None, 10053, None))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\services\product_services.py", line 165, in search_products
+    response = search.execute()
+               ^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch_dsl\_sync\search.py", line 88, in execute
+    es.search(index=self._index, body=self.to_dict(), **self._params)
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\utils.py", line 455, in wrapped
+    return api(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\__init__.py", line 5061, in search
+    return self.perform_request(  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\_base.py", line 271, in perform_request
+    response = self._perform_request(
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch\_sync\client\_base.py", line 316, in _perform_request
+    meta, resp_body = self.transport.perform_request(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_transport.py", line 342, in perform_request
+    resp = node.perform_request(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elastic_transport\_node\_http_urllib3.py", line 202, in perform_request
+    raise err from e
+elastic_transport.ConnectionError: Connection error caused by: ConnectionError(Connection error caused by: ProtocolError(('Connection aborted.', ConnectionAbortedError(10053, 'Программа на вашем хост-компьютере разорвала установленное подключение', None, 10053, None))))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\views.py", line 310, in get
+    results = ProductServices.search_products(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\services\product_services.py", line 173, in search_products
+    raise ProductServiceException(f"Ошибка поиска продуктов: {str(e)}")
+apps.products.exceptions.ProductServiceException: Ошибка поиска продуктов: Connection error caused by: ConnectionError(Connection error caused by: ProtocolError(('Connection aborted.', ConnectionAbortedError(10053, 'Программа на вашем хост-компьютере разорвала установленное подключение', None, 10053, None))))
+[2025-05-06 10:25:56,996] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 10:25:56,996] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-06 10:25:56,996] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-06 10:25:57,210] INFO apps.products.services.product_services Successfully completed search, found 2 products
+[2025-05-06 10:25:57,210] INFO apps.products.views Successfully returned 2 search results, user=anonymous
+[2025-05-06 10:26:03,354] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 10:26:03,354] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-06 10:26:03,354] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-06 10:26:03,369] INFO apps.products.services.product_services Successfully completed search, found 2 products
+[2025-05-06 10:26:03,369] INFO apps.products.views Successfully returned 2 search results, user=anonymous
+[2025-05-06 10:27:10,720] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 10:27:10,720] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-06 10:27:10,721] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-06 10:27:10,773] INFO apps.products.services.product_services Successfully completed search, found 2 products
+[2025-05-06 10:27:10,773] INFO apps.products.views Successfully returned 2 search results, user=anonymous
+[2025-05-06 10:28:15,193] INFO apps.products.models Updating product with title=Чача, user=13
+[2025-05-06 10:28:15,486] INFO apps.products.signals Updating product in Elasticsearch with title=Чача, user=13, is_active=True
+[2025-05-06 10:28:15,504] INFO apps.products.signals Skipping Elasticsearch update for product 126, user=13
+[2025-05-06 10:28:15,504] INFO apps.products.models Successfully updating product 126, user=13
+[2025-05-06 10:28:21,158] INFO apps.products.models Updating product with title=Чача, user=13
+[2025-05-06 10:28:21,184] INFO apps.products.signals Updating product in Elasticsearch with title=Чача, user=13, is_active=True
+[2025-05-06 10:28:21,185] INFO apps.products.signals Skipping Elasticsearch update for product 125, user=13
+[2025-05-06 10:28:21,185] INFO apps.products.models Successfully updating product 125, user=13
+[2025-05-06 10:28:25,541] INFO apps.products.models Updating product with title=Мёд, user=13
+[2025-05-06 10:28:25,631] INFO apps.products.signals Updating product in Elasticsearch with title=Мёд, user=13, is_active=True
+[2025-05-06 10:28:25,632] INFO apps.products.signals Skipping Elasticsearch update for product 124, user=13
+[2025-05-06 10:28:25,632] INFO apps.products.models Successfully updating product 124, user=13
+[2025-05-06 10:28:30,884] INFO apps.products.models Updating product with title=Чача, user=13
+[2025-05-06 10:28:30,949] INFO apps.products.signals Updating product in Elasticsearch with title=Чача, user=13, is_active=True
+[2025-05-06 10:28:30,950] INFO apps.products.signals Skipping Elasticsearch update for product 122, user=13
+[2025-05-06 10:28:30,950] INFO apps.products.models Successfully updating product 122, user=13
+[2025-05-06 10:28:35,950] INFO apps.products.models Updating product with title=Чача, user=13
+[2025-05-06 10:28:36,030] INFO apps.products.signals Updating product in Elasticsearch with title=Чача, user=13, is_active=True
+[2025-05-06 10:28:36,031] INFO apps.products.signals Skipping Elasticsearch update for product 123, user=13
+[2025-05-06 10:28:36,032] INFO apps.products.models Successfully updating product 123, user=13
+[2025-05-06 10:28:41,055] INFO apps.products.models Updating product with title=Чача, user=13
+[2025-05-06 10:28:41,128] INFO apps.products.signals Updating product in Elasticsearch with title=Чача, user=13, is_active=True
+[2025-05-06 10:28:41,129] INFO apps.products.signals Skipping Elasticsearch update for product 121, user=13
+[2025-05-06 10:28:41,129] INFO apps.products.models Successfully updating product 121, user=13
+[2025-05-06 10:28:47,625] INFO apps.products.models Updating product with title=Мороженое, user=8
+[2025-05-06 10:28:47,697] INFO apps.products.signals Updating product in Elasticsearch with title=Мороженое, user=8, is_active=True
+[2025-05-06 10:28:47,698] INFO apps.products.signals Skipping Elasticsearch update for product 120, user=8
+[2025-05-06 10:28:47,698] INFO apps.products.models Successfully updating product 120, user=8
+[2025-05-06 10:29:06,693] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 10:29:06,693] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-06 10:29:06,693] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-06 10:29:06,748] INFO apps.products.services.product_services Successfully completed search, found 5 products
+[2025-05-06 10:29:06,749] INFO apps.products.views Successfully returned 5 search results, user=anonymous
+[2025-05-06 10:35:10,211] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 10:35:10,211] INFO apps.products.views Retrieving product list, user=anonymous, path=/products/list/
+[2025-05-06 10:35:10,229] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-06 10:35:10,229] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-06 10:35:10,229] DEBUG apps.products.services.query_services Applying filters with params={}
+[2025-05-06 10:35:10,229] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-06 10:35:10,229] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-06 10:35:10,230] DEBUG apps.products.services.query_services Applying ordering with sort_by=None
+[2025-05-06 10:35:10,412] INFO apps.products.views Retrieved 20 products, user=anonymous
+[2025-05-06 11:20:56,867] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 11:20:56,867] INFO apps.products.views Retrieving product list, user=anonymous, path=/products/list/
+[2025-05-06 11:20:56,972] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-06 11:20:56,972] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-06 11:20:56,972] DEBUG apps.products.services.query_services Applying filters with params={}
+[2025-05-06 11:20:56,972] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-06 11:20:56,972] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-06 11:20:56,974] DEBUG apps.products.services.query_services Applying ordering with sort_by=None
+[2025-05-06 11:20:57,018] ERROR apps.products.views Failed to retrieve product list: 'ProductPagination' object has no attribute 'get_pagaunch_response', user=anonymous
+[2025-05-06 11:20:57,018] WARNING apps.products.utils Product error: Ошибка получения списка продуктов: 'ProductPagination' object has no attribute 'get_pagaunch_response', user=anonymous, path=/products/list/
+[2025-05-06 11:22:59,251] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 11:22:59,251] INFO apps.products.views Retrieving product list, user=anonymous, path=/products/list/
+[2025-05-06 11:22:59,350] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-06 11:22:59,350] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-06 11:22:59,351] DEBUG apps.products.services.query_services Applying filters with params={}
+[2025-05-06 11:22:59,351] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-06 11:22:59,351] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-06 11:22:59,352] DEBUG apps.products.services.query_services Applying ordering with sort_by=None
+[2025-05-06 11:22:59,504] INFO apps.products.views Retrieved 20 products, user=anonymous
+[2025-05-06 11:23:27,259] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 11:23:27,259] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, page=1, page_size=20, ordering=None, user=anonymous
+[2025-05-06 11:23:27,259] INFO apps.products.services.query_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, page=1, page_size=20, ordering=None
+[2025-05-06 11:23:27,261] DEBUG apps.core.services.cache_services Cache miss for key: search:чача:None:None:None:None:None:1:20:None
+[2025-05-06 11:23:27,366] INFO apps.products.services.query_services Successfully completed search, found 5 products
+[2025-05-06 11:23:27,366] INFO apps.products.views Successfully returned search results, total=5, user=anonymous
+[2025-05-06 11:24:13,598] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 11:24:13,598] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, page=1, page_size=20, ordering=None, user=anonymous
+[2025-05-06 11:24:13,598] INFO apps.products.services.query_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, page=1, page_size=20, ordering=None
+[2025-05-06 11:24:13,600] DEBUG apps.core.services.cache_services Cache hit for key: search:чача:None:None:None:None:None:1:20:None
+[2025-05-06 11:24:13,600] INFO apps.products.services.query_services Returning cached search results for search:чача:None:None:None:None:None:1:20:None
+[2025-05-06 11:24:13,600] INFO apps.products.views Successfully returned search results, total=5, user=anonymous
+[2025-05-06 11:24:15,894] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 11:24:15,894] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, page=1, page_size=20, ordering=None, user=anonymous
+[2025-05-06 11:24:15,894] INFO apps.products.services.query_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, page=1, page_size=20, ordering=None
+[2025-05-06 11:24:15,896] DEBUG apps.core.services.cache_services Cache hit for key: search:чача:None:None:None:None:None:1:20:None
+[2025-05-06 11:24:15,896] INFO apps.products.services.query_services Returning cached search results for search:чача:None:None:None:None:None:1:20:None
+[2025-05-06 11:24:15,896] INFO apps.products.views Successfully returned search results, total=5, user=anonymous

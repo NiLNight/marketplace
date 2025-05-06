@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from typing import Any
 
 from apps.products.exceptions import ProductServiceException, InvalidProductData, ProductNotFound
 from apps.products.models import Category
@@ -21,7 +22,6 @@ from apps.products.serializers import (
 )
 from apps.products.utils import handle_api_errors
 from apps.core.services.cache_services import CacheService
-from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -30,9 +30,9 @@ class ProductPagination(PageNumberPagination):
     """Настройки пагинации для списков продуктов.
 
     Attributes:
-        page_size (int): Количество продуктов на странице по умолчанию (20).
-        max_page_size (int): Максимальное количество продуктов на странице (100), чтобы ограничить нагрузку.
-        page_size_query_param (str): Параметр запроса для изменения размера страницы (например, 'page_size=50').
+        page_size: Количество продуктов на странице по умолчанию (20).
+        max_page_size: Максимальное количество продуктов на странице (100).
+        page_size_query_param: Параметр запроса для изменения размера страницы.
     """
     page_size = 20
     max_page_size = 100
@@ -43,8 +43,8 @@ class BaseProductView(APIView):
     """Базовый класс для представлений приложения products.
 
     Attributes:
-        pagination_class (ProductPagination): Класс пагинации для списков продуктов.
-        CACHE_TIMEOUT (int): Время жизни кэша в секундах (15 минут), используемое для кэширования ответов.
+        pagination_class: Класс пагинации для списков продуктов.
+        CACHE_TIMEOUT: Время жизни кэша в секундах (15 минут).
     """
     pagination_class = ProductPagination
     CACHE_TIMEOUT = 60 * 15  # 15 минут
@@ -109,7 +109,7 @@ class ProductListView(BaseProductView):
 
             base_queryset = ProductQueryService.get_base_queryset()
             if request.GET.get('q'):
-                queryset = ProductQueryService.search_products(base_queryset, request)
+                queryset = ProductQueryService.search_products_db(base_queryset, request)
             else:
                 queryset = base_queryset
 
@@ -287,10 +287,13 @@ class ProductSearchView(APIView):
         """Обрабатывает GET-запрос для поиска продуктов.
 
         Args:
-            request: HTTP-запрос с параметрами q, category_id, min_price, max_price, min_discount, in_stock.
+            request: HTTP-запрос с параметрами q, category_id, min_price, max_price, min_discount, in_stock, page, page_size, ordering.
 
         Returns:
-            Response: Список найденных продуктов или ошибка.
+            Response: Список найденных продуктов с пагинацией или ошибка.
+
+        Raises:
+            ProductServiceException: Если поиск не удался или параметры некорректны.
         """
         query = request.query_params.get('q', '')
         category_id = request.query_params.get('category_id', None)
@@ -298,24 +301,30 @@ class ProductSearchView(APIView):
         max_price = request.query_params.get('max_price', None)
         min_discount = request.query_params.get('min_discount', None)
         in_stock = request.query_params.get('in_stock', None)
+        page = request.query_params.get('page', 1)
+        page_size = request.query_params.get('page_size', 20)
+        ordering = request.query_params.get('ordering', None)
 
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(
             f"Processing search request with query={query}, category_id={category_id}, "
             f"min_price={min_price}, max_price={max_price}, min_discount={min_discount}, "
-            f"in_stock={in_stock}, user={user_id}"
+            f"in_stock={in_stock}, page={page}, page_size={page_size}, ordering={ordering}, user={user_id}"
         )
 
         try:
-            results = ProductServices.search_products(
+            results = ProductQueryService.search_products(
                 query=query,
                 category_id=int(category_id) if category_id else None,
                 min_price=float(min_price) if min_price else None,
                 max_price=float(max_price) if max_price else None,
                 min_discount=float(min_discount) if min_discount else None,
-                in_stock=bool(in_stock.lower() == 'true') if in_stock else None
+                in_stock=bool(in_stock.lower() == 'true') if in_stock else None,
+                page=int(page),
+                page_size=int(page_size),
+                ordering=ordering
             )
-            logger.info(f"Successfully returned {len(results)} search results, user={user_id}")
+            logger.info(f"Successfully returned search results, total={results['total']}, user={user_id}")
             return Response(results, status=status.HTTP_200_OK)
         except ValueError as e:
             logger.warning(f"Invalid search parameters: {str(e)}, user={user_id}")

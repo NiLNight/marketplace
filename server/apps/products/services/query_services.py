@@ -4,7 +4,9 @@ from django.db.models import Q, ExpressionWrapper, F, FloatField, Count, Avg, Pr
 from django.db.models.functions import Coalesce, ExtractDay, Now
 from apps.products.models import Product, Category
 from apps.products.exceptions import ProductNotFound, InvalidCategoryError, ProductServiceException
-from typing import Any, Dict
+from apps.products.documents import ProductDocument
+from apps.core.services.cache_services import CacheService
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -12,12 +14,15 @@ logger = logging.getLogger(__name__)
 class ProductQueryService:
     """Сервис для выполнения запросов к продуктам.
 
-    Предоставляет методы для фильтрации, сортировки и поиска продуктов с аннотациями.
+    Предоставляет методы для фильтрации, сортировки, поиска продуктов с аннотациями и поиска через Elasticsearch.
     """
+
     ALLOWED_ORDER_FIELDS = {
         '-popularity_score', 'price', '-price',
-        '-created', 'rating_avg', '-rating_avg'
+        '-created', 'rating_avg', '-rating_avg',
+        'popularity_score', 'created'
     }
+    LARGE_PAGE_SIZE = 100
 
     @classmethod
     def get_base_queryset(cls) -> Any:
@@ -195,8 +200,119 @@ class ProductQueryService:
         return queryset.order_by(sort_by or 'popularity_score')
 
     @staticmethod
-    def search_products(queryset: Any, request: Any) -> Any:
-        """Выполняет поиск продуктов по текстовому запросу.
+    def search_products(
+            query: Optional[str] = None,
+            category_id: Optional[int] = None,
+            min_price: Optional[float] = None,
+            max_price: Optional[float] = None,
+            min_discount: Optional[float] = None,
+            in_stock: Optional[bool] = None,
+            page: int = 1,
+            page_size: int = 20,
+            ordering: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """Поиск продуктов в Elasticsearch с фильтрацией, пагинацией и сортировкой.
+
+        Args:
+            query: Поисковый запрос для полей title и description.
+            category_id: ID категории для фильтрации.
+            min_price: Минимальная цена (с учётом скидки).
+            max_price: Максимальная цена (с учётом скидки).
+            min_discount: Минимальная скидка (в процентах).
+            in_stock: Фильтр по наличию на складе.
+            page: Номер страницы.
+            page_size: Количество элементов на странице.
+            ordering: Поле для сортировки (например, 'price', '-price').
+
+        Returns:
+            Словарь с результатами поиска, включая пагинацию.
+
+        Raises:
+            ProductServiceException: Если поиск не удался или параметры некорректны.
+        """
+        logger.info(
+            f"Searching products with query={query}, category_id={category_id}, "
+            f"min_price={min_price}, max_price={max_price}, min_discount={min_discount}, "
+            f"in_stock={in_stock}, page={page}, page_size={page_size}, ordering={ordering}"
+        )
+        try:
+            # Проверка параметров пагинации
+            if page < 1 or page_size < 1 or page_size > ProductQueryService.LARGE_PAGE_SIZE:
+                raise ValueError("Некорректные параметры пагинации")
+
+            # Проверка кэша
+            cache_key = f"search:{query}:{category_id}:{min_price}:{max_price}:{min_discount}:{in_stock}:{page}:{page_size}:{ordering}"
+            cached_result = CacheService.get_cached_data(cache_key)
+            if cached_result:
+                logger.info(f"Returning cached search results for {cache_key}")
+                return cached_result
+
+            search = ProductDocument.search().filter('term', is_active=True)
+
+            if query:
+                search = search.query(
+                    'multi_match',
+                    query=query,
+                    fields=['title^2', 'description', 'category.title'],
+                    fuzziness='AUTO'
+                )
+            elif not query and not any([category_id, min_price, max_price, min_discount, in_stock]):
+                # Если запрос пустой и нет фильтров, сортируем по популярности
+                search = search.sort('-popularity_score')
+
+            if category_id:
+                search = search.filter('term', **{'category.id': category_id})
+
+            if min_price is not None or max_price is not None:
+                price_range = {}
+                if min_price is not None:
+                    price_range['gte'] = min_price
+                if max_price is not None:
+                    price_range['lte'] = max_price
+                search = search.filter('range', price_with_discount=price_range)
+
+            if min_discount is not None:
+                search = search.filter('range', discount={'gte': min_discount})
+
+            if in_stock:
+                search = search.filter('range', stock={'gt': 0})
+
+            # Применение сортировки
+            if ordering and ordering in ProductQueryService.ALLOWED_ORDER_FIELDS:
+                search = search.sort(ordering)
+            elif not query:
+                search = search.sort('-popularity_score')
+
+            # Применение пагинации
+            start = (page - 1) * page_size
+            end = start + page_size
+            search = search[start:end]
+
+            response = search.execute()
+            results = [hit.to_dict() for hit in response]
+            total = response.hits.total.value if hasattr(response.hits, 'total') else len(results)
+
+            result_dict = {
+                'results': results,
+                'total': total,
+                'page': page,
+                'page_size': page_size
+            }
+
+            # Сохранение в кэш
+            CacheService.set_cached_data(cache_key, result_dict, timeout=300)  # 5 минут
+            logger.info(f"Successfully completed search, found {len(results)} products")
+            return result_dict
+        except ValueError as e:
+            logger.warning(f"Invalid search parameters: {str(e)}")
+            raise ProductServiceException(f"Некорректные параметры поиска: {str(e)}")
+        except Exception as e:
+            logger.exception(f"Failed to search products with query={query}, error={str(e)}")
+            raise ProductServiceException(f"Ошибка поиска продуктов: {str(e)}")
+
+    @staticmethod
+    def search_products_db(queryset: Any, request: Any) -> Any:
+        """Выполняет поиск продуктов по текстовому запросу в базе данных.
 
         Args:
             queryset: QuerySet продуктов.
