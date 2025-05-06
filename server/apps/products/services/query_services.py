@@ -272,17 +272,6 @@ class ProductQueryService:
             min_discount = float(params.get('min_discount')) if params.get('min_discount') else None
             in_stock = bool(params.get('in_stock').lower() == 'true') if params.get('in_stock') else None
 
-            # Формирование ключа кэша
-            cache_key = f"search:{query}:{category_id}:{min_price}:{max_price}:{min_discount}:{in_stock}:{page}:{page_size}:{ordering}"
-            cached_ids = CacheService.get_cached_data(cache_key)
-            if cached_ids:
-                logger.info(f"Returning cached search results for {cache_key}")
-                preserved_order = Case(*[When(id=id, then=pos) for pos, id in enumerate(cached_ids)],
-                                       output_field=IntegerField())
-                queryset = cls.get_base_queryset().filter(id__in=cached_ids).annotate(order=preserved_order).order_by(
-                    'order')
-                return queryset
-
             search = ProductDocument.search().filter('term', is_active=True)
 
             if query:
@@ -320,8 +309,6 @@ class ProductQueryService:
             product_ids = [hit.id for hit in response]
             total = response.hits.total.value if hasattr(response.hits, 'total') else len(product_ids)
 
-            # Сохранение ID в кэш
-            CacheService.set_cached_data(cache_key, product_ids, timeout=300)  # 5 минут
             logger.info(f"Successfully completed search, found {len(product_ids)} products, total={total}")
 
             # Формируем QuerySet с сохранением порядка

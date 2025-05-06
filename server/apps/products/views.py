@@ -49,6 +49,41 @@ class BaseProductView(APIView):
     pagination_class = ProductPagination
     CACHE_TIMEOUT = 60 * 15  # 15 минут
 
+    def process_queryset(self, queryset: Any, request: Any, cache_key: str, user_id: str) -> Response:
+        """Обрабатывает QuerySet, применяя фильтры, аннотации, сортировку, пагинацию и кэширование.
+
+        Args:
+            queryset: QuerySet продуктов для обработки.
+            request: HTTP-запрос с параметрами фильтрации, сортировки и пагинации.
+            cache_key: Ключ для кэширования ответа.
+            user_id: Идентификатор пользователя или 'anonymous'.
+
+        Returns:
+            Response: Пагинированный список продуктов.
+
+        Raises:
+            ProductServiceException: Если обработка не удалась.
+        """
+        try:
+            # Применяем фильтры, аннотации и сортировку
+            queryset = ProductQueryService.apply_filters(queryset, request)
+            queryset = ProductQueryService.get_product_list(queryset)
+            queryset = ProductQueryService.apply_ordering(queryset, request)
+
+            # Пагинация
+            paginator = self.pagination_class()
+            page = paginator.paginate_queryset(queryset, request)
+            serializer = ProductListSerializer(page, many=True)
+
+            # Формирование ответа и кэширование
+            response_data = paginator.get_paginated_response(serializer.data).data
+            CacheService.set_cached_data(cache_key, response_data, timeout=self.CACHE_TIMEOUT)
+            logger.info(f"Retrieved {len(page)} products, user={user_id}")
+            return Response(response_data)
+        except Exception as e:
+            logger.error(f"Failed to process queryset: {str(e)}, user={user_id}")
+            raise ProductServiceException(f"Ошибка обработки списка продуктов: {str(e)}")
+
 
 class CategoryListView(BaseProductView):
     """Представление для получения списка категорий."""
@@ -82,16 +117,19 @@ class CategoryListView(BaseProductView):
 
 
 class ProductListView(BaseProductView):
-    """Представление для получения списка продуктов."""
+    """Представление для получения списка продуктов или поиска по ним."""
     serializer_class = ProductListSerializer
     permission_classes = [AllowAny]
 
     @handle_api_errors
     def get(self, request: Any) -> Response:
-        """Обрабатывает GET-запрос для получения пагинированного списка продуктов.
+        """Обрабатывает GET-запрос для получения пагинированного списка продуктов или поиска.
+
+        Если в запросе присутствует параметр 'q', выполняется поиск через Elasticsearch.
+        В противном случае возвращается отфильтрованный список продуктов.
 
         Args:
-            request: HTTP-запрос с параметрами фильтрации и сортировки.
+            request: HTTP-запрос с параметрами q, category_id, min_price, max_price, min_discount, in_stock, page, page_size, ordering.
 
         Returns:
             Response с пагинированным списком продуктов.
@@ -100,33 +138,28 @@ class ProductListView(BaseProductView):
             ProductServiceException: Если запрос некорректен или обработка не удалась.
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
-        logger.info(f"Retrieving product list, user={user_id}, path={request.path}")
+        logger.info(f"Retrieving product list or search, user={user_id}, path={request.path}")
         try:
             cache_key = CacheService.build_cache_key(request, prefix="product_list")
             cached_data = CacheService.get_cached_data(cache_key)
             if cached_data:
                 return Response(cached_data)
 
-            base_queryset = ProductQueryService.get_base_queryset()
+            # Определяем начальный QuerySet в зависимости от наличия параметра q
             if request.GET.get('q'):
-                queryset = ProductQueryService.search_products_db(base_queryset, request)
+                queryset = ProductQueryService.search_products(request)
             else:
-                queryset = base_queryset
+                queryset = ProductQueryService.get_base_queryset()
 
-            queryset = ProductQueryService.apply_filters(queryset, request)
-            queryset = ProductQueryService.get_product_list(queryset)
-            queryset = ProductQueryService.apply_ordering(queryset, request)
-
-            paginator = self.pagination_class()
-            page = paginator.paginate_queryset(queryset, request)
-            serializer = self.serializer_class(page, many=True)
-
-            response_data = paginator.get_paginated_response(serializer.data).data
-            CacheService.set_cached_data(cache_key, response_data, timeout=self.CACHE_TIMEOUT)
-            logger.info(f"Retrieved {len(page)} products, user={user_id}")
-            return Response(response_data)
+            return self.process_queryset(queryset, request, cache_key, user_id)
+        except ValueError as e:
+            logger.warning(f"Invalid parameters: {str(e)}, user={user_id}")
+            return Response(
+                {"error": "Некорректные параметры запроса", "code": "invalid_params"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         except Exception as e:
-            logger.error(f"Failed to retrieve product list: {str(e)}, user={user_id}")
+            logger.error(f"Failed to retrieve product list or search: {str(e)}, user={user_id}")
             raise ProductServiceException(f"Ошибка получения списка продуктов: {str(e)}")
 
 
@@ -276,59 +309,3 @@ class ProductDeleteView(BaseProductView):
         except Exception as e:
             logger.error(f"Failed to delete product {pk}: {str(e)}, user={user_id}")
             raise ProductServiceException(f"Ошибка удаления продукта: {str(e)}")
-
-
-class ProductSearchView(BaseProductView):
-    """Представление для поиска продуктов через Elasticsearch."""
-    serializer_class = ProductListSerializer
-    permission_classes = [AllowAny]
-
-    @handle_api_errors
-    def get(self, request: Any) -> Response:
-        """Обрабатывает GET-запрос для поиска продуктов.
-
-        Args:
-            request: HTTP-запрос с параметрами q, category_id, min_price, max_price, min_discount, in_stock, page, page_size, ordering.
-
-        Returns:
-            Response: Пагинированный список найденных продуктов.
-
-        Raises:
-            ProductServiceException: Если поиск не удался или параметры некорректны.
-        """
-        user_id = request.user.id if request.user.is_authenticated else 'anonymous'
-        logger.info(f"Retrieving product search, user={user_id}, path={request.path}")
-        try:
-            cache_key = CacheService.build_cache_key(request, prefix="product_search")
-            cached_data = CacheService.get_cached_data(cache_key)
-            if cached_data:
-                return Response(cached_data)
-
-            # Выполняем поиск через Elasticsearch и получаем QuerySet
-            queryset = ProductQueryService.search_products(request)
-
-            # Применяем те же шаги обработки, что и в ProductListView
-            queryset = ProductQueryService.apply_filters(queryset, request)
-            queryset = ProductQueryService.get_product_list(queryset)
-            queryset = ProductQueryService.apply_ordering(queryset, request)
-
-            paginator = self.pagination_class()
-            page = paginator.paginate_queryset(queryset, request)
-            serializer = self.serializer_class(page, many=True)
-
-            response_data = paginator.get_paginated_response(serializer.data).data
-            CacheService.set_cached_data(cache_key, response_data, timeout=self.CACHE_TIMEOUT)
-            logger.info(f"Retrieved {len(page)} products, user={user_id}")
-            return Response(response_data)
-        except ValueError as e:
-            logger.warning(f"Invalid search parameters: {str(e)}, user={user_id}")
-            return Response(
-                {"error": "Некорректные параметры поиска", "code": "invalid_params"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        except Exception as e:
-            logger.exception(f"Search view failed, user={user_id}, error={str(e)}")
-            return Response(
-                {"error": str(e), "code": "search_error"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
