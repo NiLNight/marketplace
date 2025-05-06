@@ -135,7 +135,7 @@ class ProductServices:
             f"min_price={min_price}, max_price={max_price}, min_discount={min_discount}, in_stock={in_stock}"
         )
         try:
-            search = ProductDocument.search()  # Убрали .filter('term', is_active=True)
+            search = ProductDocument.search().filter('term', is_active=True)
 
             if query:
                 search = search.query(

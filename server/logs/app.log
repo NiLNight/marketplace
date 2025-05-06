@@ -3244,3 +3244,12 @@ AttributeError: type object 'ProductServices' has no attribute 'search_products'
 [2025-05-05 22:18:05,310] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
 [2025-05-05 22:18:05,367] INFO apps.products.services.product_services Successfully completed search, found 5 products
 [2025-05-05 22:18:05,367] INFO apps.products.views Successfully returned 5 search results, user=anonymous
+[2025-05-05 22:18:31,443] INFO apps.products.models Updating product with title=Чача, user=13
+[2025-05-05 22:18:31,510] INFO apps.products.signals Updating product in Elasticsearch with title=Чача, user=13, is_active=True
+[2025-05-05 22:18:31,511] INFO apps.products.signals Skipping Elasticsearch update for product 126, user=13
+[2025-05-05 22:18:31,511] INFO apps.products.models Successfully updating product 126, user=13
+[2025-05-05 22:18:34,809] DEBUG apps.users.authentication No token provided in request
+[2025-05-05 22:18:34,809] INFO apps.products.views Processing search request with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None, user=anonymous
+[2025-05-05 22:18:34,809] INFO apps.products.services.product_services Searching products with query=чача, category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-05 22:18:34,865] INFO apps.products.services.product_services Successfully completed search, found 5 products
+[2025-05-05 22:18:34,865] INFO apps.products.views Successfully returned 5 search results, user=anonymous
