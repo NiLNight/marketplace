@@ -4788,3 +4788,84 @@ apps.products.exceptions.ProductServiceException: ќшибка поиска продуктов: BadRe
 [2025-05-06 13:40:30,506] DEBUG apps.users.authentication No token provided in request
 [2025-05-06 13:40:30,506] INFO apps.products.views Retrieving product list or search, user=anonymous, path=/products/list/
 [2025-05-06 13:40:30,507] DEBUG apps.core.services.cache_services Cache hit for key: product_list:989f82d3e8e3f151d723be3bcea09c73
+[2025-05-06 13:41:15,573] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 13:41:15,574] INFO apps.products.views Retrieving product list or search, user=anonymous, path=/products/list/
+[2025-05-06 13:41:15,575] DEBUG apps.core.services.cache_services Cache miss for key: product_list:577e32f93f3aba114991191cba3abd16
+[2025-05-06 13:41:15,575] INFO apps.products.services.query_services Searching products with query=сочное, page=1, page_size=20, ordering=-rating_avg
+[2025-05-06 13:41:15,575] DEBUG apps.products.services.query_services Applying common filters with category_id=1, min_price=10.0, max_price=100.0, min_discount=None, in_stock=None
+[2025-05-06 13:41:15,646] INFO apps.products.services.query_services Successfully completed search, found 4 products, total=4
+[2025-05-06 13:41:15,647] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-06 13:41:15,647] DEBUG apps.products.services.query_services Applying filters with params={'q': 'сочное', 'category': '1', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-06 13:41:15,647] DEBUG apps.products.services.query_services Applying common filters with category_id=1, min_price=10.0, max_price=100.0, min_discount=None, in_stock=None
+[2025-05-06 13:41:15,649] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-06 13:41:15,649] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-06 13:41:15,649] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-06 13:41:15,666] INFO apps.products.views Retrieved 4 products, user=anonymous
+[2025-05-06 13:41:25,395] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 13:41:25,395] INFO apps.products.views Retrieving product list or search, user=anonymous, path=/products/list/
+[2025-05-06 13:41:25,396] DEBUG apps.core.services.cache_services Cache hit for key: product_list:989f82d3e8e3f151d723be3bcea09c73
+[2025-05-06 13:41:32,407] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 13:41:32,407] INFO apps.products.views Retrieving product list or search, user=anonymous, path=/products/list/
+[2025-05-06 13:41:32,408] DEBUG apps.core.services.cache_services Cache miss for key: product_list:2dd96ae5f4478f0771021783d4a8d508
+[2025-05-06 13:41:32,409] INFO apps.products.services.query_services Searching products with query=€блоко, page=1, page_size=20, ordering=-rating_avg
+[2025-05-06 13:41:32,409] DEBUG apps.products.services.query_services Applying common filters with category_id=1, min_price=10.0, max_price=100.0, min_discount=None, in_stock=None
+[2025-05-06 13:41:32,509] INFO apps.products.services.query_services Successfully completed search, found 2 products, total=2
+[2025-05-06 13:41:32,509] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-06 13:41:32,509] DEBUG apps.products.services.query_services Applying filters with params={'q': '€блоко', 'category': '1', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-06 13:41:32,509] DEBUG apps.products.services.query_services Applying common filters with category_id=1, min_price=10.0, max_price=100.0, min_discount=None, in_stock=None
+[2025-05-06 13:41:32,511] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-06 13:41:32,511] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-06 13:41:32,512] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-06 13:41:32,524] INFO apps.products.views Retrieved 2 products, user=anonymous
+[2025-05-06 13:41:42,877] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 13:41:42,877] INFO apps.products.views Retrieving product list or search, user=anonymous, path=/products/list/
+[2025-05-06 13:41:42,879] DEBUG apps.core.services.cache_services Cache miss for key: product_list:9f6d8ad4f03a59f872950e299fe1915b
+[2025-05-06 13:41:42,879] INFO apps.products.services.query_services Searching products with query=€блочко, page=1, page_size=20, ordering=-rating_avg
+[2025-05-06 13:41:42,879] DEBUG apps.products.services.query_services Applying common filters with category_id=1, min_price=10.0, max_price=100.0, min_discount=None, in_stock=None
+[2025-05-06 13:41:42,981] INFO apps.products.services.query_services Successfully completed search, found 1 products, total=1
+[2025-05-06 13:41:42,981] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-06 13:41:42,981] DEBUG apps.products.services.query_services Applying filters with params={'q': '€блочко', 'category': '1', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-06 13:41:42,981] DEBUG apps.products.services.query_services Applying common filters with category_id=1, min_price=10.0, max_price=100.0, min_discount=None, in_stock=None
+[2025-05-06 13:41:42,983] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-06 13:41:42,983] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-06 13:41:42,983] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-06 13:41:42,994] INFO apps.products.views Retrieved 1 products, user=anonymous
+[2025-05-06 13:41:48,546] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 13:41:48,546] INFO apps.products.views Retrieving product list or search, user=anonymous, path=/products/list/
+[2025-05-06 13:41:48,547] DEBUG apps.core.services.cache_services Cache miss for key: product_list:7835101480d6da281fce9fe8d2b5f3f8
+[2025-05-06 13:41:48,547] INFO apps.products.services.query_services Searching products with query=€блочко, page=1, page_size=20, ordering=-rating_avg
+[2025-05-06 13:41:48,547] DEBUG apps.products.services.query_services Applying common filters with category_id=2, min_price=10.0, max_price=100.0, min_discount=None, in_stock=None
+[2025-05-06 13:41:48,639] INFO apps.products.services.query_services Successfully completed search, found 0 products, total=0
+[2025-05-06 13:41:48,640] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-06 13:41:48,640] DEBUG apps.products.services.query_services Applying filters with params={'q': '€блочко', 'category': '2', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-06 13:41:48,640] DEBUG apps.products.services.query_services Applying common filters with category_id=2, min_price=10.0, max_price=100.0, min_discount=None, in_stock=None
+[2025-05-06 13:41:48,641] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-06 13:41:48,641] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-06 13:41:48,642] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-06 13:41:48,644] INFO apps.products.views Retrieved 0 products, user=anonymous
+[2025-05-06 13:41:52,355] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 13:41:52,356] INFO apps.products.views Retrieving product list or search, user=anonymous, path=/products/list/
+[2025-05-06 13:41:52,357] DEBUG apps.core.services.cache_services Cache miss for key: product_list:6bd39a30dee26bd9e2b2d6edd95e8db6
+[2025-05-06 13:41:52,357] INFO apps.products.services.query_services Searching products with query=€блочко, page=1, page_size=20, ordering=-rating_avg
+[2025-05-06 13:41:52,358] DEBUG apps.products.services.query_services Applying common filters with category_id=3, min_price=10.0, max_price=100.0, min_discount=None, in_stock=None
+[2025-05-06 13:41:52,450] INFO apps.products.services.query_services Successfully completed search, found 1 products, total=1
+[2025-05-06 13:41:52,450] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-06 13:41:52,451] DEBUG apps.products.services.query_services Applying filters with params={'q': '€блочко', 'category': '3', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-06 13:41:52,451] DEBUG apps.products.services.query_services Applying common filters with category_id=3, min_price=10.0, max_price=100.0, min_discount=None, in_stock=None
+[2025-05-06 13:41:52,452] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-06 13:41:52,452] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-06 13:41:52,453] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-06 13:41:52,464] INFO apps.products.views Retrieved 1 products, user=anonymous
+[2025-05-06 13:42:14,890] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 13:42:14,890] INFO apps.products.views Retrieving product list or search, user=anonymous, path=/products/list/
+[2025-05-06 13:42:14,892] DEBUG apps.core.services.cache_services Cache hit for key: product_list:9f6d8ad4f03a59f872950e299fe1915b
+[2025-05-06 13:42:23,661] DEBUG apps.users.authentication No token provided in request
+[2025-05-06 13:42:23,661] INFO apps.products.views Retrieving product list or search, user=anonymous, path=/products/list/
+[2025-05-06 13:42:23,663] DEBUG apps.core.services.cache_services Cache miss for key: product_list:83630fda569222f068a067dc70567c25
+[2025-05-06 13:42:23,663] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-06 13:42:23,663] DEBUG apps.products.services.query_services Applying filters with params={'category': '3', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-06 13:42:23,663] DEBUG apps.products.services.query_services Applying common filters with category_id=3, min_price=10.0, max_price=100.0, min_discount=None, in_stock=None
+[2025-05-06 13:42:23,696] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-06 13:42:23,696] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-06 13:42:23,697] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-06 13:42:23,708] INFO apps.products.views Retrieved 7 products, user=anonymous
