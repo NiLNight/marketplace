@@ -51,9 +51,9 @@ class CustomJWTAuthentication(JWTAuthentication):
 
             logger.info(f"User {user.id} authenticated successfully")
             return user, validated_token
-        except InvalidToken as e:
-            logger.error(f"Invalid token: {str(e)}")
+        except InvalidToken:
+            logger.error("Invalid token provided")
             raise AuthenticationFailed({
-                "detail": f"Неверный токен: {str(e)}",
+                "detail": "Неверный токен",
                 "code": "token_invalid"
             })

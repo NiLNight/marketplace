@@ -5224,3 +5224,99 @@ TypeError: Model.delete() got an unexpected keyword argument 'index'
 [2025-05-08 20:01:03,864] INFO apps.users.models Successfully updating user profile 15, user=15
 [2025-05-08 20:01:03,869] INFO apps.users.services.users_services Password reset successfully for user=15
 [2025-05-08 20:01:03,869] INFO apps.users.views Password reset confirmed
+[2025-05-08 21:02:02,889] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 21:02:06,202] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 21:02:06,311] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-08 21:02:06,312] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-08 21:02:06,313] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-08 21:02:06,585] WARNING apps.users.services.users_services Invalid password for email=bkmz-2020@inbox.ru
+[2025-05-08 21:02:06,585] WARNING apps.users.utils User error: Неверные учетные данные, user=anonymous, path=/user/login/
+[2025-05-08 21:02:12,958] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 21:02:12,961] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-08 21:02:12,961] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-08 21:02:12,961] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-08 21:02:13,488] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-08 21:02:13,492] INFO apps.users.views User 15 logged in successfully
+[2025-05-08 21:02:13,500] INFO apps.users.utils JWT cookies set for user=15
+[2025-05-08 21:02:18,213] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-08 21:02:18,213] INFO apps.users.views Fetching profile for user=15
+[2025-05-08 21:02:21,806] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-08 21:02:21,806] INFO apps.users.views Updating profile for user=15
+[2025-05-08 21:02:21,807] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-08 21:02:21,807] INFO apps.users.serializers Validating user data for user=15
+[2025-05-08 21:02:21,818] INFO apps.users.serializers Updating user=15 with validated data
+[2025-05-08 21:02:21,818] INFO apps.users.services.users_services Updating user and profile for user=15
+[2025-05-08 21:02:21,820] INFO apps.users.models Saving user profile for user=15
+[2025-05-08 21:02:21,822] INFO apps.users.models Updating user profile for user=15, data={'_state': <django.db.models.base.ModelState object at 0x000001F9417B3DA0>, 'id': 15, 'public_id': 'nil-f085260c', 'user_id': 15, 'phone': None, 'birth_date': None, 'avatar': 'images/avatars/default.png'}
+[2025-05-08 21:02:21,822] INFO apps.users.models Successfully updating user profile 15, user=15
+[2025-05-08 21:02:21,823] INFO apps.users.services.users_services User and profile updated successfully for user=15
+[2025-05-08 21:02:21,823] INFO apps.users.serializers User=15 updated successfully
+[2025-05-08 21:02:21,823] INFO apps.users.views Profile updated for user=15
+[2025-05-08 21:02:28,503] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-08 21:02:28,503] INFO apps.users.views Updating profile for user=15
+[2025-05-08 21:02:28,504] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-08 21:02:28,504] INFO apps.users.serializers Validating user data for user=15
+[2025-05-08 21:02:28,505] INFO apps.users.serializers Updating user=15 with validated data
+[2025-05-08 21:02:28,505] INFO apps.users.services.users_services Updating user and profile for user=15
+[2025-05-08 21:02:28,506] INFO apps.users.models Saving user profile for user=15
+[2025-05-08 21:02:28,508] INFO apps.users.models Updating user profile for user=15, data={'_state': <django.db.models.base.ModelState object at 0x000001F9417B2180>, 'id': 15, 'public_id': 'nil-f085260c', 'user_id': 15, 'phone': None, 'birth_date': None, 'avatar': 'images/avatars/default.png'}
+[2025-05-08 21:02:28,509] INFO apps.users.models Successfully updating user profile 15, user=15
+[2025-05-08 21:02:28,509] INFO apps.users.services.users_services User and profile updated successfully for user=15
+[2025-05-08 21:02:28,509] INFO apps.users.serializers User=15 updated successfully
+[2025-05-08 21:02:28,509] INFO apps.users.views Profile updated for user=15
+[2025-05-08 21:08:47,230] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-08 21:08:47,230] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-08 21:08:47,231] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-08 21:08:47,231] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-08 21:08:47,709] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-08 21:08:47,713] INFO apps.users.views User 15 logged in successfully
+[2025-05-08 21:08:47,716] INFO apps.users.utils JWT cookies set for user=15
+[2025-05-08 21:08:51,262] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-08 21:08:51,262] INFO apps.users.views Processing logout for user=15
+[2025-05-08 21:08:51,287] INFO apps.users.services.users_services User logged out successfully
+[2025-05-08 21:08:51,287] INFO apps.users.views User 15 logged out successfully
+[2025-05-08 21:08:55,175] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 21:08:55,182] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-08 21:08:55,182] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-08 21:08:55,183] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-08 21:08:55,746] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-08 21:08:55,749] INFO apps.users.views User 15 logged in successfully
+[2025-05-08 21:08:55,751] INFO apps.users.utils JWT cookies set for user=15
+[2025-05-08 21:09:04,043] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-08 21:09:04,044] INFO apps.users.views Processing logout for user=15
+[2025-05-08 21:09:04,051] INFO apps.users.services.users_services User logged out successfully
+[2025-05-08 21:09:04,052] INFO apps.users.views User 15 logged out successfully
+[2025-05-08 21:09:06,521] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 21:09:06,521] INFO apps.products.views Retrieving product list or search, user=anonymous, path=/products/list/
+[2025-05-08 21:09:06,523] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-08 21:09:06,523] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-08 21:09:06,523] DEBUG apps.products.services.query_services Applying filters with params={}
+[2025-05-08 21:09:06,523] DEBUG apps.products.services.query_services Applying common filters with category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-08 21:09:06,523] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-08 21:09:06,523] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-08 21:09:06,524] DEBUG apps.products.services.query_services Applying ordering with sort_by=None
+[2025-05-08 21:09:06,570] INFO apps.products.views Retrieved 20 products, user=anonymous
+[2025-05-08 21:09:09,759] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 21:09:14,176] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 21:09:14,179] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-08 21:09:14,179] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-08 21:09:14,180] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-08 21:09:14,687] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-08 21:09:14,689] INFO apps.users.views User 15 logged in successfully
+[2025-05-08 21:09:14,691] INFO apps.users.utils JWT cookies set for user=15
+[2025-05-08 21:10:20,877] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-08 21:10:20,877] INFO apps.users.views Processing logout for user=15
+[2025-05-08 21:10:20,886] INFO apps.users.services.users_services User logged out successfully
+[2025-05-08 21:10:20,886] INFO apps.users.views User 15 logged out successfully
+[2025-05-08 21:10:24,444] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 21:10:24,450] ERROR apps.users.utils Server error: 'UserLoginView' object has no attribute 'COOKIES', user=anonymous, path=/user/login/
+[2025-05-08 21:10:26,099] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 21:10:47,081] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 21:10:52,207] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 21:11:01,512] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 21:11:01,609] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-08 21:11:01,611] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-08 21:11:01,611] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-08 21:11:02,123] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-08 21:11:02,126] INFO apps.users.views User 15 logged in successfully
+[2025-05-08 21:11:02,135] INFO apps.users.utils JWT cookies set for user=15

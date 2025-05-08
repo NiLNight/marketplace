@@ -11,7 +11,8 @@ from apps.users.models import EmailVerified, UserProfile
 from apps.users.services.tasks import send_confirmation_email, send_password_reset_email
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from apps.users.exceptions import UserNotFound, InvalidUserData, AuthenticationFailed, AccountNotActivated
-import base64
+from django.db import transaction
+from django.contrib.auth.password_validation import validate_password
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -40,19 +41,20 @@ class UserService:
         """
         logger.info(f"Registering user with email={email}")
         try:
-            user = User.objects.create_user(
-                username=username,
-                email=email,
-                password=password,
-                is_active=False
-            )
-            code = str(secrets.randbelow(1000000)).zfill(6)
-            EmailVerified.objects.create(
-                user=user,
-                confirmation_code=code,
-                code_created_at=timezone.now()
-            )
-            send_confirmation_email.delay(email, code)
+            with transaction.atomic():
+                user = User.objects.create_user(
+                    username=username,
+                    email=email,
+                    password=password,
+                    is_active=False
+                )
+                code = str(secrets.randbelow(1000000)).zfill(6)
+                EmailVerified.objects.create(
+                    user=user,
+                    confirmation_code=code,
+                    code_created_at=timezone.now()
+                )
+                send_confirmation_email.delay(email, code)
             logger.info(f"User registered successfully, email={email}")
             return user
         except Exception as e:
@@ -145,29 +147,17 @@ class UserService:
         # Обновление профиля
         if profile_data:
             from apps.users.serializers import UserProfileSerializer
-            if hasattr(user, 'profile') and user.profile is not None:
-                # Игнорировать попытки изменения public_id
-                if 'public_id' in profile_data:
-                    logger.warning(f"Attempt to change public_id for user={user.id}, ignored")
-                    profile_data.pop('public_id')
+            profile_data.pop('public_id', None)
+            if hasattr(user, 'profile') and user.profile:
                 profile_serializer = UserProfileSerializer(
                     instance=user.profile,
                     data=profile_data,
                     partial=True
                 )
-                if profile_serializer.is_valid():
+                if profile_serializer.is_valid(raise_exception=True):
                     profile_serializer.save()
-                else:
-                    logger.error(f"Invalid profile data: {profile_serializer.errors}")
-                    raise InvalidUserData("Некорректные данные профиля")
             else:
-                try:
-                    # Игнорировать public_id при создании профиля
-                    profile_data.pop('public_id', None)
-                    UserProfile.objects.create(user=user, **profile_data)
-                except Exception as e:
-                    logger.error(f"Failed to create profile: {str(e)}")
-                    raise InvalidUserData("Ошибка создания профиля")
+                UserProfile.objects.create(user=user, **profile_data)
         logger.info(f"User and profile updated successfully for user={user.id}")
         return user
 
@@ -281,7 +271,6 @@ class ConfirmPasswordService:
         if not uid or not token:
             logger.warning(f"Missing uid or token: uid={uid}, token={token}")
             raise InvalidUserData("Требуются uid и token для сброса пароля")
-
         try:
             force_str(urlsafe_base64_decode(uid))
             logger.debug(f"Validated uid: {uid}")
@@ -309,7 +298,6 @@ class ConfirmPasswordService:
         logger.info(f"Confirming password reset for uid={uid}")
         # Валидация параметров
         validated_uid = ConfirmPasswordService.validate_reset_params(uid, token)
-
         try:
             user_id = force_str(urlsafe_base64_decode(validated_uid))
             user = User.objects.get(id=user_id)

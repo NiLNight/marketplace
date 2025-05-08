@@ -1,5 +1,4 @@
 import logging
-
 from django.contrib.auth import get_user_model
 from django.core.validators import RegexValidator, FileExtensionValidator
 from django.db import models
@@ -108,7 +107,7 @@ class UserProfile(models.Model):
         """Метаданные модели UserProfile."""
         ordering = ['user__id']
         indexes = [
-            models.Index(fields=['public_id', 'id']),
+            models.Index(fields=['public_id']),
         ]
         verbose_name = 'Профиль'
         verbose_name_plural = 'Профили'
@@ -123,7 +122,7 @@ class UserProfile(models.Model):
         """
         user_id = self.user.id if self.user else 'anonymous'
         action = 'Creating' if self.pk is None else 'Updating'
-        logger.info(f"{action} user profile for user={user_id}")
+        logger.info(f"{action} user profile for user={user_id}, data={self.__dict__}")
         try:
             if not self.public_id:
                 self.public_id = unique_slugify(self.user.username)

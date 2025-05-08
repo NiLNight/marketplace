@@ -45,6 +45,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         help_text='Пароль пользователя.'
     )
     username = serializers.CharField(
+        max_length=15,
         required=True,
         validators=[UniqueValidator(queryset=User.objects.all())],
         help_text='Имя пользователя.'

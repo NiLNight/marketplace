@@ -35,7 +35,7 @@ def send_confirmation_email(self, email: str, code: str) -> None:
         raise self.retry(exc=e, countdown=60)
 
 
-@shared_task(bind=True, autoretry_for=(SMTPException,), max_retries=3)
+@shared_task(bind=True, autoretry_for=(SMTPException, gaierror), max_retries=3)
 def send_password_reset_email(self, email: str, reset_url: str) -> None:
     """Отправляет письмо для сброса пароля на указанный email.
 
