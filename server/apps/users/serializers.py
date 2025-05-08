@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from apps.users.models import UserProfile, EmailVerified
+from apps.users.models import UserProfile
 from apps.users.exceptions import InvalidUserData
 from apps.users.services.users_services import UserService
 import logging
@@ -46,6 +46,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     )
     username = serializers.CharField(
         required=True,
+        validators=[UniqueValidator(queryset=User.objects.all())],
         help_text='Имя пользователя.'
     )
 

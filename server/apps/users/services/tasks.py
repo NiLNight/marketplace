@@ -1,3 +1,4 @@
+from socket import gaierror
 from celery import shared_task
 from django.core.mail import send_mail
 from django.conf import settings
@@ -7,7 +8,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-@shared_task(bind=True, autoretry_for=(SMTPException,), max_retries=3)
+@shared_task(bind=True, autoretry_for=(SMTPException, gaierror), max_retries=3)
 def send_confirmation_email(self, email: str, code: str) -> None:
     """Отправляет письмо с кодом подтверждения на указанный email.
 
@@ -29,7 +30,7 @@ def send_confirmation_email(self, email: str, code: str) -> None:
             fail_silently=False
         )
         logger.info(f"Confirmation email sent to {email}, task_id={self.request.id}")
-    except SMTPException as e:
+    except (SMTPException, gaierror) as e:
         logger.error(f"Failed to send confirmation email to {email}: {str(e)}, task_id={self.request.id}")
         raise self.retry(exc=e, countdown=60)
 
@@ -57,6 +58,6 @@ def send_password_reset_email(self, email: str, reset_url: str) -> None:
             fail_silently=False
         )
         logger.info(f"Password reset email sent to {email}, task_id={self.request.id}")
-    except SMTPException as e:
+    except (SMTPException, gaierror) as e:
         logger.error(f"Failed to send password reset email to {email}: {str(e)}, task_id={self.request.id}")
         raise self.retry(exc=e, countdown=60)

@@ -193,6 +193,10 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PERMISSION_CLASSES': [],  # Пустой список!
+    'DEFAULT_THROTTLE_CLASSES': [],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '5/hour',  # 5 запросов в час для неаутентифицированных пользователей
+    }
 }
 
 SPECTACULAR_SETTINGS = {

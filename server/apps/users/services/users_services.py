@@ -1,5 +1,6 @@
 import logging
 import binascii
+import secrets
 from django.contrib.auth import get_user_model, authenticate
 from django.utils import timezone
 from django.utils.encoding import force_bytes, force_str
@@ -9,7 +10,6 @@ from rest_framework_simplejwt.exceptions import TokenError
 from apps.users.models import EmailVerified, UserProfile
 from apps.users.services.tasks import send_confirmation_email, send_password_reset_email
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-import random
 from apps.users.exceptions import UserNotFound, InvalidUserData, AuthenticationFailed, AccountNotActivated
 import base64
 
@@ -46,7 +46,7 @@ class UserService:
                 password=password,
                 is_active=False
             )
-            code = str(random.randint(100000, 999999))
+            code = str(secrets.randbelow(1000000)).zfill(6)
             EmailVerified.objects.create(
                 user=user,
                 confirmation_code=code,
@@ -188,7 +188,7 @@ class ConfirmCodeService:
         logger.info(f"Resending confirmation code to email={email}")
         try:
             user = User.objects.get(email=email, is_active=False)
-            code = str(random.randint(100000, 999999))
+            code = str(secrets.randbelow(1000000)).zfill(6)
             EmailVerified.objects.update_or_create(
                 user=user,
                 defaults={
@@ -282,11 +282,10 @@ class ConfirmPasswordService:
             logger.warning(f"Missing uid or token: uid={uid}, token={token}")
             raise InvalidUserData("Требуются uid и token для сброса пароля")
 
-        # Восстановление padding для uid
         try:
-            padded_uid = uid + '=' * (4 - len(uid) % 4) if len(uid) % 4 != 0 else uid
-            base64.b64decode(padded_uid, validate=True)
-            return padded_uid
+            force_str(urlsafe_base64_decode(uid))
+            logger.debug(f"Validated uid: {uid}")
+            return uid
         except (binascii.Error, TypeError, ValueError):
             logger.warning(f"Invalid base64 uid: {uid}")
             raise InvalidUserData("Идентификатор пользователя должен быть в формате base64")

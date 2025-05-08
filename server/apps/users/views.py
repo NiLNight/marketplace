@@ -1,6 +1,7 @@
 import logging
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -25,6 +26,7 @@ class UserRegistrationView(APIView):
     Обрабатывает запросы на создание учетной записи и отправку кода подтверждения.
     """
     permission_classes = [AllowAny]
+    throttle_classes = [AnonRateThrottle]
     serializer_class = UserRegistrationSerializer
 
     @handle_api_errors
@@ -64,6 +66,7 @@ class UserLoginView(APIView):
     Обрабатывает запросы на вход и слияние корзины/списка желаний из сессии.
     """
     permission_classes = [AllowAny]
+    throttle_classes = [AnonRateThrottle]
     serializer_class = UserLoginSerializer
 
     @handle_api_errors
@@ -200,6 +203,7 @@ class ResendCodeView(APIView):
     Обрабатывает запросы на повторную отправку кода для активации аккаунта.
     """
     permission_classes = [AllowAny]
+    throttle_classes = [AnonRateThrottle]
 
     @handle_api_errors
     def post(self, request):
@@ -227,6 +231,7 @@ class ConfirmView(APIView):
     Активирует аккаунт пользователя по email и коду подтверждения.
     """
     permission_classes = [AllowAny]
+    throttle_classes = [AnonRateThrottle]
 
     @handle_api_errors
     def post(self, request):
@@ -257,6 +262,7 @@ class PasswordResetRequestView(APIView):
     """
     permission_classes = [AllowAny]
     serializer_class = PasswordResetSerializer
+    throttle_classes = [AnonRateThrottle]
 
     @handle_api_errors
     def post(self, request):
@@ -290,6 +296,7 @@ class PasswordResetConfirmView(APIView):
     """
     serializer_class = PasswordResetConfirmSerializer
     permission_classes = [AllowAny]
+    throttle_classes = [AnonRateThrottle]
 
     @handle_api_errors
     def post(self, request):

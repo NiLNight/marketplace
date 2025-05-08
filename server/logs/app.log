@@ -4869,3 +4869,358 @@ apps.products.exceptions.ProductServiceException: Ошибка поиска продуктов: BadRe
 [2025-05-06 13:42:23,696] DEBUG apps.products.services.query_services Applying common annotations to queryset
 [2025-05-06 13:42:23,697] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
 [2025-05-06 13:42:23,708] INFO apps.products.views Retrieved 7 products, user=anonymous
+[2025-05-08 18:19:36,179] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 18:19:36,181] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-08 18:19:36,182] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-08 18:19:36,182] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-08 18:19:37,085] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-08 18:19:37,121] INFO apps.users.views User 13 logged in successfully
+[2025-05-08 18:19:37,268] INFO apps.users.utils JWT cookies set for user=13
+[2025-05-08 18:20:13,237] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-08 18:23:42,985] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-08 18:23:42,985] INFO apps.users.views Processing password reset request for email=bkmz-2020@inbox.ru
+[2025-05-08 18:23:42,986] INFO apps.users.serializers Validating password reset request for email=bkmz-2020@inbox.ru
+[2025-05-08 18:23:42,986] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-08 18:23:42,988] INFO apps.users.services.users_services Generated uid=MTM for user=13
+[2025-05-08 18:23:43,029] INFO apps.users.services.users_services Password reset requested for email=bkmz-2020@inbox.ru
+[2025-05-08 18:23:43,030] INFO apps.users.views Password reset requested for bkmz-2020@inbox.ru
+[2025-05-08 18:23:43,032] INFO apps.users.services.tasks Sending password reset email to bkmz-2020@inbox.ru with reset_url=http://localhost:8000/user/password-reset-confirm/?token=cphxri-52fd8269ab0ffd6feb079d8c1752046d&uid=MTM, task_id=1cefa0a8-06f8-483e-906c-89c710a39f77
+[2025-05-08 18:28:07,331] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-08 18:28:07,331] INFO apps.users.views Processing password reset request for email=bkmz-2020@inbox.ru
+[2025-05-08 18:28:07,332] INFO apps.users.serializers Validating password reset request for email=bkmz-2020@inbox.ru
+[2025-05-08 18:28:07,332] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-08 18:28:07,333] INFO apps.users.services.users_services Generated uid=MTM for user=13
+[2025-05-08 18:28:07,354] INFO apps.users.services.users_services Password reset requested for email=bkmz-2020@inbox.ru
+[2025-05-08 18:28:07,354] INFO apps.users.views Password reset requested for bkmz-2020@inbox.ru
+[2025-05-08 18:28:07,355] INFO apps.users.services.tasks Sending password reset email to bkmz-2020@inbox.ru with reset_url=http://localhost:8000/user/password-reset-confirm/?token=cphxyv-61cc0a580863d18a5c169aca5b897632&uid=MTM, task_id=6b7d740f-294f-461e-9189-31dae4b11028
+[2025-05-08 18:29:25,834] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-08 18:29:25,835] INFO apps.users.views Processing password reset request for email=bkmz-2020@inbox.ru
+[2025-05-08 18:29:25,835] INFO apps.users.serializers Validating password reset request for email=bkmz-2020@inbox.ru
+[2025-05-08 18:29:25,835] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-08 18:29:25,836] INFO apps.users.services.users_services Generated uid=MTM for user=13
+[2025-05-08 18:29:25,842] INFO apps.users.services.users_services Password reset requested for email=bkmz-2020@inbox.ru
+[2025-05-08 18:29:25,842] INFO apps.users.views Password reset requested for bkmz-2020@inbox.ru
+[2025-05-08 18:29:25,844] INFO apps.users.services.tasks Sending password reset email to bkmz-2020@inbox.ru with reset_url=http://localhost:8000/user/password-reset-confirm/?token=cphy11-268d1af4d3a51d1972f7a7485a9489b5&uid=MTM, task_id=0c3b385a-2267-4c01-9f06-8d6383c6fc2e
+[2025-05-08 18:29:45,344] INFO apps.users.authentication User 13 authenticated successfully
+[2025-05-08 18:29:45,344] INFO apps.users.views Processing password reset request for email=bkmz-2020@inbox.ru
+[2025-05-08 18:29:45,344] INFO apps.users.serializers Validating password reset request for email=bkmz-2020@inbox.ru
+[2025-05-08 18:29:45,344] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-08 18:29:45,345] INFO apps.users.services.users_services Generated uid=MTM for user=13
+[2025-05-08 18:29:45,346] INFO apps.users.services.users_services Password reset requested for email=bkmz-2020@inbox.ru
+[2025-05-08 18:29:45,346] INFO apps.users.views Password reset requested for bkmz-2020@inbox.ru
+[2025-05-08 18:29:45,348] INFO apps.users.services.tasks Sending password reset email to bkmz-2020@inbox.ru with reset_url=http://localhost:8000/user/password-reset-confirm/?token=cphy1l-ea7bea4dee5db054f753fa9c1389fcdd&uid=MTM, task_id=6789c550-7539-478c-9eba-bf5a20f951c8
+[2025-05-08 18:29:47,017] INFO apps.users.services.tasks Password reset email sent to bkmz-2020@inbox.ru, task_id=6789c550-7539-478c-9eba-bf5a20f951c8
+[2025-05-08 18:31:01,911] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 18:31:08,392] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 18:31:08,392] INFO apps.users.views Processing password reset confirmation for uid=MTM
+[2025-05-08 18:31:08,392] INFO apps.users.services.users_services Validating reset parameters for uid=MTM
+[2025-05-08 18:31:08,392] WARNING apps.users.services.users_services Invalid base64 uid: MTM
+[2025-05-08 18:31:08,392] WARNING apps.users.utils User error: Идентификатор пользователя должен быть в формате base64, user=anonymous, path=/user/password-reset-confirm/
+[2025-05-08 18:34:03,811] INFO apps.users.models Saving user profile for user=1
+[2025-05-08 18:34:03,818] INFO apps.users.models Updating user profile for user=1
+[2025-05-08 18:34:03,819] INFO apps.users.models Successfully updating user profile 1, user=1
+[2025-05-08 18:44:02,701] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 18:44:02,701] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-08 18:44:02,702] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-08 18:44:02,702] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-08 18:44:03,392] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-08 18:44:03,395] INFO apps.users.views User 13 logged in successfully
+[2025-05-08 18:44:03,850] INFO apps.users.utils JWT cookies set for user=13
+[2025-05-08 18:46:25,347] INFO apps.products.signals Deleting product from Elasticsearch with title=Чача, user=13
+[2025-05-08 18:46:25,347] ERROR apps.products.signals Failed to delete product from Elasticsearch 126: Model.delete() got an unexpected keyword argument 'index', user=13
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\signals.py", line 33, in delete_product_from_elasticsearch
+    ProductDocument().delete(instance)
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch_dsl\_sync\document.py", line 273, in delete
+    es.delete(index=i, **doc_meta)
+TypeError: Model.delete() got an unexpected keyword argument 'index'
+[2025-05-08 18:46:25,370] INFO apps.products.signals Deleting product from Elasticsearch with title=Чача, user=13
+[2025-05-08 18:46:25,370] ERROR apps.products.signals Failed to delete product from Elasticsearch 125: Model.delete() got an unexpected keyword argument 'index', user=13
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\signals.py", line 33, in delete_product_from_elasticsearch
+    ProductDocument().delete(instance)
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch_dsl\_sync\document.py", line 273, in delete
+    es.delete(index=i, **doc_meta)
+TypeError: Model.delete() got an unexpected keyword argument 'index'
+[2025-05-08 18:46:25,440] INFO apps.products.signals Deleting product from Elasticsearch with title=Мёд, user=13
+[2025-05-08 18:46:25,440] ERROR apps.products.signals Failed to delete product from Elasticsearch 124: Model.delete() got an unexpected keyword argument 'index', user=13
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\signals.py", line 33, in delete_product_from_elasticsearch
+    ProductDocument().delete(instance)
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch_dsl\_sync\document.py", line 273, in delete
+    es.delete(index=i, **doc_meta)
+TypeError: Model.delete() got an unexpected keyword argument 'index'
+[2025-05-08 18:46:25,511] INFO apps.products.signals Deleting product from Elasticsearch with title=Чача, user=13
+[2025-05-08 18:46:25,511] ERROR apps.products.signals Failed to delete product from Elasticsearch 123: Model.delete() got an unexpected keyword argument 'index', user=13
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\signals.py", line 33, in delete_product_from_elasticsearch
+    ProductDocument().delete(instance)
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch_dsl\_sync\document.py", line 273, in delete
+    es.delete(index=i, **doc_meta)
+TypeError: Model.delete() got an unexpected keyword argument 'index'
+[2025-05-08 18:46:25,580] INFO apps.products.signals Deleting product from Elasticsearch with title=Чача, user=13
+[2025-05-08 18:46:25,580] ERROR apps.products.signals Failed to delete product from Elasticsearch 122: Model.delete() got an unexpected keyword argument 'index', user=13
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\signals.py", line 33, in delete_product_from_elasticsearch
+    ProductDocument().delete(instance)
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch_dsl\_sync\document.py", line 273, in delete
+    es.delete(index=i, **doc_meta)
+TypeError: Model.delete() got an unexpected keyword argument 'index'
+[2025-05-08 18:46:25,649] INFO apps.products.signals Deleting product from Elasticsearch with title=Чача, user=13
+[2025-05-08 18:46:25,649] ERROR apps.products.signals Failed to delete product from Elasticsearch 121: Model.delete() got an unexpected keyword argument 'index', user=13
+Traceback (most recent call last):
+  File "D:\Projects\PycharmProjects\marketplace\server\apps\products\signals.py", line 33, in delete_product_from_elasticsearch
+    ProductDocument().delete(instance)
+  File "D:\Projects\PycharmProjects\marketplace\server\.venv\Lib\site-packages\elasticsearch_dsl\_sync\document.py", line 273, in delete
+    es.delete(index=i, **doc_meta)
+TypeError: Model.delete() got an unexpected keyword argument 'index'
+[2025-05-08 18:51:31,432] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 18:51:41,992] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 18:51:41,993] INFO apps.users.views Processing registration request for email=bkmz-2020@inbox.ru
+[2025-05-08 18:51:42,056] INFO apps.users.serializers Validating registration data for email=bkmz-2020@inbox.ru
+[2025-05-08 18:51:42,056] INFO apps.users.services.users_services Registering user with email=bkmz-2020@inbox.ru
+[2025-05-08 18:51:42,317] INFO apps.users.models Creating user profile for new user=14
+[2025-05-08 18:51:42,317] INFO apps.users.models Creating user profile for user=14
+[2025-05-08 18:51:42,331] INFO apps.users.models Successfully creating user profile 14, user=14
+[2025-05-08 18:51:42,331] INFO apps.users.models Saving user profile for user=14
+[2025-05-08 18:51:42,331] INFO apps.users.models Updating user profile for user=14
+[2025-05-08 18:51:42,333] INFO apps.users.models Successfully updating user profile 14, user=14
+[2025-05-08 18:51:42,378] INFO apps.users.services.users_services User registered successfully, email=bkmz-2020@inbox.ru
+[2025-05-08 18:51:42,378] INFO apps.users.views User 14 registered, awaiting email confirmation
+[2025-05-08 18:51:42,379] INFO apps.users.services.tasks Sending confirmation email to bkmz-2020@inbox.ru with code=705304, task_id=c97753f9-9e21-42d4-ac4d-881b9c7ed0b0
+[2025-05-08 18:51:43,753] INFO apps.users.services.tasks Confirmation email sent to bkmz-2020@inbox.ru, task_id=c97753f9-9e21-42d4-ac4d-881b9c7ed0b0
+[2025-05-08 18:54:07,927] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 18:54:17,316] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 18:54:59,694] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 18:55:04,659] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 18:55:24,969] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 18:55:30,638] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 18:55:30,638] INFO apps.users.views Processing resend code request for email=bkmz-2020@inbox.ru
+[2025-05-08 18:55:30,639] INFO apps.users.services.users_services Resending confirmation code to email=bkmz-2020@inbox.ru
+[2025-05-08 18:55:30,814] INFO apps.users.services.users_services Confirmation code resent to email=bkmz-2020@inbox.ru
+[2025-05-08 18:55:30,814] INFO apps.users.views Confirmation code resent to bkmz-2020@inbox.ru
+[2025-05-08 18:55:30,815] INFO apps.users.services.tasks Sending confirmation email to bkmz-2020@inbox.ru with code=121914, task_id=91309636-47c9-4d8c-be98-46a2a9fda50a
+[2025-05-08 18:55:31,963] INFO apps.users.services.tasks Confirmation email sent to bkmz-2020@inbox.ru, task_id=91309636-47c9-4d8c-be98-46a2a9fda50a
+[2025-05-08 18:56:07,191] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 18:56:30,354] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 18:56:30,355] INFO apps.users.views Processing confirmation request for email=bkmz-2020@inbox.ru
+[2025-05-08 18:56:30,355] INFO apps.users.services.users_services Confirming account for email=bkmz-2020@inbox.ru with code=121914
+[2025-05-08 18:56:30,393] INFO apps.users.models Saving user profile for user=14
+[2025-05-08 18:56:30,395] INFO apps.users.models Updating user profile for user=14
+[2025-05-08 18:56:30,396] INFO apps.users.models Successfully updating user profile 14, user=14
+[2025-05-08 18:56:30,396] INFO apps.users.services.users_services Account confirmed successfully for email=bkmz-2020@inbox.ru
+[2025-05-08 18:56:30,396] INFO apps.users.views Account confirmed for bkmz-2020@inbox.ru
+[2025-05-08 19:10:01,883] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:10:01,883] ERROR apps.users.utils Server error: 'ResendCodeView' object has no attribute 'method', user=anonymous, path=/user/resend-code/
+[2025-05-08 19:13:38,468] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:13:38,468] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-08 19:13:38,469] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-08 19:13:38,469] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-08 19:13:39,175] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-08 19:13:39,178] INFO apps.users.views User 14 logged in successfully
+[2025-05-08 19:13:39,190] INFO apps.users.utils JWT cookies set for user=14
+[2025-05-08 19:18:37,028] INFO apps.users.authentication User 14 authenticated successfully
+[2025-05-08 19:30:38,412] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:30:38,526] INFO apps.users.views Processing resend code request for email=bkmz-2020@inbox.ru
+[2025-05-08 19:30:38,527] INFO apps.users.services.users_services Resending confirmation code to email=bkmz-2020@inbox.ru
+[2025-05-08 19:30:38,561] WARNING apps.users.services.users_services User not found or already activated for email=bkmz-2020@inbox.ru
+[2025-05-08 19:30:38,561] WARNING apps.users.utils User error: Аккаунт не найден или уже активирован, user=anonymous, path=/user/resend-code/
+[2025-05-08 19:31:33,136] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:31:34,850] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:31:38,403] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:31:38,405] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-08 19:31:38,406] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-08 19:31:38,406] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-08 19:31:38,437] WARNING apps.users.services.users_services User not found with email=bkmz-2020@inbox.ru
+[2025-05-08 19:31:38,438] WARNING apps.users.utils User error: Неверные учетные данные, user=anonymous, path=/user/login/
+[2025-05-08 19:31:48,630] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:31:48,633] INFO apps.users.views Processing registration request for email=bkmz-2020@inbox.ru
+[2025-05-08 19:31:48,667] INFO apps.users.serializers Validating registration data for email=bkmz-2020@inbox.ru
+[2025-05-08 19:31:48,667] INFO apps.users.services.users_services Registering user with email=bkmz-2020@inbox.ru
+[2025-05-08 19:31:48,902] INFO apps.users.models Creating user profile for new user=15
+[2025-05-08 19:31:48,902] INFO apps.users.models Creating user profile for user=15
+[2025-05-08 19:31:48,904] INFO apps.users.models Successfully creating user profile 15, user=15
+[2025-05-08 19:31:48,904] INFO apps.users.models Saving user profile for user=15
+[2025-05-08 19:31:48,904] INFO apps.users.models Updating user profile for user=15
+[2025-05-08 19:31:48,905] INFO apps.users.models Successfully updating user profile 15, user=15
+[2025-05-08 19:31:48,927] INFO apps.users.services.users_services User registered successfully, email=bkmz-2020@inbox.ru
+[2025-05-08 19:31:48,927] INFO apps.users.views User 15 registered, awaiting email confirmation
+[2025-05-08 19:31:48,928] INFO apps.users.services.tasks Sending confirmation email to bkmz-2020@inbox.ru with code=503606, task_id=7aa613ad-805d-4f8d-a2af-94620cf3357e
+[2025-05-08 19:32:48,383] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:32:48,386] INFO apps.users.views Processing confirmation request for email=bkmz-2020@inbox.ru
+[2025-05-08 19:32:48,386] INFO apps.users.services.users_services Confirming account for email=bkmz-2020@inbox.ru with code=121914
+[2025-05-08 19:32:48,422] WARNING apps.users.services.users_services Invalid confirmation code for email=bkmz-2020@inbox.ru
+[2025-05-08 19:32:48,422] WARNING apps.users.utils User error: Неверный код, user=anonymous, path=/user/confirm-code/
+[2025-05-08 19:32:59,673] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:32:59,676] INFO apps.users.views Processing resend code request for email=bkmz-2020@inbox.ru
+[2025-05-08 19:32:59,676] INFO apps.users.services.users_services Resending confirmation code to email=bkmz-2020@inbox.ru
+[2025-05-08 19:32:59,709] INFO apps.users.services.users_services Confirmation code resent to email=bkmz-2020@inbox.ru
+[2025-05-08 19:32:59,709] INFO apps.users.views Confirmation code resent to bkmz-2020@inbox.ru
+[2025-05-08 19:32:59,711] INFO apps.users.services.tasks Sending confirmation email to bkmz-2020@inbox.ru with code=514291, task_id=1cab2cd9-99d0-4c3a-a558-dc7642cbcf87
+[2025-05-08 19:33:28,921] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:33:34,449] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:33:35,713] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:34:09,800] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:34:09,919] INFO apps.users.views Processing resend code request for email=bkmz-2020@inbox.ru
+[2025-05-08 19:34:09,920] INFO apps.users.services.users_services Resending confirmation code to email=bkmz-2020@inbox.ru
+[2025-05-08 19:34:09,996] INFO apps.users.services.users_services Confirmation code resent to email=bkmz-2020@inbox.ru
+[2025-05-08 19:34:09,996] INFO apps.users.views Confirmation code resent to bkmz-2020@inbox.ru
+[2025-05-08 19:34:09,997] INFO apps.users.services.tasks Sending confirmation email to bkmz-2020@inbox.ru with code=409208, task_id=3deb3a37-c767-4ce5-b52b-cc2c501461fc
+[2025-05-08 19:34:11,560] INFO apps.users.services.tasks Confirmation email sent to bkmz-2020@inbox.ru, task_id=3deb3a37-c767-4ce5-b52b-cc2c501461fc
+[2025-05-08 19:34:12,880] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:34:54,448] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:35:16,214] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:36:48,080] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:36:49,310] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:39:07,598] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:43:51,743] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:43:51,743] INFO apps.products.views Retrieving product list or search, user=anonymous, path=/products/list/
+[2025-05-08 19:43:51,860] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-08 19:43:51,860] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-08 19:43:51,860] DEBUG apps.products.services.query_services Applying filters with params={}
+[2025-05-08 19:43:51,860] DEBUG apps.products.services.query_services Applying common filters with category_id=None, min_price=None, max_price=None, min_discount=None, in_stock=None
+[2025-05-08 19:43:51,860] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-08 19:43:51,860] DEBUG apps.products.services.query_services Applying common annotations to queryset
+[2025-05-08 19:43:51,862] DEBUG apps.products.services.query_services Applying ordering with sort_by=None
+[2025-05-08 19:43:52,467] INFO apps.products.views Retrieved 20 products, user=anonymous
+[2025-05-08 19:43:53,598] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:43:53,598] INFO apps.products.views Retrieving product list or search, user=anonymous, path=/products/list/
+[2025-05-08 19:43:53,600] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-08 19:43:54,465] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:43:54,465] INFO apps.products.views Retrieving product list or search, user=anonymous, path=/products/list/
+[2025-05-08 19:43:54,467] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-08 19:44:19,815] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:44:19,815] INFO apps.products.views Retrieving product list or search, user=anonymous, path=/products/list/
+[2025-05-08 19:44:19,817] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-08 19:44:20,621] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:44:20,621] INFO apps.products.views Retrieving product list or search, user=anonymous, path=/products/list/
+[2025-05-08 19:44:20,623] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-08 19:44:21,305] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:44:21,305] INFO apps.products.views Retrieving product list or search, user=anonymous, path=/products/list/
+[2025-05-08 19:44:21,307] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-08 19:44:21,971] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:44:21,971] INFO apps.products.views Retrieving product list or search, user=anonymous, path=/products/list/
+[2025-05-08 19:44:21,974] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-08 19:44:40,805] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:44:42,197] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:44:46,153] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:44:46,153] INFO apps.users.views Processing confirmation request for email=bkmz-2020@inbox.ru
+[2025-05-08 19:44:46,153] INFO apps.users.services.users_services Confirming account for email=bkmz-2020@inbox.ru with code=409208
+[2025-05-08 19:44:46,191] INFO apps.users.models Saving user profile for user=15
+[2025-05-08 19:44:46,193] INFO apps.users.models Updating user profile for user=15
+[2025-05-08 19:44:46,194] INFO apps.users.models Successfully updating user profile 15, user=15
+[2025-05-08 19:44:46,195] INFO apps.users.services.users_services Account confirmed successfully for email=bkmz-2020@inbox.ru
+[2025-05-08 19:44:46,195] INFO apps.users.views Account confirmed for bkmz-2020@inbox.ru
+[2025-05-08 19:44:53,609] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:44:53,609] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-08 19:44:53,610] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-08 19:44:53,611] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-08 19:44:54,143] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-08 19:44:54,146] INFO apps.users.views User 15 logged in successfully
+[2025-05-08 19:44:54,169] INFO apps.users.utils JWT cookies set for user=15
+[2025-05-08 19:45:01,132] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-08 19:45:01,132] ERROR apps.users.utils Server error: 'UserProfileView' object has no attribute 'COOKIES', user=15, path=/user/profile/
+[2025-05-08 19:45:02,669] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-08 19:45:02,669] ERROR apps.users.utils Server error: 'UserProfileView' object has no attribute 'COOKIES', user=15, path=/user/profile/
+[2025-05-08 19:45:35,152] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-08 19:45:35,152] INFO apps.users.views Fetching profile for user=15
+[2025-05-08 19:45:39,766] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-08 19:45:39,766] ERROR apps.users.utils Server error: 'UserProfileView' object has no attribute 'COOKIES', user=15, path=/user/profile/
+[2025-05-08 19:45:41,235] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-08 19:45:41,237] ERROR apps.users.utils Server error: 'UserProfileView' object has no attribute 'COOKIES', user=15, path=/user/profile/
+[2025-05-08 19:46:37,763] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-08 19:46:37,763] INFO apps.users.views Processing password reset request for email=bkmz-2020@inbox.ru
+[2025-05-08 19:46:37,765] INFO apps.users.serializers Validating password reset request for email=bkmz-2020@inbox.ru
+[2025-05-08 19:46:37,765] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-08 19:46:37,767] INFO apps.users.services.users_services Generated uid=MTU for user=15
+[2025-05-08 19:46:37,793] INFO apps.users.services.users_services Password reset requested for email=bkmz-2020@inbox.ru
+[2025-05-08 19:46:37,793] INFO apps.users.views Password reset requested for bkmz-2020@inbox.ru
+[2025-05-08 19:46:37,794] INFO apps.users.services.tasks Sending password reset email to bkmz-2020@inbox.ru with reset_url=http://localhost:8000/user/password-reset-confirm/?token=cpi1lp-36277e0735f50d804873934adc729609&uid=MTU, task_id=537dcb52-8cac-4428-9dd8-86d0c348849f
+[2025-05-08 19:47:03,635] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:47:18,618] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-08 19:47:18,618] INFO apps.users.views Processing password reset request for email=bkmz-2020@inbox.ru
+[2025-05-08 19:47:18,618] INFO apps.users.serializers Validating password reset request for email=bkmz-2020@inbox.ru
+[2025-05-08 19:47:18,618] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-08 19:47:18,619] INFO apps.users.services.users_services Generated uid=MTU for user=15
+[2025-05-08 19:47:18,620] INFO apps.users.services.users_services Password reset requested for email=bkmz-2020@inbox.ru
+[2025-05-08 19:47:18,620] INFO apps.users.views Password reset requested for bkmz-2020@inbox.ru
+[2025-05-08 19:47:18,622] INFO apps.users.services.tasks Sending password reset email to bkmz-2020@inbox.ru with reset_url=http://localhost:8000/user/password-reset-confirm/?token=cpi1mu-e4076332f877600646781059e8d7b6b9&uid=MTU, task_id=b18b597b-aedd-40d3-a7c5-31a2b1806bcb
+[2025-05-08 19:47:19,857] INFO apps.users.services.tasks Password reset email sent to bkmz-2020@inbox.ru, task_id=b18b597b-aedd-40d3-a7c5-31a2b1806bcb
+[2025-05-08 19:47:25,049] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:47:54,811] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-08 19:47:54,811] INFO apps.users.views Processing password reset confirmation for uid=MTU
+[2025-05-08 19:47:54,812] INFO apps.users.services.users_services Validating reset parameters for uid=MTU
+[2025-05-08 19:47:54,812] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-08 19:47:54,812] INFO apps.users.services.users_services Confirming password reset for uid=MTU
+[2025-05-08 19:47:54,812] INFO apps.users.services.users_services Validating reset parameters for uid=MTU
+[2025-05-08 19:47:55,073] INFO apps.users.models Saving user profile for user=15
+[2025-05-08 19:47:55,075] INFO apps.users.models Updating user profile for user=15
+[2025-05-08 19:47:55,076] INFO apps.users.models Successfully updating user profile 15, user=15
+[2025-05-08 19:47:55,088] INFO apps.users.services.users_services Password reset successfully for user=15
+[2025-05-08 19:47:55,088] INFO apps.users.views Password reset confirmed
+[2025-05-08 19:49:04,456] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-08 19:49:04,456] INFO apps.users.views Processing password reset request for email=bkmz-2020@inbox.ru
+[2025-05-08 19:49:04,457] INFO apps.users.serializers Validating password reset request for email=bkmz-2020@inbox.ru
+[2025-05-08 19:49:04,457] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-08 19:49:04,459] INFO apps.users.services.users_services Generated uid=MTU for user=15
+[2025-05-08 19:49:04,501] INFO apps.users.services.users_services Password reset requested for email=bkmz-2020@inbox.ru
+[2025-05-08 19:49:04,501] INFO apps.users.views Password reset requested for bkmz-2020@inbox.ru
+[2025-05-08 19:49:04,502] INFO apps.users.services.tasks Sending password reset email to bkmz-2020@inbox.ru with reset_url=http://localhost:8000/user/password-reset-confirm/?token=cpi1ps-6b7a798aa71823457ac8d36573ea0520&uid=MTU, task_id=6c284bf8-2cf7-44aa-ae18-edd6f97c0226
+[2025-05-08 19:49:05,740] INFO apps.users.services.tasks Password reset email sent to bkmz-2020@inbox.ru, task_id=6c284bf8-2cf7-44aa-ae18-edd6f97c0226
+[2025-05-08 19:49:20,499] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 19:49:32,208] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-08 19:49:32,208] INFO apps.users.views Processing password reset confirmation for uid=MTU
+[2025-05-08 19:49:32,208] INFO apps.users.services.users_services Validating reset parameters for uid=MTU
+[2025-05-08 19:49:32,208] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-08 19:49:32,208] INFO apps.users.services.users_services Confirming password reset for uid=MTU
+[2025-05-08 19:49:32,208] INFO apps.users.services.users_services Validating reset parameters for uid=MTU
+[2025-05-08 19:49:32,492] INFO apps.users.models Saving user profile for user=15
+[2025-05-08 19:49:32,495] INFO apps.users.models Updating user profile for user=15
+[2025-05-08 19:49:32,496] INFO apps.users.models Successfully updating user profile 15, user=15
+[2025-05-08 19:49:32,501] INFO apps.users.services.users_services Password reset successfully for user=15
+[2025-05-08 19:49:32,501] INFO apps.users.views Password reset confirmed
+[2025-05-08 20:00:11,128] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 20:00:11,128] INFO apps.users.views Processing password reset confirmation for uid=MTU
+[2025-05-08 20:00:11,128] INFO apps.users.services.users_services Validating reset parameters for uid=MTU
+[2025-05-08 20:00:11,128] DEBUG apps.users.services.users_services Validated uid: MTU
+[2025-05-08 20:00:11,128] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-08 20:00:11,128] INFO apps.users.services.users_services Confirming password reset for uid=MTU
+[2025-05-08 20:00:11,128] INFO apps.users.services.users_services Validating reset parameters for uid=MTU
+[2025-05-08 20:00:11,128] DEBUG apps.users.services.users_services Validated uid: MTU
+[2025-05-08 20:00:11,361] WARNING apps.users.services.users_services Invalid or expired token for user=15
+[2025-05-08 20:00:11,361] ERROR apps.users.services.users_services Failed to reset password: Неверный или просроченный токен
+[2025-05-08 20:00:11,361] WARNING apps.users.utils User error: Ошибка сброса пароля: Неверный или просроченный токен, user=anonymous, path=/user/password-reset-confirm/
+[2025-05-08 20:00:28,880] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 20:00:28,880] INFO apps.users.views Processing password reset confirmation for uid=MTU
+[2025-05-08 20:00:28,880] INFO apps.users.services.users_services Validating reset parameters for uid=MTU
+[2025-05-08 20:00:28,880] DEBUG apps.users.services.users_services Validated uid: MTU
+[2025-05-08 20:00:28,880] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-08 20:00:28,881] INFO apps.users.services.users_services Confirming password reset for uid=MTU
+[2025-05-08 20:00:28,881] INFO apps.users.services.users_services Validating reset parameters for uid=MTU
+[2025-05-08 20:00:28,881] DEBUG apps.users.services.users_services Validated uid: MTU
+[2025-05-08 20:00:28,911] WARNING apps.users.services.users_services Invalid or expired token for user=15
+[2025-05-08 20:00:28,911] ERROR apps.users.services.users_services Failed to reset password: Неверный или просроченный токен
+[2025-05-08 20:00:28,911] WARNING apps.users.utils User error: Ошибка сброса пароля: Неверный или просроченный токен, user=anonymous, path=/user/password-reset-confirm/
+[2025-05-08 20:00:41,247] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 20:00:41,247] INFO apps.users.views Processing password reset request for email=bkmz-2020@inbox.ru
+[2025-05-08 20:00:41,249] INFO apps.users.serializers Validating password reset request for email=bkmz-2020@inbox.ru
+[2025-05-08 20:00:41,249] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-08 20:00:41,281] INFO apps.users.services.users_services Generated uid=MTU for user=15
+[2025-05-08 20:00:41,322] INFO apps.users.services.users_services Password reset requested for email=bkmz-2020@inbox.ru
+[2025-05-08 20:00:41,322] INFO apps.users.views Password reset requested for bkmz-2020@inbox.ru
+[2025-05-08 20:00:41,323] INFO apps.users.services.tasks Sending password reset email to bkmz-2020@inbox.ru with reset_url=http://localhost:8000/user/password-reset-confirm/?token=cpi295-9ed2ed7b06c480f8f5add692ecbfc047&uid=MTU, task_id=aa540428-ef44-44cb-8877-6e22df01a448
+[2025-05-08 20:00:42,671] INFO apps.users.services.tasks Password reset email sent to bkmz-2020@inbox.ru, task_id=aa540428-ef44-44cb-8877-6e22df01a448
+[2025-05-08 20:00:51,882] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 20:01:03,111] DEBUG apps.users.authentication No token provided in request
+[2025-05-08 20:01:03,111] INFO apps.users.views Processing password reset confirmation for uid=MTU
+[2025-05-08 20:01:03,111] INFO apps.users.services.users_services Validating reset parameters for uid=MTU
+[2025-05-08 20:01:03,111] DEBUG apps.users.services.users_services Validated uid: MTU
+[2025-05-08 20:01:03,111] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-08 20:01:03,111] INFO apps.users.services.users_services Confirming password reset for uid=MTU
+[2025-05-08 20:01:03,111] INFO apps.users.services.users_services Validating reset parameters for uid=MTU
+[2025-05-08 20:01:03,111] DEBUG apps.users.services.users_services Validated uid: MTU
+[2025-05-08 20:01:03,861] INFO apps.users.models Saving user profile for user=15
+[2025-05-08 20:01:03,863] INFO apps.users.models Updating user profile for user=15
+[2025-05-08 20:01:03,864] INFO apps.users.models Successfully updating user profile 15, user=15
+[2025-05-08 20:01:03,869] INFO apps.users.services.users_services Password reset successfully for user=15
+[2025-05-08 20:01:03,869] INFO apps.users.views Password reset confirmed
