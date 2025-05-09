@@ -7776,3 +7776,244 @@ HINT:  Функция с данными именем и типами аргументов не найдена. Возможно, вам сл
 [2025-05-09 17:16:19,583] DEBUG apps.products.services.query_services Applying common annotations
 [2025-05-09 17:16:19,584] DEBUG apps.products.services.query_services Applying ordering with sort_by=None
 [2025-05-09 17:16:19,631] INFO apps.products.views Retrieved 20 products, user=anonymous
+[2025-05-09 17:17:03,693] DEBUG apps.users.authentication No token provided in request
+[2025-05-09 17:17:03,693] INFO apps.products.views Retrieving product list or search, user=anonymous, path=/products/list/
+[2025-05-09 17:17:03,794] DEBUG apps.core.services.cache_services Cache miss for key: product_list:c91a82fef2e7a1d2314f8ebea5e3094c
+[2025-05-09 17:17:03,795] INFO apps.products.services.query_services Searching products: query=мороженое, page=1, page_size=20
+[2025-05-09 17:17:03,795] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=100.0
+[2025-05-09 17:17:03,927] INFO apps.products.services.query_services Found 16 products, total=16
+[2025-05-09 17:17:03,927] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 17:17:03,928] DEBUG apps.products.services.query_services Applying filters with params={'q': 'мороженое', 'category': '1', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-09 17:17:03,928] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=100.0
+[2025-05-09 17:17:03,929] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 17:17:03,929] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 17:17:03,930] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-09 17:17:03,948] INFO apps.products.views Retrieved 16 products, user=anonymous
+[2025-05-09 17:17:29,774] DEBUG apps.users.authentication No token provided in request
+[2025-05-09 17:17:33,306] DEBUG apps.users.authentication No token provided in request
+[2025-05-09 17:17:33,309] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-09 17:17:33,310] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-09 17:17:33,310] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-09 17:17:33,816] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-09 17:17:33,820] INFO apps.users.views User 15 logged in successfully
+[2025-05-09 17:17:34,267] INFO apps.users.utils JWT cookies set for user=15
+[2025-05-09 17:17:38,570] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:17:38,570] INFO apps.reviews.views Creating review, user=15, path=/reviews/create/
+[2025-05-09 17:17:38,574] DEBUG apps.reviews.serializers Validating review data: {'product': <Product: Сок>, 'value': 5, 'text': 'фигня'}
+[2025-05-09 17:17:38,574] INFO apps.reviews.services.reviews_services Creating review for product=Сок, user=15
+[2025-05-09 17:17:38,579] INFO apps.reviews.models Creating review for product=9, user=15
+[2025-05-09 17:17:38,580] INFO apps.reviews.models Successfully creating review 31, user=15
+[2025-05-09 17:17:38,580] INFO apps.reviews.services.reviews_services Successfully created review 31, user=15
+[2025-05-09 17:17:38,615] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-05-09 17:17:38,616] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:9:*
+[2025-05-09 17:17:38,616] INFO apps.reviews.views Created review 31, user=15
+[2025-05-09 17:17:38,657] INFO apps.products.models Updating product with title=Сок, user=1
+[2025-05-09 17:17:38,722] DEBUG apps.products.signals Skipping signal for product 9 due to popularity_score update
+[2025-05-09 17:17:38,724] INFO apps.products.models Successfully updating product 9, user=1
+[2025-05-09 17:17:38,724] INFO apps.products.services.tasks Updated popularity_score for product 9
+[2025-05-09 17:17:50,077] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:17:50,077] INFO apps.products.views Retrieving product list or search, user=15, path=/products/list/
+[2025-05-09 17:17:50,078] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 17:17:50,078] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 17:17:50,079] DEBUG apps.products.services.query_services Applying filters with params={}
+[2025-05-09 17:17:50,079] DEBUG apps.products.services.query_services Applying filters: category_id=None, min_price=None, max_price=None
+[2025-05-09 17:17:50,079] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 17:17:50,079] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 17:17:50,079] DEBUG apps.products.services.query_services Applying ordering with sort_by=None
+[2025-05-09 17:17:50,093] INFO apps.products.views Retrieved 20 products, user=15
+[2025-05-09 17:18:09,461] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:18:09,461] INFO apps.products.views Retrieving product list or search, user=15, path=/products/list/
+[2025-05-09 17:18:09,462] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 17:18:51,209] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:18:51,209] INFO apps.products.views Retrieving product list or search, user=15, path=/products/list/
+[2025-05-09 17:18:51,210] DEBUG apps.core.services.cache_services Cache miss for key: product_list:c91a82fef2e7a1d2314f8ebea5e3094c
+[2025-05-09 17:18:51,210] INFO apps.products.services.query_services Searching products: query=мороженое, page=1, page_size=20
+[2025-05-09 17:18:51,211] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=100.0
+[2025-05-09 17:18:51,233] INFO apps.products.services.query_services Found 16 products, total=16
+[2025-05-09 17:18:51,233] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 17:18:51,234] DEBUG apps.products.services.query_services Applying filters with params={'q': 'мороженое', 'category': '1', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-09 17:18:51,234] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=100.0
+[2025-05-09 17:18:51,236] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 17:18:51,236] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 17:18:51,236] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-09 17:18:51,251] INFO apps.products.views Retrieved 16 products, user=15
+[2025-05-09 17:18:55,052] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:18:55,053] INFO apps.products.views Retrieving product list or search, user=15, path=/products/list/
+[2025-05-09 17:18:55,054] DEBUG apps.core.services.cache_services Cache hit for key: product_list:c91a82fef2e7a1d2314f8ebea5e3094c
+[2025-05-09 17:19:10,383] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:19:10,383] INFO apps.reviews.views Creating review, user=15, path=/reviews/create/
+[2025-05-09 17:19:10,388] DEBUG apps.reviews.serializers Validating review data: {'product': <Product: Мороженое>, 'value': 4, 'text': 'фигня'}
+[2025-05-09 17:19:10,388] INFO apps.reviews.services.reviews_services Creating review for product=Мороженое, user=15
+[2025-05-09 17:19:10,393] INFO apps.reviews.models Creating review for product=104, user=15
+[2025-05-09 17:19:10,393] INFO apps.reviews.models Successfully creating review 32, user=15
+[2025-05-09 17:19:10,394] INFO apps.reviews.services.reviews_services Successfully created review 32, user=15
+[2025-05-09 17:19:10,396] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-05-09 17:19:10,397] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:104:*
+[2025-05-09 17:19:10,397] INFO apps.reviews.views Created review 32, user=15
+[2025-05-09 17:19:10,542] INFO apps.products.models Updating product with title=Мороженое, user=4
+[2025-05-09 17:19:10,618] DEBUG apps.products.signals Skipping signal for product 104 due to popularity_score update
+[2025-05-09 17:19:10,619] INFO apps.products.models Successfully updating product 104, user=4
+[2025-05-09 17:19:10,619] INFO apps.products.services.tasks Updated popularity_score for product 104
+[2025-05-09 17:19:16,184] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:19:16,185] INFO apps.products.views Retrieving product list or search, user=15, path=/products/list/
+[2025-05-09 17:19:16,186] DEBUG apps.core.services.cache_services Cache miss for key: product_list:c91a82fef2e7a1d2314f8ebea5e3094c
+[2025-05-09 17:19:16,186] INFO apps.products.services.query_services Searching products: query=мороженое, page=1, page_size=20
+[2025-05-09 17:19:16,186] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=100.0
+[2025-05-09 17:19:16,246] INFO apps.products.services.query_services Found 16 products, total=16
+[2025-05-09 17:19:16,246] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 17:19:16,247] DEBUG apps.products.services.query_services Applying filters with params={'q': 'мороженое', 'category': '1', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-09 17:19:16,247] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=100.0
+[2025-05-09 17:19:16,249] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 17:19:16,249] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 17:19:16,249] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-09 17:19:16,263] INFO apps.products.views Retrieved 16 products, user=15
+[2025-05-09 17:19:48,512] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:19:48,512] INFO apps.products.views Creating product, user=15, path=/products/create/
+[2025-05-09 17:19:48,516] DEBUG apps.products.serializers Validating product data: {'title': 'черника', 'description': 'Вкусно ягоды', 'price': Decimal('56.00'), 'discount': Decimal('5.00'), 'stock': 1500, 'category': <Category: Мясные продукты>}
+[2025-05-09 17:19:48,516] INFO apps.products.services.product_services Creating product with data={'title': 'черника', 'description': 'Вкусно ягоды', 'price': Decimal('56.00'), 'discount': Decimal('5.00'), 'stock': 1500, 'category': <Category: Мясные продукты>}, user=15
+[2025-05-09 17:19:48,521] INFO apps.products.models Creating product with title=черника, user=15
+[2025-05-09 17:19:48,592] INFO apps.products.signals Creating product: title=черника, user=15, is_active=False
+[2025-05-09 17:19:48,593] INFO apps.products.models Successfully creating product 131, user=15
+[2025-05-09 17:19:48,593] INFO apps.products.services.product_services Created product 131, user=15
+[2025-05-09 17:19:48,595] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-05-09 17:19:48,595] INFO apps.products.views Successfully created product 131, user=15
+[2025-05-09 17:19:48,596] DEBUG apps.products.serializers Retrieving children for category 6
+[2025-05-09 17:20:04,977] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:20:04,977] INFO apps.products.views Retrieving product 1, user=15, path=/products/1/
+[2025-05-09 17:20:04,978] DEBUG apps.core.services.cache_services Cache hit for key: product_detail:1
+[2025-05-09 17:20:10,583] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:20:10,583] INFO apps.products.views Updating product 124, user=15, path=/products/124/update/
+[2025-05-09 17:20:10,583] INFO apps.products.services.query_services Retrieving product with pk=124
+[2025-05-09 17:20:10,583] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 17:20:10,583] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 17:20:10,591] WARNING apps.products.services.query_services Product 124 not found
+[2025-05-09 17:20:10,591] ERROR apps.products.views Failed to update product 124: Продукт не найден., user=15
+[2025-05-09 17:20:10,591] WARNING apps.products.utils Product error: Ошибка обновления продукта: Продукт не найден., user=15, path=/products/124/update/
+[2025-05-09 17:20:22,625] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:20:22,626] INFO apps.products.views Updating product 127, user=15, path=/products/127/update/
+[2025-05-09 17:20:22,626] INFO apps.products.services.query_services Retrieving product with pk=127
+[2025-05-09 17:20:22,626] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 17:20:22,626] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 17:20:22,633] INFO apps.products.services.query_services Retrieved product 127
+[2025-05-09 17:20:22,638] INFO apps.products.services.product_services Updating product 127, user=15
+[2025-05-09 17:20:22,640] INFO apps.products.models Updating product with title=Мёд, user=15
+[2025-05-09 17:20:22,714] INFO apps.products.signals Updating product: title=Мёд, user=15, is_active=True
+[2025-05-09 17:20:22,716] INFO apps.products.models Successfully updating product 127, user=15
+[2025-05-09 17:20:22,716] INFO apps.products.services.product_services Updated product 127, user=15
+[2025-05-09 17:20:22,718] INFO apps.core.services.cache_services Invalidated cache for key: product_detail:127
+[2025-05-09 17:20:22,718] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-05-09 17:20:22,718] INFO apps.products.views Successfully updated product 127, user=15
+[2025-05-09 17:20:22,719] DEBUG apps.products.serializers Retrieving children for category 9
+[2025-05-09 17:20:40,363] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:20:48,764] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:20:59,419] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:20:59,419] INFO apps.products.views Retrieving product list or search, user=15, path=/products/list/
+[2025-05-09 17:20:59,420] DEBUG apps.core.services.cache_services Cache miss for key: product_list:c91a82fef2e7a1d2314f8ebea5e3094c
+[2025-05-09 17:20:59,420] INFO apps.products.services.query_services Searching products: query=мороженое, page=1, page_size=20
+[2025-05-09 17:20:59,421] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=100.0
+[2025-05-09 17:20:59,483] INFO apps.products.services.query_services Found 16 products, total=16
+[2025-05-09 17:20:59,483] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 17:20:59,484] DEBUG apps.products.services.query_services Applying filters with params={'q': 'мороженое', 'category': '1', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-09 17:20:59,484] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=100.0
+[2025-05-09 17:20:59,485] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 17:20:59,486] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 17:20:59,486] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-09 17:20:59,502] INFO apps.products.views Retrieved 16 products, user=15
+[2025-05-09 17:21:07,868] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:21:07,868] INFO apps.products.views Retrieving product list or search, user=15, path=/products/list/
+[2025-05-09 17:21:07,869] DEBUG apps.core.services.cache_services Cache miss for key: product_list:8fef85eca3a67a4139179cd50e2b7858
+[2025-05-09 17:21:07,869] INFO apps.products.services.query_services Searching products: query=мед, page=1, page_size=20
+[2025-05-09 17:21:07,870] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=100.0
+[2025-05-09 17:21:07,922] INFO apps.products.services.query_services Found 0 products, total=0
+[2025-05-09 17:21:07,922] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 17:21:07,923] DEBUG apps.products.services.query_services Applying filters with params={'q': 'мед', 'category': '1', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-09 17:21:07,923] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=100.0
+[2025-05-09 17:21:07,924] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 17:21:07,924] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 17:21:07,925] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-09 17:21:07,928] INFO apps.products.views Retrieved 0 products, user=15
+[2025-05-09 17:21:14,528] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:21:14,528] INFO apps.products.views Retrieving product list or search, user=15, path=/products/list/
+[2025-05-09 17:21:14,529] DEBUG apps.core.services.cache_services Cache miss for key: product_list:8a39694722340feee014063ceb780f7e
+[2025-05-09 17:21:14,530] INFO apps.products.services.query_services Searching products: query=мёд, page=1, page_size=20
+[2025-05-09 17:21:14,530] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=100.0
+[2025-05-09 17:21:14,582] INFO apps.products.services.query_services Found 0 products, total=0
+[2025-05-09 17:21:14,582] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 17:21:14,582] DEBUG apps.products.services.query_services Applying filters with params={'q': 'мёд', 'category': '1', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-09 17:21:14,582] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=100.0
+[2025-05-09 17:21:14,584] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 17:21:14,584] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 17:21:14,584] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-09 17:21:14,585] INFO apps.products.views Retrieved 0 products, user=15
+[2025-05-09 17:22:13,875] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:22:13,875] INFO apps.products.views Retrieving product list or search, user=15, path=/products/list/
+[2025-05-09 17:22:13,876] DEBUG apps.core.services.cache_services Cache miss for key: product_list:1b68f3f725b0b1b8b5c4d8bd64ac9e2c
+[2025-05-09 17:22:13,876] INFO apps.products.services.query_services Searching products: query=медятина, page=1, page_size=20
+[2025-05-09 17:22:13,876] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=100.0
+[2025-05-09 17:22:13,936] INFO apps.products.services.query_services Found 0 products, total=0
+[2025-05-09 17:22:13,936] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 17:22:13,936] DEBUG apps.products.services.query_services Applying filters with params={'q': 'медятина', 'category': '1', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-09 17:22:13,936] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=100.0
+[2025-05-09 17:22:13,938] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 17:22:13,938] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 17:22:13,938] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-09 17:22:13,940] INFO apps.products.views Retrieved 0 products, user=15
+[2025-05-09 17:22:47,102] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:22:47,103] INFO apps.products.views Retrieving product list or search, user=15, path=/products/list/
+[2025-05-09 17:22:47,104] DEBUG apps.core.services.cache_services Cache miss for key: product_list:04415f084e4a6b559bc46197c8dcefac
+[2025-05-09 17:22:47,104] INFO apps.products.services.query_services Searching products: query=медятина, page=1, page_size=20
+[2025-05-09 17:22:47,104] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=1000.0
+[2025-05-09 17:22:47,166] INFO apps.products.services.query_services Found 2 products, total=2
+[2025-05-09 17:22:47,166] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 17:22:47,166] DEBUG apps.products.services.query_services Applying filters with params={'q': 'медятина', 'category': '1', 'price__gte': '10', 'price__lte': '1000', 'ordering': '-rating_avg'}
+[2025-05-09 17:22:47,167] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=1000.0
+[2025-05-09 17:22:47,168] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 17:22:47,168] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 17:22:47,169] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-09 17:22:47,181] INFO apps.products.views Retrieved 2 products, user=15
+[2025-05-09 17:34:47,539] DEBUG apps.users.authentication No token provided in request
+[2025-05-09 17:34:47,540] INFO apps.reviews.views Fetching reviews for product=7, user=anonymous, path=/reviews/7/
+[2025-05-09 17:34:47,647] DEBUG apps.core.services.cache_services Cache miss for key: reviews:7:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 17:34:47,647] INFO apps.reviews.services.reviews_services Fetching reviews for product=7, user=anonymous
+[2025-05-09 17:34:47,683] INFO apps.reviews.services.reviews_services Found 1 reviews for product=7
+[2025-05-09 17:34:47,696] INFO apps.reviews.views Retrieved 1 reviews for product=7, user=anonymous
+[2025-05-09 17:35:02,292] DEBUG apps.users.authentication No token provided in request
+[2025-05-09 17:35:02,292] INFO apps.products.views Retrieving product list or search, user=anonymous, path=/products/list/
+[2025-05-09 17:35:02,294] DEBUG apps.core.services.cache_services Cache hit for key: product_list:04415f084e4a6b559bc46197c8dcefac
+[2025-05-09 17:35:15,925] DEBUG apps.users.authentication No token provided in request
+[2025-05-09 17:35:19,130] DEBUG apps.users.authentication No token provided in request
+[2025-05-09 17:35:19,132] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-09 17:35:19,134] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-09 17:35:19,134] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-09 17:35:19,768] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-09 17:35:19,771] INFO apps.users.views User 15 logged in successfully
+[2025-05-09 17:35:20,224] INFO apps.users.utils JWT cookies set for user=15
+[2025-05-09 17:35:23,400] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:35:23,400] INFO apps.reviews.views Creating review, user=15, path=/reviews/create/
+[2025-05-09 17:35:23,405] DEBUG apps.reviews.serializers Validating review data: {'product': <Product: Мёд>, 'value': 4, 'text': 'фигня'}
+[2025-05-09 17:35:23,405] INFO apps.reviews.services.reviews_services Creating review for product=Мёд, user=15
+[2025-05-09 17:35:23,410] INFO apps.reviews.models Creating review for product=116, user=15
+[2025-05-09 17:35:23,411] INFO apps.reviews.models Successfully creating review 33, user=15
+[2025-05-09 17:35:23,411] INFO apps.reviews.services.reviews_services Successfully created review 33, user=15
+[2025-05-09 17:35:23,445] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-05-09 17:35:23,445] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:116:*
+[2025-05-09 17:35:23,445] INFO apps.reviews.views Created review 33, user=15
+[2025-05-09 17:35:23,446] INFO apps.products.services.tasks Starting update_popularity_score for product 116
+[2025-05-09 17:35:23,491] DEBUG apps.products.services.tasks Calculated popularity_score=1.409090909090909 for product 116
+[2025-05-09 17:35:23,492] INFO apps.products.models Updating product with title=Мёд, user=8
+[2025-05-09 17:35:23,641] DEBUG apps.products.signals Skipping signal for product 116 due to popularity_score update
+[2025-05-09 17:35:23,642] INFO apps.products.models Successfully updating product 116, user=8
+[2025-05-09 17:35:23,642] INFO apps.products.services.tasks Updated popularity_score for product 116
+[2025-05-09 17:35:40,876] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:35:40,876] INFO apps.products.views Retrieving product list or search, user=15, path=/products/list/
+[2025-05-09 17:35:40,877] DEBUG apps.core.services.cache_services Cache miss for key: product_list:04415f084e4a6b559bc46197c8dcefac
+[2025-05-09 17:35:40,877] INFO apps.products.services.query_services Searching products: query=медятина, page=1, page_size=20
+[2025-05-09 17:35:40,878] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=1000.0
+[2025-05-09 17:35:40,922] INFO apps.products.services.query_services Found 2 products, total=2
+[2025-05-09 17:35:40,922] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 17:35:40,922] DEBUG apps.products.services.query_services Applying filters with params={'q': 'медятина', 'category': '1', 'price__gte': '10', 'price__lte': '1000', 'ordering': '-rating_avg'}
+[2025-05-09 17:35:40,923] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=1000.0
+[2025-05-09 17:35:40,924] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 17:35:40,924] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 17:35:40,925] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-09 17:35:40,937] INFO apps.products.views Retrieved 2 products, user=15
