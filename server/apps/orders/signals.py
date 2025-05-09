@@ -2,8 +2,11 @@ import logging
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
+
+from apps.core.services.cache_services import CacheService
 from apps.orders.models import Order
 from apps.orders.services.notification_services import NotificationService
+from apps.products.services.tasks import update_popularity_score
 
 logger = logging.getLogger(__name__)
 
@@ -57,6 +60,12 @@ def order_post_save(sender, instance, created, **kwargs):
                     instance.user, f"Ваш заказ #{instance.id} доставлен!"
                 )
                 logger.info(f"Notification queued for order delivered, order={instance.id}, user={instance.user.id}")
+                # Обновляем popularity_score для всех продуктов в заказе
+                order_items = instance.order_items.select_related('product')
+                for item in order_items:
+                    update_popularity_score.delay(item.product.id)
+                    logger.info(
+                        f"Scheduled popularity score update for product={item.product.id} in order={instance.id}")
             else:
                 NotificationService.send_notification(
                     instance.user, f"Статус заказа #{instance.id} изменен на {instance.status}"
