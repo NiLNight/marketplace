@@ -15,6 +15,8 @@ from apps.users.serializers import (
 from apps.users.utils import set_jwt_cookies, handle_api_errors
 from apps.users.services.users_services import UserService, ConfirmPasswordService, ConfirmCodeService
 from config import settings
+# from django.views.decorators.csrf import csrf_protect
+# from django.utils.decorators import method_decorator
 
 User = get_user_model()
 logger = logging.getLogger(__name__)

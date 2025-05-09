@@ -5320,3 +5320,89 @@ TypeError: Model.delete() got an unexpected keyword argument 'index'
 [2025-05-08 21:11:02,123] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
 [2025-05-08 21:11:02,126] INFO apps.users.views User 15 logged in successfully
 [2025-05-08 21:11:02,135] INFO apps.users.utils JWT cookies set for user=15
+[2025-05-09 14:37:06,887] DEBUG apps.users.authentication No token provided in request
+[2025-05-09 14:38:04,678] DEBUG apps.users.authentication No token provided in request
+[2025-05-09 14:38:04,789] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-09 14:38:04,791] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-09 14:38:04,791] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-09 14:38:05,375] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-09 14:38:05,393] INFO apps.users.views User 15 logged in successfully
+[2025-05-09 14:38:05,476] INFO apps.users.utils JWT cookies set for user=15
+[2025-05-09 14:38:10,712] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 14:38:10,713] INFO apps.users.views Fetching profile for user=15
+[2025-05-09 14:38:28,433] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 14:38:29,727] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 14:38:53,886] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 14:39:06,059] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 14:39:06,059] INFO apps.users.views Updating profile for user=15
+[2025-05-09 14:39:06,060] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-09 14:39:06,060] INFO apps.users.serializers Validating user data for user=15
+[2025-05-09 14:39:06,099] INFO apps.users.serializers Updating user=15 with validated data
+[2025-05-09 14:39:06,099] INFO apps.users.services.users_services Updating user and profile for user=15
+[2025-05-09 14:39:06,132] INFO apps.users.models Saving user profile for user=15
+[2025-05-09 14:39:06,147] INFO apps.users.models Updating user profile for user=15, data={'_state': <django.db.models.base.ModelState object at 0x000002593662B3B0>, 'id': 15, 'public_id': 'nil-f085260c', 'user_id': 15, 'phone': None, 'birth_date': None, 'avatar': 'images/avatars/default.png'}
+[2025-05-09 14:39:06,155] INFO apps.users.models Successfully updating user profile 15, user=15
+[2025-05-09 14:39:06,155] INFO apps.users.services.users_services User and profile updated successfully for user=15
+[2025-05-09 14:39:06,155] INFO apps.users.serializers User=15 updated successfully
+[2025-05-09 14:39:06,155] INFO apps.users.views Profile updated for user=15
+[2025-05-09 14:39:09,861] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 14:39:09,862] INFO apps.users.views Fetching profile for user=15
+[2025-05-09 14:39:13,591] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 14:39:32,497] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 14:39:32,497] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-09 14:39:32,498] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-09 14:39:32,498] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-09 14:39:32,959] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-09 14:39:32,961] INFO apps.users.views User 15 logged in successfully
+[2025-05-09 14:39:32,977] INFO apps.users.utils JWT cookies set for user=15
+[2025-05-09 14:39:53,779] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 14:39:53,780] ERROR apps.users.utils Server error: 'UserLoginView' object has no attribute 'COOKIES', user=15, path=/user/login/
+[2025-05-09 14:40:19,053] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 14:46:59,988] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 14:46:59,988] INFO apps.users.views Fetching profile for user=15
+[2025-05-09 14:47:02,956] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 14:51:08,078] DEBUG apps.users.authentication No token provided in request
+[2025-05-09 14:51:19,027] DEBUG apps.users.authentication No token provided in request
+[2025-05-09 14:51:25,302] DEBUG apps.users.authentication No token provided in request
+[2025-05-09 14:51:25,304] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-09 14:51:25,306] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-09 14:51:25,306] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-09 14:51:25,579] WARNING apps.users.services.users_services Invalid password for email=bkmz-2020@inbox.ru
+[2025-05-09 14:51:25,579] WARNING apps.users.utils User error: Неверные учетные данные, user=anonymous, path=/user/login/
+[2025-05-09 14:51:31,460] DEBUG apps.users.authentication No token provided in request
+[2025-05-09 14:51:31,464] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-09 14:51:31,464] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-09 14:51:31,464] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-09 14:51:31,962] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-09 14:51:31,965] INFO apps.users.views User 15 logged in successfully
+[2025-05-09 14:51:32,369] INFO apps.users.utils JWT cookies set for user=15
+[2025-05-09 14:51:40,885] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 14:51:40,885] INFO apps.users.views Fetching profile for user=15
+[2025-05-09 14:51:44,301] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 14:51:44,301] INFO apps.users.views Processing logout for user=15
+[2025-05-09 14:51:44,372] INFO apps.users.services.users_services User logged out successfully
+[2025-05-09 14:51:44,372] INFO apps.users.views User 15 logged out successfully
+[2025-05-09 14:51:58,436] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 14:51:58,436] INFO apps.users.views Updating profile for user=15
+[2025-05-09 14:51:58,436] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-09 14:51:58,436] INFO apps.users.serializers Validating user data for user=15
+[2025-05-09 14:51:58,438] INFO apps.users.serializers Updating user=15 with validated data
+[2025-05-09 14:51:58,438] INFO apps.users.services.users_services Updating user and profile for user=15
+[2025-05-09 14:51:58,439] INFO apps.users.models Saving user profile for user=15
+[2025-05-09 14:51:58,442] INFO apps.users.models Updating user profile for user=15, data={'_state': <django.db.models.base.ModelState object at 0x000002D663043E00>, 'id': 15, 'public_id': 'nil-f085260c', 'user_id': 15, 'phone': None, 'birth_date': None, 'avatar': 'images/avatars/default.png'}
+[2025-05-09 14:51:58,442] INFO apps.users.models Successfully updating user profile 15, user=15
+[2025-05-09 14:51:58,442] INFO apps.users.services.users_services User and profile updated successfully for user=15
+[2025-05-09 14:51:58,443] INFO apps.users.serializers User=15 updated successfully
+[2025-05-09 14:51:58,443] INFO apps.users.views Profile updated for user=15
+[2025-05-09 14:52:12,806] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 14:52:12,806] INFO apps.users.views Updating profile for user=15
+[2025-05-09 14:52:12,806] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-09 14:52:12,806] INFO apps.users.serializers Validating user data for user=15
+[2025-05-09 14:52:12,807] INFO apps.users.serializers Updating user=15 with validated data
+[2025-05-09 14:52:12,807] INFO apps.users.services.users_services Updating user and profile for user=15
+[2025-05-09 14:52:12,808] INFO apps.users.models Saving user profile for user=15
+[2025-05-09 14:52:12,809] INFO apps.users.models Updating user profile for user=15, data={'_state': <django.db.models.base.ModelState object at 0x000002D663043D70>, 'id': 15, 'public_id': 'nil-f085260c', 'user_id': 15, 'phone': None, 'birth_date': None, 'avatar': 'images/avatars/default.png'}
+[2025-05-09 14:52:12,811] INFO apps.users.models Successfully updating user profile 15, user=15
+[2025-05-09 14:52:12,811] INFO apps.users.services.users_services User and profile updated successfully for user=15
+[2025-05-09 14:52:12,811] INFO apps.users.serializers User=15 updated successfully
+[2025-05-09 14:52:12,811] INFO apps.users.views Profile updated for user=15
