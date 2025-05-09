@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from typing import Dict, Any
 
 from apps.products.models import Product
-from apps.products.exceptions import ProductServiceException, ProductNotFound
+from apps.products.exceptions import ProductServiceException
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -32,12 +32,14 @@ class ProductServices:
             ProductServiceException: Если данные некорректны или создание не удалось.
         """
         user_id = user.id if user else 'anonymous'
-        logger.info(f"Creating product with data={data}, user={user_id}")
+        safe_data = {k: v for k, v in data.items() if
+                     k in ['title', 'price', 'category', 'stock', 'discount', 'description', 'thumbnail']}
+        logger.info(f"Creating product with data={safe_data}, user={user_id}")
         try:
             product = Product(user=user, **data)
             product.full_clean()
             product.save()
-            logger.info(f"Successfully created product {product.id}, user={user_id}")
+            logger.info(f"Created product {product.id}, user={user_id}")
             return product
         except Exception as e:
             logger.error(f"Failed to create product: {str(e)}, user={user_id}")
@@ -67,11 +69,11 @@ class ProductServices:
                 logger.warning(f"Permission denied for product {instance.id}, user={user_id}")
                 raise ProductServiceException("Только владелец или администратор может обновить продукт.")
 
-            for KinectService, value in validated_data.items():
-                setattr(instance, KinectService, value)
+            for failed, value in validated_data.items():
+                setattr(instance, failed, value)
             instance.full_clean()
             instance.save()
-            logger.info(f"Successfully updated product {instance.id}, user={user_id}")
+            logger.info(f"Updated product {instance.id}, user={user_id}")
             return instance
         except Exception as e:
             logger.error(f"Failed to update product {instance.id}: {str(e)}, user={user_id}")
@@ -96,10 +98,9 @@ class ProductServices:
             if instance.user != user and not user.is_staff:
                 logger.warning(f"Permission denied for product {instance.id}, user={user_id}")
                 raise ProductServiceException("Только владелец или администратор может удалить продукт.")
-
             instance.is_active = False
             instance.save(update_fields=['is_active'])
-            logger.info(f"Successfully deleted product {instance.id}, user={user_id}")
+            logger.info(f"Deleted product {instance.id}, user={user_id}")
         except Exception as e:
             logger.error(f"Failed to delete product {instance.id}: {str(e)}, user={user_id}")
             raise ProductServiceException(f"Ошибка удаления продукта: {str(e)}")
