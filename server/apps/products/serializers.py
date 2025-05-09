@@ -117,7 +117,7 @@ class ProductCreateSerializer(serializers.ModelSerializer):
             raise InvalidProductData("Цена должна быть больше нуля.")
 
         discount = data.get('discount', 0)
-        if discount and price:
+        if discount and price is not None:
             price_with_discount = price * (1 - discount / 100)
             if price_with_discount < Decimal('0.01'):
                 logger.warning(f"Price with discount too low: {price_with_discount}")
