@@ -1,6 +1,5 @@
 import logging
 from decimal import Decimal
-
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.indexes import GinIndex, HashIndex
 from django.core.exceptions import ValidationError
@@ -156,6 +155,7 @@ class Product(TimeStampedModel):
         verbose_name='Пользователь'
     )
     search_vector = SearchVectorField(null=True, blank=True, verbose_name='Поисковый вектор')
+    popularity_score = models.FloatField(default=0.0, verbose_name='Популярность')
     objects = ProductManager()
 
     class Meta:
@@ -167,6 +167,10 @@ class Product(TimeStampedModel):
             models.Index(fields=['is_active']),
             GinIndex(fields=['search_vector']),
             models.Index(fields=['price']),
+            models.Index(fields=['discount']),
+            models.Index(fields=['stock']),
+            models.Index(fields=['popularity_score']),
+            models.Index(fields=['title', 'category'], name='title_category_idx'),
         ]
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
@@ -221,7 +225,6 @@ class Product(TimeStampedModel):
                     SearchVector(Value(self.description), weight='B') +
                     SearchVector(Value(category_title), weight='C')
             )
-
             with transaction.atomic():
                 super().save(*args, **kwargs)
             logger.info(f"Successfully {action.lower()} product {self.pk}, user={user_id}")
