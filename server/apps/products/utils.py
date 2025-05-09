@@ -58,7 +58,7 @@ def get_filter_params(request: HttpRequest) -> Dict[str, Any]:
 
 
 def calculate_popularity_score(product) -> float:
-    purchase_count = product.order_items.filter(order__isnull=False).count()
+    purchase_count = product.order_items.filter(order__status='delivered').count()
     review_count = product.reviews.count()
     rating_avg = product.reviews.aggregate(Avg('value'))['value__avg'] or 0.0
     days_since_created = (timezone.now() - product.created).days + 1
