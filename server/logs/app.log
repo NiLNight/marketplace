@@ -8017,3 +8017,567 @@ HINT:  Функция с данными именем и типами аргументов не найдена. Возможно, вам сл
 [2025-05-09 17:35:40,924] DEBUG apps.products.services.query_services Applying common annotations
 [2025-05-09 17:35:40,925] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
 [2025-05-09 17:35:40,937] INFO apps.products.views Retrieved 2 products, user=15
+[2025-05-09 17:57:15,451] DEBUG apps.users.authentication No token provided in request
+[2025-05-09 17:57:15,451] INFO apps.products.views Retrieving product list or search, user=anonymous, path=/products/list/
+[2025-05-09 17:57:15,613] DEBUG apps.core.services.cache_services Cache miss for key: product_list:04415f084e4a6b559bc46197c8dcefac
+[2025-05-09 17:57:15,613] INFO apps.products.services.query_services Searching products: query=медятина, page=1, page_size=20
+[2025-05-09 17:57:15,613] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=1000.0
+[2025-05-09 17:57:15,734] INFO apps.products.services.query_services Found 2 products, total=2
+[2025-05-09 17:57:15,734] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 17:57:15,734] DEBUG apps.products.services.query_services Applying filters with params={'q': 'медятина', 'category': '1', 'price__gte': '10', 'price__lte': '1000', 'ordering': '-rating_avg'}
+[2025-05-09 17:57:15,735] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=1000.0
+[2025-05-09 17:57:15,736] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 17:57:15,736] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 17:57:15,737] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-09 17:57:15,754] INFO apps.products.views Retrieved 2 products, user=anonymous
+[2025-05-09 17:57:25,646] DEBUG apps.users.authentication No token provided in request
+[2025-05-09 17:57:29,118] DEBUG apps.users.authentication No token provided in request
+[2025-05-09 17:57:29,121] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-09 17:57:29,122] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-09 17:57:29,122] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-09 17:57:29,661] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-09 17:57:29,665] INFO apps.users.views User 15 logged in successfully
+[2025-05-09 17:57:30,126] INFO apps.users.utils JWT cookies set for user=15
+[2025-05-09 17:57:33,744] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:57:33,744] INFO apps.products.views Creating product, user=15, path=/products/create/
+[2025-05-09 17:57:33,749] DEBUG apps.products.serializers Validating product data: {'title': 'черника', 'description': 'Вкусно ягоды', 'price': Decimal('56.00'), 'discount': Decimal('5.00'), 'stock': 1500, 'category': <Category: Мясные продукты>}
+[2025-05-09 17:57:33,749] INFO apps.products.services.product_services Creating product with data={'title': 'черника', 'description': 'Вкусно ягоды', 'price': Decimal('56.00'), 'discount': Decimal('5.00'), 'stock': 1500, 'category': <Category: Мясные продукты>}, user=15
+[2025-05-09 17:57:33,755] INFO apps.products.models Creating product with title=черника, user=15
+[2025-05-09 17:57:33,785] INFO apps.products.signals Creating product: title=черника, user=15, is_active=False
+[2025-05-09 17:57:33,810] INFO apps.products.models Successfully creating product 132, user=15
+[2025-05-09 17:57:33,810] INFO apps.products.services.product_services Created product 132, user=15
+[2025-05-09 17:57:33,813] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-05-09 17:57:33,813] INFO apps.products.views Successfully created product 132, user=15
+[2025-05-09 17:57:33,814] DEBUG apps.products.serializers Retrieving children for category 6
+[2025-05-09 17:57:41,706] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:57:41,706] INFO apps.products.views Retrieving product list or search, user=15, path=/products/list/
+[2025-05-09 17:57:41,708] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 17:57:41,708] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 17:57:41,708] DEBUG apps.products.services.query_services Applying filters with params={}
+[2025-05-09 17:57:41,708] DEBUG apps.products.services.query_services Applying filters: category_id=None, min_price=None, max_price=None
+[2025-05-09 17:57:41,708] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 17:57:41,708] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 17:57:41,709] DEBUG apps.products.services.query_services Applying ordering with sort_by=None
+[2025-05-09 17:57:41,726] INFO apps.products.views Retrieved 20 products, user=15
+[2025-05-09 17:57:49,997] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:57:49,997] INFO apps.products.views Retrieving product list or search, user=15, path=/products/list/
+[2025-05-09 17:57:49,999] DEBUG apps.core.services.cache_services Cache miss for key: product_list:83630fda569222f068a067dc70567c25
+[2025-05-09 17:57:49,999] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 17:57:49,999] DEBUG apps.products.services.query_services Applying filters with params={'category': '3', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-09 17:57:49,999] DEBUG apps.products.services.query_services Applying filters: category_id=3, min_price=10.0, max_price=100.0
+[2025-05-09 17:57:50,003] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 17:57:50,003] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 17:57:50,003] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-09 17:57:50,016] INFO apps.products.views Retrieved 7 products, user=15
+[2025-05-09 17:58:01,406] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:58:01,406] INFO apps.products.views Retrieving product list or search, user=15, path=/products/list/
+[2025-05-09 17:58:01,407] DEBUG apps.core.services.cache_services Cache miss for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 17:58:01,407] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 17:58:01,408] DEBUG apps.products.services.query_services Applying filters with params={'category': '7', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-09 17:58:01,408] DEBUG apps.products.services.query_services Applying filters: category_id=7, min_price=10.0, max_price=100.0
+[2025-05-09 17:58:01,411] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 17:58:01,411] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 17:58:01,411] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-09 17:58:01,423] INFO apps.products.views Retrieved 5 products, user=15
+[2025-05-09 17:58:52,563] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:58:52,563] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-09 17:58:52,563] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-09 17:58:52,563] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-09 17:58:52,822] WARNING apps.users.services.users_services Invalid password for email=edem100@list.ru
+[2025-05-09 17:58:52,822] WARNING apps.users.utils User error: Неверные учетные данные, user=15, path=/user/login/
+[2025-05-09 17:58:56,868] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-09 17:58:56,868] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-09 17:58:56,868] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-09 17:58:56,868] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-09 17:58:57,359] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-09 17:58:57,361] INFO apps.users.views User 11 logged in successfully
+[2025-05-09 17:58:57,362] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-09 17:59:07,760] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 17:59:07,762] INFO apps.products.views Retrieving categories, user=11, path=/products/categories/
+[2025-05-09 17:59:07,767] INFO apps.products.views Successfully retrieved 1 categories, user=11
+[2025-05-09 17:59:07,767] DEBUG apps.products.serializers Retrieving children for category 1
+[2025-05-09 17:59:07,767] DEBUG apps.products.serializers Retrieving children for category 2
+[2025-05-09 17:59:07,768] DEBUG apps.products.serializers Retrieving children for category 3
+[2025-05-09 17:59:07,768] DEBUG apps.products.serializers Retrieving children for category 4
+[2025-05-09 17:59:07,768] DEBUG apps.products.serializers Retrieving children for category 5
+[2025-05-09 17:59:07,768] DEBUG apps.products.serializers Retrieving children for category 6
+[2025-05-09 17:59:07,768] DEBUG apps.products.serializers Retrieving children for category 7
+[2025-05-09 17:59:07,768] DEBUG apps.products.serializers Retrieving children for category 8
+[2025-05-09 17:59:07,768] DEBUG apps.products.serializers Retrieving children for category 9
+[2025-05-09 17:59:07,768] DEBUG apps.products.serializers Retrieving children for category 10
+[2025-05-09 17:59:07,768] DEBUG apps.products.serializers Retrieving children for category 13
+[2025-05-09 17:59:15,645] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 17:59:15,645] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 17:59:15,646] DEBUG apps.core.services.cache_services Cache miss for key: product_list:04415f084e4a6b559bc46197c8dcefac
+[2025-05-09 17:59:15,646] INFO apps.products.services.query_services Searching products: query=медятина, page=1, page_size=20
+[2025-05-09 17:59:15,646] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=1000.0
+[2025-05-09 17:59:15,710] INFO apps.products.services.query_services Found 2 products, total=2
+[2025-05-09 17:59:15,710] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 17:59:15,711] DEBUG apps.products.services.query_services Applying filters with params={'q': 'медятина', 'category': '1', 'price__gte': '10', 'price__lte': '1000', 'ordering': '-rating_avg'}
+[2025-05-09 17:59:15,711] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=1000.0
+[2025-05-09 17:59:15,712] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 17:59:15,712] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 17:59:15,713] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-09 17:59:15,726] INFO apps.products.views Retrieved 2 products, user=11
+[2025-05-09 17:59:23,037] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 17:59:23,037] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 17:59:23,039] DEBUG apps.core.services.cache_services Cache hit for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 17:59:37,462] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 17:59:37,463] INFO apps.reviews.views Creating review, user=11, path=/reviews/create/
+[2025-05-09 17:59:37,468] DEBUG apps.reviews.serializers Validating review data: {'product': <Product: Хлеб>, 'value': 4, 'text': 'фигня'}
+[2025-05-09 17:59:37,468] INFO apps.reviews.services.reviews_services Creating review for product=Хлеб, user=11
+[2025-05-09 17:59:37,474] INFO apps.reviews.models Creating review for product=8, user=11
+[2025-05-09 17:59:37,475] INFO apps.reviews.models Successfully creating review 34, user=11
+[2025-05-09 17:59:37,475] INFO apps.reviews.services.reviews_services Successfully created review 34, user=11
+[2025-05-09 17:59:37,478] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-05-09 17:59:37,478] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:8:*
+[2025-05-09 17:59:37,478] INFO apps.reviews.views Created review 34, user=11
+[2025-05-09 17:59:37,478] INFO apps.products.services.tasks Starting update_popularity_score for product 8
+[2025-05-09 17:59:37,519] DEBUG apps.products.services.tasks Calculated popularity_score=1.7511764705882353 for product 8
+[2025-05-09 17:59:37,522] INFO apps.products.models Updating product with title=Хлеб, user=1
+[2025-05-09 17:59:37,591] DEBUG apps.products.signals Skipping signal for product 8 due to popularity_score update
+[2025-05-09 17:59:37,593] INFO apps.products.models Successfully updating product 8, user=1
+[2025-05-09 17:59:37,593] INFO apps.products.services.tasks Updated popularity_score for product 8
+[2025-05-09 17:59:46,649] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 17:59:46,649] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 17:59:46,651] DEBUG apps.core.services.cache_services Cache miss for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 17:59:46,651] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 17:59:46,651] DEBUG apps.products.services.query_services Applying filters with params={'category': '7', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-09 17:59:46,651] DEBUG apps.products.services.query_services Applying filters: category_id=7, min_price=10.0, max_price=100.0
+[2025-05-09 17:59:46,654] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 17:59:46,654] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 17:59:46,654] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-09 17:59:46,665] INFO apps.products.views Retrieved 5 products, user=11
+[2025-05-09 18:00:04,358] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:00:04,374] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:00:04,375] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-09 18:00:04,404] INFO apps.orders.services.order_services Retrieved 0 orders for user=11
+[2025-05-09 18:00:04,406] INFO apps.orders.views Retrieved 0 orders for user=11
+[2025-05-09 18:00:10,605] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:00:10,605] INFO apps.orders.services.order_services Attempting to create order for user=11
+[2025-05-09 18:00:10,609] WARNING apps.orders.services.order_services Delivery 5 not found for user=11
+[2025-05-09 18:00:10,610] WARNING apps.orders.utils API error: [ErrorDetail(string='Указанная доставка не найдена', code='invalid')], user=11
+[2025-05-09 18:01:17,289] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:01:17,289] INFO apps.orders.services.order_services Attempting to create order for user=11
+[2025-05-09 18:01:17,300] DEBUG apps.orders.signals Tracking status for order=new, user=11
+[2025-05-09 18:01:17,322] INFO apps.orders.signals Processing post_save for order=12, user=11, created=True
+[2025-05-09 18:01:17,322] DEBUG apps.orders.services.notification_services Queueing notification for user=11, email=edem100@list.ru
+[2025-05-09 18:01:17,326] INFO apps.orders.signals Notification queued for order creation, order=12, user=11
+[2025-05-09 18:01:17,327] INFO apps.products.models Updating product with title=Морковка, user=1
+[2025-05-09 18:01:17,328] INFO apps.orders.services.notification_services Sending notification to edem100@list.ru
+[2025-05-09 18:01:17,410] INFO apps.products.signals Updating product: title=Морковка, user=1, is_active=True
+[2025-05-09 18:01:17,411] INFO apps.products.models Successfully updating product 1, user=1
+[2025-05-09 18:01:17,412] INFO apps.products.models Updating product with title=Абрикос, user=1
+[2025-05-09 18:01:17,478] INFO apps.products.signals Updating product: title=Абрикос, user=1, is_active=True
+[2025-05-09 18:01:17,479] INFO apps.products.models Successfully updating product 2, user=1
+[2025-05-09 18:01:17,480] INFO apps.products.models Updating product with title=Вишня, user=1
+[2025-05-09 18:01:17,550] INFO apps.products.signals Updating product: title=Вишня, user=1, is_active=True
+[2025-05-09 18:01:17,551] INFO apps.products.models Successfully updating product 3, user=1
+[2025-05-09 18:01:17,552] INFO apps.products.models Updating product with title=Картофель, user=1
+[2025-05-09 18:01:17,615] INFO apps.products.signals Updating product: title=Картофель, user=1, is_active=True
+[2025-05-09 18:01:17,616] INFO apps.products.models Successfully updating product 4, user=1
+[2025-05-09 18:01:17,620] INFO apps.orders.services.order_services Order 12 successfully created for user=11
+[2025-05-09 18:01:17,623] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:11:*
+[2025-05-09 18:01:17,623] INFO apps.orders.views Order 12 created successfully for user=11
+[2025-05-09 18:01:24,521] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:01:24,522] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:01:24,523] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-09 18:01:24,528] INFO apps.orders.services.order_services Retrieved 1 orders for user=11
+[2025-05-09 18:01:24,529] INFO apps.orders.views Retrieved 1 orders for user=11
+[2025-05-09 18:01:33,296] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:01:33,298] DEBUG apps.core.services.cache_services Cache miss for key: order_detail:12:11
+[2025-05-09 18:01:33,298] INFO apps.orders.services.order_services Retrieving details for order=12, user=11
+[2025-05-09 18:01:33,310] INFO apps.orders.services.order_services Order 12 details retrieved for user=11
+[2025-05-09 18:01:33,312] INFO apps.orders.views Order 12 details retrieved for user=11
+[2025-05-09 18:02:03,730] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:02:03,730] INFO apps.orders.services.order_services Attempting to cancel order=12 for user=11
+[2025-05-09 18:02:03,742] DEBUG apps.orders.signals Tracking status for order=12, user=11
+[2025-05-09 18:02:03,743] INFO apps.orders.signals Processing post_save for order=12, user=11, created=False
+[2025-05-09 18:02:03,743] DEBUG apps.orders.services.notification_services Queueing notification for user=11, email=edem100@list.ru
+[2025-05-09 18:02:03,745] INFO apps.orders.signals Notification queued for status change, order=12, user=11
+[2025-05-09 18:02:03,745] INFO apps.orders.services.order_services Order 12 successfully cancelled for user=11
+[2025-05-09 18:02:03,747] INFO apps.core.services.cache_services Invalidated cache for key: order_detail:12:11
+[2025-05-09 18:02:03,747] INFO apps.orders.services.notification_services Sending notification to edem100@list.ru
+[2025-05-09 18:02:03,748] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:11:*
+[2025-05-09 18:02:03,748] INFO apps.orders.views Order 12 cancelled successfully for user=11
+[2025-05-09 18:02:05,309] INFO apps.orders.services.notification_services Notification successfully sent to edem100@list.ru
+[2025-05-09 18:02:08,129] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:02:08,130] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:02:08,130] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-09 18:02:08,134] INFO apps.orders.services.order_services Retrieved 1 orders for user=11
+[2025-05-09 18:02:08,136] INFO apps.orders.views Retrieved 1 orders for user=11
+[2025-05-09 18:02:20,686] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:02:20,702] DEBUG apps.core.services.cache_services Cache miss for key: cart:11
+[2025-05-09 18:02:20,711] INFO apps.carts.services.cart_services Retrieved cart, user=11, items=0
+[2025-05-09 18:02:20,719] INFO apps.carts.views Retrieved cart, user=11, items=0
+[2025-05-09 18:02:28,865] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:02:28,875] INFO apps.carts.services.cart_services Added product 8 to cart, user=11
+[2025-05-09 18:02:28,876] INFO apps.core.services.cache_services Invalidated cache for key: cart:11
+[2025-05-09 18:02:28,876] INFO apps.carts.views Added product 8 to cart, user=11
+[2025-05-09 18:02:36,208] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:02:36,208] INFO apps.orders.services.order_services Attempting to create order for user=11
+[2025-05-09 18:02:36,216] DEBUG apps.orders.signals Tracking status for order=new, user=11
+[2025-05-09 18:02:36,217] INFO apps.orders.signals Processing post_save for order=13, user=11, created=True
+[2025-05-09 18:02:36,217] DEBUG apps.orders.services.notification_services Queueing notification for user=11, email=edem100@list.ru
+[2025-05-09 18:02:36,218] INFO apps.orders.signals Notification queued for order creation, order=13, user=11
+[2025-05-09 18:02:36,218] INFO apps.products.models Updating product with title=Хлеб, user=1
+[2025-05-09 18:02:36,219] INFO apps.orders.services.notification_services Sending notification to edem100@list.ru
+[2025-05-09 18:02:36,296] INFO apps.products.signals Updating product: title=Хлеб, user=1, is_active=True
+[2025-05-09 18:02:36,298] INFO apps.products.models Successfully updating product 8, user=1
+[2025-05-09 18:02:36,300] INFO apps.orders.services.order_services Order 13 successfully created for user=11
+[2025-05-09 18:02:36,304] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:11:*
+[2025-05-09 18:02:36,304] INFO apps.orders.views Order 13 created successfully for user=11
+[2025-05-09 18:02:37,654] INFO apps.orders.services.notification_services Notification successfully sent to edem100@list.ru
+[2025-05-09 18:02:39,850] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:02:39,852] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:02:39,852] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-09 18:02:39,857] INFO apps.orders.services.order_services Retrieved 2 orders for user=11
+[2025-05-09 18:02:39,858] INFO apps.orders.views Retrieved 2 orders for user=11
+[2025-05-09 18:02:49,284] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:02:49,285] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:02:49,286] DEBUG apps.core.services.cache_services Cache hit for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 18:02:56,820] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:02:56,820] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:02:56,821] DEBUG apps.core.services.cache_services Cache hit for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 18:14:24,847] DEBUG apps.users.authentication No token provided in request
+[2025-05-09 18:14:29,150] DEBUG apps.users.authentication No token provided in request
+[2025-05-09 18:14:29,250] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-09 18:14:29,252] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-09 18:14:29,252] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-09 18:14:29,773] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-09 18:14:29,777] INFO apps.users.views User 11 logged in successfully
+[2025-05-09 18:14:30,232] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-09 18:14:33,763] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:14:33,765] DEBUG apps.core.services.cache_services Cache hit for key: order_list:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:15:15,223] DEBUG apps.orders.signals Tracking status for order=13, user=11
+[2025-05-09 18:15:15,225] INFO apps.orders.signals Processing post_save for order=13, user=11, created=False
+[2025-05-09 18:15:15,225] DEBUG apps.orders.services.notification_services Queueing notification for user=11, email=edem100@list.ru
+[2025-05-09 18:15:15,244] INFO apps.orders.signals Notification queued for order delivered, order=13, user=11
+[2025-05-09 18:15:15,245] INFO apps.orders.services.notification_services Sending notification to edem100@list.ru
+[2025-05-09 18:15:15,249] INFO apps.orders.signals Scheduled popularity score update for product=8 in order=13
+[2025-05-09 18:15:36,379] INFO apps.products.services.tasks Starting update_popularity_score for product 8
+[2025-05-09 18:15:36,530] DEBUG apps.products.services.tasks Calculated popularity_score=2.151176470588235 for product 8
+[2025-05-09 18:15:36,531] INFO apps.products.models Updating product with title=Хлеб, user=1
+[2025-05-09 18:15:36,606] DEBUG apps.products.signals Skipping signal for product 8 due to popularity_score update
+[2025-05-09 18:15:36,635] INFO apps.products.models Successfully updating product 8, user=1
+[2025-05-09 18:15:36,635] INFO apps.products.services.tasks Updated popularity_score for product 8
+[2025-05-09 18:15:37,919] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:15:37,924] DEBUG apps.core.services.cache_services Cache miss for key: order_detail:13:11
+[2025-05-09 18:15:37,924] INFO apps.orders.services.order_services Retrieving details for order=13, user=11
+[2025-05-09 18:15:37,936] INFO apps.orders.services.order_services Order 13 details retrieved for user=11
+[2025-05-09 18:15:37,939] INFO apps.orders.views Order 13 details retrieved for user=11
+[2025-05-09 18:16:04,394] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:16:04,394] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:16:04,396] DEBUG apps.core.services.cache_services Cache miss for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 18:16:04,396] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 18:16:04,396] DEBUG apps.products.services.query_services Applying filters with params={'category': '7', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-09 18:16:04,396] DEBUG apps.products.services.query_services Applying filters: category_id=7, min_price=10.0, max_price=100.0
+[2025-05-09 18:16:04,400] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 18:16:04,400] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 18:16:04,400] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-09 18:16:04,413] INFO apps.products.views Retrieved 5 products, user=11
+[2025-05-09 18:16:14,178] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:16:14,186] INFO apps.carts.services.cart_services Added product 8 to cart, user=11
+[2025-05-09 18:16:14,188] INFO apps.core.services.cache_services Invalidated cache for key: cart:11
+[2025-05-09 18:16:14,188] INFO apps.carts.views Added product 8 to cart, user=11
+[2025-05-09 18:16:18,276] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:16:18,278] DEBUG apps.core.services.cache_services Cache hit for key: order_list:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:16:20,022] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:16:20,024] DEBUG apps.core.services.cache_services Cache hit for key: order_list:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:16:33,172] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:16:33,172] INFO apps.orders.services.order_services Attempting to create order for user=11
+[2025-05-09 18:16:33,181] DEBUG apps.orders.signals Tracking status for order=new, user=11
+[2025-05-09 18:16:33,182] INFO apps.orders.signals Processing post_save for order=14, user=11, created=True
+[2025-05-09 18:16:33,182] DEBUG apps.orders.services.notification_services Queueing notification for user=11, email=edem100@list.ru
+[2025-05-09 18:16:33,187] INFO apps.orders.signals Notification queued for order creation, order=14, user=11
+[2025-05-09 18:16:33,187] INFO apps.products.models Updating product with title=Хлеб, user=1
+[2025-05-09 18:16:33,189] INFO apps.orders.services.notification_services Sending notification to edem100@list.ru
+[2025-05-09 18:16:33,245] INFO apps.products.signals Updating product: title=Хлеб, user=1, is_active=True
+[2025-05-09 18:16:33,246] INFO apps.products.models Successfully updating product 8, user=1
+[2025-05-09 18:16:33,248] INFO apps.orders.services.order_services Order 14 successfully created for user=11
+[2025-05-09 18:16:33,250] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:11:*
+[2025-05-09 18:16:33,250] INFO apps.orders.views Order 14 created successfully for user=11
+[2025-05-09 18:16:34,530] INFO apps.orders.services.notification_services Notification successfully sent to edem100@list.ru
+[2025-05-09 18:16:41,260] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:16:41,261] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:16:41,261] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-09 18:16:41,266] INFO apps.orders.services.order_services Retrieved 3 orders for user=11
+[2025-05-09 18:16:41,267] INFO apps.orders.views Retrieved 3 orders for user=11
+[2025-05-09 18:16:59,666] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:16:59,666] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:16:59,667] DEBUG apps.core.services.cache_services Cache hit for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 18:17:00,542] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:17:00,542] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:17:00,543] DEBUG apps.core.services.cache_services Cache hit for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 18:17:16,752] DEBUG apps.orders.signals Tracking status for order=14, user=11
+[2025-05-09 18:17:16,754] INFO apps.orders.signals Processing post_save for order=14, user=11, created=False
+[2025-05-09 18:17:16,754] DEBUG apps.orders.services.notification_services Queueing notification for user=11, email=edem100@list.ru
+[2025-05-09 18:17:16,758] INFO apps.orders.signals Notification queued for order delivered, order=14, user=11
+[2025-05-09 18:17:16,760] INFO apps.orders.services.notification_services Sending notification to edem100@list.ru
+[2025-05-09 18:17:16,762] INFO apps.orders.signals Scheduled popularity score update for product=8 in order=14
+[2025-05-09 18:17:17,945] INFO apps.orders.services.notification_services Notification successfully sent to edem100@list.ru
+[2025-05-09 18:17:17,945] INFO apps.products.services.tasks Starting update_popularity_score for product 8
+[2025-05-09 18:17:17,982] DEBUG apps.products.services.tasks Calculated popularity_score=2.551176470588235 for product 8
+[2025-05-09 18:17:17,984] INFO apps.products.models Updating product with title=Хлеб, user=1
+[2025-05-09 18:17:18,058] DEBUG apps.products.signals Skipping signal for product 8 due to popularity_score update
+[2025-05-09 18:17:18,060] INFO apps.products.models Successfully updating product 8, user=1
+[2025-05-09 18:17:18,060] INFO apps.products.services.tasks Updated popularity_score for product 8
+[2025-05-09 18:17:21,901] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:17:21,901] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:17:21,903] DEBUG apps.core.services.cache_services Cache hit for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 18:17:23,667] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:17:23,667] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:17:23,668] DEBUG apps.core.services.cache_services Cache hit for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 18:17:41,978] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:17:41,978] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:17:41,979] DEBUG apps.core.services.cache_services Cache miss for key: product_list:ceb2bb3d7d24edd11da9b84e04cb8a22
+[2025-05-09 18:17:41,979] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 18:17:41,980] DEBUG apps.products.services.query_services Applying filters with params={'category': '6', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-09 18:17:41,980] DEBUG apps.products.services.query_services Applying filters: category_id=6, min_price=10.0, max_price=100.0
+[2025-05-09 18:17:41,983] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 18:17:41,983] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 18:17:41,984] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-09 18:17:41,996] INFO apps.products.views Retrieved 5 products, user=11
+[2025-05-09 18:17:49,577] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:17:49,577] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:17:49,578] DEBUG apps.core.services.cache_services Cache hit for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 18:17:57,255] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:17:57,256] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:17:57,257] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:17:57,257] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 18:17:57,258] DEBUG apps.products.services.query_services Applying filters with params={}
+[2025-05-09 18:17:57,258] DEBUG apps.products.services.query_services Applying filters: category_id=None, min_price=None, max_price=None
+[2025-05-09 18:17:57,258] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 18:17:57,258] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 18:17:57,258] DEBUG apps.products.services.query_services Applying ordering with sort_by=None
+[2025-05-09 18:17:57,272] INFO apps.products.views Retrieved 20 products, user=11
+[2025-05-09 18:18:04,072] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:18:04,072] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:18:04,074] DEBUG apps.core.services.cache_services Cache hit for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 18:19:16,965] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:19:16,965] INFO apps.products.views Retrieving product 8, user=11, path=/products/8/
+[2025-05-09 18:19:16,966] DEBUG apps.core.services.cache_services Cache miss for key: product_detail:8
+[2025-05-09 18:19:16,966] INFO apps.products.services.query_services Retrieving product with pk=8
+[2025-05-09 18:19:16,966] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 18:19:16,967] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 18:19:16,974] INFO apps.products.services.query_services Retrieved product 8
+[2025-05-09 18:19:16,978] DEBUG apps.products.serializers Retrieving children for category 7
+[2025-05-09 18:19:16,981] INFO apps.products.views Successfully retrieved product 8, user=11
+[2025-05-09 18:20:08,355] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:20:08,355] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:20:08,362] DEBUG apps.core.services.cache_services Cache hit for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 18:20:09,750] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:20:09,750] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:20:09,752] DEBUG apps.core.services.cache_services Cache hit for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 18:20:17,781] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:20:17,790] INFO apps.carts.services.cart_services Added product 8 to cart, user=11
+[2025-05-09 18:20:17,792] INFO apps.core.services.cache_services Invalidated cache for key: cart:11
+[2025-05-09 18:20:17,792] INFO apps.carts.views Added product 8 to cart, user=11
+[2025-05-09 18:20:25,751] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:20:25,752] INFO apps.orders.services.order_services Attempting to create order for user=11
+[2025-05-09 18:20:25,761] DEBUG apps.orders.signals Tracking status for order=new, user=11
+[2025-05-09 18:20:25,762] INFO apps.orders.signals Processing post_save for order=15, user=11, created=True
+[2025-05-09 18:20:25,762] DEBUG apps.orders.services.notification_services Queueing notification for user=11, email=edem100@list.ru
+[2025-05-09 18:20:25,794] INFO apps.orders.signals Notification queued for order creation, order=15, user=11
+[2025-05-09 18:20:25,796] INFO apps.orders.services.notification_services Sending notification to edem100@list.ru
+[2025-05-09 18:20:25,796] INFO apps.products.models Updating product with title=Хлеб, user=1
+[2025-05-09 18:20:25,858] INFO apps.products.signals Updating product: title=Хлеб, user=1, is_active=True
+[2025-05-09 18:20:25,859] INFO apps.products.models Successfully updating product 8, user=1
+[2025-05-09 18:20:25,861] INFO apps.orders.services.order_services Order 15 successfully created for user=11
+[2025-05-09 18:20:25,863] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:11:*
+[2025-05-09 18:20:25,863] INFO apps.orders.views Order 15 created successfully for user=11
+[2025-05-09 18:20:29,213] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:20:29,214] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:20:29,215] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-09 18:20:29,220] INFO apps.orders.services.order_services Retrieved 4 orders for user=11
+[2025-05-09 18:20:29,224] INFO apps.orders.views Retrieved 4 orders for user=11
+[2025-05-09 18:20:52,044] DEBUG apps.orders.signals Tracking status for order=15, user=11
+[2025-05-09 18:20:52,046] INFO apps.orders.signals Processing post_save for order=15, user=11, created=False
+[2025-05-09 18:20:52,046] DEBUG apps.orders.services.notification_services Queueing notification for user=11, email=edem100@list.ru
+[2025-05-09 18:20:52,050] INFO apps.orders.signals Notification queued for order delivered, order=15, user=11
+[2025-05-09 18:20:52,052] INFO apps.orders.services.notification_services Sending notification to edem100@list.ru
+[2025-05-09 18:20:52,056] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-05-09 18:20:52,056] INFO apps.orders.signals Scheduled popularity score update for product=8 in order=15
+[2025-05-09 18:21:04,987] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:21:04,987] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:21:04,988] DEBUG apps.core.services.cache_services Cache miss for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 18:21:04,988] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 18:21:04,988] DEBUG apps.products.services.query_services Applying filters with params={'category': '7', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-09 18:21:04,988] DEBUG apps.products.services.query_services Applying filters: category_id=7, min_price=10.0, max_price=100.0
+[2025-05-09 18:21:04,991] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 18:21:04,991] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 18:21:04,992] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-09 18:21:05,004] INFO apps.products.views Retrieved 5 products, user=11
+[2025-05-09 18:21:07,273] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:21:07,273] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:21:07,275] DEBUG apps.core.services.cache_services Cache hit for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 18:21:13,089] INFO apps.products.services.tasks Starting update_popularity_score for product 8
+[2025-05-09 18:21:13,124] DEBUG apps.products.services.tasks Calculated popularity_score=2.9511764705882353 for product 8
+[2025-05-09 18:21:13,125] INFO apps.products.models Updating product with title=Хлеб, user=1
+[2025-05-09 18:21:13,188] DEBUG apps.products.signals Skipping signal for product 8 due to popularity_score update
+[2025-05-09 18:21:13,189] INFO apps.products.models Successfully updating product 8, user=1
+[2025-05-09 18:21:13,189] INFO apps.products.services.tasks Updated popularity_score for product 8
+[2025-05-09 18:21:16,577] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:21:16,578] INFO apps.products.views Retrieving product 8, user=11, path=/products/8/
+[2025-05-09 18:21:16,578] DEBUG apps.core.services.cache_services Cache hit for key: product_detail:8
+[2025-05-09 18:21:21,096] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:21:21,097] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:21:21,097] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:21:21,097] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 18:21:21,098] DEBUG apps.products.services.query_services Applying filters with params={}
+[2025-05-09 18:21:21,098] DEBUG apps.products.services.query_services Applying filters: category_id=None, min_price=None, max_price=None
+[2025-05-09 18:21:21,098] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 18:21:21,098] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 18:21:21,099] DEBUG apps.products.services.query_services Applying ordering with sort_by=None
+[2025-05-09 18:21:21,157] INFO apps.products.views Retrieved 20 products, user=11
+[2025-05-09 18:21:27,416] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:21:27,416] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:21:27,417] DEBUG apps.core.services.cache_services Cache hit for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 18:21:41,003] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:21:41,003] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:21:41,004] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:21:57,517] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:21:57,517] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:21:57,518] DEBUG apps.core.services.cache_services Cache hit for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 18:21:58,355] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:21:58,355] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:21:58,356] DEBUG apps.core.services.cache_services Cache hit for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 18:22:07,324] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:22:07,324] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:22:07,325] DEBUG apps.core.services.cache_services Cache miss for key: product_list:04415f084e4a6b559bc46197c8dcefac
+[2025-05-09 18:22:07,325] INFO apps.products.services.query_services Searching products: query=медятина, page=1, page_size=20
+[2025-05-09 18:22:07,325] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=1000.0
+[2025-05-09 18:22:07,398] INFO apps.products.services.query_services Found 2 products, total=2
+[2025-05-09 18:22:07,400] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 18:22:07,400] DEBUG apps.products.services.query_services Applying filters with params={'q': 'медятина', 'category': '1', 'price__gte': '10', 'price__lte': '1000', 'ordering': '-rating_avg'}
+[2025-05-09 18:22:07,400] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=1000.0
+[2025-05-09 18:22:07,401] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 18:22:07,401] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 18:22:07,402] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-09 18:22:07,413] INFO apps.products.views Retrieved 2 products, user=11
+[2025-05-09 18:22:30,822] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:22:30,822] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:22:30,823] DEBUG apps.core.services.cache_services Cache miss for key: product_list:b27ea172ddddb5e73443e03ece1e141d
+[2025-05-09 18:22:30,823] INFO apps.products.services.query_services Searching products: query=хлеб, page=1, page_size=20
+[2025-05-09 18:22:30,824] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=1000.0
+[2025-05-09 18:22:30,877] INFO apps.products.services.query_services Found 1 products, total=1
+[2025-05-09 18:22:30,877] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 18:22:30,878] DEBUG apps.products.services.query_services Applying filters with params={'q': 'хлеб', 'category': '1', 'price__gte': '10', 'price__lte': '1000', 'ordering': '-rating_avg'}
+[2025-05-09 18:22:30,878] DEBUG apps.products.services.query_services Applying filters: category_id=1, min_price=10.0, max_price=1000.0
+[2025-05-09 18:22:30,879] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 18:22:30,879] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 18:22:30,879] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-09 18:22:30,892] INFO apps.products.views Retrieved 1 products, user=11
+[2025-05-09 18:22:50,694] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:22:50,694] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:22:50,695] DEBUG apps.core.services.cache_services Cache hit for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 18:24:59,128] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:24:59,128] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:24:59,135] DEBUG apps.core.services.cache_services Cache hit for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 18:25:10,525] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:25:10,526] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-09 18:25:10,527] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-09 18:25:10,527] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-09 18:25:11,099] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-09 18:25:11,101] INFO apps.users.views User 11 logged in successfully
+[2025-05-09 18:25:11,104] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-09 18:25:24,305] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:25:24,314] INFO apps.carts.services.cart_services Added product 8 to cart, user=11
+[2025-05-09 18:25:24,317] INFO apps.core.services.cache_services Invalidated cache for key: cart:11
+[2025-05-09 18:25:24,317] INFO apps.carts.views Added product 8 to cart, user=11
+[2025-05-09 18:25:40,731] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:25:40,732] INFO apps.orders.services.order_services Attempting to create order for user=11
+[2025-05-09 18:25:40,741] DEBUG apps.orders.signals Tracking status for order=new, user=11
+[2025-05-09 18:25:40,742] INFO apps.orders.signals Processing post_save for order=16, user=11, created=True
+[2025-05-09 18:25:40,743] DEBUG apps.orders.services.notification_services Queueing notification for user=11, email=edem100@list.ru
+[2025-05-09 18:25:40,776] INFO apps.orders.signals Notification queued for order creation, order=16, user=11
+[2025-05-09 18:25:40,777] INFO apps.orders.services.notification_services Sending notification to edem100@list.ru
+[2025-05-09 18:25:40,778] INFO apps.products.models Updating product with title=Хлеб, user=1
+[2025-05-09 18:25:40,836] INFO apps.products.signals Updating product: title=Хлеб, user=1, is_active=True
+[2025-05-09 18:25:40,838] INFO apps.products.models Successfully updating product 8, user=1
+[2025-05-09 18:25:40,840] INFO apps.orders.services.order_services Order 16 successfully created for user=11
+[2025-05-09 18:25:40,842] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:11:*
+[2025-05-09 18:25:40,842] INFO apps.orders.views Order 16 created successfully for user=11
+[2025-05-09 18:25:41,984] INFO apps.orders.services.notification_services Notification successfully sent to edem100@list.ru
+[2025-05-09 18:25:49,535] DEBUG apps.orders.signals Tracking status for order=16, user=11
+[2025-05-09 18:25:49,537] INFO apps.orders.signals Processing post_save for order=16, user=11, created=False
+[2025-05-09 18:25:49,537] DEBUG apps.orders.services.notification_services Queueing notification for user=11, email=edem100@list.ru
+[2025-05-09 18:25:49,540] INFO apps.orders.signals Notification queued for order delivered, order=16, user=11
+[2025-05-09 18:25:49,543] INFO apps.orders.services.notification_services Sending notification to edem100@list.ru
+[2025-05-09 18:25:49,546] INFO apps.orders.signals Scheduled popularity score update for product=8 in order=16
+[2025-05-09 18:25:50,701] INFO apps.orders.services.notification_services Notification successfully sent to edem100@list.ru
+[2025-05-09 18:25:50,702] INFO apps.products.services.tasks Starting update_popularity_score for product 8
+[2025-05-09 18:25:50,849] DEBUG apps.products.services.tasks Calculated popularity_score=3.3511764705882348 for product 8
+[2025-05-09 18:25:50,851] INFO apps.products.models Updating product with title=Хлеб, user=1
+[2025-05-09 18:25:50,918] DEBUG apps.products.signals Skipping signal for product 8 due to popularity_score update
+[2025-05-09 18:25:50,919] INFO apps.products.models Successfully updating product 8, user=1
+[2025-05-09 18:25:50,919] INFO apps.products.services.tasks Updated popularity_score for product 8
+[2025-05-09 18:26:10,068] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:26:10,069] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:26:10,070] DEBUG apps.core.services.cache_services Cache hit for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 18:26:11,382] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:26:11,382] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:26:11,383] DEBUG apps.core.services.cache_services Cache hit for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 18:26:24,346] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:26:24,346] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:26:24,348] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:26:25,530] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:26:25,530] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:26:25,531] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:26:40,477] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:26:40,477] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:26:40,478] DEBUG apps.core.services.cache_services Cache hit for key: product_list:b27ea172ddddb5e73443e03ece1e141d
+[2025-05-09 18:26:44,917] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:26:44,917] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:26:44,918] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:30:02,897] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:30:02,897] INFO apps.reviews.views Creating review, user=11, path=/reviews/create/
+[2025-05-09 18:30:02,903] DEBUG apps.reviews.serializers Validating review data: {'product': <Product: Сок>, 'value': 4, 'text': 'фигня'}
+[2025-05-09 18:30:02,903] INFO apps.reviews.services.reviews_services Creating review for product=Сок, user=11
+[2025-05-09 18:30:02,907] INFO apps.reviews.models Creating review for product=9, user=11
+[2025-05-09 18:30:02,908] INFO apps.reviews.models Successfully creating review 35, user=11
+[2025-05-09 18:30:02,908] INFO apps.reviews.services.reviews_services Successfully created review 35, user=11
+[2025-05-09 18:30:02,930] INFO apps.products.services.tasks Starting update_popularity_score for product 9
+[2025-05-09 18:30:02,934] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:9:*
+[2025-05-09 18:30:02,934] INFO apps.reviews.views Created review 35, user=11
+[2025-05-09 18:30:02,969] DEBUG apps.products.services.tasks Calculated popularity_score=1.7511764705882353 for product 9
+[2025-05-09 18:30:02,970] INFO apps.products.models Updating product with title=Сок, user=1
+[2025-05-09 18:30:03,049] DEBUG apps.products.signals Skipping signal for product 9 due to popularity_score update
+[2025-05-09 18:30:03,050] INFO apps.products.models Successfully updating product 9, user=1
+[2025-05-09 18:30:03,050] INFO apps.products.services.tasks Updated popularity_score for product 9
+[2025-05-09 18:30:08,995] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:30:08,995] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:30:08,997] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:30:13,249] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:30:13,249] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:30:13,250] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:33:21,525] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:33:21,526] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:33:21,527] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:33:55,518] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:33:55,519] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:33:55,519] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:34:00,590] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:34:00,590] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:34:00,592] DEBUG apps.core.services.cache_services Cache hit for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-09 18:34:05,575] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:34:05,575] INFO apps.products.views Retrieving product 8, user=11, path=/products/8/
+[2025-05-09 18:34:05,576] DEBUG apps.core.services.cache_services Cache hit for key: product_detail:8
+[2025-05-09 18:35:08,748] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:35:08,748] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:35:08,755] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:35:36,531] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:35:36,531] INFO apps.reviews.views Creating review, user=11, path=/reviews/create/
+[2025-05-09 18:35:36,537] DEBUG apps.reviews.serializers Validating review data: {'product': <Product: Мёд>, 'value': 5, 'text': 'фигня'}
+[2025-05-09 18:35:36,537] INFO apps.reviews.services.reviews_services Creating review for product=Мёд, user=11
+[2025-05-09 18:35:36,542] INFO apps.reviews.models Creating review for product=116, user=11
+[2025-05-09 18:35:36,543] INFO apps.reviews.models Successfully creating review 36, user=11
+[2025-05-09 18:35:36,543] INFO apps.reviews.services.reviews_services Successfully created review 36, user=11
+[2025-05-09 18:35:36,564] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:116:*
+[2025-05-09 18:35:36,564] INFO apps.reviews.views Created review 36, user=11
+[2025-05-09 18:35:36,565] INFO apps.products.services.tasks Starting update_popularity_score for product 116
+[2025-05-09 18:35:36,605] DEBUG apps.products.services.tasks Calculated popularity_score=1.759090909090909 for product 116
+[2025-05-09 18:35:36,607] INFO apps.products.models Updating product with title=Мёд, user=8
+[2025-05-09 18:35:36,680] DEBUG apps.products.signals Skipping signal for product 116 due to popularity_score update
+[2025-05-09 18:35:36,681] INFO apps.products.models Successfully updating product 116, user=8
+[2025-05-09 18:35:36,681] INFO apps.products.services.tasks Updated popularity_score for product 116
