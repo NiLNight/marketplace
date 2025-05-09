@@ -1,9 +1,9 @@
 import logging
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
-from django.db.models import Avg, Count
-from django.utils import timezone
+from django.db.models import Avg
 from apps.products.models import Product
+from apps.products.utils import calculate_popularity_score
 
 logger = logging.getLogger(__name__)
 
@@ -107,17 +107,7 @@ class ProductDocument(Document):
             Float-значение показателя популярности.
         """
         try:
-            purchase_count = instance.order_items.filter(order__isnull=False).count()
-            review_count = instance.reviews.count()
-            rating_avg = instance.reviews.aggregate(Avg('value'))['value__avg'] or 0.0
-            days_since_created = (timezone.now() - instance.created).days + 1
-            popularity_score = (
-                    (purchase_count * 0.4) +
-                    (review_count * 0.2) +
-                    (rating_avg * 0.3) +
-                    (1 / days_since_created * 0.1)
-            )
-            return float(popularity_score)
+            return calculate_popularity_score(instance)
         except Exception as e:
             logger.error(f"Failed to prepare popularity_score for product {instance.id}: {str(e)}")
             return 0.0
