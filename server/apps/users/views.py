@@ -5,6 +5,8 @@ from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+
+from apps.core.services.cache_services import CacheService
 from apps.users.serializers import (
     UserRegistrationSerializer,
     UserLoginSerializer,
@@ -15,8 +17,6 @@ from apps.users.serializers import (
 from apps.users.utils import set_jwt_cookies, handle_api_errors
 from apps.users.services.users_services import UserService, ConfirmPasswordService, ConfirmCodeService
 from config import settings
-# from django.views.decorators.csrf import csrf_protect
-# from django.utils.decorators import method_decorator
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -173,7 +173,12 @@ class UserProfileView(APIView):
         """
         logger.info(f"Fetching profile for user={request.user.id}")
         user = request.user
+        cache_key = f"user_profile:{user.id}"
+        cached_data = CacheService.get_cached_data(cache_key)
+        if cached_data:
+            return Response(cached_data)
         serializer = self.serializer_class(user)
+        CacheService.set_cached_data(cache_key, serializer.data, timeout=3600)
         return Response(serializer.data)
 
     @handle_api_errors
@@ -195,6 +200,7 @@ class UserProfileView(APIView):
         serializer = self.serializer_class(user, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        CacheService.invalidate_cache(prefix="user_profile", pk=request.user.id)
         logger.info(f"Profile updated for user={request.user.id}")
         return Response(serializer.data)
 

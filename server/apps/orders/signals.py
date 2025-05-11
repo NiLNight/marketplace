@@ -3,7 +3,6 @@ from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
 
-from apps.core.services.cache_services import CacheService
 from apps.orders.models import Order
 from apps.orders.services.notification_services import NotificationService
 from apps.products.services.tasks import update_popularity_score

@@ -3,6 +3,8 @@ from celery import shared_task
 from django.core.mail import send_mail
 from django.conf import settings
 from smtplib import SMTPException
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 import logging
 
 logger = logging.getLogger(__name__)
@@ -21,6 +23,11 @@ def send_confirmation_email(self, email: str, code: str) -> None:
         SMTPException: Если отправка письма не удалась, задача повторяется до 3 раз с интервалом 60 секунд.
     """
     logger.info(f"Sending confirmation email to {email} with code={code}, task_id={self.request.id}")
+    try:
+        validate_email(email)
+    except ValidationError:
+        logger.error(f"Invalid email format: {email}, task_id={self.request.id}")
+        return
     try:
         send_mail(
             subject="Ваш код подтверждения",
@@ -48,6 +55,14 @@ def send_password_reset_email(self, email: str, reset_url: str) -> None:
         SMTPException: Если отправка письма не удалась, задача повторяется до 3 раз с интервалом 60 секунд.
     """
     logger.info(f"Sending password reset email to {email} with reset_url={reset_url}, task_id={self.request.id}")
+    if len(reset_url) > 2000:
+        logger.error(f"Reset URL too long: {len(reset_url)} characters, task_id={self.request.id}")
+        return
+    try:
+        validate_email(email)
+    except ValidationError:
+        logger.error(f"Invalid email format: {email}, task_id={self.request.id}")
+        return
     try:
         send_mail(
             subject="Сброс пароля",

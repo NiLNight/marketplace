@@ -114,3 +114,7 @@ class CacheService:
     def cache_wishlist(user_id: int):
         """Кэширует список желаний пользователя."""
         return CacheService.get_cached_data(f"wishlist:{user_id}")
+
+    @staticmethod
+    def cache_user_profile(user_id: int):
+        return CacheService.get_cached_data(f"user_profile:{user_id}")

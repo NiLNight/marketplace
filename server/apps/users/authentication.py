@@ -52,7 +52,8 @@ class CustomJWTAuthentication(JWTAuthentication):
             logger.info(f"User {user.id} authenticated successfully")
             return user, validated_token
         except InvalidToken:
-            logger.error("Invalid token provided")
+            logger.error(f"Invalid token provided from IP={request.META.get('REMOTE_ADDR')}, "
+                         f"User-Agent={request.META.get('HTTP_USER_AGENT')}")
             raise AuthenticationFailed({
                 "detail": "Неверный токен",
                 "code": "token_invalid"

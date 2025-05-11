@@ -12,7 +12,6 @@ from apps.users.services.tasks import send_confirmation_email, send_password_res
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from apps.users.exceptions import UserNotFound, InvalidUserData, AuthenticationFailed, AccountNotActivated
 from django.db import transaction
-from django.contrib.auth.password_validation import validate_password
 
 User = get_user_model()
 logger = logging.getLogger(__name__)

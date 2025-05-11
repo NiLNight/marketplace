@@ -8581,3 +8581,49 @@ HINT:  Функция с данными именем и типами аргументов не найдена. Возможно, вам сл
 [2025-05-09 18:35:36,680] DEBUG apps.products.signals Skipping signal for product 116 due to popularity_score update
 [2025-05-09 18:35:36,681] INFO apps.products.models Successfully updating product 116, user=8
 [2025-05-09 18:35:36,681] INFO apps.products.services.tasks Updated popularity_score for product 116
+[2025-05-09 18:40:07,839] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:40:07,840] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:40:07,841] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:40:07,841] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 18:40:07,841] DEBUG apps.products.services.query_services Applying filters with params={}
+[2025-05-09 18:40:07,841] DEBUG apps.products.services.query_services Applying filters: category_id=None, min_price=None, max_price=None
+[2025-05-09 18:40:07,841] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 18:40:07,841] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 18:40:07,842] DEBUG apps.products.services.query_services Applying ordering with sort_by=None
+[2025-05-09 18:40:07,859] INFO apps.products.views Retrieved 20 products, user=11
+[2025-05-09 18:40:30,721] DEBUG apps.users.authentication No token provided in request
+[2025-05-09 18:40:36,596] DEBUG apps.users.authentication No token provided in request
+[2025-05-09 18:40:36,598] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-09 18:40:36,599] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-09 18:40:36,599] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-09 18:40:37,211] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-09 18:40:37,214] INFO apps.users.views User 11 logged in successfully
+[2025-05-09 18:40:37,217] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-09 18:40:39,562] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:40:39,562] INFO apps.reviews.views Creating review, user=11, path=/reviews/create/
+[2025-05-09 18:40:39,565] DEBUG apps.reviews.serializers Validating review data: {'product': <Product: Мороженое>, 'value': 5, 'text': 'фигня'}
+[2025-05-09 18:40:39,565] INFO apps.reviews.services.reviews_services Creating review for product=Мороженое, user=11
+[2025-05-09 18:40:39,570] INFO apps.reviews.models Creating review for product=104, user=11
+[2025-05-09 18:40:39,571] INFO apps.reviews.models Successfully creating review 37, user=11
+[2025-05-09 18:40:39,571] INFO apps.reviews.services.reviews_services Successfully created review 37, user=11
+[2025-05-09 18:40:39,576] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:104:*
+[2025-05-09 18:40:39,576] INFO apps.reviews.views Created review 37, user=11
+[2025-05-09 18:40:39,579] INFO apps.products.services.tasks Starting update_popularity_score for product 104
+[2025-05-09 18:40:39,625] DEBUG apps.products.services.tasks Calculated popularity_score=1.7515625 for product 104
+[2025-05-09 18:40:39,626] INFO apps.products.models Updating product with title=Мороженое, user=4
+[2025-05-09 18:40:39,845] DEBUG apps.products.signals Skipping signal for product 104 due to popularity_score update
+[2025-05-09 18:40:39,846] INFO apps.products.models Successfully updating product 104, user=4
+[2025-05-09 18:40:39,849] INFO apps.core.services.cache_services Invalidated cache for key: product_detail:104
+[2025-05-09 18:40:39,850] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-05-09 18:40:39,850] INFO apps.products.services.tasks Invalidated cache for product 104 (product_detail, product_list)
+[2025-05-09 18:40:39,850] INFO apps.products.services.tasks Updated popularity_score for product 104
+[2025-05-09 18:40:58,846] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-09 18:40:58,846] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-09 18:40:58,847] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-09 18:40:58,847] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-09 18:40:58,847] DEBUG apps.products.services.query_services Applying filters with params={}
+[2025-05-09 18:40:58,847] DEBUG apps.products.services.query_services Applying filters: category_id=None, min_price=None, max_price=None
+[2025-05-09 18:40:58,847] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-09 18:40:58,847] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-09 18:40:58,848] DEBUG apps.products.services.query_services Applying ordering with sort_by=None
+[2025-05-09 18:40:58,861] INFO apps.products.views Retrieved 20 products, user=11
