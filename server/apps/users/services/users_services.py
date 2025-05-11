@@ -76,7 +76,7 @@ class UserService:
             AccountNotActivated: Если аккаунт не активирован.
         """
         logger.info(f"Attempting to log in user with email={email}")
-        user = User.objects.filter(email=email).first()
+        user = User.objects.select_related('profile').filter(email=email).first()
         if user is None:
             logger.warning(f"User not found with email={email}")
             raise AuthenticationFailed("Неверные учетные данные")

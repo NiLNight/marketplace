@@ -2,7 +2,7 @@ import logging
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import QuerySet, Count, Prefetch, Q
-from django.db import transaction
+from django.db import transaction, IntegrityError
 from rest_framework.exceptions import PermissionDenied
 from typing import Dict, Any, Optional
 from apps.reviews.models import Review
@@ -20,7 +20,7 @@ class ReviewService:
     Предоставляет методы для создания, получения, обновления и удаления отзывов с учетом прав доступа,
     кэширования и валидации данных.
     """
-    ALLOWED_ORDERING_FIELDS = ['created', '-created', 'likes', '-likes']
+    ALLOWED_ORDERING_FIELDS = ['created', '-created', 'likes', '-likes', 'value', '-value']
 
     @staticmethod
     def _validate_review_data(data: Dict[str, Any], user_id: str, review: Optional[Review] = None) -> Dict[str, Any]:
@@ -93,8 +93,7 @@ class ReviewService:
         Raises:
             ReviewNotFound: Если продукт не существует или отзывы не найдены.
         """
-        user_id = 'anonymous'
-        logger.info(f"Fetching reviews for product={product_id}, user={user_id}")
+        logger.info(f"Fetching reviews for product={product_id}")
         try:
             if not Product.objects.filter(pk=product_id, is_active=True).exists():
                 logger.warning(f"Product {product_id} not found or inactive")
@@ -161,14 +160,10 @@ class ReviewService:
         Raises:
             InvalidReviewData: Если данные некорректны или пользователь уже оставил отзыв.
         """
-        user_id = user.id if user else 'anonymous'
+        user_id = user.id
         logger.info(f"Creating review for product={data.get('product')}, user={user_id}")
+        validated_data = ReviewService._validate_review_data(data, user_id)
         try:
-            validated_data = ReviewService._validate_review_data(data, user_id)
-            if Review.objects.filter(product=validated_data['product'], user=user).exists():
-                logger.warning(f"User {user_id} already reviewed product {validated_data['product'].id}")
-                raise InvalidReviewData("Вы уже оставили отзыв на этот продукт.")
-
             review = Review(
                 user=user,
                 product=validated_data['product'],
@@ -180,6 +175,9 @@ class ReviewService:
             review.save()
             logger.info(f"Successfully created review {review.id}, user={user_id}")
             return review
+        except IntegrityError:
+            logger.warning(f"User {user_id} already reviewed product {validated_data['product'].id}")
+            raise InvalidReviewData("Вы уже оставили отзыв на этот продукт.")
         except Exception as e:
             logger.error(f"Failed to create review: {str(e)}, user={user_id}")
             raise InvalidReviewData(f"Ошибка создания отзыва: {str(e)}")
@@ -192,36 +190,44 @@ class ReviewService:
         Args:
             review_id: Идентификатор отзыва.
             data: Данные для обновления (оценка, текст, изображение).
-            user: Пользователь, обновляющий отзыв.
+            user: Аутентифицированный пользователь, обновляющий отзыв.
 
         Returns:
             Обновленный объект Review.
 
         Raises:
-            ReviewNotFound: Если отзыв не существует.
+            ReviewNotFound: Если отзыв или продукт не существуют/неактивны.
             PermissionDenied: Если пользователь не является автором.
             InvalidReviewData: Если данные некорректны.
         """
-        user_id = user.id if user else 'anonymous'
-        logger.info(f"Updating review {review_id}, user={user_id}")
+        logger.info(f"Updating review {review_id}, user={user.id}")
         try:
-            review = Review.objects.get(pk=review_id)
+            # Получаем отзыв с предзагрузкой продукта
+            review = Review.objects.select_related('product').get(pk=review_id)
+
+            # Проверяем, что продукт активен
+            if not review.product.is_active:
+                logger.warning(f"Product {review.product.id} is inactive, review={review_id}, user={user.id}")
+                raise ReviewNotFound("Продукт неактивен.")
+
+            # Проверяем права доступа
             if review.user != user:
-                logger.warning(f"Permission denied for review {review_id}, user={user_id}")
+                logger.warning(f"Permission denied for review {review_id}, user={user.id}")
                 raise PermissionDenied("Только автор может обновить отзыв.")
 
-            validated_data = ReviewService._validate_review_data(data, user_id, review=review)
+            validated_data = ReviewService._validate_review_data(data, user.id, review=review)
             for field, value in validated_data.items():
                 if field in {'value', 'text', 'image'} and value is not None:
                     setattr(review, field, value)
 
             review.full_clean()
             review.save()
-            logger.info(f"Successfully updated review {review_id}, user={user_id}")
+            logger.info(f"Successfully updated review {review_id}, user={user.id}")
             return review
+
         except Review.DoesNotExist:
-            logger.warning(f"Review {review_id} not found, user={user_id}")
+            logger.warning(f"Review {review_id} not found, user={user.id}")
             raise ReviewNotFound("Отзыв не найден.")
         except Exception as e:
-            logger.error(f"Failed to update review {review_id}: {str(e)}, user={user_id}")
+            logger.error(f"Failed to update review {review_id}: {str(e)}, user={user.id}")
             raise InvalidReviewData(f"Ошибка обновления отзыва: {str(e)}")

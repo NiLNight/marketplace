@@ -95,6 +95,10 @@ class Review(TimeStampedModel):
         action = 'Creating' if self.pk is None else 'Updating'
         logger.info(f"{action} review for product={self.product.id}, user={user_id}")
         try:
+            if self.pk:
+                old_review = Review.objects.get(pk=self.pk)
+                if old_review.image and self.image != old_review.image:
+                    old_review.image.delete(save=False)
             super().save(*args, **kwargs)
             logger.info(f"Successfully {action.lower()} review {self.pk}, user={user_id}")
         except Exception as e:

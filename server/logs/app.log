@@ -8627,3 +8627,179 @@ HINT:  Функция с данными именем и типами аргументов не найдена. Возможно, вам сл
 [2025-05-09 18:40:58,847] DEBUG apps.products.services.query_services Applying common annotations
 [2025-05-09 18:40:58,848] DEBUG apps.products.services.query_services Applying ordering with sort_by=None
 [2025-05-09 18:40:58,861] INFO apps.products.views Retrieved 20 products, user=11
+[2025-05-11 20:54:55,248] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 20:54:55,420] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-11 20:54:55,421] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-11 20:54:55,421] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-11 20:54:56,678] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-11 20:54:56,722] INFO apps.users.views User 11 logged in successfully
+[2025-05-11 20:54:56,903] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-11 20:55:05,428] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 20:55:05,428] INFO apps.users.views Fetching profile for user=11
+[2025-05-11 20:55:05,430] DEBUG apps.core.services.cache_services Cache miss for key: user_profile:11
+[2025-05-11 20:55:15,166] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 20:55:15,166] INFO apps.users.views Fetching profile for user=11
+[2025-05-11 20:55:15,167] DEBUG apps.core.services.cache_services Cache hit for key: user_profile:11
+[2025-05-11 20:55:21,995] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 20:55:21,995] INFO apps.users.views Fetching profile for user=11
+[2025-05-11 20:55:21,997] DEBUG apps.core.services.cache_services Cache hit for key: user_profile:11
+[2025-05-11 20:55:22,867] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 20:55:22,867] INFO apps.users.views Fetching profile for user=11
+[2025-05-11 20:55:22,868] DEBUG apps.core.services.cache_services Cache hit for key: user_profile:11
+[2025-05-11 20:55:41,445] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 20:55:41,445] INFO apps.users.views Updating profile for user=11
+[2025-05-11 20:55:41,446] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-11 20:55:41,446] INFO apps.users.serializers Validating user data for user=11
+[2025-05-11 20:55:41,483] WARNING apps.users.serializers Username nil already taken for user=11
+[2025-05-11 20:55:41,483] WARNING apps.users.utils API error: {'username': [ErrorDetail(string='Имя пользователя уже занято.', code='invalid')]}, user=11, path=/user/profile/
+[2025-05-11 20:55:56,741] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 20:55:56,741] INFO apps.users.views Updating profile for user=11
+[2025-05-11 20:55:56,742] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-11 20:55:56,742] INFO apps.users.serializers Validating user data for user=11
+[2025-05-11 20:55:56,743] INFO apps.users.serializers Updating user=11 with validated data
+[2025-05-11 20:55:56,743] INFO apps.users.services.users_services Updating user and profile for user=11
+[2025-05-11 20:55:56,806] INFO apps.users.models Saving user profile for user=11
+[2025-05-11 20:55:56,823] INFO apps.users.models Updating user profile for user=11, data={'_state': <django.db.models.base.ModelState object at 0x000001B72527B7D0>, 'id': 11, 'public_id': 'test2-27ba2326', 'user_id': 11, 'phone': None, 'birth_date': None, 'avatar': 'images/avatars/default.png'}
+[2025-05-11 20:55:56,825] INFO apps.users.models Successfully updating user profile 11, user=11
+[2025-05-11 20:55:56,825] INFO apps.users.services.users_services User and profile updated successfully for user=11
+[2025-05-11 20:55:56,825] INFO apps.users.serializers User=11 updated successfully
+[2025-05-11 20:55:56,826] INFO apps.core.services.cache_services Invalidated cache for key: user_profile:11
+[2025-05-11 20:55:56,826] INFO apps.users.views Profile updated for user=11
+[2025-05-11 20:56:09,433] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 20:56:09,433] INFO apps.users.views Fetching profile for user=11
+[2025-05-11 20:56:09,434] DEBUG apps.core.services.cache_services Cache miss for key: user_profile:11
+[2025-05-11 20:56:14,834] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 20:56:14,834] INFO apps.users.views Fetching profile for user=11
+[2025-05-11 20:56:14,835] DEBUG apps.core.services.cache_services Cache hit for key: user_profile:11
+[2025-05-11 21:08:17,645] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 21:08:17,645] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-11 21:08:17,646] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-11 21:08:17,646] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-11 21:08:18,646] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-11 21:08:18,648] INFO apps.users.views User 11 logged in successfully
+[2025-05-11 21:08:18,665] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-11 21:08:20,073] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 21:08:20,074] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-11 21:08:20,074] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-11 21:08:20,074] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-11 21:08:20,562] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-11 21:08:20,565] INFO apps.users.views User 11 logged in successfully
+[2025-05-11 21:08:20,567] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-11 21:08:21,531] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 21:08:21,531] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-11 21:08:21,531] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-11 21:08:21,531] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-11 21:08:22,032] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-11 21:08:22,035] INFO apps.users.views User 11 logged in successfully
+[2025-05-11 21:08:22,038] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-11 21:34:28,008] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 21:34:28,109] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-11 21:34:28,111] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-11 21:34:28,111] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-11 21:34:28,605] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-11 21:34:28,608] INFO apps.users.views User 11 logged in successfully
+[2025-05-11 21:34:29,062] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-11 21:34:34,632] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 21:34:34,632] INFO apps.users.views Fetching profile for user=11
+[2025-05-11 21:34:34,633] DEBUG apps.core.services.cache_services Cache hit for key: user_profile:11
+[2025-05-11 21:34:38,994] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 21:34:38,994] INFO apps.users.views Updating profile for user=11
+[2025-05-11 21:34:38,994] INFO apps.users.serializers Validating profile data for user=new
+[2025-05-11 21:34:38,994] INFO apps.users.serializers Validating user data for user=11
+[2025-05-11 21:34:38,997] INFO apps.users.serializers Updating user=11 with validated data
+[2025-05-11 21:34:38,997] INFO apps.users.services.users_services Updating user and profile for user=11
+[2025-05-11 21:34:38,998] INFO apps.users.models Saving user profile for user=11
+[2025-05-11 21:34:38,999] INFO apps.users.models Updating user profile for user=11, data={'_state': <django.db.models.base.ModelState object at 0x000001A474C09DF0>, 'id': 11, 'public_id': 'test2-27ba2326', 'user_id': 11, 'phone': None, 'birth_date': None, 'avatar': 'images/avatars/default.png'}
+[2025-05-11 21:34:39,000] INFO apps.users.models Successfully updating user profile 11, user=11
+[2025-05-11 21:34:39,000] INFO apps.users.services.users_services User and profile updated successfully for user=11
+[2025-05-11 21:34:39,000] INFO apps.users.serializers User=11 updated successfully
+[2025-05-11 21:34:39,000] INFO apps.core.services.cache_services Invalidated cache for key: user_profile:11
+[2025-05-11 21:34:39,000] INFO apps.users.views Profile updated for user=11
+[2025-05-11 21:34:41,257] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 21:34:41,257] INFO apps.users.views Fetching profile for user=11
+[2025-05-11 21:34:41,259] DEBUG apps.core.services.cache_services Cache miss for key: user_profile:11
+[2025-05-11 21:34:58,240] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 21:34:58,240] INFO apps.users.views Fetching profile for user=11
+[2025-05-11 21:34:58,241] DEBUG apps.core.services.cache_services Cache hit for key: user_profile:11
+[2025-05-11 21:35:25,834] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 21:35:25,835] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-11 21:35:25,855] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-11 21:35:25,855] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-11 21:35:25,855] DEBUG apps.products.services.query_services Applying filters with params={}
+[2025-05-11 21:35:25,856] DEBUG apps.products.services.query_services Applying filters: category_id=None, min_price=None, max_price=None
+[2025-05-11 21:35:25,856] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-11 21:35:25,856] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-11 21:35:25,856] DEBUG apps.products.services.query_services Applying ordering with sort_by=None
+[2025-05-11 21:35:26,160] INFO apps.products.views Retrieved 20 products, user=11
+[2025-05-11 21:35:33,063] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 21:35:33,063] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-11 21:35:33,064] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-11 21:35:34,199] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 21:35:34,199] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-11 21:35:34,201] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-11 21:36:21,847] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 21:36:44,594] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 21:36:44,598] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-11 21:36:44,598] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-11 21:36:44,598] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-11 21:36:45,104] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-11 21:36:45,107] INFO apps.users.views User 11 logged in successfully
+[2025-05-11 21:36:45,109] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-11 22:25:22,896] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 22:25:22,896] INFO apps.reviews.views Fetching reviews for product=7, user=anonymous, path=/reviews/7/
+[2025-05-11 22:25:23,013] DEBUG apps.core.services.cache_services Cache miss for key: reviews:7:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-11 22:25:23,013] INFO apps.reviews.services.reviews_services Fetching reviews for product=7
+[2025-05-11 22:25:23,659] INFO apps.reviews.services.reviews_services Found 1 reviews for product=7
+[2025-05-11 22:25:23,717] INFO apps.reviews.views Retrieved 1 reviews for product=7, user=anonymous
+[2025-05-11 22:25:32,618] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 22:25:32,618] INFO apps.reviews.views Fetching reviews for product=1, user=anonymous, path=/reviews/1/
+[2025-05-11 22:25:32,619] DEBUG apps.core.services.cache_services Cache miss for key: reviews:1:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-11 22:25:32,620] INFO apps.reviews.services.reviews_services Fetching reviews for product=1
+[2025-05-11 22:25:32,654] INFO apps.reviews.services.reviews_services Found 1 reviews for product=1
+[2025-05-11 22:25:32,665] INFO apps.reviews.views Retrieved 1 reviews for product=1, user=anonymous
+[2025-05-11 22:25:51,694] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 22:25:51,694] INFO apps.reviews.views Fetching reviews for product=104, user=anonymous, path=/reviews/104/
+[2025-05-11 22:25:51,695] DEBUG apps.core.services.cache_services Cache miss for key: reviews:104:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-11 22:25:51,695] INFO apps.reviews.services.reviews_services Fetching reviews for product=104
+[2025-05-11 22:25:51,731] INFO apps.reviews.services.reviews_services Found 2 reviews for product=104
+[2025-05-11 22:25:51,741] INFO apps.reviews.views Retrieved 2 reviews for product=104, user=anonymous
+[2025-05-11 22:27:11,685] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 22:27:11,685] INFO apps.reviews.views Fetching reviews for product=104, user=anonymous, path=/reviews/104/
+[2025-05-11 22:27:11,686] DEBUG apps.core.services.cache_services Cache miss for key: reviews:104:18da8b8755b38c434b10039ca2547e53
+[2025-05-11 22:27:11,686] INFO apps.reviews.services.reviews_services Fetching reviews for product=104
+[2025-05-11 22:27:11,722] INFO apps.reviews.services.reviews_services Found 2 reviews for product=104
+[2025-05-11 22:27:11,722] WARNING apps.reviews.services.reviews_services Invalid ordering field: 'created'
+[2025-05-11 22:27:11,722] WARNING apps.reviews.utils Review error: Недопустимое поле сортировки: 'created', user=anonymous, path=/reviews/104/
+[2025-05-11 22:27:31,553] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 22:27:31,553] INFO apps.reviews.views Fetching reviews for product=104, user=anonymous, path=/reviews/104/
+[2025-05-11 22:27:31,554] DEBUG apps.core.services.cache_services Cache miss for key: reviews:104:e3a5a9d26a351aeb2d394846c91e72c0
+[2025-05-11 22:27:31,554] INFO apps.reviews.services.reviews_services Fetching reviews for product=104
+[2025-05-11 22:27:31,588] INFO apps.reviews.services.reviews_services Found 2 reviews for product=104
+[2025-05-11 22:27:31,598] INFO apps.reviews.views Retrieved 2 reviews for product=104, user=anonymous
+[2025-05-11 22:27:40,523] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 22:27:40,523] INFO apps.reviews.views Fetching reviews for product=104, user=anonymous, path=/reviews/104/
+[2025-05-11 22:27:40,524] DEBUG apps.core.services.cache_services Cache miss for key: reviews:104:e05d5fe8f707c9bea696eeda0dbf7b5a
+[2025-05-11 22:27:40,524] INFO apps.reviews.services.reviews_services Fetching reviews for product=104
+[2025-05-11 22:27:40,560] INFO apps.reviews.services.reviews_services Found 2 reviews for product=104
+[2025-05-11 22:27:40,570] INFO apps.reviews.views Retrieved 2 reviews for product=104, user=anonymous
+[2025-05-11 22:27:58,524] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 22:27:58,524] INFO apps.reviews.views Fetching reviews for product=104, user=anonymous, path=/reviews/104/
+[2025-05-11 22:27:58,526] DEBUG apps.core.services.cache_services Cache miss for key: reviews:104:ef5155c31d76349300e50b10439d9a25
+[2025-05-11 22:27:58,526] INFO apps.reviews.services.reviews_services Fetching reviews for product=104
+[2025-05-11 22:27:58,561] INFO apps.reviews.services.reviews_services Found 2 reviews for product=104
+[2025-05-11 22:27:58,571] INFO apps.reviews.views Retrieved 2 reviews for product=104, user=anonymous
+[2025-05-11 22:28:03,431] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 22:28:03,431] INFO apps.reviews.views Fetching reviews for product=104, user=anonymous, path=/reviews/104/
+[2025-05-11 22:28:03,433] DEBUG apps.core.services.cache_services Cache miss for key: reviews:104:c4d312bfc1c7abebb995753b45587dc0
+[2025-05-11 22:28:03,433] INFO apps.reviews.services.reviews_services Fetching reviews for product=104
+[2025-05-11 22:28:03,467] INFO apps.reviews.services.reviews_services Found 2 reviews for product=104
+[2025-05-11 22:28:03,477] INFO apps.reviews.views Retrieved 2 reviews for product=104, user=anonymous
+[2025-05-11 22:28:20,703] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 22:28:20,703] INFO apps.reviews.views Fetching reviews for product=104, user=anonymous, path=/reviews/104/
+[2025-05-11 22:28:20,704] DEBUG apps.core.services.cache_services Cache hit for key: reviews:104:c4d312bfc1c7abebb995753b45587dc0
+[2025-05-11 22:37:35,565] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 22:37:35,565] INFO apps.reviews.views Fetching reviews for product=104, user=anonymous, path=/reviews/104/
+[2025-05-11 22:37:35,661] DEBUG apps.core.services.cache_services Cache miss for key: reviews:104:c4d312bfc1c7abebb995753b45587dc0
+[2025-05-11 22:37:35,662] INFO apps.reviews.services.reviews_services Fetching reviews for product=104
+[2025-05-11 22:37:35,701] INFO apps.reviews.services.reviews_services Found 2 reviews for product=104
+[2025-05-11 22:37:35,715] INFO apps.reviews.views Retrieved 2 reviews for product=104, user=anonymous

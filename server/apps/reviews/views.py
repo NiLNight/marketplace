@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 
-from apps.comments.exceptions import LikeOperationFailed
+from apps.reviews.exceptions import LikeOperationFailed
 from apps.core.services.cache_services import CacheService
 from apps.core.services.like_services import LikeService
 from apps.reviews.models import Review
