@@ -8803,3 +8803,89 @@ HINT:  Функция с данными именем и типами аргументов не найдена. Возможно, вам сл
 [2025-05-11 22:37:35,662] INFO apps.reviews.services.reviews_services Fetching reviews for product=104
 [2025-05-11 22:37:35,701] INFO apps.reviews.services.reviews_services Found 2 reviews for product=104
 [2025-05-11 22:37:35,715] INFO apps.reviews.views Retrieved 2 reviews for product=104, user=anonymous
+[2025-05-11 22:38:06,731] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 22:38:09,883] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 22:38:09,886] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-11 22:38:09,888] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-11 22:38:09,888] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-11 22:38:10,450] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-11 22:38:10,454] INFO apps.users.views User 11 logged in successfully
+[2025-05-11 22:38:10,910] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-11 22:38:20,596] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 22:38:20,596] INFO apps.reviews.views Updating review 37, user=11, path=/reviews/update/37/
+[2025-05-11 22:38:20,597] DEBUG apps.reviews.serializers Validating review data: {'value': 5, 'text': 'negro2'}
+[2025-05-11 22:38:20,597] INFO apps.reviews.services.reviews_services Updating review 37, user=11
+[2025-05-11 22:38:20,636] INFO apps.reviews.models Updating review for product=104, user=11
+[2025-05-11 22:38:20,639] INFO apps.reviews.models Successfully updating review 37, user=11
+[2025-05-11 22:38:20,639] INFO apps.reviews.services.reviews_services Successfully updated review 37, user=11
+[2025-05-11 22:38:20,664] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:104:*
+[2025-05-11 22:38:20,664] INFO apps.reviews.views Updated review 37, user=11
+[2025-05-11 22:38:20,667] INFO apps.products.services.tasks Starting update_popularity_score for product 104
+[2025-05-11 22:38:20,853] DEBUG apps.products.services.tasks Calculated popularity_score=1.7515151515151515 for product 104
+[2025-05-11 22:38:20,855] INFO apps.products.models Updating product with title=Мороженое, user=4
+[2025-05-11 22:38:21,600] DEBUG apps.products.signals Skipping signal for product 104 due to popularity_score update
+[2025-05-11 22:38:21,601] INFO apps.products.models Successfully updating product 104, user=4
+[2025-05-11 22:38:21,604] INFO apps.core.services.cache_services Invalidated cache for key: product_detail:104
+[2025-05-11 22:38:21,605] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-05-11 22:38:21,605] INFO apps.products.services.tasks Invalidated cache for product 104 (product_detail, product_list)
+[2025-05-11 22:38:21,605] INFO apps.products.services.tasks Updated popularity_score for product 104
+[2025-05-11 22:38:41,697] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 22:38:41,698] INFO apps.reviews.views Updating review 37, user=11, path=/reviews/update/37/
+[2025-05-11 22:38:41,698] DEBUG apps.reviews.serializers Validating review data: {'value': 5, 'text': 'Новый обновленный отзыв'}
+[2025-05-11 22:38:41,698] INFO apps.reviews.services.reviews_services Updating review 37, user=11
+[2025-05-11 22:38:41,707] INFO apps.reviews.models Updating review for product=104, user=11
+[2025-05-11 22:38:41,708] INFO apps.reviews.models Successfully updating review 37, user=11
+[2025-05-11 22:38:41,708] INFO apps.reviews.services.reviews_services Successfully updated review 37, user=11
+[2025-05-11 22:38:41,711] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:104:*
+[2025-05-11 22:38:41,711] INFO apps.reviews.views Updated review 37, user=11
+[2025-05-11 22:38:41,712] INFO apps.products.services.tasks Starting update_popularity_score for product 104
+[2025-05-11 22:38:41,757] DEBUG apps.products.services.tasks Calculated popularity_score=1.7515151515151515 for product 104
+[2025-05-11 22:38:41,759] INFO apps.products.models Updating product with title=Мороженое, user=4
+[2025-05-11 22:38:41,801] DEBUG apps.products.signals Skipping signal for product 104 due to popularity_score update
+[2025-05-11 22:38:41,802] INFO apps.products.models Successfully updating product 104, user=4
+[2025-05-11 22:38:41,803] INFO apps.core.services.cache_services Invalidated cache for key: product_detail:104
+[2025-05-11 22:38:41,804] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-05-11 22:38:41,804] INFO apps.products.services.tasks Invalidated cache for product 104 (product_detail, product_list)
+[2025-05-11 22:38:41,804] INFO apps.products.services.tasks Updated popularity_score for product 104
+[2025-05-11 22:38:49,656] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 22:38:49,656] INFO apps.reviews.views Updating review 37, user=11, path=/reviews/update/37/
+[2025-05-11 22:38:49,656] WARNING apps.reviews.utils API error: {'value': [ErrorDetail(string='Значения 6 нет среди допустимых вариантов.', code='invalid_choice')]}, user=11, path=/reviews/update/37/
+[2025-05-11 22:39:01,078] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 22:39:01,078] INFO apps.reviews.views Updating review 37, user=11, path=/reviews/update/37/
+[2025-05-11 22:39:01,078] WARNING apps.reviews.utils API error: {'value': [ErrorDetail(string='Значения 4.5 нет среди допустимых вариантов.', code='invalid_choice')]}, user=11, path=/reviews/update/37/
+[2025-05-11 22:39:10,275] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 22:39:10,275] INFO apps.reviews.views Updating review 37, user=11, path=/reviews/update/37/
+[2025-05-11 22:39:10,276] DEBUG apps.reviews.serializers Validating review data: {'value': 5, 'text': 'Новый обновленный отзыв'}
+[2025-05-11 22:39:10,276] INFO apps.reviews.services.reviews_services Updating review 37, user=11
+[2025-05-11 22:39:10,283] INFO apps.reviews.models Updating review for product=104, user=11
+[2025-05-11 22:39:10,285] INFO apps.reviews.models Successfully updating review 37, user=11
+[2025-05-11 22:39:10,285] INFO apps.reviews.services.reviews_services Successfully updated review 37, user=11
+[2025-05-11 22:39:10,287] INFO apps.core.services.cache_services Invalidated cache for prefix: reviews:104:*
+[2025-05-11 22:39:10,287] INFO apps.reviews.views Updated review 37, user=11
+[2025-05-11 22:39:10,288] INFO apps.products.services.tasks Starting update_popularity_score for product 104
+[2025-05-11 22:39:10,444] DEBUG apps.products.services.tasks Calculated popularity_score=1.7515151515151515 for product 104
+[2025-05-11 22:39:10,446] INFO apps.products.models Updating product with title=Мороженое, user=4
+[2025-05-11 22:39:10,489] DEBUG apps.products.signals Skipping signal for product 104 due to popularity_score update
+[2025-05-11 22:39:10,490] INFO apps.products.models Successfully updating product 104, user=4
+[2025-05-11 22:39:10,491] INFO apps.core.services.cache_services Invalidated cache for key: product_detail:104
+[2025-05-11 22:39:10,491] INFO apps.core.services.cache_services Invalidated cache for prefix: product_list:*
+[2025-05-11 22:39:10,491] INFO apps.products.services.tasks Invalidated cache for product 104 (product_detail, product_list)
+[2025-05-11 22:39:10,492] INFO apps.products.services.tasks Updated popularity_score for product 104
+[2025-05-11 22:44:58,767] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-11 22:44:58,768] INFO apps.reviews.views Fetching reviews for product=104, user=11, path=/reviews/104/
+[2025-05-11 22:44:58,769] DEBUG apps.core.services.cache_services Cache miss for key: reviews:104:c4d312bfc1c7abebb995753b45587dc0
+[2025-05-11 22:44:58,769] INFO apps.reviews.services.reviews_services Fetching reviews for product=104
+[2025-05-11 22:44:58,776] INFO apps.reviews.services.reviews_services Found 2 reviews for product=104
+[2025-05-11 22:44:58,787] INFO apps.reviews.views Retrieved 2 reviews for product=104, user=11
+[2025-05-11 22:45:05,989] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 22:45:05,989] INFO apps.reviews.views Fetching reviews for product=104, user=anonymous, path=/reviews/104/
+[2025-05-11 22:45:05,991] DEBUG apps.core.services.cache_services Cache hit for key: reviews:104:c4d312bfc1c7abebb995753b45587dc0
+[2025-05-11 22:45:11,326] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 22:45:11,327] INFO apps.reviews.views Fetching reviews for product=104, user=anonymous, path=/reviews/104/
+[2025-05-11 22:45:11,329] DEBUG apps.core.services.cache_services Cache hit for key: reviews:104:c4d312bfc1c7abebb995753b45587dc0
+[2025-05-11 22:45:22,972] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 22:45:22,972] INFO apps.reviews.views Fetching reviews for product=104, user=anonymous, path=/reviews/104/
+[2025-05-11 22:45:22,974] DEBUG apps.core.services.cache_services Cache miss for key: reviews:104:ef5155c31d76349300e50b10439d9a25
+[2025-05-11 22:45:22,974] INFO apps.reviews.services.reviews_services Fetching reviews for product=104
+[2025-05-11 22:45:23,008] INFO apps.reviews.services.reviews_services Found 2 reviews for product=104
+[2025-05-11 22:45:23,018] INFO apps.reviews.views Retrieved 2 reviews for product=104, user=anonymous

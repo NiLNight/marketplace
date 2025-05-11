@@ -102,12 +102,8 @@ class ReviewService:
             content_type = ContentType.objects.get_for_model(Review)
             reviews = Review.objects.filter(
                 product_id=product_id
-            ).select_related('product', 'user').prefetch_related(
-                Prefetch(
-                    'likes',
-                    queryset=Like.objects.filter(content_type=content_type),
-                    to_attr='review_likes'
-                )
+            ).select_related('product', 'user').annotate(
+                likes_count=Count('likes', filter=Q(likes__content_type=content_type))
             )
             logger.info(f"Found {reviews.count()} reviews for product={product_id}")
             return reviews

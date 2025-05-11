@@ -19,27 +19,12 @@ class ReviewSerializer(serializers.ModelSerializer):
     """
     user = serializers.StringRelatedField()
     product = serializers.StringRelatedField()
-    likes_count = serializers.SerializerMethodField()
+    likes_count = serializers.IntegerField()
 
     class Meta:
         model = Review
         fields = ['id', 'product', 'user', 'value', 'text', 'image', 'created', 'updated', 'likes_count']
         read_only_fields = ['id', 'user', 'created', 'updated', 'likes_count']
-
-    def get_likes_count(self, obj) -> int:
-        """Подсчитывает количество лайков отзыва.
-
-        Args:
-            obj: Объект Review.
-
-        Returns:
-            Количество лайков.
-        """
-        try:
-            return obj.likes.count()
-        except Exception as e:
-            logger.error(f"Failed to count likes for review {obj.id}: {str(e)}")
-            return 0
 
 
 class ReviewCreateSerializer(serializers.ModelSerializer):
