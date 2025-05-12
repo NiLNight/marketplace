@@ -52,8 +52,7 @@ class CommentListView(APIView):
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(f"Retrieving comments for review={review_id}, user={user_id}")
 
-        cache_key = CacheService.build_cache_key(request, prefix=f"comments:{review_id}")
-        cached_data = CacheService.get_cached_data(cache_key)
+        cached_data = CacheService.cache_comment_list(review_id, request)
         if cached_data:
             return Response(cached_data)
 
@@ -63,6 +62,7 @@ class CommentListView(APIView):
         serializer = self.serializer_class(page, many=True)
 
         response_data = paginator.get_paginated_response(serializer.data).data
+        cache_key = CacheService.build_cache_key(request, prefix=f"comments:{review_id}")
         CacheService.set_cached_data(cache_key, response_data, timeout=300)
         logger.info(f"Retrieved {len(root_nodes)} comments for review={review_id}, user={user_id}")
         return Response(response_data)

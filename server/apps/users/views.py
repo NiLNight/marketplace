@@ -172,12 +172,13 @@ class UserProfileView(APIView):
             serializers.ValidationError: Если данные сериализатора некорректны.
         """
         logger.info(f"Fetching profile for user={request.user.id}")
-        user = request.user
-        cache_key = f"user_profile:{user.id}"
-        cached_data = CacheService.get_cached_data(cache_key)
+        user_id = request.user.id
+
+        cached_data = CacheService.cache_user_profile(user_id)
         if cached_data:
             return Response(cached_data)
-        serializer = self.serializer_class(user)
+        serializer = self.serializer_class(request.user)
+        cache_key = f"user_profile:{user_id}"
         CacheService.set_cached_data(cache_key, serializer.data, timeout=3600)
         return Response(serializer.data)
 

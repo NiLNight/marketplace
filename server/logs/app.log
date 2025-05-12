@@ -8889,3 +8889,24 @@ HINT:  Функция с данными именем и типами аргументов не найдена. Возможно, вам сл
 [2025-05-11 22:45:22,974] INFO apps.reviews.services.reviews_services Fetching reviews for product=104
 [2025-05-11 22:45:23,008] INFO apps.reviews.services.reviews_services Found 2 reviews for product=104
 [2025-05-11 22:45:23,018] INFO apps.reviews.views Retrieved 2 reviews for product=104, user=anonymous
+[2025-05-11 22:47:59,738] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 22:47:59,738] INFO apps.reviews.views Fetching reviews for product=104, user=anonymous, path=/reviews/104/
+[2025-05-11 22:47:59,840] DEBUG apps.core.services.cache_services Cache hit for key: reviews:104:ef5155c31d76349300e50b10439d9a25
+[2025-05-11 22:48:10,869] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 22:48:10,869] INFO apps.reviews.views Fetching reviews for product=104, user=anonymous, path=/reviews/104/
+[2025-05-11 22:48:10,870] DEBUG apps.core.services.cache_services Cache hit for key: reviews:104:c4d312bfc1c7abebb995753b45587dc0
+[2025-05-11 22:48:22,210] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 22:48:22,210] INFO apps.reviews.views Fetching reviews for product=104, user=anonymous, path=/reviews/104/
+[2025-05-11 22:48:22,211] DEBUG apps.core.services.cache_services Cache miss for key: reviews:104:e3a5a9d26a351aeb2d394846c91e72c0
+[2025-05-11 22:48:22,211] INFO apps.reviews.services.reviews_services Fetching reviews for product=104
+[2025-05-11 22:48:22,248] INFO apps.reviews.services.reviews_services Found 2 reviews for product=104
+[2025-05-11 22:48:22,257] INFO apps.reviews.views Retrieved 2 reviews for product=104, user=anonymous
+[2025-05-11 23:15:44,974] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 23:15:44,974] INFO apps.reviews.views Fetching reviews for product=104, user=anonymous, path=/reviews/104/
+[2025-05-11 23:15:45,090] DEBUG apps.core.services.cache_services Cache miss for key: reviews:104:c4d312bfc1c7abebb995753b45587dc0
+[2025-05-11 23:15:45,090] INFO apps.reviews.services.reviews_services Fetching reviews for product=104
+[2025-05-11 23:15:45,135] INFO apps.reviews.services.reviews_services Found 2 reviews for product=104
+[2025-05-11 23:15:45,146] INFO apps.reviews.views Retrieved 2 reviews for product=104, user=anonymous
+[2025-05-11 23:15:52,438] DEBUG apps.users.authentication No token provided in request
+[2025-05-11 23:15:52,438] INFO apps.reviews.views Fetching reviews for product=104, user=anonymous, path=/reviews/104/
+[2025-05-11 23:15:52,440] DEBUG apps.core.services.cache_services Cache hit for key: reviews:104:c4d312bfc1c7abebb995753b45587dc0

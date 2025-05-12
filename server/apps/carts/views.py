@@ -31,8 +31,7 @@ class CartsGetView(APIView):
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         if request.user.is_authenticated:
-            cache_key = f"cart:{request.user.id}"
-            cached_data = CacheService.get_cached_data(cache_key)
+            cached_data = CacheService.cache_cart(user_id)
             if cached_data:
                 return Response(cached_data)
 
@@ -43,6 +42,7 @@ class CartsGetView(APIView):
         )
         response_data = serializer.data
         if request.user.is_authenticated:
+            cache_key = f"cart:{request.user.id}"
             CacheService.set_cached_data(cache_key, response_data, timeout=300)
         logger.info(f"Retrieved cart, user={user_id}, items={len(response_data)}")
         return Response(response_data)

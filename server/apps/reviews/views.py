@@ -51,8 +51,7 @@ class ReviewListView(APIView):
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(f"Fetching reviews for product={product_id}, user={user_id}, path={request.path}")
 
-        cache_key = CacheService.build_cache_key(request, prefix=f"reviews:{product_id}")
-        cached_data = CacheService.get_cached_data(cache_key)
+        cached_data = CacheService.cache_review_list(product_id, request)
         if cached_data:
             return Response(cached_data)
 
@@ -63,6 +62,7 @@ class ReviewListView(APIView):
         page = paginator.paginate_queryset(reviews, request)
         serializer = self.serializer_class(page, many=True)
 
+        cache_key = CacheService.build_cache_key(request, prefix=f"reviews:{product_id}")
         response_data = paginator.get_paginated_response(serializer.data).data
         CacheService.set_cached_data(cache_key, response_data, timeout=300)
         logger.info(f"Retrieved {len(reviews)} reviews for product={product_id}, user={user_id}")

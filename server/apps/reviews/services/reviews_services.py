@@ -1,14 +1,13 @@
 import logging
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import QuerySet, Count, Prefetch, Q
+from django.db.models import QuerySet, Count, Q
 from django.db import transaction, IntegrityError
 from rest_framework.exceptions import PermissionDenied
 from typing import Dict, Any, Optional
 from apps.reviews.models import Review
 from apps.reviews.exceptions import ReviewNotFound, InvalidReviewData
 from apps.products.models import Product
-from apps.core.models import Like
 
 User = get_user_model()
 logger = logging.getLogger(__name__)

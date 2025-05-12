@@ -140,8 +140,8 @@ class ProductListView(BaseProductView):
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(f"Retrieving product list or search, user={user_id}, path={request.path}")
         try:
-            cache_key = CacheService.build_cache_key(request, prefix="product_list")
-            cached_data = CacheService.get_cached_data(cache_key)
+
+            cached_data = CacheService.cache_product_list(request)
             if cached_data:
                 return Response(cached_data)
 
@@ -150,7 +150,7 @@ class ProductListView(BaseProductView):
                 queryset = ProductQueryService.search_products(request)
             else:
                 queryset = ProductQueryService.get_base_queryset()
-
+            cache_key = CacheService.build_cache_key(request, prefix="product_list")
             return self.process_queryset(queryset, request, cache_key, user_id)
         except ValueError as e:
             logger.warning(f"Invalid parameters: {str(e)}, user={user_id}")
@@ -185,13 +185,13 @@ class ProductDetailView(BaseProductView):
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(f"Retrieving product {pk}, user={user_id}, path={request.path}")
         try:
-            cache_key = f'product_detail:{pk}'
-            cached_data = CacheService.get_cached_data(cache_key)
+            cached_data = CacheService.cache_product_details(pk)
             if cached_data:
                 return Response(cached_data)
 
             product = ProductQueryService.get_single_product(pk)
             serializer = self.serializer_class(product)
+            cache_key = f'product_detail:{pk}'
             CacheService.set_cached_data(cache_key, serializer.data, timeout=7200)
             logger.info(f"Successfully retrieved product {pk}, user={user_id}")
             return Response(serializer.data)

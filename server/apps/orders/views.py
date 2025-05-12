@@ -36,16 +36,17 @@ class OrderListView(APIView):
             Response: Ответ с данными заказов или ошибкой.
         """
         user_id = request.user.id
-        cache_key = CacheService.build_cache_key(request, prefix=f"order_list:{user_id}")
-        cached_data = CacheService.get_cached_data(cache_key)
+        cached_data = CacheService.cache_order_list(user_id, status=request.GET.get['status', None])
         if cached_data:
             return Response(cached_data)
 
         orders = OrderService.get_user_orders(user=request.user, request=request)
         paginator = self.pagination_class()
         page = paginator.paginate_queryset(orders, request)
+
         serializer = self.serializer_class(page, many=True)
         response_data = paginator.get_paginated_response(serializer.data).data
+        cache_key = CacheService.build_cache_key(request, prefix=f"order_list:{user_id}")
         CacheService.set_cached_data(cache_key, response_data, timeout=840)  # 14 минут
         logger.info(f"Retrieved {len(orders)} orders for user={user_id}")
         return Response(response_data)
@@ -68,14 +69,14 @@ class OrderDetailView(APIView):
             Response: Ответ с данными заказа или ошибкой.
         """
         user_id = request.user.id
-        cache_key = f"order_detail:{pk}:{user_id}"
-        cached_data = CacheService.get_cached_data(cache_key)
+        cached_data = CacheService.cache_order_detail(pk, user_id)
         if cached_data:
             return Response(cached_data)
 
         order = OrderService.get_order_details(order_id=pk, user=request.user)
         serializer = self.serializer_class(order)
         response_data = serializer.data
+        cache_key = f"order_detail:{pk}:{user_id}"
         CacheService.set_cached_data(cache_key, response_data, timeout=3600)  # 1 час
         logger.info(f"Order {pk} details retrieved for user={user_id}")
         return Response(response_data)
