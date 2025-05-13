@@ -9109,3 +9109,45 @@ HINT:  Функция с данными именем и типами аргументов не найдена. Возможно, вам сл
 [2025-05-13 12:28:41,345] INFO apps.orders.views Retrieved 4 orders for user=11
 [2025-05-13 12:28:50,063] INFO apps.users.authentication User 11 authenticated successfully
 [2025-05-13 12:28:50,064] DEBUG apps.core.services.cache_services Cache hit for key: order_list:11:delivered:0733228cbf3c94f7b08d655e5dd9d159
+[2025-05-13 12:29:59,930] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:29:59,931] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:all:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-13 12:29:59,932] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-13 12:29:59,936] INFO apps.orders.services.order_services Retrieved 5 orders for user=11
+[2025-05-13 12:29:59,937] INFO apps.orders.views Retrieved 5 orders for user=11
+[2025-05-13 12:30:07,400] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:30:07,401] DEBUG apps.core.services.cache_services Cache hit for key: order_list:11:all:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-13 12:30:20,404] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:30:20,405] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:delive:54b8a92ed12f0f3c6dcdf36d8ac2afdc
+[2025-05-13 12:30:20,405] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-13 12:30:20,409] INFO apps.orders.services.order_services Retrieved 5 orders for user=11
+[2025-05-13 12:30:20,410] INFO apps.orders.views Retrieved 5 orders for user=11
+[2025-05-13 12:30:28,631] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:30:28,632] DEBUG apps.core.services.cache_services Cache hit for key: order_list:11:delive:54b8a92ed12f0f3c6dcdf36d8ac2afdc
+[2025-05-13 12:31:58,375] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:31:58,377] DEBUG apps.core.services.cache_services Cache miss for key: order_detail:13:11
+[2025-05-13 12:31:58,377] INFO apps.orders.services.order_services Retrieving details for order=13, user=11
+[2025-05-13 12:31:58,388] INFO apps.orders.services.order_services Order 13 details retrieved for user=11
+[2025-05-13 12:31:58,390] INFO apps.orders.views Order 13 details retrieved for user=11
+[2025-05-13 12:32:03,519] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:32:03,520] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:13:11
+[2025-05-13 12:32:23,623] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:32:23,623] INFO apps.comments.views Retrieving comments for review=17, user=11
+[2025-05-13 12:32:23,632] DEBUG apps.core.services.cache_services Cache miss for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-13 12:32:23,633] INFO apps.comments.services.comment_services Retrieving comments for review=17, user=anonymous
+[2025-05-13 12:32:23,793] INFO apps.comments.services.comment_services Retrieved 11 comments for review=17
+[2025-05-13 12:32:23,795] INFO apps.comments.views Retrieved 11 comments for review=17, user=11
+[2025-05-13 12:32:31,767] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:32:31,767] INFO apps.comments.views Retrieving comments for review=17, user=11
+[2025-05-13 12:32:31,768] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-13 12:33:05,916] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:33:05,916] INFO apps.comments.views Retrieving comments for review=17, user=11
+[2025-05-13 12:33:05,917] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-13 12:33:12,682] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:33:12,682] INFO apps.comments.views Retrieving comments for review=17, user=11
+[2025-05-13 12:33:12,683] DEBUG apps.core.services.cache_services Cache hit for key: comments:17:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-13 12:33:53,275] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:33:53,277] DEBUG apps.core.services.cache_services Cache miss for key: wishlist:11
+[2025-05-13 12:33:53,280] INFO apps.wishlists.services.wishlist_services Wishlist retrieved for user=11, items_count=7
+[2025-05-13 12:33:53,290] INFO apps.wishlists.views Retrieved wishlist, user=11, items=7
+[2025-05-13 12:33:59,755] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:33:59,757] DEBUG apps.core.services.cache_services Cache hit for key: wishlist:11
