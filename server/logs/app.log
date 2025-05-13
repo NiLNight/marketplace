@@ -8910,3 +8910,202 @@ HINT:  Функция с данными именем и типами аргументов не найдена. Возможно, вам сл
 [2025-05-11 23:15:52,438] DEBUG apps.users.authentication No token provided in request
 [2025-05-11 23:15:52,438] INFO apps.reviews.views Fetching reviews for product=104, user=anonymous, path=/reviews/104/
 [2025-05-11 23:15:52,440] DEBUG apps.core.services.cache_services Cache hit for key: reviews:104:c4d312bfc1c7abebb995753b45587dc0
+[2025-05-13 11:56:36,828] DEBUG apps.users.authentication No token provided in request
+[2025-05-13 11:56:36,969] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-13 11:56:36,970] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-13 11:56:36,970] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-13 11:56:37,713] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-13 11:56:37,752] INFO apps.users.views User 11 logged in successfully
+[2025-05-13 11:56:37,841] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-13 11:57:06,074] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 11:57:06,074] INFO apps.users.views Fetching profile for user=11
+[2025-05-13 11:57:06,081] DEBUG apps.core.services.cache_services Cache miss for key: user_profile:11
+[2025-05-13 11:57:11,912] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 11:57:11,912] INFO apps.users.views Fetching profile for user=11
+[2025-05-13 11:57:11,913] DEBUG apps.core.services.cache_services Cache hit for key: user_profile:11
+[2025-05-13 11:58:49,582] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 11:58:49,595] DEBUG apps.core.services.cache_services Cache miss for key: wishlist:11
+[2025-05-13 11:58:49,804] INFO apps.wishlists.services.wishlist_services Wishlist retrieved for user=11, items_count=7
+[2025-05-13 11:58:49,912] INFO apps.wishlists.views Retrieved wishlist, user=11, items=7
+[2025-05-13 11:58:57,147] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 11:58:57,148] DEBUG apps.core.services.cache_services Cache hit for key: wishlist:11
+[2025-05-13 11:59:17,018] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 11:59:17,018] INFO apps.reviews.views Fetching reviews for product=104, user=11, path=/reviews/104/
+[2025-05-13 11:59:17,028] DEBUG apps.core.services.cache_services Cache miss for key: reviews:104:c4d312bfc1c7abebb995753b45587dc0
+[2025-05-13 11:59:17,028] INFO apps.reviews.services.reviews_services Fetching reviews for product=104
+[2025-05-13 11:59:17,101] INFO apps.reviews.services.reviews_services Found 2 reviews for product=104
+[2025-05-13 11:59:17,127] INFO apps.reviews.views Retrieved 2 reviews for product=104, user=11
+[2025-05-13 11:59:24,947] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 11:59:24,947] INFO apps.reviews.views Fetching reviews for product=104, user=11, path=/reviews/104/
+[2025-05-13 11:59:24,949] DEBUG apps.core.services.cache_services Cache hit for key: reviews:104:c4d312bfc1c7abebb995753b45587dc0
+[2025-05-13 12:01:17,493] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:01:17,493] INFO apps.reviews.views Fetching reviews for product=104, user=11, path=/reviews/104/
+[2025-05-13 12:01:17,495] DEBUG apps.core.services.cache_services Cache hit for key: reviews:104:c4d312bfc1c7abebb995753b45587dc0
+[2025-05-13 12:01:38,126] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:01:38,127] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-13 12:01:38,138] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-13 12:01:38,138] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-13 12:01:38,138] DEBUG apps.products.services.query_services Applying filters with params={}
+[2025-05-13 12:01:38,138] DEBUG apps.products.services.query_services Applying filters: category_id=None, min_price=None, max_price=None
+[2025-05-13 12:01:38,138] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-13 12:01:38,138] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-13 12:01:38,139] DEBUG apps.products.services.query_services Applying ordering with sort_by=None
+[2025-05-13 12:01:38,219] INFO apps.products.views Retrieved 20 products, user=11
+[2025-05-13 12:01:44,865] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:01:44,865] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-13 12:01:44,867] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-13 12:01:51,392] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:01:51,392] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-13 12:01:51,393] DEBUG apps.core.services.cache_services Cache miss for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-13 12:01:51,393] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-13 12:01:51,393] DEBUG apps.products.services.query_services Applying filters with params={'category': '7', 'price__gte': '10', 'price__lte': '100', 'ordering': '-rating_avg'}
+[2025-05-13 12:01:51,393] DEBUG apps.products.services.query_services Applying filters: category_id=7, min_price=10.0, max_price=100.0
+[2025-05-13 12:01:51,407] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-13 12:01:51,407] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-13 12:01:51,407] DEBUG apps.products.services.query_services Applying ordering with sort_by=-rating_avg
+[2025-05-13 12:01:51,420] INFO apps.products.views Retrieved 5 products, user=11
+[2025-05-13 12:01:52,998] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:01:52,999] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-13 12:01:53,000] DEBUG apps.core.services.cache_services Cache hit for key: product_list:570b6993fd1b265cb38c830ad6e32cb2
+[2025-05-13 12:02:11,502] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:02:11,502] ERROR apps.orders.utils Server error: 'method' object is not subscriptable, user=11
+[2025-05-13 12:02:14,832] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:02:14,832] ERROR apps.orders.utils Server error: 'method' object is not subscriptable, user=11
+[2025-05-13 12:03:55,608] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:03:55,608] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-13 12:03:55,647] INFO apps.orders.services.order_services Retrieved 5 orders for user=11
+[2025-05-13 12:03:55,655] INFO apps.orders.views Retrieved 5 orders for user=11
+[2025-05-13 12:03:57,061] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:03:57,062] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-13 12:03:57,066] INFO apps.orders.services.order_services Retrieved 5 orders for user=11
+[2025-05-13 12:03:57,067] INFO apps.orders.views Retrieved 5 orders for user=11
+[2025-05-13 12:04:24,067] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:04:24,067] ERROR apps.orders.utils Server error: 'method' object is not subscriptable, user=11
+[2025-05-13 12:04:25,317] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:04:25,317] ERROR apps.orders.utils Server error: 'method' object is not subscriptable, user=11
+[2025-05-13 12:04:49,738] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:04:49,738] ERROR apps.orders.utils Server error: 'method' object is not subscriptable, user=11
+[2025-05-13 12:04:51,716] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:04:51,716] ERROR apps.orders.utils Server error: 'method' object is not subscriptable, user=11
+[2025-05-13 12:05:03,809] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:05:03,809] ERROR apps.orders.utils Server error: 'method' object is not subscriptable, user=11
+[2025-05-13 12:05:04,951] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:05:04,951] ERROR apps.orders.utils Server error: 'method' object is not subscriptable, user=11
+[2025-05-13 12:06:13,358] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:06:13,359] ERROR apps.orders.utils Server error: 'method' object is not subscriptable, user=11
+[2025-05-13 12:06:37,487] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:06:37,487] ERROR apps.orders.utils Server error: 'method' object is not subscriptable, user=11
+[2025-05-13 12:09:15,101] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:09:15,101] ERROR apps.orders.utils Server error: 'method' object is not subscriptable, user=11
+[2025-05-13 12:09:25,585] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:09:25,592] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:all
+[2025-05-13 12:09:25,592] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-13 12:09:25,597] INFO apps.orders.services.order_services Retrieved 5 orders for user=11
+[2025-05-13 12:09:25,600] INFO apps.orders.views Retrieved 5 orders for user=11
+[2025-05-13 12:10:44,555] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:10:44,562] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:all
+[2025-05-13 12:10:44,562] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-13 12:10:44,567] INFO apps.orders.services.order_services Retrieved 5 orders for user=11
+[2025-05-13 12:10:44,570] INFO apps.orders.views Retrieved 5 orders for user=11
+[2025-05-13 12:11:10,671] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:11:10,673] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:delivered
+[2025-05-13 12:11:10,673] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-13 12:11:10,676] INFO apps.orders.services.order_services Retrieved 4 orders for user=11
+[2025-05-13 12:11:10,678] INFO apps.orders.views Retrieved 4 orders for user=11
+[2025-05-13 12:11:25,543] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:11:25,544] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:all
+[2025-05-13 12:11:25,544] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-13 12:11:25,548] INFO apps.orders.services.order_services Retrieved 5 orders for user=11
+[2025-05-13 12:11:25,550] INFO apps.orders.views Retrieved 5 orders for user=11
+[2025-05-13 12:11:43,259] DEBUG apps.users.authentication No token provided in request
+[2025-05-13 12:11:46,717] DEBUG apps.users.authentication No token provided in request
+[2025-05-13 12:11:46,720] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-13 12:11:46,720] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-13 12:11:46,720] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-13 12:11:47,288] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-13 12:11:47,291] INFO apps.users.views User 11 logged in successfully
+[2025-05-13 12:11:47,746] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-13 12:11:50,200] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:11:50,202] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:cancelled
+[2025-05-13 12:11:50,202] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-13 12:11:50,204] INFO apps.orders.services.order_services Retrieved 1 orders for user=11
+[2025-05-13 12:11:50,205] INFO apps.orders.views Retrieved 1 orders for user=11
+[2025-05-13 12:12:05,113] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:12:05,114] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:all
+[2025-05-13 12:12:05,114] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-13 12:12:05,118] INFO apps.orders.services.order_services Retrieved 5 orders for user=11
+[2025-05-13 12:12:05,119] INFO apps.orders.views Retrieved 5 orders for user=11
+[2025-05-13 12:12:11,265] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:12:11,267] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:all
+[2025-05-13 12:12:11,267] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-13 12:12:11,271] INFO apps.orders.services.order_services Retrieved 5 orders for user=11
+[2025-05-13 12:12:11,272] INFO apps.orders.views Retrieved 5 orders for user=11
+[2025-05-13 12:14:41,807] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:14:41,813] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:all
+[2025-05-13 12:14:41,813] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-13 12:14:41,819] INFO apps.orders.services.order_services Retrieved 5 orders for user=11
+[2025-05-13 12:14:41,823] INFO apps.orders.views Retrieved 5 orders for user=11
+[2025-05-13 12:14:49,003] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:14:49,004] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:all
+[2025-05-13 12:14:49,004] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-13 12:14:49,008] INFO apps.orders.services.order_services Retrieved 5 orders for user=11
+[2025-05-13 12:14:49,010] INFO apps.orders.views Retrieved 5 orders for user=11
+[2025-05-13 12:15:18,592] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:15:18,593] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:cancelled
+[2025-05-13 12:15:18,593] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-13 12:15:18,596] INFO apps.orders.services.order_services Retrieved 1 orders for user=11
+[2025-05-13 12:15:18,597] INFO apps.orders.views Retrieved 1 orders for user=11
+[2025-05-13 12:15:27,991] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:15:27,992] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:cancelled
+[2025-05-13 12:15:27,992] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-13 12:15:27,995] INFO apps.orders.services.order_services Retrieved 1 orders for user=11
+[2025-05-13 12:15:27,997] INFO apps.orders.views Retrieved 1 orders for user=11
+[2025-05-13 12:16:11,032] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:16:11,038] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:cancelled
+[2025-05-13 12:16:11,038] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-13 12:16:11,041] INFO apps.orders.services.order_services Retrieved 1 orders for user=11
+[2025-05-13 12:16:11,044] INFO apps.orders.views Retrieved 1 orders for user=11
+[2025-05-13 12:19:30,146] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:19:30,147] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:cancelled
+[2025-05-13 12:19:30,147] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-13 12:19:30,150] INFO apps.orders.services.order_services Retrieved 1 orders for user=11
+[2025-05-13 12:19:30,151] INFO apps.orders.views Retrieved 1 orders for user=11
+[2025-05-13 12:21:01,570] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:21:01,570] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-13 12:21:01,572] DEBUG apps.core.services.cache_services Cache miss for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-13 12:21:01,572] DEBUG apps.products.services.query_services Retrieving base queryset for active products
+[2025-05-13 12:21:01,572] DEBUG apps.products.services.query_services Applying filters with params={}
+[2025-05-13 12:21:01,572] DEBUG apps.products.services.query_services Applying filters: category_id=None, min_price=None, max_price=None
+[2025-05-13 12:21:01,572] DEBUG apps.products.services.query_services Applying annotations for product list
+[2025-05-13 12:21:01,572] DEBUG apps.products.services.query_services Applying common annotations
+[2025-05-13 12:21:01,573] DEBUG apps.products.services.query_services Applying ordering with sort_by=None
+[2025-05-13 12:21:01,589] INFO apps.products.views Retrieved 20 products, user=11
+[2025-05-13 12:21:06,300] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:21:06,300] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-13 12:21:06,301] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-13 12:21:42,709] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:21:42,709] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-13 12:21:42,715] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-13 12:22:43,999] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:22:44,000] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-13 12:22:44,001] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-13 12:23:19,531] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:23:19,531] INFO apps.products.views Retrieving product list or search, user=11, path=/products/list/
+[2025-05-13 12:23:19,537] DEBUG apps.core.services.cache_services Cache hit for key: product_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-13 12:28:19,433] DEBUG apps.users.authentication No token provided in request
+[2025-05-13 12:28:23,029] DEBUG apps.users.authentication No token provided in request
+[2025-05-13 12:28:23,143] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-13 12:28:23,144] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-13 12:28:23,144] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-13 12:28:23,692] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-13 12:28:23,695] INFO apps.users.views User 11 logged in successfully
+[2025-05-13 12:28:23,719] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-13 12:28:26,524] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:28:26,526] DEBUG apps.core.services.cache_services Cache hit for key: order_list:11:cancelled:cfb717368b1708250a7c1a3ce7b3330c
+[2025-05-13 12:28:41,337] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:28:41,338] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:delivered:0733228cbf3c94f7b08d655e5dd9d159
+[2025-05-13 12:28:41,338] INFO apps.orders.services.order_services Retrieving orders for user=11
+[2025-05-13 12:28:41,342] INFO apps.orders.services.order_services Retrieved 4 orders for user=11
+[2025-05-13 12:28:41,345] INFO apps.orders.views Retrieved 4 orders for user=11
+[2025-05-13 12:28:50,063] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-13 12:28:50,064] DEBUG apps.core.services.cache_services Cache hit for key: order_list:11:delivered:0733228cbf3c94f7b08d655e5dd9d159
