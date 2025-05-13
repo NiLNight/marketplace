@@ -28,8 +28,7 @@ class WishlistGetView(APIView):
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         if request.user.is_authenticated:
-            cache_key = f"wishlist:{request.user.id}"
-            cached_data = CacheService.get_cached_data(cache_key)
+            cached_data = CacheService.cache_wishlist(user_id)
             if cached_data:
                 return Response(cached_data)
 
@@ -41,6 +40,7 @@ class WishlistGetView(APIView):
         )
         response_data = serializer.data
         if request.user.is_authenticated:
+            cache_key = f"wishlist:{request.user.id}"
             CacheService.set_cached_data(cache_key, response_data, timeout=300)
         logger.info(f"Retrieved wishlist, user={user_id}, items={len(response_data)}")
         return Response(response_data)

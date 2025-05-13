@@ -35,8 +35,9 @@ class OrderListView(APIView):
         Returns:
             Response: Ответ с данными заказов или ошибкой.
         """
+
         user_id = request.user.id
-        cached_data = CacheService.cache_order_list(user_id, status=request.GET.get['status', None])
+        cached_data = CacheService.cache_order_list(user_id=user_id, status=request.GET.get('status'), request=request)
         if cached_data:
             return Response(cached_data)
 
@@ -46,7 +47,9 @@ class OrderListView(APIView):
 
         serializer = self.serializer_class(page, many=True)
         response_data = paginator.get_paginated_response(serializer.data).data
-        cache_key = CacheService.build_cache_key(request, prefix=f"order_list:{user_id}")
+        cache_key = CacheService.build_cache_key(request, prefix=f"order_list:{user_id}:{
+            request.GET.get('status') if request.GET.get('status') else 'all'
+        }")
         CacheService.set_cached_data(cache_key, response_data, timeout=840)  # 14 минут
         logger.info(f"Retrieved {len(orders)} orders for user={user_id}")
         return Response(response_data)

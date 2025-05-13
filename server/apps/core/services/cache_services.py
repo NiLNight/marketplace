@@ -85,10 +85,10 @@ class CacheService:
         return CacheService.get_cached_data(f"product_detail:{product_id}")
 
     @staticmethod
-    def cache_order_list(user_id: int, status: str = None):
+    def cache_order_list(request, user_id: int, status: str = None):
         """Кэширует список заказов пользователя."""
         key = f"order_list:{user_id}:{status or 'all'}"
-        return CacheService.get_cached_data(key)
+        return CacheService.get_cached_data(CacheService.build_cache_key(request, prefix=key))
 
     @staticmethod
     def cache_order_detail(order_id: int, user_id: int):

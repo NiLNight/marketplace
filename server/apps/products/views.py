@@ -140,7 +140,6 @@ class ProductListView(BaseProductView):
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(f"Retrieving product list or search, user={user_id}, path={request.path}")
         try:
-
             cached_data = CacheService.cache_product_list(request)
             if cached_data:
                 return Response(cached_data)
