@@ -133,7 +133,7 @@ class OrderCancelView(APIView):
         """
         user_id = request.user.id
         OrderService.cancel_order(order_id=pk, user=request.user)
-        CacheService.invalidate_cache(prefix=f"order_detail:{pk}", pk=user_id)
+        CacheService.invalidate_cache(prefix=f"order_detail:{pk}:{user_id}")
         CacheService.invalidate_cache(prefix=f"order_list:{user_id}")
         logger.info(f"Order {pk} cancelled successfully for user={user_id}")
         return Response({"message": "Заказ отменен"}, status=status.HTTP_200_OK)

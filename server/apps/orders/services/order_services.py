@@ -1,10 +1,11 @@
 import logging
 from django.db import transaction
 from django.contrib.auth import get_user_model
-from django.db.models import Prefetch
+from django.db.models import Prefetch, F, Case, When, Value, IntegerField
 from rest_framework.exceptions import ValidationError
 from apps.carts.models import OrderItem
 from apps.orders.models import Delivery, Order
+from apps.products.models import Product
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -30,28 +31,28 @@ class OrderService:
             list: Список объектов заказов.
         """
         logger.info(f"Retrieving orders for user={user.id}")
-        active_statuses = ['processing', 'shipped']
         status = request.GET.get('status')
 
         # Фильтрация по статусу, если указан
-        if status in active_statuses:
-            orders = Order.objects.filter(user=user, status__in=active_statuses).order_by('-created')
+        if status in ['processing', 'shipped']:
+            orders = Order.objects.filter(user=user, status__in=['processing', 'shipped']).order_by('-created')
         elif status == 'delivered':
             orders = Order.objects.filter(user=user, status='delivered').order_by('-created')
         elif status == 'cancelled':
             orders = Order.objects.filter(user=user, status='cancelled').order_by('-created')
         else:
             # По умолчанию: активные, затем доставленные, затем отмененные
-            active_orders = Order.objects.filter(user=user, status__in=active_statuses).order_by('-created')
-            delivered_orders = Order.objects.filter(user=user, status='delivered').order_by('-created')
-            cancelled_orders = Order.objects.filter(user=user, status='cancelled').order_by('-created')
             sort_by = request.GET.get('ordering')
-            if sort_by == 'd':
-                orders = list(cancelled_orders) + list(delivered_orders) + list(active_orders)
-            else:
-                orders = list(active_orders) + list(delivered_orders) + list(cancelled_orders)
+            order_priority = Case(
+                When(status__in=['processing', 'shipped'], then=Value(1)),
+                When(status='delivered', then=Value(2)),
+                When(status='cancelled', then=Value(3)),
+                output_field=IntegerField(),
+            )
+            order_by = ['order_priority', '-created'] if sort_by != 'd' else ['-order_priority', '-created']
+            orders = Order.objects.filter(user=user).annotate(order_priority=order_priority).order_by(*order_by)
 
-        logger.info(f"Retrieved {len(orders)} orders for user={user.id}")
+        logger.info(f"Retrieved {orders.count()} orders for user={user.id}")
         return orders
 
     @staticmethod
@@ -127,12 +128,12 @@ class OrderService:
         )
 
         # Проверка и обновление запасов товаров
-        for item in cart_items:
-            product = item.product
-            if product.stock < item.quantity:
+        products = {item.product.id: item.quantity for item in cart_items}
+        for product in Product.objects.filter(id__in=products.keys()).select_for_update():
+            if product.stock < products[product.id]:
                 logger.warning(f"Insufficient stock for product {product.id}, user={user.id}")
                 raise ValidationError(f"Недостаточно товара {product.title} на складе.")
-            product.stock -= item.quantity
+            product.stock = F('stock') - products[product.id]
             product.save()
 
         # Привязка элементов корзины к заказу и очистка связи с пользователем

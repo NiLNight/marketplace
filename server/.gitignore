@@ -5,5 +5,5 @@
 /.env
 /db.sqlite3
 /media/
-/all_apps.py
+/all_apps.txt
 /prompt.txt

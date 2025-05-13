@@ -2,7 +2,7 @@ import logging
 from celery import shared_task
 from django.core.mail import send_mail
 from smtplib import SMTPException
-from config import settings
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -49,4 +49,7 @@ class NotificationService:
             message (str): Текст уведомления.
         """
         logger.debug(f"Queueing notification for user={user.id}, email={user.email}")
+        if not user.email:
+            logger.warning(f"No email provided for user={user.id}")
+            return
         NotificationService.send_notification_async.delay(user.email, message)
