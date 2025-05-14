@@ -3,21 +3,21 @@
 1. Правила валидации данных
 
 1.1. Разделение ответственности:
-   - Валидация входных данных (формат, обязательные поля) выполняется в сериализаторах.
-   - Бизнес-логика (проверка существования объектов, сложные условия) выполняется в сервисах.
-   - Ограничения на уровне базы данных (например, max_length, уникальность) задаются в моделях.
+   - Валидация формата, типов и обязательных полей — в сериализаторах.
+   - Проверка бизнес-логики (существование объектов, права доступа) — в сервисах.
+   - Ограничения базы данных (уникальность, max_length) — в моделях.
    - Пример:
-     # Сериализатор: Проверка, что текст не пустой
-     if not attrs['text'].strip():
-         raise InvalidCommentData("Текст комментария не может быть пустым.")
-     # Сервис: Проверка существования отзыва
-     review = Review.objects.get(pk=review_id)
-     # Модель: Ограничение длины текста
-     text = models.TextField(max_length=5000)
+     # Сериализатор: Проверка формата email
+     email = serializers.EmailField(required=True)
+     # Сервис: Проверка активности пользователя
+     if not user.is_active:
+         raise AccountNotActivated("Аккаунт не активирован")
+     # Модель: Уникальность email
+     email = models.EmailField(unique=True)
 
 1.2. Проверка в сериализаторах:
-   - Проверяйте формат данных, обязательные поля и ссылочную целостность (например, существование связанного объекта через PrimaryKeyRelatedField).
-   - Добавляйте проверки для специфичных условий, связанных с API (например, активность продукта).
+   - Используйте встроенные валидаторы (например, `EmailValidator`, `UniqueValidator`) и методы `validate_<field>` для специфичных проверок.
+   - Проверяйте ссылочную целостность через `PrimaryKeyRelatedField` или кастомные методы.
    - Пример:
      def validate_review(self, value):
          if not value.product.is_active:
@@ -25,72 +25,107 @@
          return value
 
 1.3. Проверка в сервисах:
-   - Выполняйте проверки, требующие доступа к базе данных или сложной бизнес-логики (например, проверка, что родительский комментарий относится к тому же отзыву).
-   - Используйте кастомные исключения для информативных ошибок.
+   - Проводите проверки, требующие доступа к базе данных или сложной логики (например, проверка связей между объектами).
+   - Используйте кастомные исключения с понятными сообщениями.
    - Пример:
      if parent.review_id != review.id:
          raise InvalidCommentData("Родительский комментарий должен относиться к тому же отзыву.")
 
 1.4. Проверка в моделях:
-   - Задавайте ограничения на уровне полей (например, max_length, null=False, unique).
-   - Используйте метод clean() для кастомной валидации, связанной с внутренней структурой объекта.
+   - Задавайте ограничения на уровне полей (например, `max_length`, `unique`, `null=False`).
+   - Используйте `clean()` для кастомной валидации и валидаторы (`RegexValidator`, `FileExtensionValidator`).
+   - Вызывайте `full_clean()` в методе `save` для автоматической проверки.
    - Пример:
-     def clean(self):
-         if self.parent and self.parent.review != self.review:
-             raise ValidationError("Родительский комментарий должен относиться к тому же отзыву.")
+     phone = models.CharField(
+         max_length=20,
+         validators=[RegexValidator(r'^\+\d{9}$', message="Неверный формат номера телефона")]
+     )
+     def save(self, *args, **kwargs):
+         self.full_clean()
+         super().save(*args, **kwargs)
 
-1.5. Избегайте дублирования:
-   - Не повторяйте одну и ту же проверку в сериализаторе, сервисе и модели. Например, проверка на пустой текст должна быть только в сериализаторе.
-   - Если проверка нужна в нескольких местах, выносите ее в утилитную функцию.
+1.5. Использование сигналов для автоматизации:
+   - Используйте сигналы (`post_save`, `pre_save`) для создания или обновления связанных объектов.
+   - Логируйте действия сигналов для отладки.
+   - Пример:
+     @receiver(post_save, sender=User)
+     def create_user_profile(sender, instance, created, **kwargs):
+         if created:
+             logger.info(f"Creating profile for user={instance.id}")
+             UserProfile.objects.create(user=instance)
+
+1.6. Защита критических полей:
+   - Запрещайте изменение критических полей (например, `email`, `public_id`) на уровне сериализатора с использованием `read_only_fields` или `validate_<field>`.
+   - Для операций вне API добавляйте защиту в метод `clean` модели.
+   - Пример (сериализатор):
+     class UserSerializer(serializers.ModelSerializer):
+         email = serializers.EmailField(read_only=True)
+         class Meta:
+             model = User
+             fields = ['username', 'email']
+             read_only_fields = ['email']
+   - Пример (модель):
+     def clean(self):
+         if self.pk and self.email != User.objects.get(pk=self.pk).email:
+             raise ValidationError("Изменение email запрещено.")
+
+1.7. Избегайте дублирования:
+   - Проводите каждую проверку только на одном уровне (сериализатор, сервис или модель).
+   - Выносите повторяющиеся проверки в утилитные функции.
    - Пример:
      def is_valid_text(text: str) -> bool:
          return bool(text and text.strip())
 
-1.6. Информативные ошибки:
-   - Все ошибки валидации должны содержать понятное сообщение, объясняющее, что пошло не так.
+1.8. Информативные ошибки:
+   - Используйте понятные сообщения об ошибках, подходящие для вывода клиенту.
+   - Поддерживайте структуру, пригодную для локализации (например, коды ошибок).
    - Пример:
-     raise InvalidCommentData("Текст комментария не может быть пустым или содержать только пробелы.")
+     raise InvalidUserData(
+         detail="Неверный формат email",
+         code="invalid_email"
+     )
 
 2. Обработка ошибок
 
 2.1. Использование кастомных исключений:
-   - Создавайте кастомные исключения для каждой категории ошибок (например, CommentNotFound, InvalidCommentData).
-   - Указывайте HTTP-статус и код ошибки.
+   - Создавайте кастомные исключения для каждой категории ошибок с указанием HTTP-статуса, сообщения и кода.
+   - Поддерживайте структуру `{detail: str, code: str}` для локализации.
    - Пример:
-     class CommentNotFound(CommentException):
+     class UserNotFound(APIException):
          status_code = 404
-         default_detail = "Комментарий не найден"
+         default_detail = "Пользователь не найден"
          default_code = "not_found"
 
 2.2. Централизованная обработка:
-   - Используйте декораторы или middleware для обработки ошибок (например, handle_api_errors).
-   - Возвращайте стандартизированные JSON-ответы с полями error и code.
+   - Используйте декораторы или middleware для обработки ошибок во всех API-представлениях.
+   - Возвращайте JSON-ответы с полями `error` и `code`.
    - Пример:
-     return Response({"error": "Комментарий не найден", "code": "not_found"}, status=404)
+     return Response({"error": "Пользователь не найден", "code": "not_found"}, status=404)
 
 2.3. Логирование ошибок:
-   - Логируйте все ошибки с указанием пользователя, пути запроса и деталей.
+   - Логируйте ошибки с контекстом: пользователь, путь запроса, `task_id` (для Celery), IP-адрес (для безопасности).
    - Пример:
-     logger.warning(f"Comment {comment_id} not found, user={user_id}, path={request.path}")
+     logger.warning(f"User {user_id} not found, path={request.path}, IP={request.META.get('REMOTE_ADDR')}")
 
 3. Логирование
 
 3.1. Уровни логирования:
-   - Используйте info для успешных операций, warning для некритичных ошибок, error для критических сбоев.
+   - Используйте `info` для успешных операций, `warning` для некритичных ошибок, `error` для критических сбоев.
    - Пример:
-     logger.info(f"Created Comment {comment.id}, user={user_id}")
-     logger.error(f"Failed to create Comment: {str(e)}, user={user_id}")
+     logger.info(f"Created user {user.id}, email={user.email}")
+     logger.error(f"Failed to send email: {str(e)}, task_id={task_id}")
 
 3.2. Информативность:
-   - Логи должны содержать идентификатор пользователя, идентификатор объекта (если применимо) и контекст действия.
+   - Включайте в логи: идентификатор пользователя, объекта, `task_id` (для Celery), путь запроса, IP-адрес.
+   - Настройте ротацию логов для предотвращения переполнения.
    - Пример:
-     logger.info(f"Retrieving comments for review={review_id}, user={user_id}")
+     logger.info(f"Sending email to {email}, task_id={task_id}, IP={request.META.get('REMOTE_ADDR')}")
 
 4. Тестирование
 
 4.1. Покрытие тестами:
-   - Все публичные методы сервисов и API-эндпоинты должны быть покрыты юнит-тестами.
-   - Проверяйте как успешные сценарии, так и обработку ошибок.
+   - Покрывайте юнит-тестами все публичные методы сервисов, API-эндпоинты и валидаторы.
+   - Тестируйте успешные сценарии и обработку ошибок.
    - Пример:
      def test_create_comment_invalid_data(self):
          data = {"review": 1, "text": ""}
@@ -98,27 +133,83 @@
              CommentService.create_comment(data, self.user)
 
 4.2. Тестирование валидации:
-   - Проверяйте все случаи валидации (пустые данные, некорректные типы, несуществующие объекты).
+   - Проверяйте все случаи: пустые данные, некорректные типы, несуществующие объекты.
    - Пример:
      def test_serializer_empty_text(self):
-         serializer = CommentCreateSerializer(data={"review": 1, "text": ""})
+         serializer = CommentCreateSerializer(data={"text": ""})
          self.assertFalse(serializer.is_valid())
          self.assertIn("text", serializer.errors)
 
-5. Общие рекомендации
+5. Асинхронные задачи
 
-5.1. Единообразие:
-   - Следуйте единому стилю именования (camelCase для JavaScript, snake_case для Python).
-   - Используйте одинаковые подходы для валидации и обработки ошибок во всех модулях.
+5.1. Использование Celery:
+   - Реализуйте длительные операции (email, уведомления) через Celery.
+   - Настройте повторы для операций, подверженных сбоям (например, `autoretry_for=(SMTPException,)`).
+   - Пример:
+     @shared_task(autoretry_for=(SMTPException,), max_retries=3, countdown=60)
+     def send_email(email: str, message: str) -> None:
+         send_mail(subject="Уведомление", message=message, recipient_list=[email])
 
-5.2. Документация:
-   - Каждый публичный метод или класс должен иметь docstring, соответствующий правилам из code_style_rules.txt.
-   - Сложные участки кода должны быть прокомментированы.
+5.2. Мониторинг задач:
+   - Используйте инструменты (например, Celery Flower) для мониторинга выполнения задач.
+   - Логируйте начало, завершение и ошибки задач с `task_id`.
+   - Пример:
+     logger.info(f"Task started: send_email to {email}, task_id={self.request.id}")
 
-5.3. Производительность:
-   - Оптимизируйте запросы к базе данных, используя select_related и prefetch_related.
-   - Избегайте лишних проверок валидации, если они уже выполнены на другом уровне.
+6. Безопасность
 
-5.4. Безопасность:
-   - Проверяйте права доступа и активность пользователя перед выполнением операций.
-   - Используйте rate limiting для защиты API от спама.
+6.1. Проверка прав доступа:
+   - Проверяйте права доступа и активность пользователя перед операциями.
+   - Пример:
+     if not user.is_active:
+         raise AccountNotActivated("Аккаунт не активирован")
+
+6.2. Rate limiting:
+   - Применяйте `AnonRateThrottle` или кастомные лимиты к публичным эндпоинтам.
+   - Пример:
+     class UserRegistrationView(APIView):
+         throttle_classes = [AnonRateThrottle]
+
+6.3. Защита паролей:
+   - Проверяйте минимальную длину пароля (не менее 8 символов) и сложность (буквы, цифры).
+   - Пример:
+     def validate_password(self, value):
+         if len(value) < 8:
+             raise serializers.ValidationError("Пароль должен содержать не менее 8 символов.")
+
+7. Транзакции
+
+7.1. Использование транзакций:
+   - Используйте `transaction.atomic()` для операций, затрагивающих несколько моделей.
+   - Пример:
+     with transaction.atomic():
+         user = User.objects.create_user(username, email, password)
+         EmailVerified.objects.create(user=user, confirmation_code=code)
+
+8. Кэширование
+
+8.1. Кэширование данных:
+   - Кэшируйте часто запрашиваемые и редко меняющиеся данные (например, профили, списки).
+   - Инвалидируйте кэш при обновлении данных.
+   - Используйте префиксы для ключей кэша.
+   - Пример:
+     cache_key = f"user_profile:{user_id}"
+     CacheService.set_cached_data(cache_key, data, timeout=3600)
+
+9. Общие рекомендации
+
+9.1. Единообразие:
+   - Используйте `snake_case` для Python, `camelCase` для JavaScript.
+   - Применяйте одинаковые подходы к валидации, ошибкам и логированию.
+
+9.2. Документация:
+   - Каждый публичный метод и класс должен иметь docstring по правилам code_style_rules.txt.
+   - Комментируйте сложные участки кода.
+
+9.3. Производительность:
+   - Оптимизируйте запросы с помощью `select_related` и `prefetch_related`.
+   - Избегайте избыточных проверок валидации.
+
+9.4. Безопасность:
+   - Проверяйте права доступа и защищайте от инъекций (например, используйте ORM вместо raw SQL).
+   - Используйте rate limiting для защиты API.
