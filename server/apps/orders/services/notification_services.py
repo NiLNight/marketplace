@@ -15,18 +15,20 @@ class NotificationService:
 
     @staticmethod
     @shared_task(bind=True, autoretry_for=(SMTPException,), max_retries=3, retry_backoff=60)
-    def send_notification_async(self, user_email: str, message: str) -> None:
-        """Асинхронная отправка уведомления на email пользователя.
+    def send_notification_async(self, user_email: str, message: str, user_id: int = None) -> None:
+        """Асинхронно отправляет уведомление на email пользователя.
 
         Args:
             self: Экземпляр задачи Celery для управления повторными попытками.
             user_email (str): Email-адрес получателя.
             message (str): Текст уведомления.
+            user_id (int, optional): Идентификатор пользователя.
 
         Raises:
-            SMTPException: Если произошла ошибка при отправке email, задача будет повторена.
+            SMTPException: Если отправка email не удалась (повторяется до 3 раз с интервалом 60 секунд).
         """
-        logger.info(f"Sending notification to {user_email}")
+        logger.info(
+            f"Task started: send_notification to {user_email}, user_id={user_id or 'unknown'}, task_id={self.request.id}")
         try:
             send_mail(
                 subject="Уведомление о заказе",
@@ -35,9 +37,11 @@ class NotificationService:
                 recipient_list=[user_email],
                 fail_silently=False,
             )
-            logger.info(f"Notification successfully sent to {user_email}")
+            logger.info(
+                f"Notification successfully sent to {user_email}, user_id={user_id or 'unknown'}, task_id={self.request.id}")
         except SMTPException as e:
-            logger.error(f"Failed to send notification to {user_email}: {str(e)}")
+            logger.error(
+                f"Failed to send notification to {user_email}, user_id={user_id or 'unknown'}, task_id={self.request.id}: {str(e)}")
             raise self.retry(exc=e)
 
     @staticmethod
@@ -52,4 +56,4 @@ class NotificationService:
         if not user.email:
             logger.warning(f"No email provided for user={user.id}")
             return
-        NotificationService.send_notification_async.delay(user.email, message)
+        NotificationService.send_notification_async.delay(user.email, message, user_id=user.id)

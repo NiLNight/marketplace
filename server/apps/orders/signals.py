@@ -2,7 +2,6 @@ import logging
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
-
 from apps.orders.models import Order
 from apps.orders.services.notification_services import NotificationService
 from apps.products.services.tasks import update_popularity_score
@@ -24,9 +23,9 @@ def track_status(sender, instance, **kwargs):
     """
     logger.debug(f"Tracking status for order={instance.id or 'new'}, user={instance.user.id}")
     try:
-        if instance.pk:  # Если объект уже существует
+        if instance.pk:
             instance.__original_status = Order.objects.get(pk=instance.pk).status
-        else:  # Новый объект
+        else:
             instance.__original_status = None
     except ObjectDoesNotExist:
         logger.warning(f"Order {instance.pk} not found during pre_save for user={instance.user.id}")
@@ -38,7 +37,7 @@ def order_post_save(sender, instance, created, **kwargs):
     """Обрабатывает событие сохранения заказа и отправляет уведомления.
 
     При создании заказа или изменении его статуса отправляет соответствующее уведомление
-    пользователю через NotificationService.
+    пользователю через NotificationService, включая информацию о доставке или пункте выдачи.
 
     Args:
         sender: Класс модели, отправивший сигнал (Order).
@@ -48,18 +47,18 @@ def order_post_save(sender, instance, created, **kwargs):
     """
     logger.info(f"Processing post_save for order={instance.id}, user={instance.user.id}, created={created}")
     try:
+        delivery_info = f"Адрес доставки: {instance.delivery.address}" if instance.delivery else f"Пункт выдачи: {instance.pickup_point}"
         if created:
             NotificationService.send_notification(
-                instance.user, f"Ваш заказ #{instance.id} создан"
+                instance.user, f"Ваш заказ #{instance.id} создан. {delivery_info}"
             )
             logger.info(f"Notification queued for order creation, order={instance.id}, user={instance.user.id}")
         elif hasattr(instance, "__original_status") and instance.status != instance.__original_status:
             if instance.status == 'delivered':
                 NotificationService.send_notification(
-                    instance.user, f"Ваш заказ #{instance.id} доставлен!"
+                    instance.user, f"Ваш заказ #{instance.id} доставлен! {delivery_info}"
                 )
                 logger.info(f"Notification queued for order delivered, order={instance.id}, user={instance.user.id}")
-                # Обновляем popularity_score для всех продуктов в заказе
                 order_items = instance.order_items.select_related('product')
                 for item in order_items:
                     update_popularity_score.delay(item.product.id)
@@ -67,7 +66,7 @@ def order_post_save(sender, instance, created, **kwargs):
                         f"Scheduled popularity score update for product={item.product.id} in order={instance.id}")
             else:
                 NotificationService.send_notification(
-                    instance.user, f"Статус заказа #{instance.id} изменен на {instance.status}"
+                    instance.user, f"Статус заказа #{instance.id} изменен на {instance.status}. {delivery_info}"
                 )
                 logger.info(f"Notification queued for status change, order={instance.id}, user={instance.user.id}")
     except Exception as e:

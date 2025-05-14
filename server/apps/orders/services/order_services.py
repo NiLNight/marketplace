@@ -4,8 +4,9 @@ from django.contrib.auth import get_user_model
 from django.db.models import Prefetch, F, Case, When, Value, IntegerField
 from rest_framework.exceptions import ValidationError
 from apps.carts.models import OrderItem
-from apps.orders.models import Delivery, Order
+from apps.orders.models import Order
 from apps.products.models import Product
+from apps.delivery.services.delivery_services import DeliveryService
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -14,12 +15,12 @@ logger = logging.getLogger(__name__)
 class OrderService:
     """Сервис для управления заказами пользователей.
 
-    Предоставляет методы для создания, получения и отмены заказов, а также обработки связанных данных.
+    Предоставляет методы для создания, получения, отмены заказов и обработки связанных данных.
     """
 
     @staticmethod
     def get_user_orders(user: User, request) -> list:
-        """Получение списка заказов пользователя с сортировкой.
+        """Получает список заказов пользователя с сортировкой.
 
         Активные заказы отображаются первыми, затем завершенные и отмененные по дате создания.
 
@@ -30,10 +31,9 @@ class OrderService:
         Returns:
             list: Список объектов заказов.
         """
-        logger.info(f"Retrieving orders for user={user.id}")
+        logger.info(f"Retrieving orders for user={user.id}, path={request.path}, IP={request.META.get('REMOTE_ADDR')}")
         status = request.GET.get('status')
 
-        # Фильтрация по статусу, если указан
         if status in ['processing', 'shipped']:
             orders = Order.objects.filter(user=user, status__in=['processing', 'shipped']).order_by('-created')
         elif status == 'delivered':
@@ -41,7 +41,6 @@ class OrderService:
         elif status == 'cancelled':
             orders = Order.objects.filter(user=user, status='cancelled').order_by('-created')
         else:
-            # По умолчанию: активные, затем доставленные, затем отмененные
             sort_by = request.GET.get('ordering')
             order_priority = Case(
                 When(status__in=['processing', 'shipped'], then=Value(1)),
@@ -57,7 +56,7 @@ class OrderService:
 
     @staticmethod
     def get_order_details(order_id: int, user: User) -> Order:
-        """Получение детальной информации о заказе.
+        """Получает детальную информацию о заказе.
 
         Args:
             order_id (int): Идентификатор заказа.
@@ -83,66 +82,74 @@ class OrderService:
             return order
         except Order.DoesNotExist:
             logger.warning(f"Order {order_id} not found for user={user.id}")
-            raise ValidationError("Заказ не найден")
+            raise ValidationError({"detail": "Заказ не найден", "code": "not_found"})
 
     @staticmethod
     @transaction.atomic
-    def create_order(user: User, delivery_id: int) -> Order:
-        """Создание заказа из корзины пользователя.
+    def create_order(user: User, delivery_id: int = None, pickup_point_id: int = None) -> Order:
+        """Создает заказ из корзины пользователя.
+
+        Позволяет выбрать либо адрес доставки, либо пункт выдачи.
 
         Args:
-            user (User): Аутентифицированный пользователь, для которого создается заказ.
-            delivery_id (int): Идентификатор адреса доставки.
+            user (User): Аутентифицированный пользователь.
+            delivery_id (int, optional): Идентификатор адреса доставки.
+            pickup_point_id (int, optional): Идентификатор пункта выдачи.
 
         Returns:
             Order: Созданный объект заказа.
 
         Raises:
-            ValidationError: Если корзина пуста, доставка не найдена или недостаточно товара на складе.
+            ValidationError: Если корзина пуста, доставка/пункт выдачи не найдены или недостаточно товара.
         """
-        logger.info(f"Attempting to create order for user={user.id}")
-        # Получение товаров из корзины, еще не привязанных к заказу
+        logger.info(
+            f"Attempting to create order for user={user.id}, delivery_id={delivery_id}, pickup_point_id={pickup_point_id}")
+        if delivery_id and pickup_point_id:
+            logger.warning(f"Both delivery_id and pickup_point_id provided for user={user.id}")
+            raise ValidationError(
+                {"detail": "Нельзя указать и доставку, и пункт выдачи одновременно.", "code": "invalid_input"})
+        if not delivery_id and not pickup_point_id:
+            logger.warning(f"Neither delivery_id nor pickup_point_id provided for user={user.id}")
+            raise ValidationError(
+                {"detail": "Необходимо указать либо доставку, либо пункт выдачи.", "code": "missing_input"})
+
         cart_items = OrderItem.objects.filter(user=user, order__isnull=True)
         if not cart_items.exists():
             logger.warning(f"Cart is empty for user={user.id}")
-            raise ValidationError("Корзина пуста")
+            raise ValidationError({"detail": "Корзина пуста", "code": "empty_cart"})
 
-        # Проверка существования адреса доставки
-        try:
-            delivery = Delivery.objects.get(pk=delivery_id, user=user)
-        except Delivery.DoesNotExist:
-            logger.warning(f"Delivery {delivery_id} not found for user={user.id}")
-            raise ValidationError("Указанная доставка не найдена")
+        delivery = None
+        pickup_point = None
+        total_price = sum(item.product.price_with_discount * item.quantity for item in cart_items)
 
-        # Расчет общей стоимости заказа с учетом скидок и доставки
-        total_price = sum(
-            item.product.price_with_discount * item.quantity for item in cart_items
-        ) + delivery.cost
+        if delivery_id:
+            delivery = DeliveryService.get_user_delivery(user, delivery_id)
+            total_price += delivery.cost
+        else:
+            pickup_point = DeliveryService.get_pickup_point(pickup_point_id)
 
-        # Создание заказа
         order = Order.objects.create(
             user=user,
             status='processing',
             total_price=total_price,
             delivery=delivery,
+            pickup_point=pickup_point,
         )
 
-        # Проверка и обновление запасов товаров
         products = {item.product.id: item.quantity for item in cart_items}
         for product in Product.objects.filter(id__in=products.keys()).select_for_update():
             if product.stock < products[product.id]:
                 logger.warning(f"Insufficient stock for product {product.id}, user={user.id}")
-                raise ValidationError(f"Недостаточно товара {product.title} на складе.")
+                raise ValidationError(
+                    {"detail": f"Недостаточно товара {product.title} на складе.", "code": "insufficient_stock"})
             product.stock = F('stock') - products[product.id]
             product.save()
 
-        # Привязка элементов корзины к заказу и очистка связи с пользователем
         for item in cart_items:
             item.order = order
             item.user = None
             item.save()
 
-        # Удаление оставшихся элементов корзины, не привязанных к заказу
         OrderItem.objects.filter(user=user, order__isnull=True).delete()
         logger.info(f"Order {order.id} successfully created for user={user.id}")
         return order
@@ -150,7 +157,7 @@ class OrderService:
     @staticmethod
     @transaction.atomic
     def cancel_order(order_id: int, user: User) -> None:
-        """Отмена заказа пользователем.
+        """Отменяет заказ пользователя.
 
         Args:
             order_id (int): Идентификатор заказа.
@@ -168,7 +175,8 @@ class OrderService:
                 logger.info(f"Order {order_id} successfully cancelled for user={user.id}")
             else:
                 logger.warning(f"Cannot cancel order {order_id} with status={order.status} for user={user.id}")
-                raise ValidationError("Нельзя отменить заказ, который уже отправлен или доставлен.")
+                raise ValidationError(
+                    {"detail": "Нельзя отменить заказ, который уже отправлен или доставлен.", "code": "invalid_status"})
         except Order.DoesNotExist:
             logger.warning(f"Order {order_id} not found for user={user.id}")
-            raise ValidationError("Заказ не найден")
+            raise ValidationError({"detail": "Заказ не найден", "code": "not_found"})

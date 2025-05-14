@@ -4,14 +4,15 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.core.exceptions import ValidationError
 from rest_framework.exceptions import APIException
+from apps.delivery.exceptions import DeliveryNotFound, PickupPointNotFound, CityNotFound
 
 logger = logging.getLogger(__name__)
 
 
 def handle_api_errors(view_func):
-    """Декоратор для обработки ошибок в API-представлениях приложения orders.
+    """Декоратор для обработки ошибок в API-представлениях приложения delivery.
 
-    Обрабатывает общие и кастомные исключения, логирует ошибки и возвращает стандартизированные HTTP-ответы.
+    Обрабатывает стандартные и кастомные исключения, логирует ошибки и возвращает стандартизированные HTTP-ответы.
 
     Args:
         view_func: Функция представления, которую нужно обернуть.
@@ -38,6 +39,27 @@ def handle_api_errors(view_func):
             return Response(
                 {"error": str(e), "code": "validation_error"},
                 status=status.HTTP_400_BAD_REQUEST
+            )
+        except DeliveryNotFound as e:
+            logger.warning(
+                f"Delivery not found: {e.detail}, user={user_id}, path={request.path}, IP={request.META.get('REMOTE_ADDR')}")
+            return Response(
+                {"error": e.detail, "code": e.default_code},
+                status=e.status_code
+            )
+        except PickupPointNotFound as e:
+            logger.warning(
+                f"Pickup point not found: {e.detail}, user={user_id}, path={request.path}, IP={request.META.get('REMOTE_ADDR')}")
+            return Response(
+                {"error": e.detail, "code": e.default_code},
+                status=e.status_code
+            )
+        except CityNotFound as e:
+            logger.warning(
+                f"City not found: {e.detail}, user={user_id}, path={request.path}, IP={request.META.get('REMOTE_ADDR')}")
+            return Response(
+                {"error": e.detail, "code": e.default_code},
+                status=e.status_code
             )
         except APIException as e:
             logger.warning(

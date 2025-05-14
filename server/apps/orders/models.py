@@ -1,57 +1,10 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from apps.core.models import TimeStampedModel
+from apps.delivery.models import Delivery, PickupPoint
 
 User = get_user_model()
-
-
-class Delivery(models.Model):
-    """Модель для хранения адресов доставки пользователя.
-
-    Attributes:
-        user (ForeignKey): Связь с пользователем, которому принадлежит адрес.
-        address (CharField): Текст адреса доставки.
-        cost (DecimalField): Стоимость доставки.
-        is_primary (BooleanField): Флаг, указывающий, является ли адрес основным.
-    """
-    user = models.ForeignKey(
-        User,
-        related_name='deliveries',
-        on_delete=models.CASCADE,
-        verbose_name='Пользователь'
-    )
-    address = models.CharField(
-        max_length=255,
-        null=True,
-        blank=True,
-        verbose_name='Адрес'
-    )
-    cost = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        default=0,
-        verbose_name='Стоимость'
-    )
-    is_primary = models.BooleanField(
-        default=False,
-        verbose_name='Основной адрес'
-    )
-
-    class Meta:
-        """Метаданные модели Delivery."""
-        indexes = [
-            models.Index(fields=['user', 'is_primary']),
-        ]
-        verbose_name = 'Адрес доставки'
-        verbose_name_plural = 'Адреса доставки'
-
-    def __str__(self) -> str:
-        """Строковое представление адреса доставки.
-
-        Returns:
-            str: Имя пользователя и адрес доставки.
-        """
-        return f"Адрес доставки для пользователя {self.user.username}"
 
 
 class Order(TimeStampedModel):
@@ -60,8 +13,9 @@ class Order(TimeStampedModel):
     Attributes:
         user (ForeignKey): Связь с пользователем, создавшим заказ.
         status (CharField): Статус заказа (processing, shipped, delivered, cancelled).
-        total_price (DecimalField): Общая стоимость заказа с учетом доставки.
-        delivery (ForeignKey): Связь с адресом доставки.
+        total_price (DecimalField): Общая стоимость заказа с учетом доставки или самовывоза.
+        delivery (ForeignKey): Связь с адресом доставки (может быть null).
+        pickup_point (ForeignKey): Связь с пунктом выдачи (может быть null).
     """
     STATUS_CHOICES = [
         ('processing', 'Processing'),
@@ -93,7 +47,16 @@ class Order(TimeStampedModel):
         related_name='orders',
         on_delete=models.SET_NULL,
         null=True,
+        blank=True,
         verbose_name='Доставка'
+    )
+    pickup_point = models.ForeignKey(
+        PickupPoint,
+        related_name='orders',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name='Пункт выдачи'
     )
 
     class Meta:
@@ -102,6 +65,12 @@ class Order(TimeStampedModel):
         indexes = [
             models.Index(fields=['status']),
             models.Index(fields=['-created']),
+        ]
+        constraints = [
+            models.CheckConstraint(
+                check=~models.Q(delivery__isnull=True, pickup_point__isnull=True),
+                name='either_delivery_or_pickup_point'
+            ),
         ]
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
@@ -113,3 +82,22 @@ class Order(TimeStampedModel):
             str: ID заказа и имя пользователя.
         """
         return f"Заказ #{self.id} - {self.user.username}"
+
+    def clean(self):
+        """Проверяет корректность данных перед сохранением.
+
+        Raises:
+            ValidationError: Если не указаны ни доставка, ни пункт выдачи, или указаны оба.
+        """
+        if self.delivery and self.pickup_point:
+            raise ValidationError("Нельзя указать и доставку, и пункт выдачи одновременно.")
+        if not self.delivery and not self.pickup_point:
+            raise ValidationError("Необходимо указать либо доставку, либо пункт выдачи.")
+
+    def save(self, *args, **kwargs):
+        """Сохраняет объект с автоматической проверкой.
+
+        Вызывает full_clean() для валидации перед сохранением.
+        """
+        self.full_clean()
+        super().save(*args, **kwargs)

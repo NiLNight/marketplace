@@ -35,10 +35,14 @@ class OrderListView(APIView):
         Returns:
             Response: Ответ с данными заказов или ошибкой.
         """
-
         user_id = request.user.id
-        cached_data = CacheService.cache_order_list(user_id=user_id, status=request.GET.get('status'), request=request)
+        cache_key = CacheService.build_cache_key(
+            request, prefix=f"order_list:{user_id}:{request.GET.get('status', 'all')}"
+        )
+        cached_data = CacheService.get_cached_data(cache_key)
         if cached_data:
+            logger.info(
+                f"Retrieved cached orders for user={user_id}, path={request.path}, IP={request.META.get('REMOTE_ADDR')}")
             return Response(cached_data)
 
         orders = OrderService.get_user_orders(user=request.user, request=request)
@@ -47,11 +51,9 @@ class OrderListView(APIView):
 
         serializer = self.serializer_class(page, many=True)
         response_data = paginator.get_paginated_response(serializer.data).data
-        cache_key = CacheService.build_cache_key(request, prefix=f"order_list:{user_id}:{
-            request.GET.get('status') if request.GET.get('status') else 'all'
-        }")
         CacheService.set_cached_data(cache_key, response_data, timeout=840)  # 14 минут
-        logger.info(f"Retrieved {len(orders)} orders for user={user_id}")
+        logger.info(
+            f"Retrieved {len(orders)} orders for user={user_id}, path={request.path}, IP={request.META.get('REMOTE_ADDR')}")
         return Response(response_data)
 
 
@@ -72,16 +74,19 @@ class OrderDetailView(APIView):
             Response: Ответ с данными заказа или ошибкой.
         """
         user_id = request.user.id
-        cached_data = CacheService.cache_order_detail(pk, user_id)
+        cache_key = f"order_detail:{pk}:{user_id}"
+        cached_data = CacheService.get_cached_data(cache_key)
         if cached_data:
+            logger.info(
+                f"Retrieved cached order details for order={pk}, user={user_id}, path={request.path}, IP={request.META.get('REMOTE_ADDR')}")
             return Response(cached_data)
 
         order = OrderService.get_order_details(order_id=pk, user=request.user)
         serializer = self.serializer_class(order)
         response_data = serializer.data
-        cache_key = f"order_detail:{pk}:{user_id}"
         CacheService.set_cached_data(cache_key, response_data, timeout=3600)  # 1 час
-        logger.info(f"Order {pk} details retrieved for user={user_id}")
+        logger.info(
+            f"Order {pk} details retrieved for user={user_id}, path={request.path}, IP={request.META.get('REMOTE_ADDR')}")
         return Response(response_data)
 
 
@@ -94,22 +99,31 @@ class OrderCreateView(APIView):
         """Обрабатывает POST-запрос для создания заказа из корзины.
 
         Args:
-            request (HttpRequest): Объект запроса с данными о доставке.
+            request (HttpRequest): Объект запроса с данными о доставке или пункте выдачи.
 
         Returns:
             Response: Ответ с подтверждением создания заказа или ошибкой.
         """
         user_id = request.user.id
         delivery_id = request.data.get('delivery_id')
-        if not delivery_id:
-            logger.warning(f"Missing delivery_id for user={user_id}")
+        pickup_point_id = request.data.get('pickup_point_id')
+
+        if not delivery_id and not pickup_point_id:
+            logger.warning(
+                f"Missing delivery_id and pickup_point_id for user={user_id}, path={request.path}, IP={request.META.get('REMOTE_ADDR')}")
             return Response(
-                {"error": "Не указаны данные доставки"},
+                {"error": "Не указаны данные доставки или пункт выдачи", "code": "missing_input"},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        order = OrderService.create_order(user=request.user, delivery_id=delivery_id)
+
+        order = OrderService.create_order(
+            user=request.user,
+            delivery_id=delivery_id,
+            pickup_point_id=pickup_point_id
+        )
         CacheService.invalidate_cache(prefix=f"order_list:{user_id}")
-        logger.info(f"Order {order.id} created successfully for user={user_id}")
+        logger.info(
+            f"Order {order.id} created successfully for user={user_id}, path={request.path}, IP={request.META.get('REMOTE_ADDR')}")
         return Response(
             {"message": "Заказ успешно создан", "order_id": order.id},
             status=status.HTTP_201_CREATED
@@ -135,5 +149,6 @@ class OrderCancelView(APIView):
         OrderService.cancel_order(order_id=pk, user=request.user)
         CacheService.invalidate_cache(prefix=f"order_detail:{pk}:{user_id}")
         CacheService.invalidate_cache(prefix=f"order_list:{user_id}")
-        logger.info(f"Order {pk} cancelled successfully for user={user_id}")
+        logger.info(
+            f"Order {pk} cancelled successfully for user={user_id}, path={request.path}, IP={request.META.get('REMOTE_ADDR')}")
         return Response({"message": "Заказ отменен"}, status=status.HTTP_200_OK)
