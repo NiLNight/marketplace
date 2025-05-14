@@ -84,10 +84,11 @@
 
 1.8. Информативные ошибки:
    - Используйте понятные сообщения об ошибках, подходящие для вывода клиенту.
-   - Поддерживайте структуру, пригодную для локализации (например, коды ошибок).
+   - Поддерживайте структуру, пригодную для локализации (например, коды ошибок). Для локализации используйте Django i18n.
    - Пример:
+     from django.utils.translation import gettext_lazy as _
      raise InvalidUserData(
-         detail="Неверный формат email",
+         detail=_("Неверный формат email"),
          code="invalid_email"
      )
 
@@ -150,15 +151,25 @@
 5.1. Использование Celery:
    - Реализуйте длительные операции (email, уведомления) через Celery.
    - Настройте повторы для операций, подверженных сбоям (например, `autoretry_for=(SMTPException,)`).
+   - Для обработки состояний задач используйте хуки `on_success` и `on_failure`, если требуется логирование или пост-обработка (см. https://docs.celeryq.dev/en/stable/userguide/tasks.html#task-states).
    - Пример:
      @shared_task(autoretry_for=(SMTPException,), max_retries=3, countdown=60)
-     def send_email(email: str, message: str) -> None:
+     def send_email(email: str, message: str, user_id: int = None) -> None:
          send_mail(subject="Уведомление", message=message, recipient_list=[email])
+
+     @send_email.on_success
+     def on_email_success(self, retval, task_id, args, kwargs):
+         logger.info(f"Email sent successfully to {args[0]}, task_id={task_id}, user_id={kwargs.get('user_id', 'unknown')}")
+
+     @send_email.on_failure
+     def on_email_failure(self, exc, task_id, args, kwargs):
+         logger.error(f"Failed to send email to {args[0]}, task_id={task_id}, user_id={kwargs.get('user_id', 'unknown')}, error={str(exc)}")
 
 5.2. Мониторинг задач:
    - Используйте инструменты (например, Celery Flower) для мониторинга выполнения задач.
    - Логируйте начало, завершение и ошибки задач с `task_id`.
    - Пример:
+     # Логируем начало задачи с контекстом
      logger.info(f"Task started: send_email to {email}, user_id={user_id or 'unknown'}, task_id={self.request.id}, IP={request.META.get('REMOTE_ADDR', 'unknown')}")
 
 6. Безопасность
@@ -195,11 +206,21 @@
 
 8.1. Кэширование данных:
    - Кэшируйте часто запрашиваемые и редко меняющиеся данные (например, профили, списки).
-   - Инвалидируйте кэш при обновлении данных.
+   - Инвалидируйте кэш при обновлении данных, например, с помощью сигналов `post_save`.
    - Используйте префиксы для ключей кэша.
    - Пример:
      cache_key = f"user_profile:{user_id}"
      CacheService.set_cached_data(cache_key, data, timeout=3600)
+     CacheService.invalidate_cache(prefix=f"order_detail:{pk}:{user_id}")
+
+     from django.db.models.signals import post_save
+     from django.dispatch import receiver
+
+     @receiver(post_save, sender=User)
+     def invalidate_user_cache(sender, instance, **kwargs):
+         cache_key = f"user_profile:{instance.id}"
+         CacheService.invalidate_cache(prefix=cache_key)
+         logger.info(f"Invalidated cache for user_id={instance.id}")
 
 9. Общие рекомендации
 
