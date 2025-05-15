@@ -1,10 +1,11 @@
 from rest_framework import serializers
-from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 from apps.delivery.models import City, Delivery, PickupPoint
 
 
 class CitySerializer(serializers.ModelSerializer):
-    """Сериализатор для городов.
+    """
+    Сериализатор для городов.
 
     Преобразует объекты City в JSON, включая название города.
     """
@@ -13,23 +14,41 @@ class CitySerializer(serializers.ModelSerializer):
         """Метаданные сериализатора CitySerializer."""
         model = City
         fields = ['id', 'name']
-        read_only_fields = ['id', 'name']
 
 
 class DeliverySerializer(serializers.ModelSerializer):
-    """Сериализатор для адресов доставки.
+    """
+    Сериализатор для адресов доставки.
 
     Преобразует объекты Delivery в JSON, включая адрес и стоимость доставки.
+    Проверяет корректность адреса и стоимости.
     """
 
     class Meta:
         """Метаданные сериализатора DeliverySerializer."""
         model = Delivery
         fields = ['id', 'address', 'cost', 'is_primary']
-        read_only_fields = ['id', 'address', 'cost', 'is_primary']
+
+    def validate_address(self, value):
+        """
+        Проверяет, что адрес не пустой.
+
+        Args:
+            value (str): Значение поля address.
+
+        Returns:
+            str: Валидированное значение.
+
+        Raises:
+            serializers.ValidationError: Если адрес пустой.
+        """
+        if not value or not value.strip():
+            raise serializers.ValidationError(_("Адрес не может быть пустым"))
+        return value
 
     def validate(self, attrs):
-        """Проверяет корректность данных перед сериализацией.
+        """
+        Проверяет корректность данных перед сериализацией.
 
         Проверяет, что стоимость доставки неотрицательна.
 
@@ -44,12 +63,13 @@ class DeliverySerializer(serializers.ModelSerializer):
         """
         instance = self.instance
         if instance and instance.cost < 0:
-            raise serializers.ValidationError({"cost": "Стоимость доставки не может быть отрицательной."})
+            raise serializers.ValidationError({"cost": _("Стоимость доставки не может быть отрицательной")})
         return attrs
 
 
 class PickupPointSerializer(serializers.ModelSerializer):
-    """Сериализатор для пунктов выдачи.
+    """
+    Сериализатор для пунктов выдачи.
 
     Преобразует объекты PickupPoint в JSON, включая город и адрес.
     Используется для отображения списка пунктов выдачи и выбора при создании заказа.
@@ -60,10 +80,10 @@ class PickupPointSerializer(serializers.ModelSerializer):
         """Метаданные сериализатора PickupPointSerializer."""
         model = PickupPoint
         fields = ['id', 'city', 'address', 'is_active']
-        read_only_fields = ['id', 'city', 'address', 'is_active']
 
     def validate(self, attrs):
-        """Проверяет корректность данных перед сериализацией.
+        """
+        Проверяет корректность данных перед сериализацией.
 
         Проверяет, что пункт выдачи активен.
 
@@ -78,5 +98,5 @@ class PickupPointSerializer(serializers.ModelSerializer):
         """
         instance = self.instance
         if instance and not instance.is_active:
-            raise serializers.ValidationError({"is_active": "Пункт выдачи неактивен."})
+            raise serializers.ValidationError({"is_active": _("Пункт выдачи неактивен")})
         return attrs

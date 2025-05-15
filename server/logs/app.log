@@ -9151,3 +9151,229 @@ HINT:  Функция с данными именем и типами аргументов не найдена. Возможно, вам сл
 [2025-05-13 12:33:53,290] INFO apps.wishlists.views Retrieved wishlist, user=11, items=7
 [2025-05-13 12:33:59,755] INFO apps.users.authentication User 11 authenticated successfully
 [2025-05-13 12:33:59,757] DEBUG apps.core.services.cache_services Cache hit for key: wishlist:11
+[2025-05-15 12:01:48,883] DEBUG apps.users.authentication No token provided in request
+[2025-05-15 12:01:49,032] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-15 12:01:49,033] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-15 12:01:49,033] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-15 12:01:49,950] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-15 12:01:49,999] INFO apps.users.views User 11 logged in successfully
+[2025-05-15 12:01:50,121] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-15 12:02:30,843] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:02:30,843] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-15 12:02:30,843] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-15 12:02:30,843] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-15 12:02:31,333] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-15 12:02:31,336] INFO apps.users.views User 11 logged in successfully
+[2025-05-15 12:02:31,339] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-15 12:04:20,731] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:05:35,624] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:06:02,229] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:07:45,087] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:07:45,100] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:none:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 12:08:04,727] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:08:04,734] DEBUG apps.core.services.cache_services Cache miss for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 12:08:24,247] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:08:24,252] DEBUG apps.core.services.cache_services Cache miss for key: delivery_list:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 12:08:38,418] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:08:38,424] DEBUG apps.core.services.cache_services Cache hit for key: delivery_list:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 12:09:06,576] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:09:06,577] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 12:09:11,709] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:09:11,710] DEBUG apps.core.services.cache_services Cache hit for key: pickup_points:all:none:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 12:11:19,456] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:12:01,824] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:12:01,836] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:delive:54b8a92ed12f0f3c6dcdf36d8ac2afdc
+[2025-05-15 12:12:01,836] DEBUG apps.orders.services.order_services Starting retrieval of orders for user=11
+[2025-05-15 12:12:01,836] INFO apps.orders.services.order_services Retrieving orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-15 12:12:01,915] INFO apps.orders.services.order_services Retrieved 5 orders for user=11, IP=127.0.0.1
+[2025-05-15 12:12:01,954] INFO apps.orders.views Retrieved 5 orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-15 12:12:57,245] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:12:57,246] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:all:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 12:12:57,246] DEBUG apps.orders.services.order_services Starting retrieval of orders for user=11
+[2025-05-15 12:12:57,247] INFO apps.orders.services.order_services Retrieving orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-15 12:12:57,249] INFO apps.orders.services.order_services Retrieved 5 orders for user=11, IP=127.0.0.1
+[2025-05-15 12:12:57,259] INFO apps.orders.views Retrieved 5 orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-15 12:12:59,309] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:12:59,309] DEBUG apps.core.services.cache_services Cache hit for key: order_list:11:all:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 12:12:59,311] INFO apps.orders.views Retrieved cached orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-15 12:14:30,591] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:14:30,596] DEBUG apps.core.services.cache_services Cache hit for key: pickup_points:all:none:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 12:14:30,597] INFO apps.delivery.views Retrieved cached pickup points for user=11, path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-15 12:20:48,355] DEBUG apps.users.authentication No token provided in request
+[2025-05-15 12:20:51,439] DEBUG apps.users.authentication No token provided in request
+[2025-05-15 12:20:51,442] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-15 12:20:51,443] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-15 12:20:51,443] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-15 12:20:51,954] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-15 12:20:51,957] INFO apps.users.views User 11 logged in successfully
+[2025-05-15 12:20:51,959] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-15 12:20:54,783] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:20:54,784] DEBUG apps.core.services.cache_services Cache miss for key: order_detail:13:11
+[2025-05-15 12:20:54,784] DEBUG apps.orders.services.order_services Starting retrieval of order=13 for user=11
+[2025-05-15 12:20:54,785] INFO apps.orders.services.order_services Retrieving details for order=13, user=11, IP=127.0.0.1
+[2025-05-15 12:20:54,976] INFO apps.orders.services.order_services Order 13 details retrieved for user=11, IP=127.0.0.1
+[2025-05-15 12:20:54,982] INFO apps.orders.views Order 13 details retrieved for user=11, path=/orders/13/, IP=127.0.0.1
+[2025-05-15 12:21:25,565] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:21:25,566] DEBUG apps.orders.services.order_services Starting order creation for user=11
+[2025-05-15 12:21:25,566] INFO apps.orders.services.order_services Attempting to create order for user=11, delivery_id=6, pickup_point_id=None, IP=127.0.0.1
+[2025-05-15 12:21:25,579] WARNING apps.orders.services.order_services Cart is empty for user=11, IP=127.0.0.1
+[2025-05-15 12:21:25,579] WARNING apps.orders.utils API error: {'detail': ErrorDetail(string='Корзина пуста', code='invalid'), 'code': ErrorDetail(string='empty_cart', code='invalid')}, user=11, path=/orders/create/, IP=127.0.0.1
+[2025-05-15 12:21:42,312] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:21:42,440] INFO apps.carts.services.cart_services Added product 8 to cart, user=11
+[2025-05-15 12:21:42,442] INFO apps.core.services.cache_services Invalidated cache for key: cart:11
+[2025-05-15 12:21:42,442] INFO apps.carts.views Added product 8 to cart, user=11
+[2025-05-15 12:21:49,330] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:21:49,330] DEBUG apps.orders.services.order_services Starting order creation for user=11
+[2025-05-15 12:21:49,330] INFO apps.orders.services.order_services Attempting to create order for user=11, delivery_id=6, pickup_point_id=None, IP=127.0.0.1
+[2025-05-15 12:21:49,337] DEBUG apps.delivery.services.delivery_services Starting retrieval of delivery=6 for user=11
+[2025-05-15 12:21:49,337] INFO apps.delivery.services.delivery_services Retrieving delivery=6 for user=11, IP=127.0.0.1
+[2025-05-15 12:21:49,339] WARNING apps.delivery.services.delivery_services Delivery 6 not found for user=11, IP=127.0.0.1
+[2025-05-15 12:21:49,339] WARNING apps.orders.utils API error: Адрес доставки не найден, user=11, path=/orders/create/, IP=127.0.0.1
+[2025-05-15 12:26:52,350] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:26:52,356] DEBUG apps.core.services.cache_services Cache hit for key: delivery_list:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 12:26:52,356] INFO apps.delivery.views Retrieved cached deliveries for user=11, path=/delivery/deliveries/, IP=127.0.0.1
+[2025-05-15 12:27:54,012] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:27:54,013] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 12:27:54,013] INFO apps.delivery.views Retrieved cached cities for user=11, path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-15 12:28:53,027] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:28:53,033] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 12:28:53,033] INFO apps.delivery.views Retrieved cached cities for user=11, path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-15 12:29:37,099] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:29:37,100] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 12:29:37,100] INFO apps.delivery.views Retrieved cached cities for user=11, path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-15 12:29:41,330] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:29:41,331] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 12:29:41,331] INFO apps.delivery.views Retrieved cached cities for user=11, path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-15 12:29:42,649] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:29:42,650] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 12:29:42,650] INFO apps.delivery.views Retrieved cached cities for user=11, path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-15 12:31:23,400] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:31:23,401] DEBUG apps.orders.services.order_services Starting order creation for user=11
+[2025-05-15 12:31:23,401] INFO apps.orders.services.order_services Attempting to create order for user=11, delivery_id=None, pickup_point_id=6, IP=127.0.0.1
+[2025-05-15 12:31:23,409] DEBUG apps.delivery.services.delivery_services Starting retrieval of pickup point=6
+[2025-05-15 12:31:23,409] INFO apps.delivery.services.delivery_services Retrieving pickup point=6, IP=127.0.0.1
+[2025-05-15 12:31:23,410] WARNING apps.delivery.services.delivery_services Pickup point 6 not found or inactive, IP=127.0.0.1
+[2025-05-15 12:31:23,410] WARNING apps.orders.utils API error: Пункт выдачи не найден или неактивен, user=11, path=/orders/create/, IP=127.0.0.1
+[2025-05-15 12:31:29,559] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:31:29,560] DEBUG apps.orders.services.order_services Starting order creation for user=11
+[2025-05-15 12:31:29,560] INFO apps.orders.services.order_services Attempting to create order for user=11, delivery_id=None, pickup_point_id=1, IP=127.0.0.1
+[2025-05-15 12:31:29,566] DEBUG apps.delivery.services.delivery_services Starting retrieval of pickup point=1
+[2025-05-15 12:31:29,566] INFO apps.delivery.services.delivery_services Retrieving pickup point=1, IP=127.0.0.1
+[2025-05-15 12:31:29,568] INFO apps.delivery.services.delivery_services Pickup point 1 retrieved, IP=127.0.0.1
+[2025-05-15 12:31:29,577] WARNING apps.orders.utils Validation error: {'total_price': ['Убедитесь, что вы ввели не более 2 цифр после запятой.']}, user=11, path=/orders/create/, IP=127.0.0.1
+[2025-05-15 12:31:36,819] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:31:36,819] DEBUG apps.orders.services.order_services Starting order creation for user=11
+[2025-05-15 12:31:36,819] INFO apps.orders.services.order_services Attempting to create order for user=11, delivery_id=None, pickup_point_id=1, IP=127.0.0.1
+[2025-05-15 12:31:36,825] DEBUG apps.delivery.services.delivery_services Starting retrieval of pickup point=1
+[2025-05-15 12:31:36,825] INFO apps.delivery.services.delivery_services Retrieving pickup point=1, IP=127.0.0.1
+[2025-05-15 12:31:36,826] INFO apps.delivery.services.delivery_services Pickup point 1 retrieved, IP=127.0.0.1
+[2025-05-15 12:31:36,829] WARNING apps.orders.utils Validation error: {'total_price': ['Убедитесь, что вы ввели не более 2 цифр после запятой.']}, user=11, path=/orders/create/, IP=127.0.0.1
+[2025-05-15 12:32:43,194] DEBUG apps.orders.signals Tracking status for order=16, user=11
+[2025-05-15 12:32:43,232] DEBUG apps.orders.signals Starting post_save for order=16, user=11
+[2025-05-15 12:32:43,234] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:11:*
+[2025-05-15 12:32:43,235] INFO apps.core.services.cache_services Invalidated cache for prefix: order_detail:16:11:*
+[2025-05-15 12:32:43,235] INFO apps.orders.signals Invalidated cache for order=16, user=11
+[2025-05-15 12:57:14,854] DEBUG apps.orders.signals Tracking status for order=16, user=11
+[2025-05-15 12:57:14,856] DEBUG apps.orders.signals Starting post_save for order=16, user=11
+[2025-05-15 12:57:14,858] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:11:*
+[2025-05-15 12:57:14,858] INFO apps.core.services.cache_services Invalidated cache for prefix: order_detail:16:11:*
+[2025-05-15 12:57:14,858] INFO apps.orders.signals Invalidated cache for order=16, user=11
+[2025-05-15 12:57:15,488] DEBUG apps.orders.signals Tracking status for order=16, user=11
+[2025-05-15 12:57:17,710] DEBUG apps.orders.signals Starting post_save for order=16, user=11
+[2025-05-15 12:57:17,712] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:11:*
+[2025-05-15 12:57:17,712] INFO apps.core.services.cache_services Invalidated cache for prefix: order_detail:16:11:*
+[2025-05-15 12:57:17,712] INFO apps.orders.signals Invalidated cache for order=16, user=11
+[2025-05-15 12:57:25,816] DEBUG apps.users.authentication No token provided in request
+[2025-05-15 12:57:28,914] DEBUG apps.users.authentication No token provided in request
+[2025-05-15 12:57:28,917] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-15 12:57:28,918] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-15 12:57:28,918] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-15 12:57:29,423] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-15 12:57:29,425] INFO apps.users.views User 11 logged in successfully
+[2025-05-15 12:57:29,428] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-15 12:57:35,972] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:57:35,974] DEBUG apps.core.services.cache_services Cache hit for key: pickup_points:all:none:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 12:57:35,974] INFO apps.delivery.views Retrieved cached pickup points for user=11, path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-15 12:57:48,278] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:57:48,279] DEBUG apps.core.services.cache_services Cache hit for key: delivery_list:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 12:57:48,279] INFO apps.delivery.views Retrieved cached deliveries for user=11, path=/delivery/deliveries/, IP=127.0.0.1
+[2025-05-15 12:57:53,617] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 12:57:53,619] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 12:57:53,619] INFO apps.delivery.views Retrieved cached cities for user=11, path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-15 13:01:47,100] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 13:01:47,107] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:all:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 13:01:47,107] DEBUG apps.orders.services.order_services Starting retrieval of orders for user=11
+[2025-05-15 13:01:47,107] INFO apps.orders.services.order_services Retrieving orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-15 13:01:47,110] INFO apps.orders.services.order_services Retrieved 5 orders for user=11, IP=127.0.0.1
+[2025-05-15 13:01:47,126] INFO apps.orders.views Retrieved 5 orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-15 13:02:06,628] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 13:02:06,629] DEBUG apps.core.services.cache_services Cache hit for key: order_list:11:all:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 13:02:06,629] INFO apps.orders.views Retrieved cached orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-15 13:05:48,747] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 13:05:48,754] DEBUG apps.core.services.cache_services Cache hit for key: order_list:11:all:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 13:05:48,754] INFO apps.orders.views Retrieved cached orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-15 13:05:52,639] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 13:05:52,641] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:13:11
+[2025-05-15 13:05:52,641] INFO apps.orders.views Retrieved cached order details for order=13, user=11, path=/orders/13/, IP=127.0.0.1
+[2025-05-15 13:06:01,238] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 13:06:01,240] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:13:11
+[2025-05-15 13:06:01,240] INFO apps.orders.views Retrieved cached order details for order=13, user=11, path=/orders/13/, IP=127.0.0.1
+[2025-05-15 13:09:59,402] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 13:09:59,408] DEBUG apps.core.services.cache_services Cache miss for key: delivery_list:11
+[2025-05-15 13:09:59,412] INFO apps.delivery.views Retrieved 0 deliveries for user=11, path=/delivery/deliveries/, IP=127.0.0.1
+[2025-05-15 13:10:56,654] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 13:10:56,656] DEBUG apps.core.services.cache_services Cache miss for key: delivery_list:11
+[2025-05-15 13:10:56,660] INFO apps.delivery.views Retrieved 1 deliveries for user=11, path=/delivery/deliveries/, IP=127.0.0.1
+[2025-05-15 13:11:07,541] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 13:11:07,542] DEBUG apps.core.services.cache_services Cache miss for key: delivery_list:11
+[2025-05-15 13:11:07,547] INFO apps.delivery.views Retrieved 1 deliveries for user=11, path=/delivery/deliveries/, IP=127.0.0.1
+[2025-05-15 13:12:50,830] DEBUG apps.users.authentication No token provided in request
+[2025-05-15 13:12:54,082] DEBUG apps.users.authentication No token provided in request
+[2025-05-15 13:12:54,194] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-15 13:12:54,196] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-15 13:12:54,196] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-15 13:12:54,725] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-15 13:12:54,728] INFO apps.users.views User 11 logged in successfully
+[2025-05-15 13:12:54,737] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-15 13:13:01,823] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 13:13:01,825] DEBUG apps.core.services.cache_services Cache hit for key: delivery_list:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 13:13:01,826] INFO apps.delivery.views Retrieved cached deliveries for user=11, path=/delivery/deliveries/, IP=127.0.0.1
+[2025-05-15 13:13:06,490] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 13:13:06,490] DEBUG apps.core.services.cache_services Cache hit for key: delivery_list:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 13:13:06,490] INFO apps.delivery.views Retrieved cached deliveries for user=11, path=/delivery/deliveries/, IP=127.0.0.1
+[2025-05-15 13:17:04,558] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 13:17:04,564] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 13:17:04,564] INFO apps.delivery.views Retrieved cached cities for user=11, path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-15 13:17:07,084] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 13:17:07,086] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 13:17:07,086] INFO apps.delivery.views Retrieved cached cities for user=11, path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-15 13:17:22,120] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 13:17:22,126] DEBUG apps.core.services.cache_services Cache miss for key: city_listi:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 13:17:22,126] DEBUG apps.delivery.services.delivery_services Starting retrieval of cities
+[2025-05-15 13:17:22,126] INFO apps.delivery.services.delivery_services Retrieving cities
+[2025-05-15 13:17:22,128] INFO apps.delivery.services.delivery_services Retrieved 1 cities
+[2025-05-15 13:17:22,132] INFO apps.delivery.views Retrieved 1 cities for user=11, path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-15 13:17:34,542] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 13:17:34,549] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 13:17:34,549] INFO apps.delivery.views Retrieved cached cities for user=11, path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-15 13:18:58,764] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 13:18:58,770] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 13:18:58,770] INFO apps.delivery.views Retrieved cached cities for user=11, path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-15 13:24:09,547] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 13:24:09,554] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 13:24:09,554] INFO apps.delivery.views Retrieved cached cities for user=11, path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-15 13:24:45,810] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 13:24:45,813] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 13:24:45,813] INFO apps.delivery.views Retrieved cached cities for user=11, path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-15 13:24:48,376] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 13:24:48,378] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 13:24:48,378] INFO apps.delivery.views Retrieved cached cities for user=11, path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-15 13:25:14,373] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 13:25:14,374] DEBUG apps.core.services.cache_services Cache hit for key: pickup_points:all:none:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 13:25:14,374] INFO apps.delivery.views Retrieved cached pickup points for user=11, path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-15 13:25:26,762] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 13:25:26,763] DEBUG apps.core.services.cache_services Cache hit for key: pickup_points:all:none:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 13:25:26,763] INFO apps.delivery.views Retrieved cached pickup points for user=11, path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-15 13:26:51,032] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-15 13:26:51,039] DEBUG apps.core.services.cache_services Cache hit for key: pickup_points:all:none:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-15 13:26:51,039] INFO apps.delivery.views Retrieved cached pickup points for user=11, path=/delivery/pickup_points/, IP=127.0.0.1

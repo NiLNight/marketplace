@@ -118,3 +118,16 @@ class CacheService:
     @staticmethod
     def cache_user_profile(user_id: int):
         return CacheService.get_cached_data(f"user_profile:{user_id}")
+
+    @staticmethod
+    def cache_delivery_list(user_id: int, request):
+        return CacheService.get_cached_data(CacheService.build_cache_key(request, prefix=f"delivery_list:{user_id}"))
+
+    @staticmethod
+    def cache_city_list(request):
+        return CacheService.get_cached_data(CacheService.build_cache_key(request, prefix="city_list"))
+
+    @staticmethod
+    def cache_pickup_points_list(city: str, search: str, request):
+        return CacheService.get_cached_data(
+            CacheService.build_cache_key(request, prefix=f"pickup_points:{city or 'all'}:{search or 'none'}"))

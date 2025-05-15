@@ -5,13 +5,16 @@ from django.core.exceptions import ObjectDoesNotExist
 from apps.orders.models import Order
 from apps.orders.services.notification_services import NotificationService
 from apps.products.services.tasks import update_popularity_score
+from apps.core.services.cache_services import CacheService
+from django.utils.translation import gettext_lazy as _
 
 logger = logging.getLogger(__name__)
 
 
 @receiver(pre_save, sender=Order)
 def track_status(sender, instance, **kwargs):
-    """Отслеживает исходный статус заказа перед сохранением.
+    """
+    Отслеживает исходный статус заказа перед сохранением.
 
     Сохраняет текущий статус заказа в атрибут `__original_status` для последующего сравнения
     в сигнале post_save. Для новых заказов устанавливает `__original_status` как None.
@@ -19,7 +22,7 @@ def track_status(sender, instance, **kwargs):
     Args:
         sender: Класс модели, отправивший сигнал (Order).
         instance: Экземпляр модели Order, который сохраняется.
-        **kwargs: Дополнительные аргументы сигнала.
+        kwargs: Дополнительные аргументы сигнала.
     """
     logger.debug(f"Tracking status for order={instance.id or 'new'}, user={instance.user.id}")
     try:
@@ -34,40 +37,54 @@ def track_status(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Order)
 def order_post_save(sender, instance, created, **kwargs):
-    """Обрабатывает событие сохранения заказа и отправляет уведомления.
+    """
+    Обрабатывает событие сохранения заказа и отправляет уведомления.
 
     При создании заказа или изменении его статуса отправляет соответствующее уведомление
-    пользователю через NotificationService, включая информацию о доставке или пункте выдачи.
+    пользователю через NotificationService и инвалидирует кэш.
 
     Args:
         sender: Класс модели, отправивший сигнал (Order).
         instance: Экземпляр модели Order, который был сохранен.
         created (bool): Флаг, указывающий, был ли заказ создан.
-        **kwargs: Дополнительные аргументы сигнала.
+        kwargs: Дополнительные аргументы сигнала.
     """
-    logger.info(f"Processing post_save for order={instance.id}, user={instance.user.id}, created={created}")
+    logger.debug(f"Starting post_save for order={instance.id}, user={instance.user.id}")
     try:
-        delivery_info = f"Адрес доставки: {instance.delivery.address}" if instance.delivery else f"Пункт выдачи: {instance.pickup_point}"
+        delivery_info = (
+            f"{_('Адрес доставки')}: {instance.delivery.address}" if instance.delivery
+            else f"{_('Пункт выдачи')}: {instance.pickup_point}"
+        )
         if created:
             NotificationService.send_notification(
-                instance.user, f"Ваш заказ #{instance.id} создан. {delivery_info}"
+                instance.user, f"{_('Ваш заказ')} #{instance.id} {_('создан')}. {delivery_info}"
             )
-            logger.info(f"Notification queued for order creation, order={instance.id}, user={instance.user.id}")
+            logger.info(f"Notification queued for order creation, "
+                        f"order={instance.id}, user={instance.user.id}")
         elif hasattr(instance, "__original_status") and instance.status != instance.__original_status:
             if instance.status == 'delivered':
                 NotificationService.send_notification(
-                    instance.user, f"Ваш заказ #{instance.id} доставлен! {delivery_info}"
+                    instance.user, f"{_('Ваш заказ')} #{instance.id} {_('доставлен')}! {delivery_info}"
                 )
-                logger.info(f"Notification queued for order delivered, order={instance.id}, user={instance.user.id}")
+                logger.info(f"Notification queued for order delivered, "
+                            f"order={instance.id}, user={instance.user.id}")
                 order_items = instance.order_items.select_related('product')
                 for item in order_items:
                     update_popularity_score.delay(item.product.id)
-                    logger.info(
-                        f"Scheduled popularity score update for product={item.product.id} in order={instance.id}")
+                    logger.info(f"Scheduled popularity score update for product={item.product.id}"
+                                f" in order={instance.id}")
             else:
                 NotificationService.send_notification(
-                    instance.user, f"Статус заказа #{instance.id} изменен на {instance.status}. {delivery_info}"
+                    instance.user,
+                    f"{_('Статус заказа')} #{instance.id} {_('изменен на')} {instance.status}. {delivery_info}"
                 )
-                logger.info(f"Notification queued for status change, order={instance.id}, user={instance.user.id}")
+                logger.info(f"Notification queued for status change, "
+                            f"order={instance.id}, user={instance.user.id}")
+
+        # Инвалидация кэша после изменения заказа
+        CacheService.invalidate_cache(prefix=f"order_list:{instance.user.id}")
+        CacheService.invalidate_cache(prefix=f"order_detail:{instance.id}:{instance.user.id}")
+        logger.info(f"Invalidated cache for order={instance.id}, user={instance.user.id}")
     except Exception as e:
-        logger.error(f"Failed to process post_save for order={instance.id}, user={instance.user.id}: {str(e)}")
+        logger.error(f"Failed to process post_save for order={instance.id},"
+                     f" user={instance.user.id}: {str(e)}")

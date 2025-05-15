@@ -3,12 +3,14 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from apps.core.models import TimeStampedModel
 from apps.delivery.models import Delivery, PickupPoint
+from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
 
 
 class Order(TimeStampedModel):
-    """Модель для хранения заказов пользователей.
+    """
+    Модель для хранения заказов пользователей.
 
     Attributes:
         user (ForeignKey): Связь с пользователем, создавшим заказ.
@@ -76,7 +78,8 @@ class Order(TimeStampedModel):
         verbose_name_plural = 'Заказы'
 
     def __str__(self) -> str:
-        """Строковое представление заказа.
+        """
+        Строковое представление заказа.
 
         Returns:
             str: ID заказа и имя пользователя.
@@ -84,20 +87,25 @@ class Order(TimeStampedModel):
         return f"Заказ #{self.id} - {self.user.username}"
 
     def clean(self):
-        """Проверяет корректность данных перед сохранением.
+        """
+        Проверяет корректность данных перед сохранением.
+
+        Убеждается, что total_price не отрицателен.
 
         Raises:
-            ValidationError: Если не указаны ни доставка, ни пункт выдачи, или указаны оба.
+            ValidationError: Если total_price отрицателен.
         """
-        if self.delivery and self.pickup_point:
-            raise ValidationError("Нельзя указать и доставку, и пункт выдачи одновременно.")
-        if not self.delivery and not self.pickup_point:
-            raise ValidationError("Необходимо указать либо доставку, либо пункт выдачи.")
+        if self.total_price < 0:
+            raise ValidationError(_("Общая стоимость не может быть отрицательной"))
 
     def save(self, *args, **kwargs):
-        """Сохраняет объект с автоматической проверкой.
+        """
+        Сохраняет объект с автоматической проверкой.
 
         Вызывает full_clean() для валидации перед сохранением.
+
+        Raises:
+            ValidationError: Если данные не прошли валидацию.
         """
         self.full_clean()
         super().save(*args, **kwargs)

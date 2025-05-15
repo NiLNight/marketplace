@@ -15,6 +15,7 @@ urlpatterns = [
     path('reviews/', include('apps.reviews.urls')),
     path('comments/', include('apps.comments.urls')),
     path('wishlists/', include('apps.wishlists.urls')),
+    path('delivery/', include('apps.delivery.urls')),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger'),
     path('api/docs/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),

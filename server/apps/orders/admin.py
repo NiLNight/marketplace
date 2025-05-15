@@ -1,7 +1,5 @@
-# orders/admin.py
 from django.contrib import admin
-from .models import Order, Delivery
-from apps.carts.models import OrderItem
+from .models import Order
 
 
 admin.site.register(Order)
