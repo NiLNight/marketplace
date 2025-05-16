@@ -61,8 +61,7 @@ class DeliverySerializer(serializers.ModelSerializer):
         Raises:
             serializers.ValidationError: Если данные некорректны.
         """
-        instance = self.instance
-        if instance and instance.cost < 0:
+        if attrs.get('cost', 0) < 0:
             raise serializers.ValidationError({"cost": _("Стоимость доставки не может быть отрицательной")})
         return attrs
 
@@ -72,7 +71,7 @@ class PickupPointSerializer(serializers.ModelSerializer):
     Сериализатор для пунктов выдачи.
 
     Преобразует объекты PickupPoint в JSON, включая город и адрес.
-    Используется для отображения списка пунктов выдачи и выбора при создании заказа.
+    Используется только для чтения, обновление пунктов выдачи не поддерживается.
     """
     city = CitySerializer(read_only=True)
 
@@ -80,6 +79,23 @@ class PickupPointSerializer(serializers.ModelSerializer):
         """Метаданные сериализатора PickupPointSerializer."""
         model = PickupPoint
         fields = ['id', 'city', 'address', 'is_active']
+
+    def validate_address(self, value):
+        """
+        Проверяет, что адрес содержит не менее 5 символов.
+
+        Args:
+            value (str): Значение поля address.
+
+        Returns:
+            str: Валидированное значение.
+
+        Raises:
+            serializers.ValidationError: Если адрес слишком короткий.
+        """
+        if len(value.strip()) < 5:
+            raise serializers.ValidationError(_("Адрес должен содержать не менее 5 символов"))
+        return value
 
     def validate(self, attrs):
         """
