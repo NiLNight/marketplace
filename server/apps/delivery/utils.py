@@ -3,26 +3,56 @@ from functools import wraps
 from rest_framework.response import Response
 from rest_framework import status
 from django.core.exceptions import ValidationError
-from rest_framework.exceptions import APIException
-from apps.delivery.exceptions import DeliveryNotFound, PickupPointNotFound, CityNotFound
+from rest_framework.exceptions import APIException, PermissionDenied
+from apps.delivery.exceptions import DeliveryNotFound, PickupPointNotFound, CityNotFound, ElasticsearchUnavailable
+from django.utils.translation import gettext_lazy as _
+from typing import Dict, Any
+from django.http import HttpRequest
 
 logger = logging.getLogger(__name__)
 
 
-def handle_api_errors(view_func):
-    """
-    Декоратор для обработки ошибок в API-представлениях приложения delivery.
+def validate_positive_integer(value, field_name):
+    """Проверяет, что значение является положительным целым числом."""
+    if not isinstance(value, int) or value <= 0:
+        raise ValidationError(_(f"Идентификатор {field_name} должен быть положительным целым числом"))
+    return value
 
-    Обрабатывает стандартные и кастомные исключения, логирует ошибки и возвращает стандартизированные HTTP-ответы.
-    """
+
+def get_filter_params(request: HttpRequest) -> Dict[str, Any]:
+    """Извлекает параметры фильтрации из HTTP-запроса."""
+    params = request.GET
+    result = {
+        'city_id': None,
+    }
+    try:
+        city_id = params.get('city_id')
+        if city_id is not None:
+            result['city_id'] = int(city_id)
+        return result
+    except (ValueError, TypeError) as e:
+        logger.warning(f"Invalid filter parameters: {str(e)}")
+        raise CityNotFound(f"Некорректные параметры фильтрации: {str(e)}")
+
+
+def handle_api_errors(view_func):
+    """Декоратор для обработки ошибок в API-представлениях приложения delivery."""
 
     @wraps(view_func)
     def wrapper(self, request, *args, **kwargs):
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         try:
             return view_func(self, request, *args, **kwargs)
+        except PermissionDenied as e:
+            logger.warning(
+                f"Permission denied: {str(e)}, user={user_id}, path={request.path}, "
+                f"IP={request.META.get('REMOTE_ADDR')}"
+            )
+            return Response(
+                {"error": str(e), "code": "permission_denied"},
+                status=status.HTTP_403_FORBIDDEN
+            )
         except KeyError as e:
-            # Обрабатываем отсутствие ключей в запросе
             logger.warning(
                 f"Missing key: {str(e)}, user={user_id}, path={request.path}, IP={request.META.get('REMOTE_ADDR')}"
             )
@@ -31,7 +61,6 @@ def handle_api_errors(view_func):
                 status=status.HTTP_400_BAD_REQUEST
             )
         except ValueError as e:
-            # Обрабатываем некорректные значения параметров
             logger.warning(
                 f"Invalid value: {str(e)}, user={user_id}, path={request.path}, IP={request.META.get('REMOTE_ADDR')}"
             )
@@ -40,7 +69,6 @@ def handle_api_errors(view_func):
                 status=status.HTTP_400_BAD_REQUEST
             )
         except ValidationError as e:
-            # Обрабатываем ошибки валидации
             logger.warning(
                 f"Validation error: {str(e)}, user={user_id}, path={request.path}, IP={request.META.get('REMOTE_ADDR')}"
             )
@@ -49,7 +77,6 @@ def handle_api_errors(view_func):
                 status=status.HTTP_400_BAD_REQUEST
             )
         except DeliveryNotFound as e:
-            # Обрабатываем отсутствие адреса доставки
             logger.warning(
                 f"Delivery not found: {e.detail}, user={user_id}, path={request.path}, IP={request.META.get('REMOTE_ADDR')}"
             )
@@ -58,7 +85,6 @@ def handle_api_errors(view_func):
                 status=e.status_code
             )
         except PickupPointNotFound as e:
-            # Обрабатываем отсутствие пункта выдачи
             logger.warning(
                 f"Pickup point not found: {e.detail}, user={user_id}, path={request.path}, IP={request.META.get('REMOTE_ADDR')}"
             )
@@ -67,7 +93,6 @@ def handle_api_errors(view_func):
                 status=e.status_code
             )
         except CityNotFound as e:
-            # Обрабатываем отсутствие города
             logger.warning(
                 f"City not found: {e.detail}, user={user_id}, path={request.path}, IP={request.META.get('REMOTE_ADDR')}"
             )
@@ -75,8 +100,16 @@ def handle_api_errors(view_func):
                 {"error": e.detail, "code": e.default_code},
                 status=e.status_code
             )
+        except ElasticsearchUnavailable as e:
+            logger.warning(
+                f"Elasticsearch unavailable: {e.detail}, user={user_id}, path={request.path}, "
+                f"IP={request.META.get('REMOTE_ADDR')}"
+            )
+            return Response(
+                {"error": e.detail, "code": e.default_code},
+                status=e.status_code
+            )
         except APIException as e:
-            # Обрабатываем другие API-исключения
             logger.warning(
                 f"API error: {e.detail}, user={user_id}, path={request.path}, IP={request.META.get('REMOTE_ADDR')}"
             )
@@ -85,7 +118,6 @@ def handle_api_errors(view_func):
                 status=e.status_code
             )
         except Exception as e:
-            # Обрабатываем непредвиденные ошибки
             logger.error(
                 f"Server error: {str(e)}, user={user_id}, path={request.path}, IP={request.META.get('REMOTE_ADDR')}"
             )
