@@ -112,20 +112,24 @@
 2.3. Логирование ошибок:
    - Логируйте ошибки с доступным контекстом: пользователь (например, user_id), путь запроса (для API), task_id (для Celery), IP-адрес (для безопасности).
    - Пример:
-     logger.warning(f"User {user_id} not found, path={request.path}, IP={request.META.get('REMOTE_ADDR')}")
+     logger.warning(f"User {user_id} not found, path={request.path}, "
+     f"IP={request.META.get('REMOTE_ADDR')}")
 
 3. Логирование
 
 3.1. Уровни логирования:
    - Используйте `info` для успешных операций, `warning` для некритичных ошибок, `error` для критических сбоев.
    - Пример:
-     logger.info(f"Created user {user.id}, email={user.email}, path={request.path}, IP={request.META.get('REMOTE_ADDR')}")
-     logger.error(f"Failed to send email: {str(e)}, user_id={user_id or 'unknown'}, task_id={task_id}, IP={request.META.get('REMOTE_ADDR', 'unknown')}")
+     logger.info(f"Created user {user.id}, email={user.email}, path={request.path}, "
+     f"IP={request.META.get('REMOTE_ADDR')}")
+     logger.error(f"Failed to send email: {str(e)}, user_id={user_id or 'unknown'}, "
+     f"task_id={task_id}, IP={request.META.get('REMOTE_ADDR', 'unknown')}")
 
 3.2. Информативность:
    - Включайте в логи доступные элементы контекста: идентификатор пользователя (например, user_id), объекта (например, email), task_id (для Celery), путь запроса (для API), IP-адрес. Настройте ротацию логов для предотвращения переполнения.
    - Пример:
-     logger.info(f"Sending email to {email}, user_id={user_id or 'unknown'}, task_id={task_id}, IP={request.META.get('REMOTE_ADDR')}")
+     logger.info(f"Sending email to {email}, user_id={user_id or 'unknown'}, "
+     f"task_id={task_id}, IP={request.META.get('REMOTE_ADDR')}")
 
 4. Тестирование
 
@@ -159,18 +163,21 @@
 
      @send_email.on_success
      def on_email_success(self, retval, task_id, args, kwargs):
-         logger.info(f"Email sent successfully to {args[0]}, task_id={task_id}, user_id={kwargs.get('user_id', 'unknown')}")
+         logger.info(f"Email sent successfully to {args[0]}, task_id={task_id}, "
+         f"user_id={kwargs.get('user_id', 'unknown')}")
 
      @send_email.on_failure
      def on_email_failure(self, exc, task_id, args, kwargs):
-         logger.error(f"Failed to send email to {args[0]}, task_id={task_id}, user_id={kwargs.get('user_id', 'unknown')}, error={str(exc)}")
+         logger.error(f"Failed to send email to {args[0]}, task_id={task_id}, "
+         f"user_id={kwargs.get('user_id', 'unknown')}, error={str(exc)}")
 
 5.2. Мониторинг задач:
    - Используйте инструменты (например, Celery Flower) для мониторинга выполнения задач.
    - Логируйте начало, завершение и ошибки задач с `task_id`.
    - Пример:
      # Логируем начало задачи с контекстом
-     logger.info(f"Task started: send_email to {email}, user_id={user_id or 'unknown'}, task_id={self.request.id}, IP={request.META.get('REMOTE_ADDR', 'unknown')}")
+     logger.info(f"Task started: send_email to {email}, user_id={user_id or 'unknown'}, "
+     f"task_id={self.request.id}, IP={request.META.get('REMOTE_ADDR', 'unknown')}")
 
 6. Безопасность
 
@@ -239,3 +246,84 @@
 9.4. Безопасность:
    - Проверяйте права доступа и защищайте от инъекций (например, используйте ORM вместо raw SQL).
    - Используйте rate limiting для защиты API.
+
+9.5. Использование Elasticsearch для поиска
+
+9.5.1. Обязательное использование:
+   - Применяйте Elasticsearch для всех операций полнотекстового поиска, фильтрации и ранжирования данных. Это обеспечивает высокую производительность и масштабируемость при работе с большими объемами данных.
+   - Пример:
+     # Поиск по продуктам
+     from elasticsearch_dsl import Search
+     search = Search(index="products").query("match", title=query)
+     results = search.execute()
+
+9.5.2. Интеграция с моделями:
+   - Определяйте документы Elasticsearch, соответствующие структуре моделей базы данных. Используйте библиотеки, такие как `django-elasticsearch-dsl`, для упрощения синхронизации.
+   - Настройте автоматическое обновление индексов через сигналы (`post_save`, `post_delete`) и асинхронные задачи Celery.
+   - Пример:
+     from django.db.models.signals import post_save
+     from django.dispatch import receiver
+     from myapp.tasks import update_elasticsearch_index
+
+     @receiver(post_save, sender=Product)
+     def sync_product_to_elasticsearch(sender, instance, **kwargs):
+         update_elasticsearch_index.delay(instance.id, "product")
+
+9.5.3. Валидация поисковых запросов:
+   - Проверяйте формат и безопасность поисковых запросов в сериализаторах перед передачей в Elasticsearch.
+   - Используйте кастомные валидаторы для проверки длины запроса, допустимых символов и фильтров.
+   - Пример:
+     class SearchSerializer(serializers.Serializer):
+         """Сериализатор для валидации поисковых запросов."""
+         query = serializers.CharField(max_length=200, required=True)
+
+         def validate_query(self, value):
+             if not value.strip():
+                 raise serializers.ValidationError("Поисковый запрос не может быть пустым.")
+             return value
+
+9.5.4. Обработка ошибок:
+   - Проверяйте доступность Elasticsearch перед выполнением операций. При недоступности сервиса выбрасывайте кастомное исключение с HTTP-статусом 503.
+   - Поддерживайте структуру `{detail: str, code: str}` для сообщений об ошибках.
+   - Пример:
+     class ElasticsearchUnavailable(APIException):
+         status_code = 503
+         default_detail = "Сервис поиска временно недоступен"
+         default_code = "service_unavailable"
+
+9.5.5. Логирование операций:
+   - Логируйте начало, завершение и ошибки операций поиска с указанием контекста: запрос, количество результатов, время выполнения, `task_id` (для Celery), IP-адрес.
+   - Используйте уровень `info` для успешных операций, `error` для сбоев.
+   - Пример:
+     logger.info(f"Searching in Elasticsearch: query={query}, results_count={len(results)}, "
+                 f"duration_ms={duration}, task_id={task_id or 'unknown'}, "
+                 f"IP={request.META.get('REMOTE_ADDR', 'unknown')}")
+
+9.5.6. Кэширование результатов:
+   - Кэшируйте часто запрашиваемые результаты поиска с использованием ключей вида `search_results:<query_hash>`.
+   - Инвалидируйте кэш при изменении данных с помощью сигналов (`post_save`, `post_delete`).
+   - Пример:
+     cache_key = f"search_results:{hash_query(query)}"
+     CacheService.set_cached_data(cache_key, results, timeout=3600)
+
+     @receiver(post_save, sender=Product)
+     def invalidate_search_cache(sender, instance, **kwargs):
+         CacheService.invalidate_cache(prefix="search_results")
+         logger.info(f"Invalidated search cache for product_id={instance.id}")
+
+9.5.7. Асинхронные задачи:
+   - Выполняйте индексацию и обновление документов Elasticsearch асинхронно через Celery.
+   - Настройте повторы для операций, подверженных сбоям (например, `autoretry_for=(ConnectionError,)`).
+   - Пример:
+     @shared_task(autoretry_for=(ConnectionError,), max_retries=3, countdown=60)
+     def update_elasticsearch_index(object_id: int, object_type: str) -> None:
+         obj = get_object_or_none(object_type, object_id)
+         if obj:
+             obj.to_elasticsearch()
+             logger.info(f"Indexed {object_type} id={object_id}, task_id={self.request.id}")
+
+9.5.8. Безопасность:
+   - Проверяйте права доступа к данным перед возвратом результатов поиска.
+   - Применяйте фильтры на уровне Elasticsearch для ограничения доступа к данным.
+   - Пример:
+     search = search.filter("term", user_id=request.user.id)
