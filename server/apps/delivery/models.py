@@ -1,17 +1,13 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.validators import MinLengthValidator
+from django.contrib.postgres.search import SearchVectorField, SearchVector, Value
+from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
 
 
 class City(models.Model):
-    """
-    Модель для хранения городов.
-
-    Attributes:
-        name (CharField): Название города.
-    """
     name = models.CharField(
         max_length=100,
         unique=True,
@@ -19,7 +15,6 @@ class City(models.Model):
     )
 
     class Meta:
-        """Метаданные модели City."""
         indexes = [
             models.Index(fields=['name']),
         ]
@@ -27,35 +22,14 @@ class City(models.Model):
         verbose_name_plural = 'Города'
 
     def __str__(self) -> str:
-        """
-        Строковое представление города.
-
-        Returns:
-            str: Название города.
-        """
         return self.name
 
     def save(self, *args, **kwargs):
-        """
-        Сохраняет объект города, выполняя полную валидацию.
-
-        Raises:
-            ValidationError: Если данные не прошли валидацию.
-        """
         self.full_clean()
         super().save(*args, **kwargs)
 
 
 class Delivery(models.Model):
-    """
-    Модель для хранения адресов доставки пользователя.
-
-    Attributes:
-        user (ForeignKey): Связь с пользователем, которому принадлежит адрес.
-        address (CharField): Текст адреса доставки.
-        cost (DecimalField): Стоимость доставки.
-        is_primary (BooleanField): Флаг, указывающий, является ли адрес основным.
-    """
     user = models.ForeignKey(
         User,
         related_name='deliveries',
@@ -81,7 +55,6 @@ class Delivery(models.Model):
     )
 
     class Meta:
-        """ Метаданные модели Delivery."""
         indexes = [
             models.Index(fields=['user', 'is_primary']),
         ]
@@ -89,38 +62,20 @@ class Delivery(models.Model):
         verbose_name_plural = 'Адреса доставки'
 
     def __str__(self) -> str:
-        """
-        Строковое представление адреса доставки.
-
-        Returns:
-            str: Имя пользователя и адрес доставки.
-        """
         return f"Адрес доставки для пользователя {self.user.username}"
 
     def save(self, *args, **kwargs):
-        """
-        Сохраняет объект адреса доставки, выполняя полную валидацию.
-
-        Raises:
-            ValidationError: Если данные не прошли валидацию.
-        """
+        if self.is_primary:
+            Delivery.objects.filter(user=self.user, is_primary=True).exclude(pk=self.pk).update(is_primary=False)
         self.full_clean()
         super().save(*args, **kwargs)
 
 
 class PickupPoint(models.Model):
-    """
-    Модель для хранения пунктов выдачи.
-
-    Attributes:
-        city (ForeignKey): Связь с городом, в котором находится пункт выдачи.
-        address (CharField): Адрес пункта выдачи.
-        is_active (BooleanField): Флаг, указывающий, активен ли пункт выдачи.
-    """
     city = models.ForeignKey(
         City,
         related_name='pickup_points',
-        on_delete=models.CASCADE,  # Изменено на CASCADE для упрощения удаления городов
+        on_delete=models.CASCADE,
         verbose_name='Город'
     )
     address = models.CharField(
@@ -132,30 +87,27 @@ class PickupPoint(models.Model):
         default=True,
         verbose_name='Активен'
     )
+    search_vector = SearchVectorField(null=True, blank=True, verbose_name='Поисковый вектор')
 
     class Meta:
-        """Метаданные модели PickupPoint."""
         indexes = [
             models.Index(fields=['city', 'is_active']),
+            models.Index(fields=['search_vector']),
+        ]
+        constraints = [
+            models.UniqueConstraint(fields=['city', 'address'], name='unique_city_address')
         ]
         verbose_name = 'Пункт выдачи'
         verbose_name_plural = 'Пункты выдачи'
 
     def __str__(self) -> str:
-        """
-        Строковое представление пункта выдачи.
-
-        Returns:
-            str: Город и адрес пункта выдачи.
-        """
         return f"{self.city.name}, {self.address}"
 
     def save(self, *args, **kwargs):
-        """
-        Сохраняет объект пункта выдачи, выполняя полную валидацию.
-
-        Raises:
-            ValidationError: Если данные не прошли валидацию.
-        """
+        city_name = self.city.name if self.city else ''
+        self.search_vector = (
+                SearchVector(Value(self.address), weight='A', config='russian') +
+                SearchVector(Value(city_name), weight='B', config='russian')
+        )
         self.full_clean()
         super().save(*args, **kwargs)
