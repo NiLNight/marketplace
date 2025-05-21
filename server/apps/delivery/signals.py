@@ -18,8 +18,11 @@ def invalidate_delivery_cache(sender, instance, **kwargs):
         kwargs: Дополнительные аргументы сигнала.
     """
     cache_key = f"delivery_list:{instance.user.id}"
-    CacheService.invalidate_cache(prefix=cache_key)
-    logger.info(f"Invalidated cache for delivery_list user_id={instance.user.id}")
+    try:
+        CacheService.invalidate_cache(prefix=cache_key)
+        logger.info(f"Invalidated cache for delivery_list user_id={instance.user.id}")
+    except Exception as e:
+        logger.error(f"Failed to invalidate cache for delivery_list user_id={instance.user.id}: {str(e)}")
 
 
 @receiver([post_save, post_delete], sender=PickupPoint)
@@ -33,8 +36,11 @@ def invalidate_pickup_point_cache(sender, instance, **kwargs):
         kwargs: Дополнительные аргументы сигнала.
     """
     cache_key = f"pickup_points:{instance.city_id or 'all'}:none"
-    CacheService.invalidate_cache(prefix=cache_key)
-    logger.info(f"Invalidated cache for pickup_points city_id={instance.city_id}")
+    try:
+        CacheService.invalidate_cache(prefix=cache_key)
+        logger.info(f"Invalidated cache for pickup_points city_id={instance.city_id}")
+    except Exception as e:
+        logger.error(f"Failed to invalidate cache for pickup_points city_id={instance.city_id}: {str(e)}")
 
 
 @receiver([post_save, post_delete], sender=City)
@@ -48,5 +54,8 @@ def invalidate_city_cache(sender, instance, **kwargs):
         kwargs: Дополнительные аргументы сигнала.
     """
     cache_key = "city_list"
-    CacheService.invalidate_cache(prefix=cache_key)
-    logger.info(f"Invalidated cache for city_list")
+    try:
+        CacheService.invalidate_cache(prefix=cache_key)
+        logger.info(f"Invalidated cache for city_list")
+    except Exception as e:
+        logger.error(f"Failed to invalidate cache for city_list: {str(e)}")

@@ -9681,3 +9681,71 @@ LINE 1: ...t"."address", "delivery_pickuppoint"."is_active", "delivery_...
 [2025-05-16 21:51:38,264] DEBUG apps.delivery.services.query_services Retrieving base queryset for active pickup points
 [2025-05-16 21:51:38,264] DEBUG apps.delivery.services.query_services Applying optimizations for pickup point list
 [2025-05-16 21:51:38,271] INFO apps.delivery.views Retrieved 1 pickup points for user=11, path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-21 14:29:51,863] DEBUG apps.users.authentication No token provided in request
+[2025-05-21 14:29:56,138] DEBUG apps.users.authentication No token provided in request
+[2025-05-21 14:30:00,251] DEBUG apps.users.authentication No token provided in request
+[2025-05-21 14:30:00,412] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-21 14:30:00,413] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-21 14:30:00,413] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-21 14:30:01,226] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-21 14:30:01,227] INFO apps.users.views User 11 logged in successfully
+[2025-05-21 14:30:01,325] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-21 14:30:07,420] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 14:30:07,420] INFO apps.delivery.views Processing pickup points list request for user=11, path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-21 14:30:07,445] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:Севастополь:e5995e31291cf5f4191273cbbd256874
+[2025-05-21 14:30:07,445] INFO apps.delivery.services.query_services Searching pickup points: query=Севастополь, page=1, page_size=50
+[2025-05-21 14:30:07,445] DEBUG apps.delivery.services.query_services Applying filters: city_id=None
+[2025-05-21 14:30:07,916] INFO apps.delivery.services.query_services Found 1 pickup points, total=1
+[2025-05-21 14:30:07,916] DEBUG apps.delivery.services.query_services Retrieving base queryset for active pickup points
+[2025-05-21 14:30:07,916] DEBUG apps.delivery.services.query_services Applying optimizations for pickup point list
+[2025-05-21 14:30:08,005] INFO apps.delivery.views Retrieved 1 pickup points for user=11, path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-21 14:30:12,980] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 14:30:12,980] INFO apps.delivery.views Processing pickup points list request for user=11, path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-21 14:30:12,981] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:Севастополь:e5995e31291cf5f4191273cbbd256874
+[2025-05-21 14:30:12,981] INFO apps.delivery.services.query_services Searching pickup points: query=Севастополь, page=1, page_size=50
+[2025-05-21 14:30:12,982] DEBUG apps.delivery.services.query_services Applying filters: city_id=None
+[2025-05-21 14:30:12,999] INFO apps.delivery.services.query_services Found 1 pickup points, total=1
+[2025-05-21 14:30:13,000] DEBUG apps.delivery.services.query_services Retrieving base queryset for active pickup points
+[2025-05-21 14:30:13,000] DEBUG apps.delivery.services.query_services Applying optimizations for pickup point list
+[2025-05-21 14:30:13,008] INFO apps.delivery.views Retrieved 1 pickup points for user=11, path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-21 14:30:17,628] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 14:30:17,628] INFO apps.delivery.views Processing pickup points list request for user=11, path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-21 14:30:17,629] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:Севастополь:e5995e31291cf5f4191273cbbd256874
+[2025-05-21 14:30:17,629] INFO apps.delivery.services.query_services Searching pickup points: query=Севастополь, page=1, page_size=50
+[2025-05-21 14:30:17,629] DEBUG apps.delivery.services.query_services Applying filters: city_id=None
+[2025-05-21 14:30:17,687] INFO apps.delivery.services.query_services Found 1 pickup points, total=1
+[2025-05-21 14:30:17,688] DEBUG apps.delivery.services.query_services Retrieving base queryset for active pickup points
+[2025-05-21 14:30:17,688] DEBUG apps.delivery.services.query_services Applying optimizations for pickup point list
+[2025-05-21 14:30:17,695] INFO apps.delivery.views Retrieved 1 pickup points for user=11, path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-21 14:30:36,524] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 14:30:36,524] INFO apps.delivery.views Processing delivery list request for user=11, path=/delivery/deliveries/, IP=127.0.0.1
+[2025-05-21 14:30:36,526] DEBUG apps.core.services.cache_services Cache miss for key: delivery_list:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-21 14:30:36,526] DEBUG apps.delivery.services.query_services Retrieving base queryset for deliveries of user=11
+[2025-05-21 14:30:36,526] DEBUG apps.delivery.services.query_services Applying optimizations for delivery list
+[2025-05-21 14:30:36,546] INFO apps.delivery.views Retrieved 1 deliveries, user=11
+[2025-05-21 14:30:39,882] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 14:30:39,883] INFO apps.delivery.views Processing delivery list request for user=11, path=/delivery/deliveries/, IP=127.0.0.1
+[2025-05-21 14:30:39,884] DEBUG apps.core.services.cache_services Cache hit for key: delivery_list:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-21 14:30:39,884] INFO apps.delivery.views Retrieved cached deliveries for user=11, path=/delivery/deliveries/, IP=127.0.0.1
+[2025-05-21 14:30:44,382] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 14:30:44,382] INFO apps.delivery.views Processing city list request for user=11, path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-21 14:30:44,383] DEBUG apps.core.services.cache_services Cache miss for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-21 14:30:44,387] INFO apps.delivery.views Retrieved 2 cities for user=11, path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-21 14:30:46,039] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 14:30:46,039] INFO apps.delivery.views Processing city list request for user=11, path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-21 14:30:46,041] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-21 14:30:46,041] INFO apps.delivery.views Retrieved cached cities for user=11, path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-21 15:33:31,190] DEBUG apps.users.authentication No token provided in request
+[2025-05-21 15:33:33,646] DEBUG apps.users.authentication No token provided in request
+[2025-05-21 15:33:33,648] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-21 15:33:33,648] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-21 15:33:33,648] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-21 15:33:34,153] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-21 15:33:34,153] INFO apps.users.views User 11 logged in successfully
+[2025-05-21 15:33:34,156] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-21 15:33:35,824] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 15:33:35,840] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:all:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-21 15:33:35,840] DEBUG apps.orders.services.order_services Starting retrieval of orders for user=11
+[2025-05-21 15:33:35,840] INFO apps.orders.services.order_services Retrieving orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-21 15:33:35,919] INFO apps.orders.services.order_services Retrieved 5 orders for user=11, IP=127.0.0.1
+[2025-05-21 15:33:35,976] INFO apps.orders.views Retrieved 5 orders for user=11, path=/orders/, IP=127.0.0.1
