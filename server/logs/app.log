@@ -9825,3 +9825,83 @@ LINE 1: ...t"."address", "delivery_pickuppoint"."is_active", "delivery_...
 [2025-05-21 17:27:39,819] INFO apps.delivery.views Processing pickup points list request for user=11
 [2025-05-21 17:27:39,819] DEBUG apps.core.services.cache_services Cache hit for key: pickup_points:all:Севастополь:e5995e31291cf5f4191273cbbd256874
 [2025-05-21 17:27:39,819] INFO apps.delivery.views Retrieved cached pickup points for user=11
+[2025-05-21 18:36:45,838] DEBUG apps.users.authentication No token provided in request
+[2025-05-21 18:36:49,066] DEBUG apps.users.authentication No token provided in request
+[2025-05-21 18:36:49,187] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-21 18:36:49,188] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-21 18:36:49,188] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-21 18:36:49,752] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-21 18:36:49,752] INFO apps.users.views User 11 logged in successfully
+[2025-05-21 18:36:49,761] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-21 18:36:52,526] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 18:36:52,526] INFO apps.delivery.views Processing pickup points list request for user=11
+[2025-05-21 18:36:52,528] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:none:Севастополь:e5995e31291cf5f4191273cbbd256874
+[2025-05-21 18:36:52,528] INFO apps.delivery.services.query_services Searching pickup points: query=Севастополь, city_id=None, district=None, page=1, page_size=50
+[2025-05-21 18:36:52,605] INFO apps.delivery.services.query_services Found 1 pickup points, total=1
+[2025-05-21 18:36:52,606] DEBUG apps.delivery.services.query_services Retrieving base queryset for active pickup points
+[2025-05-21 18:36:52,606] DEBUG apps.delivery.services.query_services Applying optimizations for pickup point list
+[2025-05-21 18:36:52,614] INFO apps.delivery.views Retrieved 1 pickup points for user=11
+[2025-05-21 18:36:53,806] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 18:36:53,806] INFO apps.delivery.views Processing pickup points list request for user=11
+[2025-05-21 18:36:53,807] DEBUG apps.core.services.cache_services Cache hit for key: pickup_points:all:none:Севастополь:e5995e31291cf5f4191273cbbd256874
+[2025-05-21 18:36:53,807] INFO apps.delivery.views Retrieved cached pickup points for user=11
+[2025-05-21 18:41:52,019] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 18:41:52,019] INFO apps.delivery.views Processing pickup points list request for user=11
+[2025-05-21 18:41:52,025] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:none:vjc:5b548fe0ba6a764967ded12482df8a64
+[2025-05-21 18:41:52,025] INFO apps.delivery.services.query_services Searching pickup points: query=vjc, city_id=None, district=None, page=1, page_size=50
+[2025-05-21 18:41:52,054] INFO apps.delivery.services.query_services Found 0 pickup points, total=0
+[2025-05-21 18:41:52,054] DEBUG apps.delivery.services.query_services Retrieving base queryset for active pickup points
+[2025-05-21 18:41:52,054] DEBUG apps.delivery.services.query_services Applying optimizations for pickup point list
+[2025-05-21 18:41:52,056] INFO apps.delivery.views Retrieved 0 pickup points for user=11
+[2025-05-21 18:41:59,185] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 18:41:59,185] INFO apps.delivery.views Processing pickup points list request for user=11
+[2025-05-21 18:41:59,186] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:none:москва:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-21 18:41:59,187] INFO apps.delivery.services.query_services Searching pickup points: query=москва, city_id=None, district=None, page=1, page_size=50
+[2025-05-21 18:41:59,244] INFO apps.delivery.services.query_services Found 1 pickup points, total=1
+[2025-05-21 18:41:59,244] DEBUG apps.delivery.services.query_services Retrieving base queryset for active pickup points
+[2025-05-21 18:41:59,245] DEBUG apps.delivery.services.query_services Applying optimizations for pickup point list
+[2025-05-21 18:41:59,254] INFO apps.delivery.views Retrieved 1 pickup points for user=11
+[2025-05-21 18:44:30,716] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 18:44:30,716] INFO apps.delivery.views Processing district list request for user=11, city_id=None
+[2025-05-21 18:44:33,135] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 18:44:33,135] INFO apps.delivery.views Processing district list request for user=11, city_id=None
+[2025-05-21 18:45:02,710] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 18:45:02,710] INFO apps.delivery.views Processing district list request for user=11, city_id=None
+[2025-05-21 18:45:28,565] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 18:45:28,565] INFO apps.delivery.views Processing district list request for user=11, city_id=None
+[2025-05-21 18:45:29,582] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 18:45:29,582] INFO apps.delivery.views Processing district list request for user=11, city_id=None
+[2025-05-21 18:45:41,189] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 18:45:41,189] INFO apps.delivery.views Processing district list request for user=11, city_id=None
+[2025-05-21 18:45:57,897] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 18:45:57,898] INFO apps.delivery.views Processing district list request for user=11, city_id=None
+[2025-05-21 18:52:30,911] DEBUG apps.users.authentication No token provided in request
+[2025-05-21 18:56:13,737] DEBUG apps.users.authentication No token provided in request
+[2025-05-21 18:56:13,856] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-21 18:56:13,857] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-21 18:56:13,857] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-21 18:56:14,411] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-21 18:56:14,411] INFO apps.users.views User 11 logged in successfully
+[2025-05-21 18:56:14,999] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-21 18:56:18,456] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 18:56:18,456] INFO apps.delivery.views Processing city list request for user=11
+[2025-05-21 18:56:18,458] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-21 18:56:18,458] INFO apps.delivery.views Retrieved cached cities for user=11
+[2025-05-21 18:56:24,964] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 18:56:24,964] INFO apps.delivery.views Processing district list request for user=11, city_id=None
+[2025-05-21 18:59:32,625] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 18:59:32,625] INFO apps.delivery.views Processing district list request for user=11, city_id=1
+[2025-05-21 18:59:32,628] DEBUG apps.core.services.cache_services Cache miss for key: districts:1
+[2025-05-21 18:59:32,632] INFO apps.delivery.views Retrieved 0 districts for city_id=1, user=11
+[2025-05-21 18:59:34,641] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 18:59:34,641] INFO apps.delivery.views Processing district list request for user=11, city_id=1
+[2025-05-21 18:59:34,643] DEBUG apps.core.services.cache_services Cache hit for key: districts:1
+[2025-05-21 18:59:34,643] INFO apps.delivery.views Retrieved cached districts for city_id=1, user=11
+[2025-05-21 18:59:38,253] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 18:59:38,253] INFO apps.delivery.views Processing district list request for user=11, city_id=2
+[2025-05-21 18:59:38,256] DEBUG apps.core.services.cache_services Cache miss for key: districts:2
+[2025-05-21 18:59:38,259] INFO apps.delivery.views Retrieved 0 districts for city_id=2, user=11
+[2025-05-21 18:59:41,064] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 18:59:41,064] INFO apps.delivery.views Processing district list request for user=11, city_id=1
+[2025-05-21 18:59:41,068] DEBUG apps.core.services.cache_services Cache hit for key: districts:1
+[2025-05-21 18:59:41,068] INFO apps.delivery.views Retrieved cached districts for city_id=1, user=11
