@@ -2,9 +2,10 @@ import logging
 from django.contrib.postgres.search import SearchQuery, SearchRank
 from django.db.models import Q, Case, When, IntegerField
 from elasticsearch_dsl import Search
+from elasticsearch_dsl.exceptions import ElasticsearchDslException
 from typing import Any, Optional, Union
 from apps.delivery.models import Delivery, PickupPoint, City
-from apps.delivery.exceptions import CityNotFound, ElasticsearchUnavailable, PickupPointNotFound, DeliveryNotFound
+from apps.delivery.exceptions import CityNotFound, PickupPointNotFound, DeliveryNotFound
 from apps.delivery.documents import PickupPointDocument
 from apps.delivery.utils import get_filter_params
 
@@ -17,8 +18,7 @@ class DeliveryQueryService:
     @classmethod
     def get_base_queryset(cls, user: Any) -> Any:
         """Возвращает базовый QuerySet для адресов доставки пользователя."""
-        logger.debug(f"Retrieving base queryset for deliveries of user={user.id}")
-        return Delivery.objects.filter(user=user)
+        return Delivery.objects.filter(user=user).order_by('id')
 
     @classmethod
     def get_delivery_list(cls, queryset: Any) -> Any:
@@ -88,11 +88,17 @@ class PickupPointQueryService:
                     source = source.filter('term', **{'city.id': city_id})
             else:  # QuerySet
                 if city_id:
+                    if not City.objects.filter(id=city_id).exists():
+                        logger.warning(f"City with id={city_id} not found")
+                        raise CityNotFound(f"Город с ID {city_id} не найден")
                     source = source.filter(city_id=city_id)
             return source
+        except ElasticsearchDslException as e:
+            logger.error(f"Elasticsearch error in apply_common_filters: {str(e)}")
+            raise CityNotFound(f"Ошибка Elasticsearch при фильтрации: {str(e)}")
         except Exception as e:
-            logger.warning(f"Invalid filter parameters: {str(e)}")
-            raise CityNotFound(f"Некорректные параметры фильтрации: {str(e)}")
+            logger.error(f"Unexpected error in apply_common_filters: {str(e)}")
+            raise CityNotFound(f"Неизвестная ошибка при фильтрации: {str(e)}")
 
     @classmethod
     def apply_filters(cls, queryset: Any, request: Any) -> Any:
@@ -108,7 +114,7 @@ class PickupPointQueryService:
         logger.debug(f"Applying ordering with sort_by={sort_by}")
         if sort_by and sort_by not in cls.ALLOWED_ORDER_FIELDS:
             logger.warning(f"Invalid ordering field: {sort_by}")
-            sort_by = None
+            raise ValueError(f"Недопустимое поле сортировки: {sort_by}")
         return queryset.order_by(sort_by or 'city__name', 'address')
 
     @classmethod
@@ -141,7 +147,12 @@ class PickupPointQueryService:
             elif not query:
                 search = search.sort('city.name', 'address')
             if page > 1:
-                last_hit = search[0:(page - 1) * page_size][-1]
+                preliminary_search = search[0:(page - 1) * page_size]
+                preliminary_response = preliminary_search.execute()
+                if not preliminary_response.hits:
+                    logger.warning(f"No results found for page={page}, page_size={page_size}")
+                    return cls.get_pickup_point_list(cls.get_base_queryset().none())
+                last_hit = preliminary_response[-1]
                 search = search.extra(search_after=[last_hit.meta.sort])
             search = search[0:page_size]
             response = search.execute()
@@ -160,9 +171,12 @@ class PickupPointQueryService:
         except ValueError as e:
             logger.warning(f"Invalid search parameters: {str(e)}")
             raise CityNotFound(f"Некорректные параметры поиска: {str(e)}")
-        except Exception as e:
+        except ElasticsearchDslException as e:
             logger.warning(f"Elasticsearch search failed: {str(e)}, falling back to DB")
             return cls.search_pickup_points_db(cls.get_base_queryset(), request)
+        except Exception as e:
+            logger.error(f"Unexpected error in search_pickup_points: {str(e)}")
+            raise CityNotFound(f"Неизвестная ошибка при поиске: {str(e)}")
 
     @staticmethod
     def search_pickup_points_db(queryset: Any, request: Any) -> Any:

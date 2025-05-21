@@ -11,7 +11,6 @@ class CitySerializer(serializers.ModelSerializer):
     """
 
     class Meta:
-        """Метаданные сериализатора CitySerializer."""
         model = City
         fields = ['id', 'name']
 
@@ -25,7 +24,6 @@ class DeliverySerializer(serializers.ModelSerializer):
     """
 
     class Meta:
-        """Метаданные сериализатора DeliverySerializer."""
         model = Delivery
         fields = ['id', 'address', 'cost', 'is_primary']
 
@@ -50,8 +48,6 @@ class DeliverySerializer(serializers.ModelSerializer):
         """
         Проверяет корректность данных перед сериализацией.
 
-        Проверяет, что стоимость доставки неотрицательна.
-
         Args:
             attrs (dict): Данные для сериализации.
 
@@ -61,7 +57,8 @@ class DeliverySerializer(serializers.ModelSerializer):
         Raises:
             serializers.ValidationError: Если данные некорректны.
         """
-        if attrs.get('cost', 0) < 0:
+        cost = attrs.get('cost')
+        if cost is not None and cost < 0:
             raise serializers.ValidationError({"cost": _("Стоимость доставки не может быть отрицательной")})
         return attrs
 
@@ -76,43 +73,5 @@ class PickupPointSerializer(serializers.ModelSerializer):
     city = CitySerializer(read_only=True)
 
     class Meta:
-        """Метаданные сериализатора PickupPointSerializer."""
         model = PickupPoint
         fields = ['id', 'city', 'address', 'is_active']
-
-    def validate_address(self, value):
-        """
-        Проверяет, что адрес содержит не менее 5 символов.
-
-        Args:
-            value (str): Значение поля address.
-
-        Returns:
-            str: Валидированное значение.
-
-        Raises:
-            serializers.ValidationError: Если адрес слишком короткий.
-        """
-        if len(value.strip()) < 5:
-            raise serializers.ValidationError(_("Адрес должен содержать не менее 5 символов"))
-        return value
-
-    def validate(self, attrs):
-        """
-        Проверяет корректность данных перед сериализацией.
-
-        Проверяет, что пункт выдачи активен.
-
-        Args:
-            attrs (dict): Данные для сериализации.
-
-        Returns:
-            dict: Валидированные данные.
-
-        Raises:
-            serializers.ValidationError: Если пункт выдачи неактивен.
-        """
-        instance = self.instance
-        if instance and not instance.is_active:
-            raise serializers.ValidationError({"is_active": _("Пункт выдачи неактивен")})
-        return attrs

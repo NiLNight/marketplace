@@ -9749,3 +9749,79 @@ LINE 1: ...t"."address", "delivery_pickuppoint"."is_active", "delivery_...
 [2025-05-21 15:33:35,840] INFO apps.orders.services.order_services Retrieving orders for user=11, path=/orders/, IP=127.0.0.1
 [2025-05-21 15:33:35,919] INFO apps.orders.services.order_services Retrieved 5 orders for user=11, IP=127.0.0.1
 [2025-05-21 15:33:35,976] INFO apps.orders.views Retrieved 5 orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-21 17:08:18,480] DEBUG apps.users.authentication No token provided in request
+[2025-05-21 17:08:21,591] DEBUG apps.users.authentication No token provided in request
+[2025-05-21 17:08:21,719] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-21 17:08:21,720] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-21 17:08:21,720] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-21 17:08:22,280] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-21 17:08:22,280] INFO apps.users.views User 11 logged in successfully
+[2025-05-21 17:08:22,289] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-21 17:08:24,778] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 17:08:24,779] INFO apps.delivery.views Processing pickup points list request for user=11
+[2025-05-21 17:08:24,780] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:Севастополь:e5995e31291cf5f4191273cbbd256874
+[2025-05-21 17:08:24,781] INFO apps.delivery.services.query_services Searching pickup points: query=Севастополь, page=1, page_size=50
+[2025-05-21 17:08:24,781] DEBUG apps.delivery.services.query_services Applying filters: city_id=None
+[2025-05-21 17:08:24,892] INFO apps.delivery.services.query_services Found 1 pickup points, total=1
+[2025-05-21 17:08:24,893] DEBUG apps.delivery.services.query_services Retrieving base queryset for active pickup points
+[2025-05-21 17:08:24,893] DEBUG apps.delivery.services.query_services Applying optimizations for pickup point list
+[2025-05-21 17:08:24,900] INFO apps.delivery.views Retrieved 1 pickup points for user=11
+[2025-05-21 17:08:29,271] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 17:08:29,271] INFO apps.delivery.views Processing pickup points list request for user=11
+[2025-05-21 17:08:29,272] DEBUG apps.core.services.cache_services Cache hit for key: pickup_points:all:Севастополь:e5995e31291cf5f4191273cbbd256874
+[2025-05-21 17:08:29,273] INFO apps.delivery.views Retrieved cached pickup points for user=11
+[2025-05-21 17:08:37,187] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 17:08:37,187] INFO apps.delivery.views Processing delivery list request for user=11
+[2025-05-21 17:08:37,189] DEBUG apps.core.services.cache_services Cache miss for key: delivery_list:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-21 17:08:37,189] DEBUG apps.delivery.services.query_services Applying optimizations for delivery list
+[2025-05-21 17:08:37,192] INFO apps.delivery.views Retrieved 1 deliveries, user=11
+[2025-05-21 17:08:38,609] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 17:08:38,609] INFO apps.delivery.views Processing delivery list request for user=11
+[2025-05-21 17:08:38,610] DEBUG apps.core.services.cache_services Cache hit for key: delivery_list:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-21 17:08:38,610] INFO apps.delivery.views Retrieved cached deliveries for user=11
+[2025-05-21 17:08:42,671] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 17:08:42,671] INFO apps.delivery.views Processing city list request for user=11
+[2025-05-21 17:08:42,672] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-21 17:08:42,672] INFO apps.delivery.views Retrieved cached cities for user=11
+[2025-05-21 17:08:46,203] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 17:08:46,203] INFO apps.delivery.views Processing city list request for user=11
+[2025-05-21 17:08:46,204] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-21 17:08:46,204] INFO apps.delivery.views Retrieved cached cities for user=11
+[2025-05-21 17:27:12,170] DEBUG apps.users.authentication No token provided in request
+[2025-05-21 17:27:13,303] DEBUG apps.users.authentication No token provided in request
+[2025-05-21 17:27:15,138] DEBUG apps.users.authentication No token provided in request
+[2025-05-21 17:27:15,252] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-21 17:27:15,253] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-21 17:27:15,253] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-21 17:27:15,787] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-21 17:27:15,787] INFO apps.users.views User 11 logged in successfully
+[2025-05-21 17:27:16,236] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-21 17:27:18,737] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 17:27:18,737] INFO apps.delivery.views Processing city list request for user=11
+[2025-05-21 17:27:18,739] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-21 17:27:18,739] INFO apps.delivery.views Retrieved cached cities for user=11
+[2025-05-21 17:27:21,196] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 17:27:21,197] INFO apps.delivery.views Processing city list request for user=11
+[2025-05-21 17:27:21,198] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-21 17:27:21,198] INFO apps.delivery.views Retrieved cached cities for user=11
+[2025-05-21 17:27:25,519] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 17:27:25,519] INFO apps.delivery.views Processing delivery list request for user=11
+[2025-05-21 17:27:25,520] DEBUG apps.core.services.cache_services Cache miss for key: delivery_list:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-21 17:27:25,521] DEBUG apps.delivery.services.query_services Applying optimizations for delivery list
+[2025-05-21 17:27:25,526] INFO apps.delivery.views Retrieved 1 deliveries, user=11
+[2025-05-21 17:27:31,533] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 17:27:31,533] INFO apps.delivery.views Processing delivery list request for user=11
+[2025-05-21 17:27:31,534] DEBUG apps.core.services.cache_services Cache hit for key: delivery_list:11:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-21 17:27:31,534] INFO apps.delivery.views Retrieved cached deliveries for user=11
+[2025-05-21 17:27:35,150] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 17:27:35,150] INFO apps.delivery.views Processing pickup points list request for user=11
+[2025-05-21 17:27:35,151] DEBUG apps.core.services.cache_services Cache hit for key: pickup_points:all:Севастополь:e5995e31291cf5f4191273cbbd256874
+[2025-05-21 17:27:35,151] INFO apps.delivery.views Retrieved cached pickup points for user=11
+[2025-05-21 17:27:38,658] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 17:27:38,658] INFO apps.delivery.views Processing pickup points list request for user=11
+[2025-05-21 17:27:38,659] DEBUG apps.core.services.cache_services Cache hit for key: pickup_points:all:Севастополь:e5995e31291cf5f4191273cbbd256874
+[2025-05-21 17:27:38,659] INFO apps.delivery.views Retrieved cached pickup points for user=11
+[2025-05-21 17:27:39,818] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-21 17:27:39,819] INFO apps.delivery.views Processing pickup points list request for user=11
+[2025-05-21 17:27:39,819] DEBUG apps.core.services.cache_services Cache hit for key: pickup_points:all:Севастополь:e5995e31291cf5f4191273cbbd256874
+[2025-05-21 17:27:39,819] INFO apps.delivery.views Retrieved cached pickup points for user=11

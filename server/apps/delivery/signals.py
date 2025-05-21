@@ -1,5 +1,6 @@
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
+import redis
 from apps.core.services.cache_services import CacheService
 from apps.delivery.models import Delivery, PickupPoint, City
 import logging
@@ -17,12 +18,17 @@ def invalidate_delivery_cache(sender, instance, **kwargs):
         instance: Экземпляр модели Delivery.
         kwargs: Дополнительные аргументы сигнала.
     """
-    cache_key = f"delivery_list:{instance.user.id}"
     try:
+        if not instance.user:
+            logger.warning(f"Delivery instance {instance.id} has no associated user")
+            return
+        cache_key = f"delivery_list:{instance.user.id}"
         CacheService.invalidate_cache(prefix=cache_key)
         logger.info(f"Invalidated cache for delivery_list user_id={instance.user.id}")
+    except redis.exceptions.RedisError as e:
+        logger.error(f"Redis error invalidating delivery_list user_id={instance.user.id}: {str(e)}")
     except Exception as e:
-        logger.error(f"Failed to invalidate cache for delivery_list user_id={instance.user.id}: {str(e)}")
+        logger.error(f"Unexpected error invalidating delivery_list user_id={instance.user.id}: {str(e)}")
 
 
 @receiver([post_save, post_delete], sender=PickupPoint)
@@ -35,12 +41,14 @@ def invalidate_pickup_point_cache(sender, instance, **kwargs):
         instance: Экземпляр модели PickupPoint.
         kwargs: Дополнительные аргументы сигнала.
     """
-    cache_key = f"pickup_points:{instance.city_id or 'all'}:none"
     try:
+        cache_key = f"pickup_points:{instance.city_id or 'all'}:none"
         CacheService.invalidate_cache(prefix=cache_key)
         logger.info(f"Invalidated cache for pickup_points city_id={instance.city_id}")
+    except redis.exceptions.RedisError as e:
+        logger.error(f"Redis error invalidating pickup_points city_id={instance.city_id}: {str(e)}")
     except Exception as e:
-        logger.error(f"Failed to invalidate cache for pickup_points city_id={instance.city_id}: {str(e)}")
+        logger.error(f"Unexpected error invalidating pickup_points city_id={instance.city_id}: {str(e)}")
 
 
 @receiver([post_save, post_delete], sender=City)
@@ -53,9 +61,11 @@ def invalidate_city_cache(sender, instance, **kwargs):
         instance: Экземпляр модели City.
         kwargs: Дополнительные аргументы сигнала.
     """
-    cache_key = "city_list"
     try:
+        cache_key = "city_list"
         CacheService.invalidate_cache(prefix=cache_key)
         logger.info(f"Invalidated cache for city_list")
+    except redis.exceptions.RedisError as e:
+        logger.error(f"Redis error invalidating city_list: {str(e)}")
     except Exception as e:
-        logger.error(f"Failed to invalidate cache for city_list: {str(e)}")
+        logger.error(f"Unexpected error invalidating city_list: {str(e)}")

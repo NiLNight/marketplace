@@ -1,13 +1,14 @@
 import logging
-import hashlib
 from typing import Any
-
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.exceptions import ValidationError as RestValidationError
 from django.utils.translation import gettext_lazy as _
+import redis
 from apps.core.services.cache_services import CacheService
 from apps.delivery.models import Delivery, City
 from apps.delivery.serializers import DeliverySerializer, PickupPointSerializer, CitySerializer
@@ -51,9 +52,18 @@ class BaseDeliveryView(APIView):
             CacheService.set_cached_data(cache_key, response_data, timeout=self.CACHE_TIMEOUT)
             logger.info(f"Retrieved {len(page)} deliveries, user={user_id}")
             return Response(response_data)
+        except RestValidationError as e:
+            logger.error(f"Validation error processing queryset: {str(e)}, user={user_id}")
+            raise DeliveryServiceException(f"Ошибка валидации: {str(e)}")
+        except ObjectDoesNotExist as e:
+            logger.error(f"Object not found processing queryset: {str(e)}, user={user_id}")
+            raise DeliveryServiceException(f"Объект не найден: {str(e)}")
+        except redis.exceptions.RedisError as e:
+            logger.error(f"Redis error processing queryset: {str(e)}, user={user_id}")
+            raise DeliveryServiceException(f"Ошибка кэширования: {str(e)}")
         except Exception as e:
-            logger.error(f"Failed to process queryset: {str(e)}, user={user_id}")
-            raise DeliveryServiceException(f"Ошибка обработки списка адресов доставки: {str(e)}")
+            logger.error(f"Unexpected error processing queryset: {str(e)}, user={user_id}")
+            raise DeliveryServiceException(f"Неизвестная ошибка обработки списка адресов доставки: {str(e)}")
 
 
 class DeliveryListView(BaseDeliveryView):
@@ -63,17 +73,19 @@ class DeliveryListView(BaseDeliveryView):
     @handle_api_errors
     def get(self, request):
         user_id = request.user.id
-        logger.info(f"Processing delivery list request for user={user_id}, path={request.path}, "
-                    f"IP={request.META.get('REMOTE_ADDR')}")
-        cached_data = CacheService.cache_delivery_list(user_id, request)
-        if cached_data:
-            logger.info(f"Retrieved cached deliveries for user={user_id}, path={request.path}, "
-                        f"IP={request.META.get('REMOTE_ADDR')}")
-            return Response(cached_data)
+        logger.info(f"Processing delivery list request for user={user_id}")
+        try:
+            cached_data = CacheService.cache_delivery_list(user_id, request)
+            if cached_data:
+                logger.info(f"Retrieved cached deliveries for user={user_id}")
+                return Response(cached_data)
 
-        deliveries = DeliveryQueryService.get_base_queryset(request.user)
-        cache_key = CacheService.build_cache_key(request, prefix=f"delivery_list:{user_id}")
-        return self.process_queryset(deliveries, request, cache_key, user_id)
+            deliveries = DeliveryQueryService.get_base_queryset(request.user)
+            cache_key = CacheService.build_cache_key(request, prefix=f"delivery_list:{user_id}")
+            return self.process_queryset(deliveries, request, cache_key, user_id)
+        except redis.exceptions.RedisError as e:
+            logger.error(f"Redis error retrieving delivery list: {str(e)}, user={user_id}")
+            raise DeliveryServiceException(f"Ошибка кэширования: {str(e)}")
 
 
 class DeliveryDetailView(BaseDeliveryView):
@@ -83,7 +95,7 @@ class DeliveryDetailView(BaseDeliveryView):
     @handle_api_errors
     def get(self, request, pk: int):
         user_id = request.user.id
-        logger.info(f"Retrieving delivery {pk}, user={user_id}, path={request.path}")
+        logger.info(f"Retrieving delivery {pk}, user={user_id}")
         try:
             cached_data = CacheService.cache_delivery_details(pk, user_id)
             if cached_data:
@@ -95,8 +107,14 @@ class DeliveryDetailView(BaseDeliveryView):
             CacheService.set_cached_data(cache_key, serializer.data, timeout=7200)
             logger.info(f"Successfully retrieved delivery {pk}, user={user_id}")
             return Response(serializer.data)
+        except DeliveryNotFound as e:
+            logger.error(f"Delivery {pk} not found: {str(e)}, user={user_id}")
+            raise
+        except redis.exceptions.RedisError as e:
+            logger.error(f"Redis error retrieving delivery {pk}: {str(e)}, user={user_id}")
+            raise DeliveryServiceException(f"Ошибка кэширования: {str(e)}")
         except Exception as e:
-            logger.error(f"Failed to retrieve delivery {pk}: {str(e)}, user={user_id}")
+            logger.error(f"Unexpected error retrieving delivery {pk}: {str(e)}, user={user_id}")
             raise DeliveryNotFound(f"Ошибка получения адреса доставки: {str(e)}")
 
 
@@ -107,7 +125,7 @@ class DeliveryCreateView(BaseDeliveryView):
     @handle_api_errors
     def post(self, request):
         user_id = request.user.id
-        logger.info(f"Creating delivery, user={user_id}, path={request.path}")
+        logger.info(f"Creating delivery, user={user_id}")
         try:
             serializer = self.serializer_class(data=request.data, context={'request': request})
             serializer.is_valid(raise_exception=True)
@@ -118,8 +136,14 @@ class DeliveryCreateView(BaseDeliveryView):
                 self.serializer_class(delivery).data,
                 status=status.HTTP_201_CREATED
             )
+        except RestValidationError as e:
+            logger.error(f"Validation error creating delivery: {str(e)}, user={user_id}")
+            raise DeliveryServiceException(f"Ошибка валидации адреса доставки: {str(e)}")
+        except redis.exceptions.RedisError as e:
+            logger.error(f"Redis error creating delivery: {str(e)}, user={user_id}")
+            raise DeliveryServiceException(f"Ошибка кэширования: {str(e)}")
         except Exception as e:
-            logger.error(f"Failed to create delivery: {str(e)}, user={user_id}")
+            logger.error(f"Unexpected error creating delivery: {str(e)}, user={user_id}")
             raise DeliveryServiceException(f"Ошибка создания адреса доставки: {str(e)}")
 
 
@@ -130,7 +154,7 @@ class DeliveryUpdateView(BaseDeliveryView):
     @handle_api_errors
     def patch(self, request, pk: int):
         user_id = request.user.id
-        logger.info(f"Updating delivery {pk}, user={user_id}, path={request.path}")
+        logger.info(f"Updating delivery {pk}, user={user_id}")
         try:
             delivery = DeliveryQueryService.get_single_delivery(pk, request.user)
             serializer = self.serializer_class(
@@ -142,8 +166,17 @@ class DeliveryUpdateView(BaseDeliveryView):
             CacheService.invalidate_cache(prefix=f"delivery_list:{user_id}")
             logger.info(f"Successfully updated delivery {pk}, user={user_id}")
             return Response(self.serializer_class(updated_delivery).data)
+        except DeliveryNotFound as e:
+            logger.error(f"Delivery {pk} not found: {str(e)}, user={user_id}")
+            raise
+        except RestValidationError as e:
+            logger.error(f"Validation error updating delivery {pk}: {str(e)}, user={user_id}")
+            raise DeliveryServiceException(f"Ошибка валидации адреса доставки: {str(e)}")
+        except redis.exceptions.RedisError as e:
+            logger.error(f"Redis error updating delivery {pk}: {str(e)}, user={user_id}")
+            raise DeliveryServiceException(f"Ошибка кэширования: {str(e)}")
         except Exception as e:
-            logger.error(f"Failed to update delivery {pk}: {str(e)}, user={user_id}")
+            logger.error(f"Unexpected error updating delivery {pk}: {str(e)}, user={user_id}")
             raise DeliveryServiceException(f"Ошибка обновления адреса доставки: {str(e)}")
 
 
@@ -153,7 +186,7 @@ class DeliveryDeleteView(BaseDeliveryView):
     @handle_api_errors
     def delete(self, request, pk: int):
         user_id = request.user.id
-        logger.info(f"Deleting delivery {pk}, user={user_id}, path={request.path}")
+        logger.info(f"Deleting delivery {pk}, user={user_id}")
         try:
             delivery = DeliveryQueryService.get_single_delivery(pk, request.user)
             DeliveryService.delete_delivery(delivery, request.user)
@@ -161,8 +194,14 @@ class DeliveryDeleteView(BaseDeliveryView):
             CacheService.invalidate_cache(prefix=f"delivery_list:{user_id}")
             logger.info(f"Successfully deleted delivery {pk}, user={user_id}")
             return Response({"message": "Адрес доставки удален"}, status=status.HTTP_204_NO_CONTENT)
+        except DeliveryNotFound as e:
+            logger.error(f"Delivery {pk} not found: {str(e)}, user={user_id}")
+            raise
+        except redis.exceptions.RedisError as e:
+            logger.error(f"Redis error deleting delivery {pk}: {str(e)}, user={user_id}")
+            raise DeliveryServiceException(f"Ошибка кэширования: {str(e)}")
         except Exception as e:
-            logger.error(f"Failed to delete delivery {pk}: {str(e)}, user={user_id}")
+            logger.error(f"Unexpected error deleting delivery {pk}: {str(e)}, user={user_id}")
             raise DeliveryServiceException(f"Ошибка удаления адреса доставки: {str(e)}")
 
 
@@ -175,45 +214,50 @@ class PickupPointListView(BaseDeliveryView):
     @handle_api_errors
     def get(self, request):
         user_id = request.user.id
-        logger.info(f"Processing pickup points list request for user={user_id}, path={request.path}, "
-                    f"IP={request.META.get('REMOTE_ADDR')}")
+        logger.info(f"Processing pickup points list request for user={user_id}")
         query = request.GET.get('q', '')
         city_id = request.GET.get('city_id')
         try:
             city_id = int(city_id) if city_id else None
+            if city_id and not City.objects.filter(id=city_id).exists():
+                logger.warning(f"City with id={city_id} not found for user={user_id}")
+                return Response(
+                    {"error": _("Город с указанным ID не найден"), "code": "city_not_found"},
+                    status=status.HTTP_400_BAD_REQUEST)
         except ValueError:
-            logger.warning(f"Invalid city_id={city_id} for user={user_id}, path={request.path}, "
-                           f"IP={request.META.get('REMOTE_ADDR')}")
+            logger.warning(f"Invalid city_id={city_id} for user={user_id}")
             return Response(
                 {"error": _("Идентификатор города должен быть числом"), "code": "invalid_city_id"},
                 status=status.HTTP_400_BAD_REQUEST)
 
-        cached_data = CacheService.cache_pickup_points_list(city_id or 'all', query or 'none', request)
-        if cached_data:
-            logger.info(f"Retrieved cached pickup points for user={user_id}, path={request.path}, "
-                        f"IP={request.META.get('REMOTE_ADDR')}")
-            return Response(cached_data)
+        try:
+            cached_data = CacheService.cache_pickup_points_list(city_id or 'all', query[:50] or 'none', request)
+            if cached_data:
+                logger.info(f"Retrieved cached pickup points for user={user_id}")
+                return Response(cached_data)
 
-        if query:
-            pickup_points = PickupPointQueryService.search_pickup_points(request)
-        else:
-            pickup_points = PickupPointQueryService.get_base_queryset()
-            pickup_points = PickupPointQueryService.apply_filters(pickup_points, request)
-            pickup_points = PickupPointQueryService.get_pickup_point_list(pickup_points)
-            pickup_points = PickupPointQueryService.apply_ordering(pickup_points, request)
+            if query:
+                pickup_points = PickupPointQueryService.search_pickup_points(request)
+            else:
+                pickup_points = PickupPointQueryService.get_base_queryset()
+                pickup_points = PickupPointQueryService.apply_filters(pickup_points, request)
+                pickup_points = PickupPointQueryService.get_pickup_point_list(pickup_points)
+                pickup_points = PickupPointQueryService.apply_ordering(pickup_points, request)
 
-        paginator = self.pagination_class()
-        page = paginator.paginate_queryset(pickup_points, request)
+            paginator = self.pagination_class()
+            page = paginator.paginate_queryset(pickup_points, request)
 
-        response_data = paginator.get_paginated_response(self.serializer_class(page, many=True).data).data
-        cache_key = CacheService.build_cache_key(
-            request,
-            prefix=f"pickup_points:{city_id or 'all'}:{hashlib.md5(query.encode()).hexdigest() if query else 'none'}"
-        )
-        CacheService.set_cached_data(cache_key, response_data, timeout=self.CACHE_TIMEOUT)
-        logger.info(f"Retrieved {pickup_points.count()} pickup points for user={user_id}, path={request.path}, "
-                    f"IP={request.META.get('REMOTE_ADDR')}")
-        return Response(response_data)
+            response_data = paginator.get_paginated_response(self.serializer_class(page, many=True).data).data
+            cache_key = CacheService.build_cache_key(
+                request,
+                prefix=f"pickup_points:{city_id or 'all'}:{query[:50] or 'none'}"
+            )
+            CacheService.set_cached_data(cache_key, response_data, timeout=self.CACHE_TIMEOUT)
+            logger.info(f"Retrieved {pickup_points.count()} pickup points for user={user_id}")
+            return Response(response_data)
+        except redis.exceptions.RedisError as e:
+            logger.error(f"Redis error retrieving pickup points: {str(e)}, user={user_id}")
+            raise DeliveryServiceException(f"Ошибка кэширования: {str(e)}")
 
 
 class CityListView(BaseDeliveryView):
@@ -224,22 +268,23 @@ class CityListView(BaseDeliveryView):
     @handle_api_errors
     def get(self, request):
         user_id = request.user.id
-        logger.info(f"Processing city list request for user={user_id}, path={request.path}, "
-                    f"IP={request.META.get('REMOTE_ADDR')}")
-        cached_data = CacheService.cache_city_list(request)
-        if cached_data:
-            logger.info(f"Retrieved cached cities for user={user_id}, path={request.path}, "
-                        f"IP={request.META.get('REMOTE_ADDR')}")
-            return Response(cached_data)
+        logger.info(f"Processing city list request for user={user_id}")
+        try:
+            cached_data = CacheService.cache_city_list(request)
+            if cached_data:
+                logger.info(f"Retrieved cached cities for user={user_id}")
+                return Response(cached_data)
 
-        cities = City.objects.all()
-        paginator = self.pagination_class()
-        page = paginator.paginate_queryset(cities, request)
+            cities = City.objects.all()
+            paginator = self.pagination_class()
+            page = paginator.paginate_queryset(cities, request)
 
-        serializer = self.serializer_class(page, many=True).data
-        response_data = paginator.get_paginated_response(serializer).data
-        cache_key = CacheService.build_cache_key(request, prefix="city_list")
-        CacheService.set_cached_data(cache_key, response_data, timeout=86400)
-        logger.info(f"Retrieved {cities.count()} cities for user={user_id}, path={request.path}, "
-                    f"IP={request.META.get('REMOTE_ADDR')}")
-        return Response(response_data)
+            serializer = self.serializer_class(page, many=True).data
+            response_data = paginator.get_paginated_response(serializer).data
+            cache_key = CacheService.build_cache_key(request, prefix="city_list")
+            CacheService.set_cached_data(cache_key, response_data, timeout=86400)
+            logger.info(f"Retrieved {cities.count()} cities for user={user_id}")
+            return Response(response_data)
+        except redis.exceptions.RedisError as e:
+            logger.error(f"Redis error retrieving city list: {str(e)}, user={user_id}")
+            raise DeliveryServiceException(f"Ошибка кэширования: {str(e)}")

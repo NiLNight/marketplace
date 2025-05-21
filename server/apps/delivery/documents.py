@@ -1,6 +1,7 @@
 import logging
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
+from elasticsearch_dsl.exceptions import ElasticsearchDslException
 from apps.delivery.models import PickupPoint, City
 
 logger = logging.getLogger(__name__)
@@ -35,10 +36,13 @@ class PickupPointDocument(Document):
     def prepare_city(self, instance):
         """Подготавливает данные города для индексации."""
         try:
+            if not instance.city:
+                logger.warning(f"No city associated with pickup point {instance.id}")
+                return {}
             return {
                 'id': instance.city.id,
                 'name': instance.city.name,
-            } if instance.city else {}
+            }
         except Exception as e:
             logger.error(f"Failed to prepare city for pickup point {instance.id}: {str(e)}")
             return {}
@@ -49,6 +53,9 @@ class PickupPointDocument(Document):
         try:
             super().save(**kwargs)
             logger.info(f"Successfully saved pickup point document {self.id}")
+        except ElasticsearchDslException as e:
+            logger.error(f"Elasticsearch error saving pickup point document {self.id}: {str(e)}")
+            raise
         except Exception as e:
-            logger.error(f"Failed to save pickup point document {self.id}: {str(e)}")
+            logger.error(f"Unexpected error saving pickup point document {self.id}: {str(e)}")
             raise
