@@ -7,7 +7,8 @@ from django.utils.translation import gettext_lazy as _
 from apps.carts.models import OrderItem
 from apps.orders.models import Order
 from apps.products.models import Product
-from apps.delivery.services.delivery_services import DeliveryService
+from apps.delivery.models import PickupPoint
+from decimal import Decimal, ROUND_DOWN
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -123,16 +124,15 @@ class OrderService:
 
     @staticmethod
     @transaction.atomic
-    def create_order(user: User, delivery_id: int = None, pickup_point_id: int = None, request=None) -> Order:
+    def create_order(user: User, pickup_point_id: int, request=None) -> Order:
         """
         Создает заказ из корзины пользователя.
 
-        Позволяет выбрать либо адрес доставки, либо пункт выдачи.
+        Требует указания пункта выдачи.
 
         Args:
             user (User): Аутентифицированный пользователь.
-            delivery_id (int, optional): Идентификатор адреса доставки.
-            pickup_point_id (int, optional): Идентификатор пункта выдачи.
+            pickup_point_id (int): Идентификатор пункта выдачи.
             request: HTTP-запрос для логирования IP.
 
         Returns:
@@ -147,52 +147,38 @@ class OrderService:
             logger.warning(f"Inactive user={user.id} attempted to create order, "
                            f"IP={request.META.get('REMOTE_ADDR')}")
             raise APIException(_("Аккаунт не активирован"), code="account_not_activated")
-        if delivery_id and not (isinstance(delivery_id, int) and delivery_id > 0):
-            logger.warning(f"Invalid delivery_id={delivery_id} for user={user.id}, "
-                           f"IP={request.META.get('REMOTE_ADDR')}")
-            raise ValidationError(_("Идентификатор доставки должен быть положительным целым числом"))
-        if pickup_point_id and not (isinstance(pickup_point_id, int) and pickup_point_id > 0):
+        if not (isinstance(pickup_point_id, int) and pickup_point_id > 0):
             logger.warning(f"Invalid pickup_point_id={pickup_point_id} for user={user.id},"
                            f" IP={request.META.get('REMOTE_ADDR')}")
             raise ValidationError(_("Идентификатор пункта выдачи должен быть положительным целым числом"))
 
         logger.info(f"Attempting to create order for user={user.id}, "
-                    f"delivery_id={delivery_id}, pickup_point_id={pickup_point_id}, "
+                    f"pickup_point_id={pickup_point_id}, "
                     f"IP={request.META.get('REMOTE_ADDR')}")
-        if delivery_id and pickup_point_id:
-            logger.warning(f"Both delivery_id and pickup_point_id provided for user={user.id},"
-                           f" IP={request.META.get('REMOTE_ADDR')}")
-            raise ValidationError(
-                {"detail": _("Нельзя указать и доставку, и пункт выдачи одновременно"), "code": "invalid_input"}
-            )
-        if not delivery_id and not pickup_point_id:
-            logger.warning(f"Neither delivery_id nor pickup_point_id provided for user={user.id},"
-                           f" IP={request.META.get('REMOTE_ADDR')}")
-            raise ValidationError(
-                {"detail": _("Необходимо указать либо доставку, либо пункт выдачи"), "code": "missing_input"}
-            )
-
         cart_items = OrderItem.objects.filter(user=user, order__isnull=True)
         if not cart_items.exists():
             logger.warning(f"Cart is empty for user={user.id}, "
                            f"IP={request.META.get('REMOTE_ADDR')}")
             raise ValidationError({"detail": _("Корзина пуста"), "code": "empty_cart"})
 
-        delivery = None
-        pickup_point = None
-        total_price = sum(item.product.price_with_discount * item.quantity for item in cart_items)
+        try:
+            pickup_point = PickupPoint.objects.get(id=pickup_point_id, is_active=True)
+        except PickupPoint.DoesNotExist:
+            logger.warning(f"Pickup point {pickup_point_id} not found or inactive for user={user.id},"
+                           f" IP={request.META.get('REMOTE_ADDR')}")
+            raise ValidationError(
+                {"detail": _("Пункт выдачи не найден или неактивен"), "code": "pickup_point_not_found"})
 
-        if delivery_id:
-            delivery = DeliveryService.get_user_delivery(request, user, delivery_id)
-            total_price += delivery.cost
-        else:
-            pickup_point = DeliveryService.get_pickup_point(request, pickup_point_id)
+        # Вычисление total_price с округлением до 2 знаков после запятой
+        total_price = sum(
+            (item.product.price_with_discount * item.quantity).quantize(Decimal('0.01'), rounding=ROUND_DOWN)
+            for item in cart_items
+        )
 
         order = Order.objects.create(
             user=user,
             status='processing',
             total_price=total_price,
-            delivery=delivery,
             pickup_point=pickup_point,
         )
 
@@ -204,7 +190,7 @@ class OrderService:
                 raise ValidationError(
                     {"detail": _("Недостаточно товара {product.title} на складе"), "code": "insufficient_stock"}
                 )
-            product.stock = F('stock') - products[product.id]
+            product.stock = product.stock - products[product.id]
             product.save()
 
         for item in cart_items:
