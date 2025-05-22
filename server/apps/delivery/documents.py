@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 class PickupPointDocument(Document):
     """Документ Elasticsearch для модели PickupPoint."""
     address = fields.TextField(analyzer='standard', fields={'raw': fields.KeywordField()})
+    district = fields.TextField(analyzer='standard', fields={'raw': fields.KeywordField()})
     city = fields.ObjectField(properties={
         'id': fields.IntegerField(),
         'name': fields.TextField(analyzer='standard'),
@@ -46,6 +47,14 @@ class PickupPointDocument(Document):
         except Exception as e:
             logger.error(f"Failed to prepare city for pickup point {instance.id}: {str(e)}")
             return {}
+
+    def prepare_district(self, instance):
+        """Подготавливает данные района для индексации."""
+        try:
+            return instance.district or ''
+        except Exception as e:
+            logger.error(f"Failed to prepare district for pickup point {instance.id}: {str(e)}")
+            return ''
 
     def save(self, **kwargs):
         """Сохраняет документ в Elasticsearch с логированием."""
