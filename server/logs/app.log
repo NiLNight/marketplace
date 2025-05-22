@@ -9905,3 +9905,256 @@ LINE 1: ...t"."address", "delivery_pickuppoint"."is_active", "delivery_...
 [2025-05-21 18:59:41,064] INFO apps.delivery.views Processing district list request for user=11, city_id=1
 [2025-05-21 18:59:41,068] DEBUG apps.core.services.cache_services Cache hit for key: districts:1
 [2025-05-21 18:59:41,068] INFO apps.delivery.views Retrieved cached districts for city_id=1, user=11
+[2025-05-22 13:42:51,205] DEBUG apps.users.authentication No token provided in request
+[2025-05-22 13:42:55,584] DEBUG apps.users.authentication No token provided in request
+[2025-05-22 13:42:55,730] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-22 13:42:55,732] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-22 13:42:55,732] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-22 13:42:56,436] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-22 13:42:56,436] INFO apps.users.views User 11 logged in successfully
+[2025-05-22 13:42:56,512] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-22 13:42:59,512] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 13:42:59,512] INFO apps.delivery.views Processing pickup points list request for user=11
+[2025-05-22 13:42:59,534] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:none:москва:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-22 13:42:59,534] INFO apps.delivery.services.query_services Searching pickup points: query=москва, city_id=None, district=None, page=1, page_size=50
+[2025-05-22 13:42:59,909] INFO apps.delivery.services.query_services Found 1 pickup points, total=1
+[2025-05-22 13:42:59,909] DEBUG apps.delivery.services.query_services Retrieving base queryset for active pickup points
+[2025-05-22 13:42:59,910] DEBUG apps.delivery.services.query_services Applying optimizations for pickup point list
+[2025-05-22 13:42:59,967] INFO apps.delivery.views Retrieved 1 pickup points for user=11
+[2025-05-22 13:43:24,412] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 13:43:24,412] INFO apps.delivery.views Processing district list request for user=11, city_id=1
+[2025-05-22 13:43:24,415] DEBUG apps.core.services.cache_services Cache miss for key: districts:1
+[2025-05-22 13:43:24,418] INFO apps.delivery.views Retrieved 0 districts for city_id=1, user=11
+[2025-05-22 13:43:36,493] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 13:43:36,493] INFO apps.delivery.views Processing city list request for user=11
+[2025-05-22 13:43:36,494] DEBUG apps.core.services.cache_services Cache miss for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-22 13:43:36,498] INFO apps.delivery.views Retrieved 2 cities for user=11
+[2025-05-22 13:44:40,885] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 13:44:40,894] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:all:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-22 13:44:40,894] DEBUG apps.orders.services.order_services Starting retrieval of orders for user=11
+[2025-05-22 13:44:40,894] INFO apps.orders.services.order_services Retrieving orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-22 13:44:40,981] INFO apps.orders.services.order_services Retrieved 5 orders for user=11, IP=127.0.0.1
+[2025-05-22 13:44:41,018] INFO apps.orders.views Retrieved 5 orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-22 13:44:49,901] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 13:44:49,903] DEBUG apps.core.services.cache_services Cache miss for key: order_detail:13:11
+[2025-05-22 13:44:49,903] DEBUG apps.orders.services.order_services Starting retrieval of order=13 for user=11
+[2025-05-22 13:44:49,903] INFO apps.orders.services.order_services Retrieving details for order=13, user=11, IP=127.0.0.1
+[2025-05-22 13:44:50,080] INFO apps.orders.services.order_services Order 13 details retrieved for user=11, IP=127.0.0.1
+[2025-05-22 13:44:50,082] INFO apps.orders.views Order 13 details retrieved for user=11, path=/orders/13/, IP=127.0.0.1
+[2025-05-22 13:44:59,661] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 13:44:59,661] DEBUG apps.orders.services.order_services Starting order creation for user=11
+[2025-05-22 13:44:59,661] INFO apps.orders.services.order_services Attempting to create order for user=11, pickup_point_id=1, IP=127.0.0.1
+[2025-05-22 13:44:59,683] WARNING apps.orders.utils Validation error: {'total_price': ['Убедитесь, что вы ввели не более 2 цифр после запятой.']}, user=11, path=/orders/create/, IP=127.0.0.1
+[2025-05-22 13:45:12,509] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 13:45:12,510] DEBUG apps.orders.services.order_services Starting cancellation of order=12 for user=11
+[2025-05-22 13:45:12,510] INFO apps.orders.services.order_services Attempting to cancel order=12 for user=11, IP=127.0.0.1
+[2025-05-22 13:45:12,512] WARNING apps.orders.services.order_services Cannot cancel order 12 with status=cancelled for user=11, IP=127.0.0.1
+[2025-05-22 13:45:12,512] WARNING apps.orders.utils API error: {'detail': ErrorDetail(string='Нельзя отменить заказ, который уже отправлен или доставлен', code='invalid'), 'code': ErrorDetail(string='invalid_status', code='invalid')}, user=11, path=/orders/cancel/12/, IP=127.0.0.1
+[2025-05-22 13:45:43,138] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 13:45:43,138] DEBUG apps.orders.services.order_services Starting order creation for user=11
+[2025-05-22 13:45:43,138] INFO apps.orders.services.order_services Attempting to create order for user=11, pickup_point_id=1, IP=127.0.0.1
+[2025-05-22 13:45:43,147] WARNING apps.orders.utils Validation error: {'total_price': ['Убедитесь, что вы ввели не более 2 цифр после запятой.']}, user=11, path=/orders/create/, IP=127.0.0.1
+[2025-05-22 13:46:06,286] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 13:46:06,305] DEBUG apps.core.services.cache_services Cache miss for key: cart:11
+[2025-05-22 13:46:06,315] INFO apps.carts.services.cart_services Retrieved cart, user=11, items=1
+[2025-05-22 13:46:06,325] INFO apps.carts.views Retrieved cart, user=11, items=1
+[2025-05-22 13:46:09,062] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 13:46:09,063] DEBUG apps.core.services.cache_services Cache hit for key: cart:11
+[2025-05-22 13:46:15,083] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 13:46:15,084] DEBUG apps.orders.services.order_services Starting order creation for user=11
+[2025-05-22 13:46:15,084] INFO apps.orders.services.order_services Attempting to create order for user=11, pickup_point_id=1, IP=127.0.0.1
+[2025-05-22 13:46:15,096] WARNING apps.orders.utils Validation error: {'total_price': ['Убедитесь, что вы ввели не более 2 цифр после запятой.']}, user=11, path=/orders/create/, IP=127.0.0.1
+[2025-05-22 14:04:07,718] DEBUG apps.users.authentication No token provided in request
+[2025-05-22 14:06:26,594] DEBUG apps.users.authentication No token provided in request
+[2025-05-22 14:06:26,709] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-22 14:06:26,710] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-22 14:06:26,710] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-22 14:06:27,372] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-22 14:06:27,372] INFO apps.users.views User 11 logged in successfully
+[2025-05-22 14:06:27,829] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-22 14:07:00,954] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:07:00,954] INFO apps.delivery.views Processing city list request for user=11
+[2025-05-22 14:07:00,956] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-22 14:07:00,956] INFO apps.delivery.views Retrieved cached cities for user=11
+[2025-05-22 14:07:31,456] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:07:31,457] INFO apps.delivery.views Processing city list request for user=11
+[2025-05-22 14:07:31,462] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-22 14:07:31,462] INFO apps.delivery.views Retrieved cached cities for user=11
+[2025-05-22 14:07:53,469] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:07:53,469] INFO apps.delivery.views Processing city list request for user=11
+[2025-05-22 14:07:53,475] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-22 14:07:53,480] INFO apps.delivery.views Retrieved 2 cities for user=11
+[2025-05-22 14:08:26,096] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:08:26,096] INFO apps.delivery.views Processing city list request for user=11
+[2025-05-22 14:08:26,097] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-22 14:08:26,102] INFO apps.delivery.views Retrieved 2 cities for user=11
+[2025-05-22 14:09:09,994] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:09:09,994] INFO apps.delivery.views Processing city list request for user=11
+[2025-05-22 14:09:09,995] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-22 14:09:10,000] INFO apps.delivery.views Retrieved 2 cities for user=11
+[2025-05-22 14:09:11,051] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:09:11,051] INFO apps.delivery.views Processing city list request for user=11
+[2025-05-22 14:09:11,053] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-22 14:09:11,058] INFO apps.delivery.views Retrieved 2 cities for user=11
+[2025-05-22 14:09:28,950] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:09:28,950] INFO apps.delivery.views Processing city list request for user=11
+[2025-05-22 14:09:28,960] INFO apps.delivery.views Retrieved 2 cities for user=11
+[2025-05-22 14:09:30,729] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:09:30,729] INFO apps.delivery.views Processing city list request for user=11
+[2025-05-22 14:09:30,734] INFO apps.delivery.views Retrieved 2 cities for user=11
+[2025-05-22 14:10:15,717] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:10:15,717] INFO apps.delivery.views Processing district list request for user=11, city_id=1
+[2025-05-22 14:10:15,720] DEBUG apps.core.services.cache_services Cache hit for key: districts:1
+[2025-05-22 14:10:15,720] INFO apps.delivery.views Retrieved cached districts for city_id=1, user=11
+[2025-05-22 14:10:25,261] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:10:25,261] INFO apps.delivery.views Processing district list request for user=11, city_id=2
+[2025-05-22 14:10:25,264] DEBUG apps.core.services.cache_services Cache miss for key: districts:2
+[2025-05-22 14:10:25,267] INFO apps.delivery.views Retrieved 0 districts for city_id=2, user=11
+[2025-05-22 14:12:27,754] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:12:27,754] INFO apps.delivery.views Processing city list request for user=11
+[2025-05-22 14:12:27,760] INFO apps.delivery.views Retrieved 2 cities for user=11
+[2025-05-22 14:12:46,923] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:12:46,923] INFO apps.delivery.views Processing city list request for user=11
+[2025-05-22 14:12:46,930] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-22 14:12:46,930] INFO apps.delivery.views Retrieved cached cities for user=11
+[2025-05-22 14:12:48,444] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:12:48,444] INFO apps.delivery.views Processing city list request for user=11
+[2025-05-22 14:12:48,445] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-22 14:12:48,446] INFO apps.delivery.views Retrieved cached cities for user=11
+[2025-05-22 14:15:34,486] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:15:34,486] INFO apps.delivery.views Processing city list request for user=11
+[2025-05-22 14:15:34,488] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-22 14:15:34,488] INFO apps.delivery.views Retrieved cached cities for user=11
+[2025-05-22 14:18:25,134] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:18:25,134] INFO apps.delivery.views Processing city list request for user=11
+[2025-05-22 14:18:25,141] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-22 14:18:25,142] INFO apps.delivery.views Retrieved cached city list for user=11
+[2025-05-22 14:18:38,852] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:18:38,852] INFO apps.delivery.views Processing district list request for user=11, city_id=2
+[2025-05-22 14:18:38,856] DEBUG apps.core.services.cache_services Cache hit for key: districts:2
+[2025-05-22 14:18:38,856] INFO apps.delivery.views Retrieved cached districts for city_id=2, user=11
+[2025-05-22 14:18:44,655] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:18:44,655] INFO apps.delivery.views Processing district list request for user=11, city_id=1
+[2025-05-22 14:18:44,658] DEBUG apps.core.services.cache_services Cache hit for key: districts:1
+[2025-05-22 14:18:44,658] INFO apps.delivery.views Retrieved cached districts for city_id=1, user=11
+[2025-05-22 14:22:19,069] DEBUG apps.users.authentication No token provided in request
+[2025-05-22 14:22:21,815] DEBUG apps.users.authentication No token provided in request
+[2025-05-22 14:22:21,928] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-22 14:22:21,929] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-22 14:22:21,929] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-22 14:22:22,569] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-22 14:22:22,569] INFO apps.users.views User 11 logged in successfully
+[2025-05-22 14:22:23,167] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-22 14:22:25,431] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:22:25,432] DEBUG apps.orders.services.order_services Starting order creation for user=11
+[2025-05-22 14:22:25,432] INFO apps.orders.services.order_services Attempting to create order for user=11, pickup_point_id=1, IP=127.0.0.1
+[2025-05-22 14:22:25,441] DEBUG apps.orders.signals Tracking status for order=new, user=11
+[2025-05-22 14:22:25,481] DEBUG apps.orders.signals Starting post_save for order=17, user=11
+[2025-05-22 14:22:25,497] DEBUG apps.orders.services.notification_services Queueing notification for user=11, email=edem100@list.ru
+[2025-05-22 14:22:25,532] INFO apps.orders.signals Notification queued for order creation, order=17, user=11
+[2025-05-22 14:22:25,533] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:11:*
+[2025-05-22 14:22:25,533] INFO apps.core.services.cache_services Invalidated cache for prefix: order_detail:17:11:*
+[2025-05-22 14:22:25,533] INFO apps.orders.signals Invalidated cache for order=17, user=11
+[2025-05-22 14:22:25,537] DEBUG apps.orders.services.notification_services Starting task: send_notification to edem100@list.ru, task_id=ace1464f-18c6-4fb0-8846-026dc4cc139b
+[2025-05-22 14:22:25,539] INFO apps.orders.services.notification_services Task started: send_notification to edem100@list.ru, user_id=11, task_id=ace1464f-18c6-4fb0-8846-026dc4cc139b
+[2025-05-22 14:22:25,547] INFO apps.products.models Updating product with title=Хлеб, user=1
+[2025-05-22 14:22:25,950] ERROR apps.products.models Failed to updating product: Unable to serialize to JSON: {'price': 18.0, 'discount': 1.0, 'category': {'id': 7, 'title': 'Хлебобулочные изделия', 'slug': 'hlebobulochnye-izdeliya'}, 'price_with_discount': 17.82, 'title': 'Хлеб', 'stock': <CombinedExpression: F(stock) - Value(10)>, 'popularity_score': 3.351030927835051, 'rating_avg': 4.5, 'description': 'Свежий хлеб', 'is_active': True, 'id': 8} (type: dict), user=1
+[2025-05-22 14:22:25,950] ERROR apps.orders.utils Server error: Unable to serialize to JSON: {'price': 18.0, 'discount': 1.0, 'category': {'id': 7, 'title': 'Хлебобулочные изделия', 'slug': 'hlebobulochnye-izdeliya'}, 'price_with_discount': 17.82, 'title': 'Хлеб', 'stock': <CombinedExpression: F(stock) - Value(10)>, 'popularity_score': 3.351030927835051, 'rating_avg': 4.5, 'description': 'Свежий хлеб', 'is_active': True, 'id': 8} (type: dict), user=11, path=/orders/create/, IP=127.0.0.1
+[2025-05-22 14:23:49,328] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:23:49,329] DEBUG apps.core.services.cache_services Cache miss for key: cart:11
+[2025-05-22 14:23:49,332] INFO apps.carts.services.cart_services Retrieved cart, user=11, items=1
+[2025-05-22 14:23:49,344] INFO apps.carts.views Retrieved cart, user=11, items=1
+[2025-05-22 14:23:54,873] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:23:54,873] DEBUG apps.orders.services.order_services Starting order creation for user=11
+[2025-05-22 14:23:54,873] INFO apps.orders.services.order_services Attempting to create order for user=11, pickup_point_id=1, IP=127.0.0.1
+[2025-05-22 14:23:54,881] DEBUG apps.orders.signals Tracking status for order=new, user=11
+[2025-05-22 14:23:54,882] DEBUG apps.orders.signals Starting post_save for order=18, user=11
+[2025-05-22 14:23:54,884] DEBUG apps.orders.services.notification_services Queueing notification for user=11, email=edem100@list.ru
+[2025-05-22 14:23:54,888] INFO apps.orders.signals Notification queued for order creation, order=18, user=11
+[2025-05-22 14:23:54,889] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:11:*
+[2025-05-22 14:23:54,890] INFO apps.core.services.cache_services Invalidated cache for prefix: order_detail:18:11:*
+[2025-05-22 14:23:54,890] INFO apps.orders.signals Invalidated cache for order=18, user=11
+[2025-05-22 14:23:54,890] DEBUG apps.orders.services.notification_services Starting task: send_notification to edem100@list.ru, task_id=31cb6a08-49c4-466b-a32f-8fcc595f00cd
+[2025-05-22 14:23:54,891] INFO apps.orders.services.notification_services Task started: send_notification to edem100@list.ru, user_id=11, task_id=31cb6a08-49c4-466b-a32f-8fcc595f00cd
+[2025-05-22 14:23:54,892] INFO apps.products.models Updating product with title=Хлеб, user=1
+[2025-05-22 14:23:54,905] ERROR apps.products.models Failed to updating product: Unable to serialize to JSON: {'price': 18.0, 'discount': 1.0, 'category': {'id': 7, 'title': 'Хлебобулочные изделия', 'slug': 'hlebobulochnye-izdeliya'}, 'price_with_discount': 17.82, 'title': 'Хлеб', 'stock': <CombinedExpression: F(stock) - Value(10)>, 'popularity_score': 3.351030927835051, 'rating_avg': 4.5, 'description': 'Свежий хлеб', 'is_active': True, 'id': 8} (type: dict), user=1
+[2025-05-22 14:23:54,905] ERROR apps.orders.utils Server error: Unable to serialize to JSON: {'price': 18.0, 'discount': 1.0, 'category': {'id': 7, 'title': 'Хлебобулочные изделия', 'slug': 'hlebobulochnye-izdeliya'}, 'price_with_discount': 17.82, 'title': 'Хлеб', 'stock': <CombinedExpression: F(stock) - Value(10)>, 'popularity_score': 3.351030927835051, 'rating_avg': 4.5, 'description': 'Свежий хлеб', 'is_active': True, 'id': 8} (type: dict), user=11, path=/orders/create/, IP=127.0.0.1
+[2025-05-22 14:23:56,695] INFO apps.orders.services.notification_services Task 31cb6a08-49c4-466b-a32f-8fcc595f00cd completed successfully: notification sent to edem100@list.ru, user_id=11
+[2025-05-22 14:24:13,020] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:24:13,021] DEBUG apps.core.services.cache_services Cache hit for key: cart:11
+[2025-05-22 14:24:13,958] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:24:13,959] DEBUG apps.core.services.cache_services Cache hit for key: cart:11
+[2025-05-22 14:24:22,644] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:24:22,644] DEBUG apps.orders.services.order_services Starting order creation for user=11
+[2025-05-22 14:24:22,644] INFO apps.orders.services.order_services Attempting to create order for user=11, pickup_point_id=1, IP=127.0.0.1
+[2025-05-22 14:24:22,653] DEBUG apps.orders.signals Tracking status for order=new, user=11
+[2025-05-22 14:24:22,654] DEBUG apps.orders.signals Starting post_save for order=19, user=11
+[2025-05-22 14:24:22,656] DEBUG apps.orders.services.notification_services Queueing notification for user=11, email=edem100@list.ru
+[2025-05-22 14:24:22,657] INFO apps.orders.signals Notification queued for order creation, order=19, user=11
+[2025-05-22 14:24:22,657] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:11:*
+[2025-05-22 14:24:22,658] INFO apps.core.services.cache_services Invalidated cache for prefix: order_detail:19:11:*
+[2025-05-22 14:24:22,658] INFO apps.orders.signals Invalidated cache for order=19, user=11
+[2025-05-22 14:24:22,659] DEBUG apps.orders.services.notification_services Starting task: send_notification to edem100@list.ru, task_id=b99b0dd2-c19e-435f-abfd-f55ef03601d0
+[2025-05-22 14:24:22,659] INFO apps.orders.services.notification_services Task started: send_notification to edem100@list.ru, user_id=11, task_id=b99b0dd2-c19e-435f-abfd-f55ef03601d0
+[2025-05-22 14:24:22,660] INFO apps.products.models Updating product with title=Хлеб, user=1
+[2025-05-22 14:24:22,675] ERROR apps.products.models Failed to updating product: Unable to serialize to JSON: {'price': 18.0, 'discount': 1.0, 'category': {'id': 7, 'title': 'Хлебобулочные изделия', 'slug': 'hlebobulochnye-izdeliya'}, 'price_with_discount': 17.82, 'title': 'Хлеб', 'stock': <CombinedExpression: F(stock) - Value(10)>, 'popularity_score': 3.351030927835051, 'rating_avg': 4.5, 'description': 'Свежий хлеб', 'is_active': True, 'id': 8} (type: dict), user=1
+[2025-05-22 14:24:22,675] ERROR apps.orders.utils Server error: Unable to serialize to JSON: {'price': 18.0, 'discount': 1.0, 'category': {'id': 7, 'title': 'Хлебобулочные изделия', 'slug': 'hlebobulochnye-izdeliya'}, 'price_with_discount': 17.82, 'title': 'Хлеб', 'stock': <CombinedExpression: F(stock) - Value(10)>, 'popularity_score': 3.351030927835051, 'rating_avg': 4.5, 'description': 'Свежий хлеб', 'is_active': True, 'id': 8} (type: dict), user=11, path=/orders/create/, IP=127.0.0.1
+[2025-05-22 14:24:23,868] INFO apps.orders.services.notification_services Task b99b0dd2-c19e-435f-abfd-f55ef03601d0 completed successfully: notification sent to edem100@list.ru, user_id=11
+[2025-05-22 14:30:26,582] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:30:26,584] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:all:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-22 14:30:26,584] DEBUG apps.orders.services.order_services Starting retrieval of orders for user=11
+[2025-05-22 14:30:26,584] INFO apps.orders.services.order_services Retrieving orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-22 14:30:26,587] INFO apps.orders.services.order_services Retrieved 5 orders for user=11, IP=127.0.0.1
+[2025-05-22 14:30:26,596] INFO apps.orders.views Retrieved 5 orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-22 14:31:04,446] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:31:04,446] DEBUG apps.orders.services.order_services Starting order creation for user=11
+[2025-05-22 14:31:04,446] INFO apps.orders.services.order_services Attempting to create order for user=11, pickup_point_id=1, IP=127.0.0.1
+[2025-05-22 14:31:04,457] DEBUG apps.orders.signals Tracking status for order=new, user=11
+[2025-05-22 14:31:04,458] DEBUG apps.orders.signals Starting post_save for order=20, user=11
+[2025-05-22 14:31:04,459] DEBUG apps.orders.services.notification_services Queueing notification for user=11, email=edem100@list.ru
+[2025-05-22 14:31:04,463] INFO apps.orders.signals Notification queued for order creation, order=20, user=11
+[2025-05-22 14:31:04,465] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:11:*
+[2025-05-22 14:31:04,465] INFO apps.core.services.cache_services Invalidated cache for prefix: order_detail:20:11:*
+[2025-05-22 14:31:04,465] INFO apps.orders.signals Invalidated cache for order=20, user=11
+[2025-05-22 14:31:04,465] DEBUG apps.orders.services.notification_services Starting task: send_notification to edem100@list.ru, task_id=e48dc632-e3b3-43db-826f-24bd7c4b44ec
+[2025-05-22 14:31:04,465] INFO apps.orders.services.notification_services Task started: send_notification to edem100@list.ru, user_id=11, task_id=e48dc632-e3b3-43db-826f-24bd7c4b44ec
+[2025-05-22 14:31:04,467] INFO apps.products.models Updating product with title=Хлеб, user=1
+[2025-05-22 14:31:04,482] ERROR apps.products.models Failed to updating product: Unable to serialize to JSON: {'price': 18.0, 'discount': 1.0, 'category': {'id': 7, 'title': 'Хлебобулочные изделия', 'slug': 'hlebobulochnye-izdeliya'}, 'price_with_discount': 17.82, 'title': 'Хлеб', 'stock': <CombinedExpression: F(stock) - Value(10)>, 'popularity_score': 3.351030927835051, 'rating_avg': 4.5, 'description': 'Свежий хлеб', 'is_active': True, 'id': 8} (type: dict), user=1
+[2025-05-22 14:31:04,482] ERROR apps.orders.utils Server error: Unable to serialize to JSON: {'price': 18.0, 'discount': 1.0, 'category': {'id': 7, 'title': 'Хлебобулочные изделия', 'slug': 'hlebobulochnye-izdeliya'}, 'price_with_discount': 17.82, 'title': 'Хлеб', 'stock': <CombinedExpression: F(stock) - Value(10)>, 'popularity_score': 3.351030927835051, 'rating_avg': 4.5, 'description': 'Свежий хлеб', 'is_active': True, 'id': 8} (type: dict), user=11, path=/orders/create/, IP=127.0.0.1
+[2025-05-22 14:31:10,654] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 14:31:10,656] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:all:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-22 14:31:10,656] DEBUG apps.orders.services.order_services Starting retrieval of orders for user=11
+[2025-05-22 14:31:10,656] INFO apps.orders.services.order_services Retrieving orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-22 14:31:10,659] INFO apps.orders.services.order_services Retrieved 5 orders for user=11, IP=127.0.0.1
+[2025-05-22 14:31:10,668] INFO apps.orders.views Retrieved 5 orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-22 16:32:57,740] DEBUG apps.users.authentication No token provided in request
+[2025-05-22 16:32:57,847] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-22 16:32:57,848] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-22 16:32:57,848] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-22 16:32:58,411] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-22 16:32:58,411] INFO apps.users.views User 11 logged in successfully
+[2025-05-22 16:32:58,420] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-22 16:33:02,918] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 16:33:02,918] DEBUG apps.orders.services.order_services Starting order creation for user=11
+[2025-05-22 16:33:02,918] INFO apps.orders.services.order_services Attempting to create order for user=11, pickup_point_id=1, IP=127.0.0.1
+[2025-05-22 16:33:02,929] DEBUG apps.orders.signals Tracking status for order=new, user=11
+[2025-05-22 16:33:02,930] DEBUG apps.orders.signals Starting post_save for order=21, user=11
+[2025-05-22 16:33:02,933] DEBUG apps.orders.services.notification_services Queueing notification for user=11, email=edem100@list.ru
+[2025-05-22 16:33:02,953] INFO apps.orders.signals Notification queued for order creation, order=21, user=11
+[2025-05-22 16:33:02,954] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:11:*
+[2025-05-22 16:33:02,954] INFO apps.core.services.cache_services Invalidated cache for prefix: order_detail:21:11:*
+[2025-05-22 16:33:02,954] DEBUG apps.orders.services.notification_services Starting task: send_notification to edem100@list.ru, task_id=dc8a6b01-4a3e-4b01-8b0e-e71a2d008656
+[2025-05-22 16:33:02,954] INFO apps.orders.signals Invalidated cache for order=21, user=11
+[2025-05-22 16:33:02,954] INFO apps.orders.services.notification_services Task started: send_notification to edem100@list.ru, user_id=11, task_id=dc8a6b01-4a3e-4b01-8b0e-e71a2d008656
+[2025-05-22 16:33:02,957] INFO apps.products.models Updating product with title=Хлеб, user=1
+[2025-05-22 16:33:03,167] INFO apps.products.signals Updating product: title=Хлеб, user=1, is_active=True
+[2025-05-22 16:33:03,170] INFO apps.products.models Successfully updating product 8, user=1
+[2025-05-22 16:33:03,174] INFO apps.orders.services.order_services Order 21 successfully created for user=11, IP=127.0.0.1
+[2025-05-22 16:33:03,175] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:11:*
+[2025-05-22 16:33:03,176] INFO apps.orders.views Order 21 created successfully for user=11, path=/orders/create/, IP=127.0.0.1
+[2025-05-22 16:33:23,804] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 16:33:23,805] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:all:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-22 16:33:23,806] DEBUG apps.orders.services.order_services Starting retrieval of orders for user=11
+[2025-05-22 16:33:23,806] INFO apps.orders.services.order_services Retrieving orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-22 16:33:23,809] INFO apps.orders.services.order_services Retrieved 6 orders for user=11, IP=127.0.0.1
+[2025-05-22 16:33:23,824] INFO apps.orders.views Retrieved 6 orders for user=11, path=/orders/, IP=127.0.0.1
