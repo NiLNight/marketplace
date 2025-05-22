@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from apps.core.models import TimeStampedModel
-from apps.delivery.models import Delivery, PickupPoint
+from apps.delivery.models import PickupPoint
 from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
@@ -15,9 +15,8 @@ class Order(TimeStampedModel):
     Attributes:
         user (ForeignKey): Связь с пользователем, создавшим заказ.
         status (CharField): Статус заказа (processing, shipped, delivered, cancelled).
-        total_price (DecimalField): Общая стоимость заказа с учетом доставки или самовывоза.
-        delivery (ForeignKey): Связь с адресом доставки (может быть null).
-        pickup_point (ForeignKey): Связь с пунктом выдачи (может быть null).
+        total_price (DecimalField): Общая стоимость заказа.
+        pickup_point (ForeignKey): Связь с пунктом выдачи (обязательное поле).
     """
     STATUS_CHOICES = [
         ('processing', 'Processing'),
@@ -44,20 +43,10 @@ class Order(TimeStampedModel):
         default=0,
         verbose_name='Общая стоимость'
     )
-    delivery = models.ForeignKey(
-        Delivery,
-        related_name='orders',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        verbose_name='Доставка'
-    )
     pickup_point = models.ForeignKey(
         PickupPoint,
         related_name='orders',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
+        on_delete=models.PROTECT,
         verbose_name='Пункт выдачи'
     )
 
@@ -67,12 +56,6 @@ class Order(TimeStampedModel):
         indexes = [
             models.Index(fields=['status']),
             models.Index(fields=['-created']),
-        ]
-        constraints = [
-            models.CheckConstraint(
-                check=~models.Q(delivery__isnull=True, pickup_point__isnull=True),
-                name='either_delivery_or_pickup_point'
-            ),
         ]
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
@@ -90,13 +73,15 @@ class Order(TimeStampedModel):
         """
         Проверяет корректность данных перед сохранением.
 
-        Убеждается, что total_price не отрицателен.
+        Убеждается, что total_price не отрицателен и pickup_point активен.
 
         Raises:
-            ValidationError: Если total_price отрицателен.
+            ValidationError: Если данные некорректны.
         """
         if self.total_price < 0:
             raise ValidationError(_("Общая стоимость не может быть отрицательной"))
+        if self.pickup_point and not self.pickup_point.is_active:
+            raise ValidationError(_("Пункт выдачи неактивен"))
 
     def save(self, *args, **kwargs):
         """
