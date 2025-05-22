@@ -51,10 +51,7 @@ def order_post_save(sender, instance, created, **kwargs):
     """
     logger.debug(f"Starting post_save for order={instance.id}, user={instance.user.id}")
     try:
-        delivery_info = (
-            f"{_('Адрес доставки')}: {instance.delivery.address}" if instance.delivery
-            else f"{_('Пункт выдачи')}: {instance.pickup_point}"
-        )
+        delivery_info = f"{_('Пункт выдачи')}: {instance.pickup_point.city.name}, {instance.pickup_point.address}"
         if created:
             NotificationService.send_notification(
                 instance.user, f"{_('Ваш заказ')} #{instance.id} {_('создан')}. {delivery_info}"
