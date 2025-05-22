@@ -1,51 +1,18 @@
 import logging
 from django.contrib.postgres.search import SearchQuery, SearchRank
-from django.db.models import Q, Case, When, IntegerField
-from elasticsearch_dsl import Search
+from django.db.models import Case, When, IntegerField
 from elasticsearch_dsl.exceptions import ElasticsearchDslException
-from typing import Any, Optional, Union
-from apps.delivery.models import Delivery, PickupPoint, City
-from apps.delivery.exceptions import CityNotFound, PickupPointNotFound, DeliveryNotFound
+from typing import Any
+from apps.delivery.models import PickupPoint, City
+from apps.delivery.exceptions import CityNotFound
 from apps.delivery.documents import PickupPointDocument
-from apps.delivery.utils import get_filter_params
 
 logger = logging.getLogger(__name__)
 
 
-class DeliveryQueryService:
-    """Сервис для выполнения запросов к адресам доставки."""
-
-    @classmethod
-    def get_base_queryset(cls, user: Any) -> Any:
-        """Возвращает базовый QuerySet для адресов доставки пользователя."""
-        return Delivery.objects.filter(user=user).order_by('id')
-
-    @classmethod
-    def get_delivery_list(cls, queryset: Any) -> Any:
-        """Возвращает список адресов доставки с оптимизированными полями."""
-        logger.debug("Applying optimizations for delivery list")
-        return queryset.only('id', 'address', 'cost', 'is_primary')
-
-    @classmethod
-    def get_single_delivery(cls, pk: int, user: Any) -> Delivery:
-        """Получает один адрес доставки по ID."""
-        logger.info(f"Retrieving delivery with pk={pk} for user={user.id}")
-        try:
-            delivery = cls.get_base_queryset(user).get(pk=pk)
-            logger.info(f"Retrieved delivery {pk}")
-            return delivery
-        except Delivery.DoesNotExist:
-            logger.warning(f"Delivery {pk} not found for user={user.id}")
-            raise DeliveryNotFound("Адрес доставки не найден.")
-
-
 class PickupPointQueryService:
-    """Сервис для выполнения запросов к пунктам выдачи.
+    """Сервис для получения и поиска пунктов выдачи."""
 
-    Предоставляет методы для поиска, фильтрации и сортировки пунктов выдачи через Elasticsearch и PostgreSQL.
-    """
-
-    ALLOWED_ORDER_FIELDS = {'city__name', 'address', '-city__name', '-address'}
     LARGE_PAGE_SIZE = 200
 
     @classmethod
@@ -59,102 +26,52 @@ class PickupPointQueryService:
         """Возвращает список пунктов выдачи с оптимизированными полями."""
         logger.debug("Applying optimizations for pickup point list")
         return queryset.select_related('city').only(
-            'id', 'address', 'is_active', 'city__id', 'city__name'
+            'id', 'address', 'district', 'is_active', 'city__id', 'city__name'
         )
-
-    @classmethod
-    def get_single_pickup_point(cls, pk: int) -> PickupPoint:
-        """Получает один пункт выдачи по ID."""
-        logger.info(f"Retrieving pickup point with pk={pk}")
-        try:
-            pickup_point = cls.get_base_queryset().get(pk=pk)
-            logger.info(f"Retrieved pickup point {pk}")
-            return pickup_point
-        except PickupPoint.DoesNotExist:
-            logger.warning(f"Pickup point {pk} not found")
-            raise PickupPointNotFound("Пункт выдачи не найден.")
-
-    @classmethod
-    def apply_common_filters(
-            cls,
-            source: Union[Any, Search],
-            city_id: Optional[int] = None
-    ) -> Union[Any, Search]:
-        """Применяет общие фильтры к QuerySet или объекту поиска Elasticsearch."""
-        logger.debug(f"Applying filters: city_id={city_id}")
-        try:
-            if isinstance(source, Search):
-                if city_id:
-                    source = source.filter('term', **{'city.id': city_id})
-            else:  # QuerySet
-                if city_id:
-                    if not City.objects.filter(id=city_id).exists():
-                        logger.warning(f"City with id={city_id} not found")
-                        raise CityNotFound(f"Город с ID {city_id} не найден")
-                    source = source.filter(city_id=city_id)
-            return source
-        except ElasticsearchDslException as e:
-            logger.error(f"Elasticsearch error in apply_common_filters: {str(e)}")
-            raise CityNotFound(f"Ошибка Elasticsearch при фильтрации: {str(e)}")
-        except Exception as e:
-            logger.error(f"Unexpected error in apply_common_filters: {str(e)}")
-            raise CityNotFound(f"Неизвестная ошибка при фильтрации: {str(e)}")
-
-    @classmethod
-    def apply_filters(cls, queryset: Any, request: Any) -> Any:
-        """Применяет фильтры к QuerySet на основе параметров запроса."""
-        logger.debug(f"Applying filters with params={request.GET.dict()}")
-        params = get_filter_params(request)
-        return cls.apply_common_filters(queryset, **params)
-
-    @classmethod
-    def apply_ordering(cls, queryset: Any, request: Any) -> Any:
-        """Применяет сортировку к QuerySet на основе параметра запроса."""
-        sort_by = request.GET.get('ordering')
-        logger.debug(f"Applying ordering with sort_by={sort_by}")
-        if sort_by and sort_by not in cls.ALLOWED_ORDER_FIELDS:
-            logger.warning(f"Invalid ordering field: {sort_by}")
-            raise ValueError(f"Недопустимое поле сортировки: {sort_by}")
-        return queryset.order_by(sort_by or 'city__name', 'address')
 
     @classmethod
     def search_pickup_points(cls, request: Any) -> Any:
         """Поиск пунктов выдачи в Elasticsearch с фильтрацией и пагинацией."""
         query = request.GET.get('q', '')
+        city_id = request.GET.get('city_id')
+        district = request.GET.get('district')
         page = int(request.GET.get('page', 1))
         page_size = int(request.GET.get('page_size', 50))
-        ordering = request.GET.get('ordering', None)
-        logger.info(f"Searching pickup points: query={query}, page={page}, page_size={page_size}")
+        logger.info(
+            f"Searching pickup points: query={query}, city_id={city_id}, district={district}, page={page}, page_size={page_size}")
 
         try:
             if page < 1 or page_size < 1 or page_size > cls.LARGE_PAGE_SIZE:
                 logger.warning(f"Invalid pagination params: page={page}, page_size={page_size}")
                 raise CityNotFound("Некорректные параметры пагинации.")
-            params = get_filter_params(request)
+
             search = PickupPointDocument.search().filter('term', is_active=True)
+
+            if city_id:
+                try:
+                    city_id = int(city_id)
+                    if not City.objects.filter(id=city_id).exists():
+                        logger.warning(f"City with id={city_id} not found")
+                        raise CityNotFound(f"Город с ID {city_id} не найден")
+                    search = search.filter('term', **{'city.id': city_id})
+                except ValueError:
+                    logger.warning(f"Invalid city_id={city_id}")
+                    raise CityNotFound("Идентификатор города должен быть числом")
+
+            if district:
+                search = search.filter('term', **{'district': district})
+
             if query:
                 search = search.query(
                     'multi_match',
                     query=query,
-                    fields=['address^2', 'city.name'],
+                    fields=['address^2', 'city.name', 'district'],
                     fuzziness='AUTO'
                 )
-            elif not any(params.values()):
+            else:
                 search = search.sort('city.name', 'address')
-            search = cls.apply_common_filters(search, **params)
-            if ordering and ordering in cls.ALLOWED_ORDER_FIELDS:
-                search = search.sort(ordering)
-            elif not query:
-                search = search.sort('city.name', 'address')
-            if page > 1:
-                preliminary_search = search[0:(page - 1) * page_size]
-                preliminary_response = preliminary_search.execute()
-                if not preliminary_response.hits:
-                    logger.warning(f"No results found for page={page}, page_size={page_size}")
-                    return cls.get_pickup_point_list(cls.get_base_queryset().none())
-                last_hit = preliminary_response[-1]
-                search = search.extra(search_after=[last_hit.meta.sort])
-            search = search[0:page_size]
+
+            search = search[(page - 1) * page_size:page * page_size]
             response = search.execute()
             pickup_point_ids = [hit.id for hit in response]
             total = response.hits.total.value if hasattr(response.hits, 'total') else len(pickup_point_ids)
@@ -181,16 +98,34 @@ class PickupPointQueryService:
     @staticmethod
     def search_pickup_points_db(queryset: Any, request: Any) -> Any:
         """Выполняет поиск пунктов выдачи по текстовому запросу в базе данных."""
-        search_query = request.GET.get('q')
-        logger.info(f"Searching pickup points with query={search_query}")
-        if not search_query:
-            logger.warning("Empty search query")
-            raise CityNotFound("Пустой поисковый запрос.")
+        query = request.GET.get('q')
+        city_id = request.GET.get('city_id')
+        district = request.GET.get('district')
+        logger.info(f"Searching pickup points in DB: query={query}, city_id={city_id}, district={district}")
+
         try:
-            query = SearchQuery(search_query, config='russian', search_type='websearch')
-            return queryset.annotate(
-                rank=SearchRank('search_vector', query)
-            ).filter(search_vector=query).order_by('-rank')
+            if city_id:
+                city_id = int(city_id)
+                if not City.objects.filter(id=city_id).exists():
+                    logger.warning(f"City with id={city_id} not found")
+                    raise CityNotFound(f"Город с ID {city_id} не найден")
+                queryset = queryset.filter(city_id=city_id)
+
+            if district:
+                queryset = queryset.filter(district=district)
+
+            if query:
+                search_query = SearchQuery(query, config='russian', search_type='websearch')
+                queryset = queryset.annotate(
+                    rank=SearchRank('search_vector', search_query)
+                ).filter(search_vector=search_query).order_by('-rank')
+            else:
+                queryset = queryset.order_by('city__name', 'address')
+
+            return queryset
+        except ValueError as e:
+            logger.warning(f"Invalid search parameters: {str(e)}")
+            raise CityNotFound(f"Некорректные параметры поиска: {str(e)}")
         except Exception as e:
             logger.error(f"Search failed: {str(e)}")
             raise CityNotFound(f"Ошибка поиска: {str(e)}")
