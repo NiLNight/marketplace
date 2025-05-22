@@ -2,44 +2,16 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 import redis
 from apps.core.services.cache_services import CacheService
-from apps.delivery.models import Delivery, PickupPoint, City
+from apps.delivery.models import PickupPoint, City
 import logging
 
 logger = logging.getLogger(__name__)
-
-
-@receiver([post_save, post_delete], sender=Delivery)
-def invalidate_delivery_cache(sender, instance, **kwargs):
-    """
-    Инвалидирует кэш списка адресов доставки при сохранении или удалении объекта Delivery.
-
-    Args:
-        sender: Класс модели, отправивший сигнал.
-        instance: Экземпляр модели Delivery.
-        kwargs: Дополнительные аргументы сигнала.
-    """
-    try:
-        if not instance.user:
-            logger.warning(f"Delivery instance {instance.id} has no associated user")
-            return
-        cache_key = f"delivery_list:{instance.user.id}"
-        CacheService.invalidate_cache(prefix=cache_key)
-        logger.info(f"Invalidated cache for delivery_list user_id={instance.user.id}")
-    except redis.exceptions.RedisError as e:
-        logger.error(f"Redis error invalidating delivery_list user_id={instance.user.id}: {str(e)}")
-    except Exception as e:
-        logger.error(f"Unexpected error invalidating delivery_list user_id={instance.user.id}: {str(e)}")
 
 
 @receiver([post_save, post_delete], sender=PickupPoint)
 def invalidate_pickup_point_cache(sender, instance, **kwargs):
     """
     Инвалидирует кэш списка пунктов выдачи при сохранении или удалении объекта PickupPoint.
-
-    Args:
-        sender: Класс модели, отправивший сигнал.
-        instance: Экземпляр модели PickupPoint.
-        kwargs: Дополнительные аргументы сигнала.
     """
     try:
         cache_key = f"pickup_points:{instance.city_id or 'all'}:none"
@@ -55,11 +27,6 @@ def invalidate_pickup_point_cache(sender, instance, **kwargs):
 def invalidate_city_cache(sender, instance, **kwargs):
     """
     Инвалидирует кэш списка городов при сохранении или удалении объекта City.
-
-    Args:
-        sender: Класс модели, отправивший сигнал.
-        instance: Экземпляр модели City.
-        kwargs: Дополнительные аргументы сигнала.
     """
     try:
         cache_key = "city_list"
