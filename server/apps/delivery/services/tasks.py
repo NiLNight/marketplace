@@ -11,9 +11,6 @@ logger = logging.getLogger(__name__)
 def index_pickup_point(pickup_point_id):
     """
     Асинхронно индексирует пункт выдачи в Elasticsearch.
-
-    Args:
-        pickup_point_id (int): Идентификатор пункта выдачи.
     """
     try:
         pickup_point = PickupPoint.objects.get(pk=pickup_point_id)
@@ -23,21 +20,21 @@ def index_pickup_point(pickup_point_id):
         doc = PickupPointDocument(
             meta={'id': pickup_point.id},
             address=pickup_point.address,
+            district=pickup_point.district or '',
             is_active=pickup_point.is_active,
             city={'id': pickup_point.city.id, 'name': pickup_point.city.name}
         )
         doc.instance = pickup_point
         doc.save()
-        logger.info(f"Indexed pickup_point id={pickup_point_id}, "
-                    f"task_id={index_pickup_point.request.id}")
+        logger.info(f"Indexed pickup_point id={pickup_point_id}, task_id={index_pickup_point.request.id}")
     except PickupPoint.DoesNotExist:
-        logger.warning(f"PickupPoint id={pickup_point_id} not found for indexing, "
-                       f"task_id={index_pickup_point.request.id}")
+        logger.warning(
+            f"PickupPoint id={pickup_point_id} not found for indexing, task_id={index_pickup_point.request.id}")
     except ElasticsearchDslException as e:
-        logger.error(f"Elasticsearch error indexing pickup_point id={pickup_point_id}: {str(e)}, "
-                     f"task_id={index_pickup_point.request.id}")
+        logger.error(
+            f"Elasticsearch error indexing pickup_point id={pickup_point_id}: {str(e)}, task_id={index_pickup_point.request.id}")
         raise
     except Exception as e:
-        logger.error(f"Unexpected error indexing pickup_point id={pickup_point_id}: {str(e)}, "
-                     f"task_id={index_pickup_point.request.id}")
+        logger.error(
+            f"Unexpected error indexing pickup_point id={pickup_point_id}: {str(e)}, task_id={index_pickup_point.request.id}")
         raise
