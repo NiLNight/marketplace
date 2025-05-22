@@ -37,7 +37,6 @@ class OrderListView(APIView):
         permission_classes: Требует аутентификации пользователя.
         serializer_class: Сериализатор для преобразования данных заказов.
         pagination_class: Пагинация с настраиваемым размером страницы.
-        throttle_classes: Ограничивает частоту запросов.
     """
     permission_classes = [IsAuthenticated]
     serializer_class = OrderSerializer
@@ -85,7 +84,6 @@ class OrderDetailView(APIView):
     Attributes:
         permission_classes: Требует аутентификации пользователя.
         serializer_class: Сериализатор для преобразования данных заказа.
-        throttle_classes: Ограничивает частоту запросов.
     """
     permission_classes = [IsAuthenticated]
     serializer_class = OrderDetailSerializer
@@ -133,11 +131,10 @@ class OrderCreateView(APIView):
     """
     Представление для создания нового заказа.
 
-    Создает заказ из корзины пользователя с указанием доставки или пункта выдачи.
+    Создает заказ из корзины пользователя с указанием пункта выдачи.
 
     Attributes:
         permission_classes: Требует аутентификации пользователя.
-        throttle_classes: Ограничивает частоту запросов.
     """
     permission_classes = [IsAuthenticated]
 
@@ -147,26 +144,24 @@ class OrderCreateView(APIView):
         Обрабатывает POST-запрос для создания заказа из корзины.
 
         Args:
-            request (HttpRequest): Объект запроса с данными о доставке или пункте выдачи.
+            request (HttpRequest): Объект запроса с данными о пункте выдачи.
 
         Returns:
             Response: Ответ с подтверждением создания заказа или ошибкой.
         """
         user_id = request.user.id
-        delivery_id = request.data.get('delivery_id')
         pickup_point_id = request.data.get('pickup_point_id')
 
-        if not delivery_id and not pickup_point_id:
-            logger.warning(f"Missing delivery_id and pickup_point_id for user={user_id},"
+        if not pickup_point_id:
+            logger.warning(f"Missing pickup_point_id for user={user_id},"
                            f" path={request.path}, IP={request.META.get('REMOTE_ADDR')}")
             return Response(
-                {"error": _("Не указаны данные доставки или пункт выдачи"), "code": "missing_input"},
+                {"error": _("Не указан пункт выдачи"), "code": "missing_input"},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         order = OrderService.create_order(
             user=request.user,
-            delivery_id=delivery_id,
             pickup_point_id=pickup_point_id,
             request=request
         )
@@ -187,7 +182,6 @@ class OrderCancelView(APIView):
 
     Attributes:
         permission_classes: Требует аутентификации пользователя.
-        throttle_classes: Ограничивает частоту запросов.
     """
     permission_classes = [IsAuthenticated]
 
