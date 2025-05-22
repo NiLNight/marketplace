@@ -52,8 +52,8 @@ class PickupPointDocument(Document):
         """Подготавливает данные района для индексации."""
         try:
             return instance.district or ''
-        except Exception as e:
-            logger.error(f"Failed to prepare district for pickup point {instance.id}: {str(e)}")
+        except AttributeError as e:
+            logger.error(f"Failed to access district for pickup point {instance.id}: {str(e)}")
             return ''
 
     def save(self, **kwargs):

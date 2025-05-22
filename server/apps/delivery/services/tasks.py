@@ -1,5 +1,6 @@
 from celery import shared_task
 from apps.delivery.documents import PickupPointDocument
+from apps.delivery.exceptions import PickupPointNotFound
 from apps.delivery.models import PickupPoint
 from elasticsearch_dsl.exceptions import ElasticsearchDslException
 import logging
@@ -26,15 +27,16 @@ def index_pickup_point(pickup_point_id):
         )
         doc.instance = pickup_point
         doc.save()
-        logger.info(f"Indexed pickup_point id={pickup_point_id}, task_id={index_pickup_point.request.id}")
+        logger.info(f"Indexed pickup_point id={pickup_point_id},"
+                    f" task_id={index_pickup_point.request.id}")
     except PickupPoint.DoesNotExist:
-        logger.warning(
-            f"PickupPoint id={pickup_point_id} not found for indexing, task_id={index_pickup_point.request.id}")
+        logger.error(f"PickupPoint id={pickup_point_id} not found for indexing")
+        raise PickupPointNotFound(f"Пункт выдачи с ID {pickup_point_id} не найден")
     except ElasticsearchDslException as e:
-        logger.error(
-            f"Elasticsearch error indexing pickup_point id={pickup_point_id}: {str(e)}, task_id={index_pickup_point.request.id}")
+        logger.error(f"Elasticsearch error indexing pickup_point id={pickup_point_id}: {str(e)},"
+                     f" task_id={index_pickup_point.request.id}")
         raise
     except Exception as e:
-        logger.error(
-            f"Unexpected error indexing pickup_point id={pickup_point_id}: {str(e)}, task_id={index_pickup_point.request.id}")
+        logger.error(f"Unexpected error indexing pickup_point id={pickup_point_id}: {str(e)},"
+                     f" task_id={index_pickup_point.request.id}")
         raise

@@ -31,7 +31,6 @@ class PickupPointListView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = PickupPointSerializer
     pagination_class = PickupPointPagination
-    CACHE_TIMEOUT = 86400  # 24 часа
 
     @handle_api_errors
     def get(self, request):
@@ -56,7 +55,7 @@ class PickupPointListView(APIView):
             page = paginator.paginate_queryset(pickup_points, request)
 
             response_data = paginator.get_paginated_response(self.serializer_class(page, many=True).data).data
-            CacheService.set_cached_data(cache_key, response_data, timeout=self.CACHE_TIMEOUT)
+            CacheService.set_cached_data(cache_key, response_data, timeout=60 * 60)
             logger.info(f"Retrieved {pickup_points.count()} pickup points for user={user_id}")
             return Response(response_data)
         except redis.exceptions.RedisError as e:

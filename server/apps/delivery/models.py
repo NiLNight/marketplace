@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.core.validators import MinLengthValidator
 from django.contrib.postgres.search import SearchVectorField, SearchVector, Value
@@ -76,7 +77,9 @@ class PickupPoint(models.Model):
         return f"{self.city.name}, {self.address}"
 
     def save(self, *args, **kwargs):
-        city_name = self.city.name if self.city else ''
+        if not self.city:
+            raise ValidationError("Город не может быть пустым")
+        city_name = self.city.name
         district_name = self.district or ''
         self.search_vector = (
                 SearchVector(Value(self.address), weight='A', config='russian') +

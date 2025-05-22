@@ -37,8 +37,8 @@ class PickupPointQueryService:
         district = request.GET.get('district')
         page = int(request.GET.get('page', 1))
         page_size = int(request.GET.get('page_size', 50))
-        logger.info(
-            f"Searching pickup points: query={query}, city_id={city_id}, district={district}, page={page}, page_size={page_size}")
+        logger.info(f"Searching pickup points: query={query}, city_id={city_id},"
+                    f" district={district}, page={page}, page_size={page_size}")
 
         try:
             if page < 1 or page_size < 1 or page_size > cls.LARGE_PAGE_SIZE:
@@ -74,6 +74,11 @@ class PickupPointQueryService:
             search = search[(page - 1) * page_size:page * page_size]
             response = search.execute()
             pickup_point_ids = [hit.id for hit in response]
+
+            if not pickup_point_ids:
+                logger.info("No pickup points found for the given criteria")
+                return cls.get_pickup_point_list(cls.get_base_queryset().none())
+
             total = response.hits.total.value if hasattr(response.hits, 'total') else len(pickup_point_ids)
             logger.info(f"Found {len(pickup_point_ids)} pickup points, total={total}")
 
