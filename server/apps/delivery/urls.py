@@ -3,11 +3,11 @@ from django.urls import path
 from apps.delivery.views import (
     CityListView,
     PickupPointListView,
-    DeliveryListView
+    DistrictListView,
 )
 
 urlpatterns = [
     path('pickup_points/', PickupPointListView.as_view(), name='pickup_points'),
-    path('deliveries/', DeliveryListView.as_view(), name='deliveries'),
     path('city_list/', CityListView.as_view(), name='city_list'),
+    path('district_list/', DistrictListView.as_view(), name='district_list'),
 ]
