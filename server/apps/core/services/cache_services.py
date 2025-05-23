@@ -13,7 +13,8 @@ class CacheService:
 
     @staticmethod
     def build_cache_key(request, prefix: str) -> str:
-        """Создает уникальный ключ кэша на основе параметров запроса.
+        """
+        Создает уникальный ключ кэша на основе параметров запроса.
 
         Args:
             request: HTTP-запрос, содержащий GET-параметры.
@@ -34,37 +35,40 @@ class CacheService:
 
     @staticmethod
     def get_cached_data(key: str):
-        """Получает данные из кэша по ключу.
+        """
+        Получает данные из кэша по ключу.
 
-                Args:
-                    key (str): Ключ кэша.
+        Args:
+            key (str): Ключ кэша.
 
-                Returns:
-                    Данные из кэша или None, если кэш пуст.
-                """
+        Returns:
+            Данные из кэша или None, если кэш пуст.
+        """
         data = cache.get(key)
         logger.debug(f"Cache {'hit' if data else 'miss'} for key: {key}")
         return data
 
     @staticmethod
     def set_cached_data(key: str, data, timeout: int = 900):
-        """Сохраняет данные в кэш.
+        """
+        Сохраняет данные в кэш.
 
-                Args:
-                    key (str): Ключ кэша.
-                    data: Данные для сохранения.
-                    timeout (int): Время жизни кэша в секундах (по умолчанию 15 минут).
-                """
+        Args:
+            key (str): Ключ кэша.
+            data: Данные для сохранения.
+            timeout (int): Время жизни кэша в секундах (по умолчанию 15 минут).
+        """
         cache.set(key, data, timeout)
 
     @staticmethod
     def invalidate_cache(prefix: str, pk: int = None):
-        """Инвалидирует кэш по префиксу или конкретному ID.
+        """
+        Инвалидирует кэш по префиксу или конкретному ID.
 
-                Args:
-                    prefix (str): Префикс ключа кэша (например, 'product_list').
-                    pk (int, optional): ID объекта для точечной инвалидации.
-                """
+        Args:
+            prefix (str): Префикс ключа кэша (например, 'product_list').
+            pk (int, optional): ID объекта для точечной инвалидации.
+        """
         if pk:
             cache.delete(f"{prefix}:{pk}")
             logger.info(f"Invalidated cache for key: {prefix}:{pk}")
@@ -117,17 +121,22 @@ class CacheService:
 
     @staticmethod
     def cache_user_profile(user_id: int):
+        """Кэширует профиль пользователя."""
         return CacheService.get_cached_data(f"user_profile:{user_id}")
 
     @staticmethod
     def cache_delivery_list(user_id: int, request):
+        """Кэширует список вариантов доставки для пользователя."""
         return CacheService.get_cached_data(CacheService.build_cache_key(request, prefix=f"delivery_list:{user_id}"))
 
     @staticmethod
-    def cache_city_list(request):
-        return CacheService.get_cached_data(CacheService.build_cache_key(request, prefix="city_list"))
+    def cache_pickup_points_list(request, city: str = None):
+        """Кэширует список пунктов выдачи."""
+        return CacheService.get_cached_data(
+            CacheService.build_cache_key(request, prefix=f"pickup_points:{city or 'all'}")
+        )
 
     @staticmethod
-    def cache_pickup_points_list(city: str, search: str, request):
-        return CacheService.get_cached_data(
-            CacheService.build_cache_key(request, prefix=f"pickup_points:{city or 'all'}:{search or 'none'}"))
+    def cache_city_list(request):
+        """Кэширует список городов."""
+        return CacheService.get_cached_data(CacheService.build_cache_key(request, prefix="city_list"))

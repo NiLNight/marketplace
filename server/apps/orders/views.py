@@ -66,10 +66,11 @@ class OrderListView(APIView):
 
         serializer = self.serializer_class(page, many=True)
         response_data = paginator.get_paginated_response(serializer.data).data
-        cache_key = CacheService.build_cache_key(
-            request, prefix=f"order_list:{user_id}:{request.GET.get('status', 'all')}"
-        )
-        CacheService.set_cached_data(cache_key, response_data, timeout=60 * 15)  # 15 мин
+        CacheService.set_cached_data(
+            CacheService.build_cache_key(request, prefix=f"order_list:{user_id}:{request.GET.get('status', 'all')}"),
+            response_data,
+            timeout=60 * 15
+        )  # 15 мин
         logger.info(f"Retrieved {len(orders)} orders for user={user_id}, "
                     f"path={request.path}, IP={request.META.get('REMOTE_ADDR')}")
         return Response(response_data)

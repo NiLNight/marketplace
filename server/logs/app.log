@@ -10158,3 +10158,428 @@ LINE 1: ...t"."address", "delivery_pickuppoint"."is_active", "delivery_...
 [2025-05-22 16:33:23,806] INFO apps.orders.services.order_services Retrieving orders for user=11, path=/orders/, IP=127.0.0.1
 [2025-05-22 16:33:23,809] INFO apps.orders.services.order_services Retrieved 6 orders for user=11, IP=127.0.0.1
 [2025-05-22 16:33:23,824] INFO apps.orders.views Retrieved 6 orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-22 20:34:09,633] DEBUG apps.users.authentication No token provided in request
+[2025-05-22 20:34:10,864] DEBUG apps.users.authentication No token provided in request
+[2025-05-22 20:34:12,663] DEBUG apps.users.authentication No token provided in request
+[2025-05-22 20:34:12,773] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-22 20:34:12,774] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-22 20:34:12,774] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-22 20:34:13,265] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-22 20:34:13,265] INFO apps.users.views User 11 logged in successfully
+[2025-05-22 20:34:13,276] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-22 20:34:16,169] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 20:34:16,171] DEBUG apps.core.services.cache_services Cache miss for key: cart:11
+[2025-05-22 20:34:16,174] INFO apps.carts.services.cart_services Retrieved cart, user=11, items=0
+[2025-05-22 20:34:16,182] INFO apps.carts.views Retrieved cart, user=11, items=0
+[2025-05-22 20:34:18,788] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 20:34:18,790] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:all:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-22 20:34:18,790] DEBUG apps.orders.services.order_services Starting retrieval of orders for user=11
+[2025-05-22 20:34:18,791] INFO apps.orders.services.order_services Retrieving orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-22 20:34:18,793] INFO apps.orders.services.order_services Retrieved 6 orders for user=11, IP=127.0.0.1
+[2025-05-22 20:34:18,805] INFO apps.orders.views Retrieved 6 orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-22 20:34:25,553] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 20:34:25,553] INFO apps.delivery.views Action=GetPickupPointsList UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=all
+[2025-05-22 20:34:25,554] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:москва:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-22 20:34:25,554] INFO apps.delivery.services.delivery_services Action=GetPickupPoints UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query= CityID=None District=None
+[2025-05-22 20:34:25,555] INFO apps.delivery.services.query_services Action=SearchPickupPoints UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=None District=None Page=1 PageSize=50
+[2025-05-22 20:34:25,686] INFO apps.delivery.services.query_services Found 1 pickup points Total=1 UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-22 20:34:25,686] INFO apps.delivery.services.query_services Action=GetBaseQueryset
+[2025-05-22 20:34:25,686] INFO apps.delivery.services.query_services Action=OptimizePickupPointList
+[2025-05-22 20:34:25,694] INFO apps.delivery.views Retrieved 1 pickup points UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-22 20:34:27,385] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 20:34:27,385] INFO apps.delivery.views Action=GetPickupPointsList UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=all
+[2025-05-22 20:34:27,386] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:москва:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-22 20:34:27,387] INFO apps.delivery.services.delivery_services Action=GetPickupPoints UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query= CityID=None District=None
+[2025-05-22 20:34:27,387] INFO apps.delivery.services.query_services Action=SearchPickupPoints UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=None District=None Page=1 PageSize=50
+[2025-05-22 20:34:27,406] INFO apps.delivery.services.query_services Found 1 pickup points Total=1 UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-22 20:34:27,407] INFO apps.delivery.services.query_services Action=GetBaseQueryset
+[2025-05-22 20:34:27,407] INFO apps.delivery.services.query_services Action=OptimizePickupPointList
+[2025-05-22 20:34:27,414] INFO apps.delivery.views Retrieved 1 pickup points UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-22 20:34:36,437] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 20:34:36,437] INFO apps.delivery.views Action=GetDistrictList UserID=11 Path=/delivery/district_list/ IP=127.0.0.1 CityID=1
+[2025-05-22 20:34:36,439] DEBUG apps.core.services.cache_services Cache miss for key: districts:1:57802c04eaf3b516d619b9e21d1dd627
+[2025-05-22 20:34:36,441] ERROR apps.delivery.utils Server error: DeliveryService.get_districts() missing 1 required positional argument: 'request' UserID=11 Path=/delivery/district_list/ IP=127.0.0.1
+[2025-05-22 20:35:01,840] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 20:35:01,840] INFO apps.delivery.views Action=GetCityList UserID=11 Path=/delivery/city_list/ IP=127.0.0.1
+[2025-05-22 20:35:01,841] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-22 20:35:01,841] INFO apps.delivery.views Retrieved cached city list UserID=11 Path=/delivery/city_list/ IP=127.0.0.1
+[2025-05-22 20:35:07,728] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 20:35:07,728] INFO apps.delivery.views Action=GetCityList UserID=11 Path=/delivery/city_list/ IP=127.0.0.1
+[2025-05-22 20:35:07,730] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-22 20:35:07,730] INFO apps.delivery.views Retrieved cached city list UserID=11 Path=/delivery/city_list/ IP=127.0.0.1
+[2025-05-22 20:35:14,493] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-22 20:35:14,493] INFO apps.delivery.views Action=GetPickupPointsList UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=all
+[2025-05-22 20:35:14,494] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:москва:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-22 20:35:14,494] INFO apps.delivery.services.delivery_services Action=GetPickupPoints UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query= CityID=None District=None
+[2025-05-22 20:35:14,494] INFO apps.delivery.services.query_services Action=SearchPickupPoints UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=None District=None Page=1 PageSize=50
+[2025-05-22 20:35:14,558] INFO apps.delivery.services.query_services Found 1 pickup points Total=1 UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-22 20:35:14,558] INFO apps.delivery.services.query_services Action=GetBaseQueryset
+[2025-05-22 20:35:14,559] INFO apps.delivery.services.query_services Action=OptimizePickupPointList
+[2025-05-22 20:35:14,565] INFO apps.delivery.views Retrieved 1 pickup points UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-23 12:32:21,653] DEBUG apps.users.authentication No token provided in request
+[2025-05-23 12:32:21,813] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-23 12:32:21,814] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-23 12:32:21,814] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-23 12:32:22,619] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-23 12:32:22,619] INFO apps.users.views User 11 logged in successfully
+[2025-05-23 12:32:22,748] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-23 12:32:26,760] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 12:32:26,760] INFO apps.delivery.views Action=GetPickupPointsList UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=all
+[2025-05-23 12:32:26,780] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:москва:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 12:32:26,781] INFO apps.delivery.services.delivery_services Action=GetPickupPoints UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query= CityID=None District=None
+[2025-05-23 12:32:26,781] INFO apps.delivery.services.query_services Action=SearchPickupPoints UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=None District=None Page=1 PageSize=50
+[2025-05-23 12:32:27,137] INFO apps.delivery.services.query_services Found 1 pickup points Total=1 UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-23 12:32:27,137] INFO apps.delivery.services.query_services Action=GetBaseQueryset
+[2025-05-23 12:32:27,138] INFO apps.delivery.services.query_services Action=OptimizePickupPointList
+[2025-05-23 12:32:27,221] INFO apps.delivery.views Retrieved 1 pickup points UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-23 12:32:28,488] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 12:32:28,488] INFO apps.delivery.views Action=GetPickupPointsList UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=all
+[2025-05-23 12:32:28,489] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:москва:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 12:32:28,489] INFO apps.delivery.services.delivery_services Action=GetPickupPoints UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query= CityID=None District=None
+[2025-05-23 12:32:28,489] INFO apps.delivery.services.query_services Action=SearchPickupPoints UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=None District=None Page=1 PageSize=50
+[2025-05-23 12:32:28,504] INFO apps.delivery.services.query_services Found 1 pickup points Total=1 UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-23 12:32:28,505] INFO apps.delivery.services.query_services Action=GetBaseQueryset
+[2025-05-23 12:32:28,505] INFO apps.delivery.services.query_services Action=OptimizePickupPointList
+[2025-05-23 12:32:28,512] INFO apps.delivery.views Retrieved 1 pickup points UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-23 12:32:37,677] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 12:32:37,677] INFO apps.delivery.views Action=GetPickupPointsList UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=all
+[2025-05-23 12:32:37,678] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:москва:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 12:32:37,679] INFO apps.delivery.services.delivery_services Action=GetPickupPoints UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query= CityID=None District=None
+[2025-05-23 12:32:37,679] INFO apps.delivery.services.query_services Action=SearchPickupPoints UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=None District=None Page=1 PageSize=50
+[2025-05-23 12:32:37,744] INFO apps.delivery.services.query_services Found 1 pickup points Total=1 UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-23 12:32:37,745] INFO apps.delivery.services.query_services Action=GetBaseQueryset
+[2025-05-23 12:32:37,745] INFO apps.delivery.services.query_services Action=OptimizePickupPointList
+[2025-05-23 12:32:37,752] INFO apps.delivery.views Retrieved 1 pickup points UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-23 12:32:51,409] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 12:32:51,409] INFO apps.delivery.views Action=GetDistrictList UserID=11 Path=/delivery/district_list/ IP=127.0.0.1 CityID=1
+[2025-05-23 12:32:51,411] DEBUG apps.core.services.cache_services Cache miss for key: districts:1:57802c04eaf3b516d619b9e21d1dd627
+[2025-05-23 12:32:51,429] ERROR apps.delivery.utils Server error: DeliveryService.get_districts() missing 1 required positional argument: 'request' UserID=11 Path=/delivery/district_list/ IP=127.0.0.1
+[2025-05-23 12:32:54,765] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 12:32:54,765] INFO apps.delivery.views Action=GetDistrictList UserID=11 Path=/delivery/district_list/ IP=127.0.0.1 CityID=1
+[2025-05-23 12:32:54,766] DEBUG apps.core.services.cache_services Cache miss for key: districts:1:57802c04eaf3b516d619b9e21d1dd627
+[2025-05-23 12:32:54,768] ERROR apps.delivery.utils Server error: DeliveryService.get_districts() missing 1 required positional argument: 'request' UserID=11 Path=/delivery/district_list/ IP=127.0.0.1
+[2025-05-23 12:33:00,260] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 12:33:00,260] INFO apps.delivery.views Action=GetCityList UserID=11 Path=/delivery/city_list/ IP=127.0.0.1
+[2025-05-23 12:33:00,261] DEBUG apps.core.services.cache_services Cache miss for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-23 12:33:00,261] ERROR apps.delivery.utils Server error: DeliveryService.get_cities() missing 2 required positional arguments: 'self' and 'request' UserID=11 Path=/delivery/city_list/ IP=127.0.0.1
+[2025-05-23 12:33:09,942] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 12:33:09,942] DEBUG apps.orders.services.order_services Starting order creation for user=11
+[2025-05-23 12:33:09,942] INFO apps.orders.services.order_services Attempting to create order for user=11, pickup_point_id=1, IP=127.0.0.1
+[2025-05-23 12:33:10,030] WARNING apps.orders.services.order_services Cart is empty for user=11, IP=127.0.0.1
+[2025-05-23 12:33:10,030] WARNING apps.orders.utils API error: {'detail': ErrorDetail(string=' орзина пуста', code='invalid'), 'code': ErrorDetail(string='empty_cart', code='invalid')}, user=11, path=/orders/create/, IP=127.0.0.1
+[2025-05-23 12:33:14,466] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 12:33:14,482] DEBUG apps.core.services.cache_services Cache miss for key: cart:11
+[2025-05-23 12:33:14,492] INFO apps.carts.services.cart_services Retrieved cart, user=11, items=0
+[2025-05-23 12:33:14,569] INFO apps.carts.views Retrieved cart, user=11, items=0
+[2025-05-23 12:33:17,702] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 12:33:17,704] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:all:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-23 12:33:17,704] DEBUG apps.orders.services.order_services Starting retrieval of orders for user=11
+[2025-05-23 12:33:17,704] INFO apps.orders.services.order_services Retrieving orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-23 12:33:17,752] INFO apps.orders.services.order_services Retrieved 6 orders for user=11, IP=127.0.0.1
+[2025-05-23 12:33:17,802] INFO apps.orders.views Retrieved 6 orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-23 12:35:34,365] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 12:35:34,365] INFO apps.delivery.views Action=GetDistrictList UserID=11 Path=/delivery/district_list/ IP=127.0.0.1 CityID=1
+[2025-05-23 12:35:34,367] DEBUG apps.core.services.cache_services Cache miss for key: districts:1:57802c04eaf3b516d619b9e21d1dd627
+[2025-05-23 12:35:34,369] ERROR apps.delivery.utils Server error: DeliveryService.get_districts() missing 1 required positional argument: 'request' UserID=11 Path=/delivery/district_list/ IP=127.0.0.1
+[2025-05-23 12:41:24,768] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 12:41:24,768] INFO apps.delivery.views Action=GetDistrictList UserID=11 Path=/delivery/district_list/ IP=127.0.0.1 CityID=1
+[2025-05-23 12:41:24,774] DEBUG apps.core.services.cache_services Cache miss for key: districts:1:57802c04eaf3b516d619b9e21d1dd627
+[2025-05-23 12:41:24,777] INFO apps.delivery.services.delivery_services Action=GetDistricts CityID=1
+[2025-05-23 12:41:24,781] INFO apps.delivery.views Retrieved 0 districts UserID=11 Path=/delivery/district_list/ IP=127.0.0.1
+[2025-05-23 12:41:26,626] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 12:41:26,626] INFO apps.delivery.views Action=GetDistrictList UserID=11 Path=/delivery/district_list/ IP=127.0.0.1 CityID=1
+[2025-05-23 12:41:26,628] DEBUG apps.core.services.cache_services Cache hit for key: districts:1:57802c04eaf3b516d619b9e21d1dd627
+[2025-05-23 12:41:26,629] INFO apps.delivery.views Retrieved cached districts CityID=1 UserID=11 Path=/delivery/district_list/ IP=127.0.0.1
+[2025-05-23 12:41:36,185] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 12:41:36,186] INFO apps.delivery.views Action=GetPickupPointsList UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=all
+[2025-05-23 12:41:36,187] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:москва:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 12:41:36,187] INFO apps.delivery.services.delivery_services Action=GetPickupPoints UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query= CityID=None District=None
+[2025-05-23 12:41:36,187] INFO apps.delivery.services.query_services Action=SearchPickupPoints UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=None District=None Page=1 PageSize=50
+[2025-05-23 12:41:36,212] INFO apps.delivery.services.query_services Found 1 pickup points Total=1 UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-23 12:41:36,212] INFO apps.delivery.services.query_services Action=GetBaseQueryset
+[2025-05-23 12:41:36,212] INFO apps.delivery.services.query_services Action=OptimizePickupPointList
+[2025-05-23 12:41:36,220] INFO apps.delivery.views Retrieved 1 pickup points UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-23 12:41:50,206] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 12:41:50,207] INFO apps.delivery.views Action=GetDistrictList UserID=11 Path=/delivery/district_list/ IP=127.0.0.1 CityID=1
+[2025-05-23 12:41:50,207] DEBUG apps.core.services.cache_services Cache hit for key: districts:1:57802c04eaf3b516d619b9e21d1dd627
+[2025-05-23 12:41:50,207] INFO apps.delivery.views Retrieved cached districts CityID=1 UserID=11 Path=/delivery/district_list/ IP=127.0.0.1
+[2025-05-23 12:41:53,566] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 12:41:53,566] INFO apps.delivery.views Action=GetCityList UserID=11 Path=/delivery/city_list/ IP=127.0.0.1
+[2025-05-23 12:41:53,567] DEBUG apps.core.services.cache_services Cache miss for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-23 12:41:53,567] ERROR apps.delivery.utils Server error: DeliveryService.get_cities() missing 2 required positional arguments: 'self' and 'request' UserID=11 Path=/delivery/city_list/ IP=127.0.0.1
+[2025-05-23 12:45:18,771] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 12:45:18,772] INFO apps.delivery.views Action=GetDistrictList UserID=11 Path=/delivery/district_list/ IP=127.0.0.1 CityID=1
+[2025-05-23 12:45:18,778] DEBUG apps.core.services.cache_services Cache hit for key: districts:1:57802c04eaf3b516d619b9e21d1dd627
+[2025-05-23 12:45:18,778] INFO apps.delivery.views Retrieved cached districts CityID=1 UserID=11 Path=/delivery/district_list/ IP=127.0.0.1
+[2025-05-23 12:45:22,252] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 12:45:22,252] INFO apps.delivery.views Action=GetCityList UserID=11 Path=/delivery/city_list/ IP=127.0.0.1
+[2025-05-23 12:45:22,253] DEBUG apps.core.services.cache_services Cache miss for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-23 12:45:22,253] ERROR apps.delivery.utils Server error: DeliveryService.get_cities() missing 2 required positional arguments: 'self' and 'request' UserID=11 Path=/delivery/city_list/ IP=127.0.0.1
+[2025-05-23 12:50:10,682] DEBUG apps.users.authentication No token provided in request
+[2025-05-23 12:50:12,070] DEBUG apps.users.authentication No token provided in request
+[2025-05-23 12:50:14,058] DEBUG apps.users.authentication No token provided in request
+[2025-05-23 12:50:14,158] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-23 12:50:14,159] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-23 12:50:14,159] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-23 12:50:14,661] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-23 12:50:14,661] INFO apps.users.views User 11 logged in successfully
+[2025-05-23 12:50:15,245] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-23 12:50:17,072] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 12:50:17,072] INFO apps.delivery.views Action=GetCityList UserID=11 Path=/delivery/city_list/ IP=127.0.0.1
+[2025-05-23 12:50:17,074] DEBUG apps.core.services.cache_services Cache miss for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-23 12:50:17,074] ERROR apps.delivery.utils Server error: DeliveryService.get_cities() missing 2 required positional arguments: 'self' and 'request' UserID=11 Path=/delivery/city_list/ IP=127.0.0.1
+[2025-05-23 12:50:18,257] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 12:50:18,258] INFO apps.delivery.views Action=GetCityList UserID=11 Path=/delivery/city_list/ IP=127.0.0.1
+[2025-05-23 12:50:18,259] DEBUG apps.core.services.cache_services Cache miss for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-23 12:50:18,259] ERROR apps.delivery.utils Server error: DeliveryService.get_cities() missing 2 required positional arguments: 'self' and 'request' UserID=11 Path=/delivery/city_list/ IP=127.0.0.1
+[2025-05-23 12:50:27,728] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 12:50:27,728] INFO apps.delivery.views Action=GetDistrictList UserID=11 Path=/delivery/district_list/ IP=127.0.0.1 CityID=1
+[2025-05-23 12:50:27,729] DEBUG apps.core.services.cache_services Cache hit for key: districts:1:57802c04eaf3b516d619b9e21d1dd627
+[2025-05-23 12:50:27,729] INFO apps.delivery.views Retrieved cached districts CityID=1 UserID=11 Path=/delivery/district_list/ IP=127.0.0.1
+[2025-05-23 12:50:28,796] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 12:50:28,796] INFO apps.delivery.views Action=GetDistrictList UserID=11 Path=/delivery/district_list/ IP=127.0.0.1 CityID=1
+[2025-05-23 12:50:28,797] DEBUG apps.core.services.cache_services Cache hit for key: districts:1:57802c04eaf3b516d619b9e21d1dd627
+[2025-05-23 12:50:28,797] INFO apps.delivery.views Retrieved cached districts CityID=1 UserID=11 Path=/delivery/district_list/ IP=127.0.0.1
+[2025-05-23 13:17:40,733] DEBUG apps.users.authentication No token provided in request
+[2025-05-23 13:17:41,851] DEBUG apps.users.authentication No token provided in request
+[2025-05-23 13:17:44,063] DEBUG apps.users.authentication No token provided in request
+[2025-05-23 13:17:44,214] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-23 13:17:44,215] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-23 13:17:44,215] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-23 13:17:44,774] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-23 13:17:44,775] INFO apps.users.views User 11 logged in successfully
+[2025-05-23 13:17:44,792] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-23 13:17:47,371] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 13:17:47,371] INFO apps.delivery.views Action=GetPickupPointsList UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=all
+[2025-05-23 13:17:47,381] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:москва:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 13:17:47,381] WARNING apps.delivery.views Invalid search parameters: {'city_id': [ErrorDetail(string='ќб€зательное поле.', code='required')]} UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-23 13:17:50,051] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 13:17:50,051] INFO apps.delivery.views Action=GetPickupPointsList UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=all
+[2025-05-23 13:17:50,052] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:москва:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 13:17:50,053] WARNING apps.delivery.views Invalid search parameters: {'city_id': [ErrorDetail(string='ќб€зательное поле.', code='required')]} UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-23 13:18:19,593] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 13:18:19,593] INFO apps.delivery.views Action=GetDistrictList UserID=11 Path=/delivery/district_list/ IP=127.0.0.1 CityID=1
+[2025-05-23 13:18:19,594] DEBUG apps.core.services.cache_services Cache hit for key: districts:1:57802c04eaf3b516d619b9e21d1dd627
+[2025-05-23 13:18:19,594] INFO apps.delivery.views Retrieved cached districts CityID=1 UserID=11 Path=/delivery/district_list/ IP=127.0.0.1
+[2025-05-23 13:18:20,778] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 13:18:20,779] INFO apps.delivery.views Action=GetDistrictList UserID=11 Path=/delivery/district_list/ IP=127.0.0.1 CityID=1
+[2025-05-23 13:18:20,779] DEBUG apps.core.services.cache_services Cache hit for key: districts:1:57802c04eaf3b516d619b9e21d1dd627
+[2025-05-23 13:18:20,779] INFO apps.delivery.views Retrieved cached districts CityID=1 UserID=11 Path=/delivery/district_list/ IP=127.0.0.1
+[2025-05-23 13:18:31,290] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 13:18:31,290] INFO apps.delivery.views Action=GetCityList UserID=11 Path=/delivery/city_list/ IP=127.0.0.1
+[2025-05-23 13:18:31,291] DEBUG apps.core.services.cache_services Cache miss for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-23 13:18:31,291] ERROR apps.delivery.utils Server error: DeliveryService.get_cities() missing 2 required positional arguments: 'self' and 'request' UserID=11 Path=/delivery/city_list/ IP=127.0.0.1
+[2025-05-23 13:18:32,303] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 13:18:32,303] INFO apps.delivery.views Action=GetCityList UserID=11 Path=/delivery/city_list/ IP=127.0.0.1
+[2025-05-23 13:18:32,305] DEBUG apps.core.services.cache_services Cache miss for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-23 13:18:32,305] ERROR apps.delivery.utils Server error: DeliveryService.get_cities() missing 2 required positional arguments: 'self' and 'request' UserID=11 Path=/delivery/city_list/ IP=127.0.0.1
+[2025-05-23 13:29:46,611] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 13:29:46,611] INFO apps.delivery.views Action=GetPickupPointsList UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=all
+[2025-05-23 13:29:46,618] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 13:29:46,619] WARNING apps.delivery.views Invalid search parameters: {'city_id': [ErrorDetail(string='ќб€зательное поле.', code='required')]} UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-23 13:29:47,768] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 13:29:47,768] INFO apps.delivery.views Action=GetPickupPointsList UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=all
+[2025-05-23 13:29:47,770] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 13:29:47,770] WARNING apps.delivery.views Invalid search parameters: {'city_id': [ErrorDetail(string='ќб€зательное поле.', code='required')]} UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-23 13:45:25,228] DEBUG apps.users.authentication No token provided in request
+[2025-05-23 13:45:27,924] DEBUG apps.users.authentication No token provided in request
+[2025-05-23 13:45:28,031] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-23 13:45:28,032] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-23 13:45:28,033] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-23 13:45:28,533] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-23 13:45:28,533] INFO apps.users.views User 11 logged in successfully
+[2025-05-23 13:45:28,542] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-23 13:45:31,281] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 13:45:31,281] INFO apps.delivery.views Action=GetPickupPointsList UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=all
+[2025-05-23 13:45:31,283] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 13:45:31,283] ERROR apps.delivery.utils Server error: DeliveryService.get_pickup_points() missing 1 required positional argument: 'request' UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-23 13:45:57,024] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 13:45:57,024] INFO apps.delivery.views Action=GetPickupPointsList UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=all
+[2025-05-23 13:45:57,026] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 13:45:57,026] ERROR apps.delivery.utils Server error: DeliveryService.get_pickup_points() missing 1 required positional argument: 'request' UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-23 13:45:59,124] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 13:45:59,124] INFO apps.delivery.views Action=GetCityList UserID=11 Path=/delivery/city_list/ IP=127.0.0.1
+[2025-05-23 13:45:59,126] DEBUG apps.core.services.cache_services Cache miss for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-23 13:45:59,126] ERROR apps.delivery.utils Server error: DeliveryService.get_cities() missing 2 required positional arguments: 'self' and 'request' UserID=11 Path=/delivery/city_list/ IP=127.0.0.1
+[2025-05-23 13:48:36,686] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 13:48:36,686] INFO apps.delivery.views Action=GetPickupPointsList UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=all
+[2025-05-23 13:48:36,692] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 13:48:36,693] ERROR apps.delivery.utils Server error: DeliveryService.get_pickup_points() missing 1 required positional argument: 'request' UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-23 13:51:49,723] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 13:51:49,723] INFO apps.delivery.views Action=GetPickupPointsList UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1 Query=москва CityID=all
+[2025-05-23 13:51:49,732] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 13:51:49,732] ERROR apps.delivery.utils Server error: DeliveryService.get_pickup_points() missing 1 required positional argument: 'request' UserID=11 Path=/delivery/pickup_points/ IP=127.0.0.1
+[2025-05-23 14:14:15,510] DEBUG apps.users.authentication No token provided in request
+[2025-05-23 14:14:18,209] DEBUG apps.users.authentication No token provided in request
+[2025-05-23 14:14:18,320] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-23 14:14:18,321] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-23 14:14:18,321] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-23 14:14:18,954] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-23 14:14:18,954] INFO apps.users.views User 11 logged in successfully
+[2025-05-23 14:14:22,048] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-23 14:14:26,243] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 14:14:26,243] INFO apps.delivery.views Action=GetPickupPointsList UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, Page=1, PageSize=50
+[2025-05-23 14:14:26,245] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 14:14:26,245] ERROR apps.delivery.utils Server error: DeliveryService.get_pickup_points() missing 1 required positional argument: 'request', UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-23 14:14:29,157] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 14:14:29,157] INFO apps.delivery.views Action=GetCityList UserID=11, Path=/delivery/city_list/, IP=127.0.0.1, Page=1, PageSize=100
+[2025-05-23 14:14:29,158] DEBUG apps.core.services.cache_services Cache miss for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-23 14:14:29,158] ERROR apps.delivery.utils Server error: DeliveryService.get_cities() missing 1 required positional argument: 'request', UserID=11, Path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-23 14:21:07,944] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 14:21:07,945] INFO apps.delivery.views Action=GetPickupPointsList UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, Page=1, PageSize=50
+[2025-05-23 14:21:07,952] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 14:21:07,952] ERROR apps.delivery.utils Server error: DeliveryService.get_pickup_points() missing 1 required positional argument: 'request', UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-23 14:21:09,013] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 14:21:09,013] INFO apps.delivery.views Action=GetPickupPointsList UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, Page=1, PageSize=50
+[2025-05-23 14:21:09,015] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 14:21:09,015] ERROR apps.delivery.utils Server error: DeliveryService.get_pickup_points() missing 1 required positional argument: 'request', UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-23 14:44:08,675] DEBUG apps.users.authentication No token provided in request
+[2025-05-23 14:44:11,381] DEBUG apps.users.authentication No token provided in request
+[2025-05-23 14:44:11,486] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-23 14:44:11,487] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-23 14:44:11,487] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-23 14:44:12,012] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-23 14:44:12,012] INFO apps.users.views User 11 logged in successfully
+[2025-05-23 14:44:12,465] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-23 14:44:14,814] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 14:44:14,814] INFO apps.delivery.views Action=GetPickupPointsList UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, Page=1, PageSize=50
+[2025-05-23 14:44:14,815] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 14:44:14,815] ERROR apps.delivery.utils Server error: DeliveryService.get_pickup_points() missing 1 required positional argument: 'request', UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-23 14:45:03,072] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 14:45:03,072] INFO apps.delivery.views Action=GetCityList UserID=11, Path=/delivery/city_list/, IP=127.0.0.1, Page=1, PageSize=100
+[2025-05-23 14:45:03,074] DEBUG apps.core.services.cache_services Cache miss for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-23 14:45:03,074] ERROR apps.delivery.utils Server error: DeliveryService.get_cities() missing 1 required positional argument: 'request', UserID=11, Path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-23 14:52:20,534] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 14:52:20,534] INFO apps.delivery.views Action=GetCityList UserID=11, Path=/delivery/city_list/, IP=127.0.0.1, Page=1, PageSize=100
+[2025-05-23 14:52:20,539] DEBUG apps.core.services.cache_services Cache miss for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-23 14:52:20,539] INFO apps.delivery.services.delivery_services Action=GetCities UserID=11, Path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-23 14:52:20,555] INFO apps.delivery.views Retrieved 2 cities UserID=11, Path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-23 14:52:23,266] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 14:52:23,266] INFO apps.delivery.views Action=GetPickupPointsList UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, Page=1, PageSize=50
+[2025-05-23 14:52:23,268] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 14:52:23,268] INFO apps.delivery.services.delivery_services Action=GetPickupPoints UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=, CityID=None, District=None, Page=1, PageSize=50
+[2025-05-23 14:52:23,268] INFO apps.delivery.services.query_services Action=SearchPickupPoints UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, District=None, Page=1, PageSize=50
+[2025-05-23 14:52:23,463] INFO apps.delivery.services.query_services Found 1 pickup points, Total=1, UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, duration_ms=194.31
+[2025-05-23 14:52:23,463] INFO apps.delivery.services.query_services Action=GetBaseQueryset
+[2025-05-23 14:52:23,463] INFO apps.delivery.services.query_services Action=OptimizePickupPointList
+[2025-05-23 14:52:23,470] INFO apps.delivery.views Retrieved 1 pickup points UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-23 14:52:41,916] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 14:52:41,916] INFO apps.delivery.views Action=GetPickupPointsList UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, Page=1, PageSize=50
+[2025-05-23 14:52:41,918] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 14:52:41,918] INFO apps.delivery.services.delivery_services Action=GetPickupPoints UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=, CityID=None, District=None, Page=1, PageSize=50
+[2025-05-23 14:52:41,918] INFO apps.delivery.services.query_services Action=SearchPickupPoints UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, District=None, Page=1, PageSize=50
+[2025-05-23 14:52:41,934] INFO apps.delivery.services.query_services Found 1 pickup points, Total=1, UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, duration_ms=15.57
+[2025-05-23 14:52:41,934] INFO apps.delivery.services.query_services Action=GetBaseQueryset
+[2025-05-23 14:52:41,934] INFO apps.delivery.services.query_services Action=OptimizePickupPointList
+[2025-05-23 14:52:41,941] INFO apps.delivery.views Retrieved 1 pickup points UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-23 14:52:49,044] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 14:52:49,044] INFO apps.delivery.views Action=GetCityList UserID=11, Path=/delivery/city_list/, IP=127.0.0.1, Page=1, PageSize=100
+[2025-05-23 14:52:49,045] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-23 14:52:49,045] INFO apps.delivery.views Retrieved cached city list UserID=11, Path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-23 15:02:16,150] DEBUG apps.users.authentication No token provided in request
+[2025-05-23 15:02:18,926] DEBUG apps.users.authentication No token provided in request
+[2025-05-23 15:02:19,147] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-23 15:02:19,148] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-23 15:02:19,148] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-23 15:02:19,696] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-23 15:02:19,696] INFO apps.users.views User 11 logged in successfully
+[2025-05-23 15:02:20,147] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-23 15:02:23,402] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 15:02:23,402] INFO apps.delivery.views Action=GetPickupPointsList UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, Page=1, PageSize=50
+[2025-05-23 15:02:23,404] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 15:02:23,404] INFO apps.delivery.services.delivery_services Action=GetPickupPoints UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=, CityID=None, District=None, Page=1, PageSize=50
+[2025-05-23 15:02:23,404] INFO apps.delivery.services.query_services Action=SearchPickupPoints UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, District=None, Page=1, PageSize=50
+[2025-05-23 15:02:23,427] INFO apps.delivery.services.query_services Found 1 pickup points, Total=1, UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, duration_ms=23.61
+[2025-05-23 15:02:23,427] INFO apps.delivery.services.query_services Action=GetBaseQueryset
+[2025-05-23 15:02:23,428] INFO apps.delivery.services.query_services Action=OptimizePickupPointList
+[2025-05-23 15:02:23,437] INFO apps.delivery.views Retrieved 1 pickup points UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-23 15:02:27,405] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 15:02:27,405] INFO apps.delivery.views Action=GetPickupPointsList UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, Page=1, PageSize=50
+[2025-05-23 15:02:27,405] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 15:02:27,407] INFO apps.delivery.services.delivery_services Action=GetPickupPoints UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=, CityID=None, District=None, Page=1, PageSize=50
+[2025-05-23 15:02:27,407] INFO apps.delivery.services.query_services Action=SearchPickupPoints UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, District=None, Page=1, PageSize=50
+[2025-05-23 15:02:27,463] INFO apps.delivery.services.query_services Found 1 pickup points, Total=1, UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, duration_ms=56.43
+[2025-05-23 15:02:27,463] INFO apps.delivery.services.query_services Action=GetBaseQueryset
+[2025-05-23 15:02:27,464] INFO apps.delivery.services.query_services Action=OptimizePickupPointList
+[2025-05-23 15:02:27,470] INFO apps.delivery.views Retrieved 1 pickup points UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-23 15:08:54,223] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 15:08:54,223] INFO apps.delivery.views Action=GetPickupPointsList UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, Page=1, PageSize=50
+[2025-05-23 15:08:54,230] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 15:08:54,230] INFO apps.delivery.services.delivery_services Action=GetPickupPoints UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=, CityID=None, District=None, Page=1, PageSize=50
+[2025-05-23 15:08:54,230] INFO apps.delivery.services.query_services Action=SearchPickupPoints UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, District=None, Page=1, PageSize=50
+[2025-05-23 15:08:54,263] INFO apps.delivery.services.query_services Found 1 pickup points, Total=1, UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, duration_ms=33.38
+[2025-05-23 15:08:54,263] INFO apps.delivery.services.query_services Action=GetBaseQueryset
+[2025-05-23 15:08:54,264] INFO apps.delivery.services.query_services Action=OptimizePickupPointList
+[2025-05-23 15:08:54,271] INFO apps.delivery.views Retrieved 1 pickup points UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-23 15:08:55,301] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 15:08:55,301] INFO apps.delivery.views Action=GetPickupPointsList UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, Page=1, PageSize=50
+[2025-05-23 15:08:55,302] DEBUG apps.core.services.cache_services Cache hit for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-23 15:08:55,302] INFO apps.delivery.views Retrieved cached pickup points CityID=None, Search=москва, UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-23 15:09:24,000] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 15:09:24,000] INFO apps.delivery.views Action=GetCityList UserID=11, Path=/delivery/city_list/, IP=127.0.0.1, Page=1, PageSize=100
+[2025-05-23 15:09:24,001] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-23 15:09:24,002] INFO apps.delivery.views Retrieved cached city list UserID=11, Path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-23 15:11:56,667] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 15:11:56,674] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:all:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-23 15:11:56,674] DEBUG apps.orders.services.order_services Starting retrieval of orders for user=11
+[2025-05-23 15:11:56,674] INFO apps.orders.services.order_services Retrieving orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-23 15:11:56,685] INFO apps.orders.services.order_services Retrieved 6 orders for user=11, IP=127.0.0.1
+[2025-05-23 15:11:56,718] INFO apps.orders.views Retrieved 6 orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-23 15:12:00,167] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 15:12:00,168] DEBUG apps.core.services.cache_services Cache hit for key: order_list:11:all:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-23 15:12:00,168] INFO apps.orders.views Retrieved cached orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-23 15:12:04,698] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 15:12:04,699] DEBUG apps.core.services.cache_services Cache miss for key: order_detail:13:11
+[2025-05-23 15:12:04,700] DEBUG apps.orders.services.order_services Starting retrieval of order=13 for user=11
+[2025-05-23 15:12:04,700] INFO apps.orders.services.order_services Retrieving details for order=13, user=11, IP=127.0.0.1
+[2025-05-23 15:12:05,191] INFO apps.orders.services.order_services Order 13 details retrieved for user=11, IP=127.0.0.1
+[2025-05-23 15:12:05,193] INFO apps.orders.views Order 13 details retrieved for user=11, path=/orders/13/, IP=127.0.0.1
+[2025-05-23 15:12:06,465] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 15:12:06,467] DEBUG apps.core.services.cache_services Cache hit for key: order_detail:13:11
+[2025-05-23 15:12:06,467] INFO apps.orders.views Retrieved cached order details for order=13, user=11, path=/orders/13/, IP=127.0.0.1
+[2025-05-23 15:12:14,594] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 15:12:14,700] INFO apps.carts.services.cart_services Added product 8 to cart, user=11
+[2025-05-23 15:12:14,702] INFO apps.core.services.cache_services Invalidated cache for key: cart:11
+[2025-05-23 15:12:14,703] INFO apps.carts.views Added product 8 to cart, user=11
+[2025-05-23 15:12:19,590] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 15:12:19,599] INFO apps.carts.services.cart_services Added product 1 to cart, user=11
+[2025-05-23 15:12:19,601] INFO apps.core.services.cache_services Invalidated cache for key: cart:11
+[2025-05-23 15:12:19,602] INFO apps.carts.views Added product 1 to cart, user=11
+[2025-05-23 15:12:23,291] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 15:12:23,301] INFO apps.carts.services.cart_services Added product 2 to cart, user=11
+[2025-05-23 15:12:23,303] INFO apps.core.services.cache_services Invalidated cache for key: cart:11
+[2025-05-23 15:12:23,303] INFO apps.carts.views Added product 2 to cart, user=11
+[2025-05-23 15:12:29,844] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 15:12:29,845] DEBUG apps.core.services.cache_services Cache miss for key: cart:11
+[2025-05-23 15:12:29,848] INFO apps.carts.services.cart_services Retrieved cart, user=11, items=3
+[2025-05-23 15:12:29,859] INFO apps.carts.views Retrieved cart, user=11, items=3
+[2025-05-23 15:12:34,350] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 15:12:34,350] DEBUG apps.orders.services.order_services Starting order creation for user=11
+[2025-05-23 15:12:34,350] INFO apps.orders.services.order_services Attempting to create order for user=11, pickup_point_id=1, IP=127.0.0.1
+[2025-05-23 15:12:34,367] DEBUG apps.orders.signals Tracking status for order=new, user=11
+[2025-05-23 15:12:34,404] DEBUG apps.orders.signals Starting post_save for order=22, user=11
+[2025-05-23 15:12:34,419] DEBUG apps.orders.services.notification_services Queueing notification for user=11, email=edem100@list.ru
+[2025-05-23 15:12:34,443] INFO apps.orders.signals Notification queued for order creation, order=22, user=11
+[2025-05-23 15:12:34,445] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:11:*
+[2025-05-23 15:12:34,445] INFO apps.core.services.cache_services Invalidated cache for prefix: order_detail:22:11:*
+[2025-05-23 15:12:34,445] INFO apps.orders.signals Invalidated cache for order=22, user=11
+[2025-05-23 15:12:34,448] DEBUG apps.orders.services.notification_services Starting task: send_notification to edem100@list.ru, task_id=ff308fd6-d62d-45cd-a5c2-42cba9d0df89
+[2025-05-23 15:12:34,450] INFO apps.orders.services.notification_services Task started: send_notification to edem100@list.ru, user_id=11, task_id=ff308fd6-d62d-45cd-a5c2-42cba9d0df89
+[2025-05-23 15:12:34,459] INFO apps.products.models Updating product with title=јбрикос, user=1
+[2025-05-23 15:12:35,012] INFO apps.products.signals Updating product: title=јбрикос, user=1, is_active=True
+[2025-05-23 15:12:35,014] INFO apps.products.models Successfully updating product 2, user=1
+[2025-05-23 15:12:35,015] INFO apps.products.models Updating product with title=’леб, user=1
+[2025-05-23 15:12:35,043] INFO apps.products.signals Updating product: title=’леб, user=1, is_active=True
+[2025-05-23 15:12:35,045] INFO apps.products.models Successfully updating product 8, user=1
+[2025-05-23 15:12:35,046] INFO apps.products.models Updating product with title=ћорковка, user=1
+[2025-05-23 15:12:35,115] INFO apps.products.signals Updating product: title=ћорковка, user=1, is_active=True
+[2025-05-23 15:12:35,116] INFO apps.products.models Successfully updating product 1, user=1
+[2025-05-23 15:12:35,119] INFO apps.orders.services.order_services Order 22 successfully created for user=11, IP=127.0.0.1
+[2025-05-23 15:12:35,121] INFO apps.core.services.cache_services Invalidated cache for prefix: order_list:11:*
+[2025-05-23 15:12:35,121] INFO apps.orders.views Order 22 created successfully for user=11, path=/orders/create/, IP=127.0.0.1
+[2025-05-23 15:12:46,529] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-23 15:12:46,531] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:all:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-23 15:12:46,531] DEBUG apps.orders.services.order_services Starting retrieval of orders for user=11
+[2025-05-23 15:12:46,531] INFO apps.orders.services.order_services Retrieving orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-23 15:12:46,534] INFO apps.orders.services.order_services Retrieved 7 orders for user=11, IP=127.0.0.1
+[2025-05-23 15:12:46,544] INFO apps.orders.views Retrieved 7 orders for user=11, path=/orders/, IP=127.0.0.1
