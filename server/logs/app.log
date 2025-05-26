@@ -10583,3 +10583,18 @@ LINE 1: ...t"."address", "delivery_pickuppoint"."is_active", "delivery_...
 [2025-05-23 15:12:46,531] INFO apps.orders.services.order_services Retrieving orders for user=11, path=/orders/, IP=127.0.0.1
 [2025-05-23 15:12:46,534] INFO apps.orders.services.order_services Retrieved 7 orders for user=11, IP=127.0.0.1
 [2025-05-23 15:12:46,544] INFO apps.orders.views Retrieved 7 orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-26 23:45:02,348] DEBUG apps.users.authentication No token provided in request
+[2025-05-26 23:46:05,589] DEBUG apps.users.authentication No token provided in request
+[2025-05-26 23:46:05,700] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-26 23:46:05,701] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-26 23:46:05,701] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-26 23:46:06,597] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-26 23:46:06,597] INFO apps.users.views User 11 logged in successfully
+[2025-05-26 23:46:06,728] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-26 23:46:24,050] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-26 23:46:24,050] INFO apps.delivery.views Action=GetPickupPointsList UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, Page=1, PageSize=50
+[2025-05-26 23:46:24,068] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-26 23:46:24,068] INFO apps.delivery.services.delivery_services Action=GetPickupPoints UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=, CityID=None, District=None, Page=1, PageSize=50
+[2025-05-26 23:46:24,068] INFO apps.delivery.services.query_services Action=SearchPickupPoints UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, District=None, Page=1, PageSize=50
+[2025-05-26 23:46:40,449] ERROR apps.delivery.services.query_services Unexpected error in search_pickup_points: Connection error caused by: ConnectionError(Connection error caused by: NewConnectionError(<urllib3.connection.HTTPConnection object at 0x0000021AFEC6DA30>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)), UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-26 23:46:40,449] WARNING apps.delivery.utils City not found: Неизвестная ошибка при поиске, UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1
