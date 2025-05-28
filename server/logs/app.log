@@ -10806,3 +10806,57 @@ LINE 1: ...t"."address", "delivery_pickuppoint"."is_active", "delivery_...
 [2025-05-28 18:30:54,596] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_ip_127.0.0.1, user_id=anonymous
 [2025-05-28 18:33:12,742] DEBUG apps.users.authentication No token provided in request
 [2025-05-28 18:33:12,742] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_ip_127.0.0.1, user_id=anonymous
+[2025-05-28 18:43:20,478] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:43:20,478] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_ip_127.0.0.1, user_id=anonymous
+[2025-05-28 18:43:20,596] WARNING apps.users.services.trottles Throttle limit exceeded for verification code, email=none, user_id=anonymous, IP=127.0.0.1
+[2025-05-28 18:43:20,597] WARNING apps.users.services.trottles Throttle limit exceeded for verification code, email=none, user_id=anonymous, IP=127.0.0.1
+[2025-05-28 18:43:30,386] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:43:30,386] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_email_bkmz-2020@inbox.ru, user_id=anonymous
+[2025-05-28 18:43:30,388] WARNING apps.users.services.trottles Throttle limit exceeded for verification code, email=bkmz-2020@inbox.ru, user_id=anonymous, IP=127.0.0.1
+[2025-05-28 18:43:30,388] WARNING apps.users.services.trottles Throttle limit exceeded for verification code, email=bkmz-2020@inbox.ru, user_id=anonymous, IP=127.0.0.1
+[2025-05-28 18:43:31,636] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:43:31,636] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_email_bkmz-2020@inbox.ru, user_id=anonymous
+[2025-05-28 18:43:31,637] WARNING apps.users.services.trottles Throttle limit exceeded for verification code, email=bkmz-2020@inbox.ru, user_id=anonymous, IP=127.0.0.1
+[2025-05-28 18:43:31,637] WARNING apps.users.services.trottles Throttle limit exceeded for verification code, email=bkmz-2020@inbox.ru, user_id=anonymous, IP=127.0.0.1
+[2025-05-28 18:43:32,676] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:43:32,676] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_email_bkmz-2020@inbox.ru, user_id=anonymous
+[2025-05-28 18:43:32,677] WARNING apps.users.services.trottles Throttle limit exceeded for verification code, email=bkmz-2020@inbox.ru, user_id=anonymous, IP=127.0.0.1
+[2025-05-28 18:43:32,677] WARNING apps.users.services.trottles Throttle limit exceeded for verification code, email=bkmz-2020@inbox.ru, user_id=anonymous, IP=127.0.0.1
+[2025-05-28 18:43:36,912] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:43:43,029] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:43:43,032] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-28 18:43:43,033] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-28 18:43:43,033] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-28 18:43:43,301] WARNING apps.users.services.users_services Invalid password for email=bkmz-2020@inbox.ru
+[2025-05-28 18:43:43,302] WARNING apps.users.utils User error: Неверные учетные данные, user=anonymous, path=/user/login/
+[2025-05-28 18:43:48,977] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:43:48,979] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-28 18:43:48,980] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-28 18:43:48,980] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-28 18:43:49,593] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-28 18:43:49,593] INFO apps.users.views User 15 logged in successfully
+[2025-05-28 18:43:50,065] INFO apps.users.utils JWT cookies set for user=15
+[2025-05-28 18:43:51,739] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-28 18:43:51,739] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-28 18:43:51,740] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-28 18:43:51,740] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-28 18:43:52,242] INFO apps.users.services.users_services User logged in successfully, email=bkmz-2020@inbox.ru
+[2025-05-28 18:43:52,242] INFO apps.users.views User 15 logged in successfully
+[2025-05-28 18:43:52,244] INFO apps.users.utils JWT cookies set for user=15
+[2025-05-28 18:47:30,245] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-28 18:47:30,245] INFO apps.delivery.views Action=GetPickupPointsList UserID=15, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, Page=1, PageSize=50
+[2025-05-28 18:47:30,247] DEBUG apps.core.services.cache_services Cache hit for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-28 18:47:30,247] INFO apps.delivery.views Retrieved cached pickup points CityID=None, Search=москва, UserID=15, Path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-28 18:47:33,341] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-28 18:47:33,341] INFO apps.delivery.views Action=GetCityList UserID=15, Path=/delivery/city_list/, IP=127.0.0.1, Page=1, PageSize=100
+[2025-05-28 18:47:33,342] DEBUG apps.core.services.cache_services Cache miss for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-28 18:47:33,342] INFO apps.delivery.services.delivery_services Action=GetCities UserID=15, Path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-28 18:47:33,346] INFO apps.delivery.views Retrieved 2 cities UserID=15, Path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-28 18:47:51,843] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-28 18:47:51,843] INFO apps.delivery.views Action=GetPickupPointsList UserID=15, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, Page=1, PageSize=50
+[2025-05-28 18:47:51,844] DEBUG apps.core.services.cache_services Cache hit for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-28 18:47:51,844] INFO apps.delivery.views Retrieved cached pickup points CityID=None, Search=москва, UserID=15, Path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-28 18:47:54,019] INFO apps.users.authentication User 15 authenticated successfully
+[2025-05-28 18:47:54,019] INFO apps.delivery.views Action=GetCityList UserID=15, Path=/delivery/city_list/, IP=127.0.0.1, Page=1, PageSize=100
+[2025-05-28 18:47:54,020] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-28 18:47:54,020] INFO apps.delivery.views Retrieved cached city list UserID=15, Path=/delivery/city_list/, IP=127.0.0.1
