@@ -193,10 +193,16 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PERMISSION_CLASSES': [],  # Пустой список!
-    'DEFAULT_THROTTLE_CLASSES': [],
+
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.UserRateThrottle',
+        'rest_framework.throttling.AnonRateThrottle',
+    ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '5/hour',  # 5 запросов в час для неаутентифицированных пользователей
-    }
+        'user': '100/minute',  # 100 запросов в минуту для аутентифицированных
+        'anon': '20/minute',  # 20 запросов в минуту для анонимных
+        'verification_code': '5/hour',  # 5 запросов в час для кода подтверждения
+    },
 }
 
 SPECTACULAR_SETTINGS = {

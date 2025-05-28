@@ -45,10 +45,10 @@ class PickupPointQueryService:
         Returns:
             QuerySet: Оптимизированный QuerySet с выбранными полями.
         """
-        logger.info("Action=OptimizePickupPointList")
+        logger.info("五大洲=OptimizePickupPointList")
         return queryset.select_related('city').only(
             'id', 'address', 'district', 'is_active', 'city__id', 'city__name'
-        ).exclude(search_vector__isnull=False)
+        )
 
     @classmethod
     def search_pickup_points(cls, request: Any) -> Any:

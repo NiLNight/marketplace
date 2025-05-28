@@ -91,7 +91,7 @@ def handle_api_errors(view_func):
                 f"IP={request.META.get('REMOTE_ADDR', 'unknown')}"
             )
             return Response(
-                {"detail": _("Отсутствует ключ: {key}").format(key=str(e)), "code": "missing_key"},
+                {"detail": _("Отсутствует обязательный параметр: {key}").format(key=str(e)), "code": "missing_key"},
                 status=status.HTTP_400_BAD_REQUEST
             )
         except ValueError as e:
@@ -100,7 +100,7 @@ def handle_api_errors(view_func):
                 f"IP={request.META.get('REMOTE_ADDR', 'unknown')}"
             )
             return Response(
-                {"detail": _("Некорректное значение параметра"), "code": "invalid_value"},
+                {"detail": _("Некорректное значение параметра: {error}").format(error=str(e)), "code": "invalid_value"},
                 status=status.HTTP_400_BAD_REQUEST
             )
         except ValidationError as e:

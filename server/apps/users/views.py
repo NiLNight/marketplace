@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from apps.core.services.cache_services import CacheService
+from apps.users.services.trottles import CeleryThrottle
 from apps.users.serializers import (
     UserRegistrationSerializer,
     UserLoginSerializer,
@@ -212,7 +213,7 @@ class ResendCodeView(APIView):
     Обрабатывает запросы на повторную отправку кода для активации аккаунта.
     """
     permission_classes = [AllowAny]
-    throttle_classes = [AnonRateThrottle]
+    throttle_classes = [CeleryThrottle]
 
     @handle_api_errors
     def post(self, request):
@@ -240,7 +241,7 @@ class ConfirmView(APIView):
     Активирует аккаунт пользователя по email и коду подтверждения.
     """
     permission_classes = [AllowAny]
-    throttle_classes = [AnonRateThrottle]
+    throttle_classes = [CeleryThrottle]
 
     @handle_api_errors
     def post(self, request):
@@ -271,7 +272,7 @@ class PasswordResetRequestView(APIView):
     """
     permission_classes = [AllowAny]
     serializer_class = PasswordResetSerializer
-    throttle_classes = [AnonRateThrottle]
+    throttle_classes = [CeleryThrottle]
 
     @handle_api_errors
     def post(self, request):
@@ -305,7 +306,7 @@ class PasswordResetConfirmView(APIView):
     """
     serializer_class = PasswordResetConfirmSerializer
     permission_classes = [AllowAny]
-    throttle_classes = [AnonRateThrottle]
+    throttle_classes = [CeleryThrottle]
 
     @handle_api_errors
     def post(self, request):

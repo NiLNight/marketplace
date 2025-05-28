@@ -10598,3 +10598,211 @@ LINE 1: ...t"."address", "delivery_pickuppoint"."is_active", "delivery_...
 [2025-05-26 23:46:24,068] INFO apps.delivery.services.query_services Action=SearchPickupPoints UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, District=None, Page=1, PageSize=50
 [2025-05-26 23:46:40,449] ERROR apps.delivery.services.query_services Unexpected error in search_pickup_points: Connection error caused by: ConnectionError(Connection error caused by: NewConnectionError(<urllib3.connection.HTTPConnection object at 0x0000021AFEC6DA30>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)), UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1
 [2025-05-26 23:46:40,449] WARNING apps.delivery.utils City not found: Неизвестная ошибка при поиске, UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-28 14:43:58,285] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 14:43:58,428] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-28 14:43:58,429] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-28 14:43:58,429] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-28 14:43:59,183] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-28 14:43:59,184] INFO apps.users.views User 11 logged in successfully
+[2025-05-28 14:43:59,267] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-28 14:44:09,633] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-28 14:44:09,633] INFO apps.delivery.views Action=GetPickupPointsList UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, Page=1, PageSize=50
+[2025-05-28 14:44:09,655] DEBUG apps.core.services.cache_services Cache miss for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-28 14:44:09,655] INFO apps.delivery.services.delivery_services Action=GetPickupPoints UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=, CityID=None, District=None, Page=1, PageSize=50
+[2025-05-28 14:44:09,655] INFO apps.delivery.services.query_services Action=SearchPickupPoints UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, District=None, Page=1, PageSize=50
+[2025-05-28 14:44:10,033] INFO apps.delivery.services.query_services Found 1 pickup points, Total=1, UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, duration_ms=377.38
+[2025-05-28 14:44:10,033] INFO apps.delivery.services.query_services Action=GetBaseQueryset
+[2025-05-28 14:44:10,033] INFO apps.delivery.services.query_services Action=OptimizePickupPointList
+[2025-05-28 14:44:10,105] INFO apps.delivery.views Retrieved 1 pickup points UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-28 14:44:12,797] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-28 14:44:12,797] INFO apps.delivery.views Action=GetPickupPointsList UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, Page=1, PageSize=50
+[2025-05-28 14:44:12,798] DEBUG apps.core.services.cache_services Cache hit for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-28 14:44:12,798] INFO apps.delivery.views Retrieved cached pickup points CityID=None, Search=москва, UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-28 14:44:17,269] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-28 14:44:17,269] INFO apps.delivery.views Action=GetCityList UserID=11, Path=/delivery/city_list/, IP=127.0.0.1, Page=1, PageSize=100
+[2025-05-28 14:44:17,270] DEBUG apps.core.services.cache_services Cache miss for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-28 14:44:17,270] INFO apps.delivery.services.delivery_services Action=GetCities UserID=11, Path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-28 14:44:17,274] INFO apps.delivery.views Retrieved 2 cities UserID=11, Path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-28 14:44:18,926] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-28 14:44:18,927] INFO apps.delivery.views Action=GetCityList UserID=11, Path=/delivery/city_list/, IP=127.0.0.1, Page=1, PageSize=100
+[2025-05-28 14:44:18,928] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-28 14:44:18,928] INFO apps.delivery.views Retrieved cached city list UserID=11, Path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-28 14:44:21,362] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-28 14:44:21,362] INFO apps.delivery.views Action=GetCityList UserID=11, Path=/delivery/city_list/, IP=127.0.0.1, Page=1, PageSize=100
+[2025-05-28 14:44:21,363] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-28 14:44:21,363] INFO apps.delivery.views Retrieved cached city list UserID=11, Path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-28 14:44:30,075] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-28 14:44:30,092] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:all:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-28 14:44:30,092] DEBUG apps.orders.services.order_services Starting retrieval of orders for user=11
+[2025-05-28 14:44:30,092] INFO apps.orders.services.order_services Retrieving orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-28 14:44:30,160] INFO apps.orders.services.order_services Retrieved 7 orders for user=11, IP=127.0.0.1
+[2025-05-28 14:44:30,212] INFO apps.orders.views Retrieved 7 orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-28 14:44:32,153] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-28 14:44:32,155] DEBUG apps.core.services.cache_services Cache hit for key: order_list:11:all:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-28 14:44:32,156] INFO apps.orders.views Retrieved cached orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-28 14:44:38,830] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-28 14:44:38,832] DEBUG apps.core.services.cache_services Cache miss for key: order_detail:13:11
+[2025-05-28 14:44:38,832] DEBUG apps.orders.services.order_services Starting retrieval of order=13 for user=11
+[2025-05-28 14:44:38,832] INFO apps.orders.services.order_services Retrieving details for order=13, user=11, IP=127.0.0.1
+[2025-05-28 14:44:38,946] INFO apps.orders.services.order_services Order 13 details retrieved for user=11, IP=127.0.0.1
+[2025-05-28 14:44:38,948] INFO apps.orders.views Order 13 details retrieved for user=11, path=/orders/13/, IP=127.0.0.1
+[2025-05-28 17:17:42,002] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 17:17:43,125] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 17:17:45,208] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 17:17:45,421] INFO apps.users.views Processing login request for email=edem100@list.ru
+[2025-05-28 17:17:45,422] INFO apps.users.serializers Validating login data for email=edem100@list.ru
+[2025-05-28 17:17:45,423] INFO apps.users.services.users_services Attempting to log in user with email=edem100@list.ru
+[2025-05-28 17:17:46,442] INFO apps.users.services.users_services User logged in successfully, email=edem100@list.ru
+[2025-05-28 17:17:46,442] INFO apps.users.views User 11 logged in successfully
+[2025-05-28 17:17:46,455] INFO apps.users.utils JWT cookies set for user=11
+[2025-05-28 17:17:48,445] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-28 17:17:48,446] INFO apps.delivery.views Action=GetPickupPointsList UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, Page=1, PageSize=50
+[2025-05-28 17:17:48,446] ERROR apps.delivery.utils Server error: CacheService.build_cache_key() got an unexpected keyword argument 'extra_params', UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-28 17:18:38,415] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-28 17:18:38,416] INFO apps.delivery.views Action=GetPickupPointsList UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, Page=1, PageSize=50
+[2025-05-28 17:18:38,422] DEBUG apps.core.services.cache_services Cache hit for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-28 17:18:38,423] INFO apps.delivery.views Retrieved cached pickup points CityID=None, Search=москва, UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-28 17:18:40,811] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-28 17:18:40,811] INFO apps.delivery.views Action=GetPickupPointsList UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1, Query=москва, CityID=None, Page=1, PageSize=50
+[2025-05-28 17:18:40,811] DEBUG apps.core.services.cache_services Cache hit for key: pickup_points:all:ffede16ea292cc81f78db1370b5d1b0d
+[2025-05-28 17:18:40,811] INFO apps.delivery.views Retrieved cached pickup points CityID=None, Search=москва, UserID=11, Path=/delivery/pickup_points/, IP=127.0.0.1
+[2025-05-28 17:18:44,948] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-28 17:18:44,948] INFO apps.delivery.views Action=GetCityList UserID=11, Path=/delivery/city_list/, IP=127.0.0.1, Page=1, PageSize=100
+[2025-05-28 17:18:44,949] DEBUG apps.core.services.cache_services Cache miss for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-28 17:18:44,950] INFO apps.delivery.services.delivery_services Action=GetCities UserID=11, Path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-28 17:18:44,981] INFO apps.delivery.views Retrieved 2 cities UserID=11, Path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-28 17:18:47,743] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-28 17:18:47,743] INFO apps.delivery.views Action=GetCityList UserID=11, Path=/delivery/city_list/, IP=127.0.0.1, Page=1, PageSize=100
+[2025-05-28 17:18:47,744] DEBUG apps.core.services.cache_services Cache hit for key: city_list:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-28 17:18:47,744] INFO apps.delivery.views Retrieved cached city list UserID=11, Path=/delivery/city_list/, IP=127.0.0.1
+[2025-05-28 17:18:56,477] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-28 17:18:56,480] DEBUG apps.core.services.cache_services Cache miss for key: order_list:11:all:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-28 17:18:56,480] DEBUG apps.orders.services.order_services Starting retrieval of orders for user=11
+[2025-05-28 17:18:56,480] INFO apps.orders.services.order_services Retrieving orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-28 17:18:56,509] INFO apps.orders.services.order_services Retrieved 7 orders for user=11, IP=127.0.0.1
+[2025-05-28 17:18:56,534] INFO apps.orders.views Retrieved 7 orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-28 17:18:58,801] INFO apps.users.authentication User 11 authenticated successfully
+[2025-05-28 17:18:58,802] DEBUG apps.core.services.cache_services Cache hit for key: order_list:11:all:d41d8cd98f00b204e9800998ecf8427e
+[2025-05-28 17:18:58,803] INFO apps.orders.views Retrieved cached orders for user=11, path=/orders/, IP=127.0.0.1
+[2025-05-28 18:14:17,207] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:14:17,333] INFO apps.users.views Processing login request for email=bkmz-2020@inbox.ru
+[2025-05-28 18:14:17,334] INFO apps.users.serializers Validating login data for email=bkmz-2020@inbox.ru
+[2025-05-28 18:14:17,334] INFO apps.users.services.users_services Attempting to log in user with email=bkmz-2020@inbox.ru
+[2025-05-28 18:14:17,623] WARNING apps.users.services.users_services Invalid password for email=bkmz-2020@inbox.ru
+[2025-05-28 18:14:17,623] WARNING apps.users.utils User error: Неверные учетные данные, user=anonymous, path=/user/login/
+[2025-05-28 18:14:25,942] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:20:17,739] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:20:17,739] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_email_bkmz-2020@inbox.ru, user_id=anonymous
+[2025-05-28 18:20:17,844] INFO apps.users.views Processing password reset request for email=bkmz-2020@inbox.ru
+[2025-05-28 18:20:17,846] INFO apps.users.serializers Validating password reset request for email=bkmz-2020@inbox.ru
+[2025-05-28 18:20:17,846] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-28 18:20:17,881] INFO apps.users.services.users_services Generated uid=MTU for user=15
+[2025-05-28 18:20:23,979] ERROR apps.users.utils Server error: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение, user=anonymous, path=/user/password-reset/
+[2025-05-28 18:21:01,197] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:21:01,197] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_email_bkmz-2020@inbox.ru, user_id=anonymous
+[2025-05-28 18:21:01,200] INFO apps.users.views Processing password reset request for email=bkmz-2020@inbox.ru
+[2025-05-28 18:21:01,200] INFO apps.users.serializers Validating password reset request for email=bkmz-2020@inbox.ru
+[2025-05-28 18:21:01,200] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-28 18:21:01,339] INFO apps.users.services.users_services Generated uid=MTU for user=15
+[2025-05-28 18:21:07,412] ERROR apps.users.utils Server error: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение, user=anonymous, path=/user/password-reset/
+[2025-05-28 18:22:18,595] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:22:18,595] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_email_bkmz-2020@inbox.ru, user_id=anonymous
+[2025-05-28 18:22:18,599] INFO apps.users.views Processing password reset request for email=bkmz-2020@inbox.ru
+[2025-05-28 18:22:18,599] INFO apps.users.serializers Validating password reset request for email=bkmz-2020@inbox.ru
+[2025-05-28 18:22:18,599] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-28 18:22:18,635] INFO apps.users.services.users_services Generated uid=MTU for user=15
+[2025-05-28 18:22:18,668] INFO apps.users.services.users_services Password reset requested for email=bkmz-2020@inbox.ru
+[2025-05-28 18:22:18,668] INFO apps.users.views Password reset requested for bkmz-2020@inbox.ru
+[2025-05-28 18:22:18,671] INFO apps.users.services.tasks Sending password reset email to bkmz-2020@inbox.ru with reset_url=http://localhost:8000/user/password-reset-confirm/?token=cqiz16-b97ba930f6ffe17dd8a77f74f54c4575&uid=MTU, task_id=0f7d6922-f1f2-4d7c-bf8b-eb6adf370a5e
+[2025-05-28 18:22:29,196] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:22:29,196] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_email_bkmz-2020@inbox.ru, user_id=anonymous
+[2025-05-28 18:22:29,198] INFO apps.users.views Processing password reset request for email=bkmz-2020@inbox.ru
+[2025-05-28 18:22:29,198] INFO apps.users.serializers Validating password reset request for email=bkmz-2020@inbox.ru
+[2025-05-28 18:22:29,198] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-28 18:22:29,337] INFO apps.users.services.users_services Generated uid=MTU for user=15
+[2025-05-28 18:22:29,339] INFO apps.users.services.users_services Password reset requested for email=bkmz-2020@inbox.ru
+[2025-05-28 18:22:29,339] INFO apps.users.views Password reset requested for bkmz-2020@inbox.ru
+[2025-05-28 18:22:30,471] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:22:30,471] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_email_bkmz-2020@inbox.ru, user_id=anonymous
+[2025-05-28 18:22:30,474] INFO apps.users.views Processing password reset request for email=bkmz-2020@inbox.ru
+[2025-05-28 18:22:30,474] INFO apps.users.serializers Validating password reset request for email=bkmz-2020@inbox.ru
+[2025-05-28 18:22:30,474] INFO apps.users.services.users_services Requesting password reset for email=bkmz-2020@inbox.ru
+[2025-05-28 18:22:30,505] INFO apps.users.services.users_services Generated uid=MTU for user=15
+[2025-05-28 18:22:30,505] INFO apps.users.services.users_services Password reset requested for email=bkmz-2020@inbox.ru
+[2025-05-28 18:22:30,505] INFO apps.users.views Password reset requested for bkmz-2020@inbox.ru
+[2025-05-28 18:22:31,654] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:22:31,655] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_email_bkmz-2020@inbox.ru, user_id=anonymous
+[2025-05-28 18:22:40,829] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:22:40,830] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_email_bkmz-2020@inbox.ru, user_id=anonymous
+[2025-05-28 18:22:41,215] INFO apps.users.services.tasks Sending password reset email to bkmz-2020@inbox.ru with reset_url=http://localhost:8000/user/password-reset-confirm/?token=cqiz1h-c41d7f6948a0a40d406723565bbb4d64&uid=MTU, task_id=eccc4667-7574-4064-92c8-e538731a2d0b
+[2025-05-28 18:22:51,082] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:22:51,082] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_ip_127.0.0.1, user_id=anonymous
+[2025-05-28 18:22:51,084] INFO apps.users.views Processing password reset confirmation for uid=MTU
+[2025-05-28 18:22:51,084] INFO apps.users.services.users_services Validating reset parameters for uid=MTU
+[2025-05-28 18:22:51,084] DEBUG apps.users.services.users_services Validated uid: MTU
+[2025-05-28 18:22:51,084] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-28 18:22:51,084] INFO apps.users.services.users_services Confirming password reset for uid=MTU
+[2025-05-28 18:22:51,084] INFO apps.users.services.users_services Validating reset parameters for uid=MTU
+[2025-05-28 18:22:51,084] DEBUG apps.users.services.users_services Validated uid: MTU
+[2025-05-28 18:22:51,116] WARNING apps.users.services.users_services Invalid or expired token for user=15
+[2025-05-28 18:22:51,116] ERROR apps.users.services.users_services Failed to reset password: Неверный или просроченный токен
+[2025-05-28 18:22:51,116] WARNING apps.users.utils User error: Ошибка сброса пароля: Неверный или просроченный токен, user=anonymous, path=/user/password-reset-confirm/
+[2025-05-28 18:22:54,053] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:22:54,053] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_ip_127.0.0.1, user_id=anonymous
+[2025-05-28 18:22:54,056] INFO apps.users.views Processing password reset confirmation for uid=MTU
+[2025-05-28 18:22:54,056] INFO apps.users.services.users_services Validating reset parameters for uid=MTU
+[2025-05-28 18:22:54,056] DEBUG apps.users.services.users_services Validated uid: MTU
+[2025-05-28 18:22:54,056] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-28 18:22:54,056] INFO apps.users.services.users_services Confirming password reset for uid=MTU
+[2025-05-28 18:22:54,056] INFO apps.users.services.users_services Validating reset parameters for uid=MTU
+[2025-05-28 18:22:54,056] DEBUG apps.users.services.users_services Validated uid: MTU
+[2025-05-28 18:22:54,088] WARNING apps.users.services.users_services Invalid or expired token for user=15
+[2025-05-28 18:22:54,088] ERROR apps.users.services.users_services Failed to reset password: Неверный или просроченный токен
+[2025-05-28 18:22:54,088] WARNING apps.users.utils User error: Ошибка сброса пароля: Неверный или просроченный токен, user=anonymous, path=/user/password-reset-confirm/
+[2025-05-28 18:22:54,935] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:22:54,935] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_ip_127.0.0.1, user_id=anonymous
+[2025-05-28 18:22:54,937] INFO apps.users.views Processing password reset confirmation for uid=MTU
+[2025-05-28 18:22:54,937] INFO apps.users.services.users_services Validating reset parameters for uid=MTU
+[2025-05-28 18:22:54,937] DEBUG apps.users.services.users_services Validated uid: MTU
+[2025-05-28 18:22:54,937] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-28 18:22:54,937] INFO apps.users.services.users_services Confirming password reset for uid=MTU
+[2025-05-28 18:22:54,937] INFO apps.users.services.users_services Validating reset parameters for uid=MTU
+[2025-05-28 18:22:54,937] DEBUG apps.users.services.users_services Validated uid: MTU
+[2025-05-28 18:22:54,967] WARNING apps.users.services.users_services Invalid or expired token for user=15
+[2025-05-28 18:22:54,968] ERROR apps.users.services.users_services Failed to reset password: Неверный или просроченный токен
+[2025-05-28 18:22:54,968] WARNING apps.users.utils User error: Ошибка сброса пароля: Неверный или просроченный токен, user=anonymous, path=/user/password-reset-confirm/
+[2025-05-28 18:22:55,822] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:22:55,822] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_ip_127.0.0.1, user_id=anonymous
+[2025-05-28 18:22:55,824] INFO apps.users.views Processing password reset confirmation for uid=MTU
+[2025-05-28 18:22:55,824] INFO apps.users.services.users_services Validating reset parameters for uid=MTU
+[2025-05-28 18:22:55,824] DEBUG apps.users.services.users_services Validated uid: MTU
+[2025-05-28 18:22:55,824] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-28 18:22:55,824] INFO apps.users.services.users_services Confirming password reset for uid=MTU
+[2025-05-28 18:22:55,824] INFO apps.users.services.users_services Validating reset parameters for uid=MTU
+[2025-05-28 18:22:55,824] DEBUG apps.users.services.users_services Validated uid: MTU
+[2025-05-28 18:22:55,964] WARNING apps.users.services.users_services Invalid or expired token for user=15
+[2025-05-28 18:22:55,964] ERROR apps.users.services.users_services Failed to reset password: Неверный или просроченный токен
+[2025-05-28 18:22:55,964] WARNING apps.users.utils User error: Ошибка сброса пароля: Неверный или просроченный токен, user=anonymous, path=/user/password-reset-confirm/
+[2025-05-28 18:22:56,723] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:22:56,723] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_ip_127.0.0.1, user_id=anonymous
+[2025-05-28 18:22:56,725] INFO apps.users.views Processing password reset confirmation for uid=MTU
+[2025-05-28 18:22:56,725] INFO apps.users.services.users_services Validating reset parameters for uid=MTU
+[2025-05-28 18:22:56,725] DEBUG apps.users.services.users_services Validated uid: MTU
+[2025-05-28 18:22:56,725] INFO apps.users.serializers Validating password reset confirmation data
+[2025-05-28 18:22:56,725] INFO apps.users.services.users_services Confirming password reset for uid=MTU
+[2025-05-28 18:22:56,725] INFO apps.users.services.users_services Validating reset parameters for uid=MTU
+[2025-05-28 18:22:56,725] DEBUG apps.users.services.users_services Validated uid: MTU
+[2025-05-28 18:22:56,755] WARNING apps.users.services.users_services Invalid or expired token for user=15
+[2025-05-28 18:22:56,755] ERROR apps.users.services.users_services Failed to reset password: Неверный или просроченный токен
+[2025-05-28 18:22:56,755] WARNING apps.users.utils User error: Ошибка сброса пароля: Неверный или просроченный токен, user=anonymous, path=/user/password-reset-confirm/
+[2025-05-28 18:22:57,482] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:22:57,483] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_ip_127.0.0.1, user_id=anonymous
+[2025-05-28 18:22:59,152] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:22:59,152] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_ip_127.0.0.1, user_id=anonymous
+[2025-05-28 18:23:02,251] INFO apps.users.services.tasks Sending password reset email to bkmz-2020@inbox.ru with reset_url=http://localhost:8000/user/password-reset-confirm/?token=cqiz1i-0c26046ee207e6e5530069abec825c43&uid=MTU, task_id=d444d427-e1e3-4f26-971f-f955166b7676
+[2025-05-28 18:30:53,061] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:30:53,061] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_ip_127.0.0.1, user_id=anonymous
+[2025-05-28 18:30:54,596] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:30:54,596] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_ip_127.0.0.1, user_id=anonymous
+[2025-05-28 18:33:12,742] DEBUG apps.users.authentication No token provided in request
+[2025-05-28 18:33:12,742] DEBUG apps.users.services.trottles Throttle cache key: throttle_verification_code_ip_127.0.0.1, user_id=anonymous

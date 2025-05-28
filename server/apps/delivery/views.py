@@ -3,6 +3,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.throttling import AnonRateThrottle
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from apps.core.services.cache_services import CacheService
@@ -97,10 +98,12 @@ class PickupPointListView(APIView):
 
     Attributes:
         permission_classes (list): Требует аутентификации пользователя.
+        throttle_classes (list): Ограничение частоты запросов для анонимных пользователей.
         pagination_class (PageNumberPagination): Класс пагинации.
         serializer_class (Serializer): Сериализатор для пунктов выдачи.
     """
     permission_classes = [IsAuthenticated]
+    throttle_classes = [AnonRateThrottle]  # Добавлен rate limiting
     pagination_class = PickupPointPagination
     serializer_class = PickupPointSerializer
 
@@ -143,8 +146,8 @@ class PickupPointListView(APIView):
         # Получение данных
         pickup_points = DeliveryService.get_pickup_points(request)
         paginator = self.pagination_class()
-        page = paginator.paginate_queryset(pickup_points, request)
-        serializer = self.serializer_class(page, many=True)
+        page_data = paginator.paginate_queryset(pickup_points, request)
+        serializer = self.serializer_class(page_data, many=True)
         response_data = paginator.get_paginated_response(serializer.data).data
 
         # Кэширование результата
@@ -154,7 +157,7 @@ class PickupPointListView(APIView):
             timeout=86400
         )
         logger.info(
-            f"Retrieved {len(page)} pickup points UserID={user_id}, Path={request.path}, "
+            f"Retrieved {len(page_data)} pickup points UserID={user_id}, Path={request.path}, "
             f"IP={request.META.get('REMOTE_ADDR', 'unknown')}"
         )
         return Response(response_data)
@@ -168,10 +171,12 @@ class CityListView(APIView):
 
     Attributes:
         permission_classes (list): Требует аутентификации пользователя.
+        throttle_classes (list): Ограничение частоты запросов для анонимных пользователей.
         pagination_class (PageNumberPagination): Класс пагинации.
         serializer_class (Serializer): Сериализатор для городов.
     """
     permission_classes = [IsAuthenticated]
+    throttle_classes = [AnonRateThrottle]  # Добавлен rate limiting
     pagination_class = CityPagination
     serializer_class = CitySerializer
 
@@ -209,8 +214,8 @@ class CityListView(APIView):
         # Получение данных
         cities = DeliveryService.get_cities(request)
         paginator = self.pagination_class()
-        page = paginator.paginate_queryset(cities, request)
-        serializer = self.serializer_class(page, many=True)
+        page_data = paginator.paginate_queryset(cities, request)
+        serializer = self.serializer_class(page_data, many=True)
         response_data = paginator.get_paginated_response(serializer.data).data
 
         # Кэширование результата
@@ -220,7 +225,7 @@ class CityListView(APIView):
             timeout=3600
         )
         logger.info(
-            f"Retrieved {len(page)} cities UserID={user_id}, Path={request.path}, "
+            f"Retrieved {len(page_data)} cities UserID={user_id}, Path={request.path}, "
             f"IP={request.META.get('REMOTE_ADDR', 'unknown')}"
         )
         return Response(response_data)
