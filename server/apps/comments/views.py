@@ -22,7 +22,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
     Определяет размер страницы и параметры запроса для пагинированных ответов.
 
-    Атрибуты:
+    Attributes:
         page_size (int): Количество элементов на странице по умолчанию.
         page_size_query_param (str): Параметр запроса для изменения размера страницы.
         max_page_size (int): Максимально допустимый размер страницы.
@@ -33,7 +33,13 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 
 class CommentListView(APIView):
-    """Представление для получения списка комментариев к отзыву."""
+    """Представление для получения списка комментариев к отзыву.
+
+    Attributes:
+        permission_classes: Классы разрешений для доступа (доступно всем).
+        pagination_class: Класс пагинации для списков комментариев.
+        serializer_class: Класс сериализатора для преобразования данных комментариев.
+    """
     permission_classes = [AllowAny]
     pagination_class = StandardResultsSetPagination
     serializer_class = CommentSerializer
@@ -48,6 +54,9 @@ class CommentListView(APIView):
 
         Returns:
             Response: Пагинированный список комментариев или ответ с ошибкой.
+
+        Raises:
+            Exception: Если получение списка комментариев не удалось (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(f"Retrieving comments for review={review_id}, user={user_id}")
@@ -69,7 +78,12 @@ class CommentListView(APIView):
 
 
 class CommentCreateView(APIView):
-    """Представление для создания нового комментария."""
+    """Представление для создания нового комментария.
+
+    Attributes:
+        permission_classes: Классы разрешений для доступа (только для аутентифицированных).
+        serializer_class: Класс сериализатора для создания комментариев.
+    """
     permission_classes = [IsAuthenticated]
     serializer_class = CommentCreateSerializer
 
@@ -82,6 +96,9 @@ class CommentCreateView(APIView):
 
         Returns:
             Response: Данные созданного комментария или ответ с ошибкой.
+
+        Raises:
+            Exception: Если создание комментария не удалось из-за некорректных данных или других ошибок (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(f"Creating comment by user={user_id}")
@@ -96,7 +113,12 @@ class CommentCreateView(APIView):
 
 
 class CommentUpdateView(APIView):
-    """Представление для обновления существующего комментария."""
+    """Представление для обновления существующего комментария.
+
+    Attributes:
+        permission_classes: Классы разрешений для доступа (только для аутентифицированных).
+        serializer_class: Класс сериализатора для обновления комментариев.
+    """
     permission_classes = [IsAuthenticated]
     serializer_class = CommentCreateSerializer
 
@@ -110,6 +132,9 @@ class CommentUpdateView(APIView):
 
         Returns:
             Response: Данные обновленного комментария или ответ с ошибкой.
+
+        Raises:
+            Exception: Если обновление комментария не удалось из-за некорректных данных или других ошибок (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(f"Updating Comment {pk}, user={user_id}, path={request.path}")
@@ -124,7 +149,11 @@ class CommentUpdateView(APIView):
 
 
 class CommentDeleteView(APIView):
-    """Представление для удаления комментария."""
+    """Представление для удаления комментария.
+
+    Attributes:
+        permission_classes: Классы разрешений для доступа (только для аутентифицированных).
+    """
     permission_classes = [IsAuthenticated]
 
     @handle_api_errors
@@ -137,6 +166,9 @@ class CommentDeleteView(APIView):
 
         Returns:
             Response: Сообщение об удалении или ответ с ошибкой.
+
+        Raises:
+            Exception: Если удаление комментария не удалось из-за отсутствия прав или других ошибок (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(f"Deleting Comment {pk}, user={user_id}, path={request.path}")
@@ -148,7 +180,11 @@ class CommentDeleteView(APIView):
 
 
 class CommentLikeView(APIView):
-    """Представление для управления лайками комментариев."""
+    """Представление для управления лайками комментариев.
+
+    Attributes:
+        permission_classes: Классы разрешений для доступа (только для аутентифицированных).
+    """
     permission_classes = [IsAuthenticated]
 
     @handle_api_errors
@@ -161,6 +197,9 @@ class CommentLikeView(APIView):
 
         Returns:
             Response: Результат операции с лайком или ответ с ошибкой.
+
+        Raises:
+            Exception: Если операция с лайком не удалась из-за ошибки базы данных или других проблем (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(f"Toggling like for comment={pk}, user={user_id}, path={request.path}")

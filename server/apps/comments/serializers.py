@@ -12,10 +12,10 @@ class CommentSerializer(serializers.ModelSerializer):
 
     Преобразует объекты Comment в JSON, включая дочерние комментарии и количество лайков.
 
-    Атрибуты:
-        user (StringRelatedField): Имя пользователя-автора комментария.
-        children (SerializerMethodField): Вложенные дочерние комментарии.
-        likes_count (SerializerMethodField): Количество лайков комментария.
+    Attributes:
+        user: Имя пользователя-автора комментария.
+        children: Вложенные дочерние комментарии.
+        likes_count: Количество лайков комментария.
     """
     user = serializers.StringRelatedField()
     children = serializers.SerializerMethodField()
@@ -34,6 +34,9 @@ class CommentSerializer(serializers.ModelSerializer):
 
         Returns:
             list: Сериализованные данные дочерних комментариев.
+
+        Raises:
+            Exception: Если произошла ошибка при получении дочерних комментариев из-за проблем с базой данных.
         """
         queryset = obj.cached_children
         serializer = CommentSerializer(queryset, many=True)
@@ -47,6 +50,9 @@ class CommentSerializer(serializers.ModelSerializer):
 
         Returns:
             int: Общее количество лайков.
+
+        Raises:
+            Exception: Если произошла ошибка при подсчете лайков из-за проблем с базой данных.
         """
         return obj.likes.count()
 
@@ -55,6 +61,11 @@ class CommentCreateSerializer(serializers.ModelSerializer):
     """Сериализатор для создания комментариев.
 
     Проверяет и обрабатывает данные для создания новых комментариев.
+
+    Attributes:
+        review: Отзыв, к которому относится комментарий.
+        text: Текст комментария.
+        parent: Родительский комментарий (опционально).
     """
     review = serializers.PrimaryKeyRelatedField(queryset=Review.objects.all())
 
@@ -75,7 +86,7 @@ class CommentCreateSerializer(serializers.ModelSerializer):
             dict: Проверенные данные.
 
         Raises:
-            InvalidCommentData: Если текст комментария пустой или отзыв некорректен.
+            InvalidCommentData: Если текст комментария пустой или отзыв не существует либо неактивен.
         """
         logger.debug(f"Validating comment creation data: {attrs}")
         if not attrs['text'].strip():

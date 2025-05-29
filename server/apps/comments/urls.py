@@ -1,3 +1,8 @@
+"""Модуль URL-шаблонов для приложения comments.
+
+Определяет маршруты для операций с комментариями, таких как просмотр списка, создание, обновление, управление лайками и удаление.
+"""
+
 from django.urls import path
 from apps.comments.views import (
     CommentListView,

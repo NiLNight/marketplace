@@ -21,6 +21,7 @@ class Comment(MPTTModel, TimeStampedModel):
         user (ForeignKey): Пользователь, создавший комментарий.
         text (TextField): Содержимое комментария.
         parent (TreeForeignKey): Родительский комментарий для ответов (опционально).
+        likes (GenericRelation): Связь с моделью лайков.
     """
     review = models.ForeignKey(
         Review,
@@ -64,6 +65,9 @@ class Comment(MPTTModel, TimeStampedModel):
 
         Returns:
             QuerySet: Дочерние комментарии, кэшированные для оптимизации.
+
+        Raises:
+            Exception: Если произошла ошибка при получении дочерних комментариев из-за проблем с базой данных.
         """
         return getattr(self, '_cached_children', self.children.all())
 
