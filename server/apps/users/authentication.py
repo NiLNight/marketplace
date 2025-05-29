@@ -10,6 +10,10 @@ class CustomJWTAuthentication(JWTAuthentication):
     """Кастомная аутентификация JWT с поддержкой cookies.
 
     Переопределяет стандартную аутентификацию для работы с токенами из cookies.
+
+    Attributes:
+        AUTH_HEADER_TYPES (tuple): Поддерживаемые типы заголовков аутентификации.
+        AUTH_HEADER_NAME (str): Имя заголовка для токена аутентификации.
     """
 
     def authenticate(self, request):
@@ -18,13 +22,15 @@ class CustomJWTAuthentication(JWTAuthentication):
         Проверяет наличие токена в заголовке Authorization или cookies.
 
         Args:
-            request: HTTP-запрос.
+            request (HttpRequest): HTTP-запрос.
 
         Returns:
-            tuple: Пользователь и валидированный токен, если аутентификация успешна.
+            tuple: Кортеж из объекта пользователя (User) и валидированного токена (Token), если аутентификация успешна.
+            None: Если токен не предоставлен.
 
         Raises:
             AuthenticationFailed: Если токен недействителен или пользователь неактивен.
+            InvalidToken: Если токен не может быть декодирован или истек срок его действия.
         """
         header = self.get_header(request)
         raw_token = None
@@ -32,6 +38,7 @@ class CustomJWTAuthentication(JWTAuthentication):
         if header:
             raw_token = self.get_raw_token(header)
         else:
+            # Если токен не найден в заголовке, проверяем cookies как альтернативный источник
             raw_token = request.COOKIES.get(settings.SIMPLE_JWT['AUTH_COOKIE'])
 
         if not raw_token:
