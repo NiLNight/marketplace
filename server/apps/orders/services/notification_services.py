@@ -34,7 +34,10 @@ class NotificationService:
             self: Экземпляр задачи Celery для управления повторными попытками.
             user_email (str): Email-адрес получателя.
             message (str): Текст уведомления.
-            user_id (int, optional): Идентификатор пользователя.
+            user_id (int, optional): Идентификатор пользователя. По умолчанию None.
+
+        Returns:
+            None: Метод не возвращает значения, только отправляет уведомление.
 
         Raises:
             ValidationError: Если email или сообщение некорректны.
@@ -81,6 +84,9 @@ class NotificationService:
         Args:
             user: Объект пользователя, содержащий email.
             message (str): Текст уведомления.
+
+        Returns:
+            None: Метод не возвращает значения, только инициирует отправку уведомления.
 
         Raises:
             ValidationError: Если email отсутствует или сообщение пустое.

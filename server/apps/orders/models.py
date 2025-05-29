@@ -66,6 +66,9 @@ class Order(TimeStampedModel):
 
         Returns:
             str: ID заказа и имя пользователя.
+
+        Raises:
+            AttributeError: Если user.username недоступен из-за проблем с базой данных.
         """
         return f"Заказ #{self.id} - {self.user.username}"
 
@@ -75,8 +78,11 @@ class Order(TimeStampedModel):
 
         Убеждается, что total_price не отрицателен и pickup_point активен.
 
+        Returns:
+            None: Метод не возвращает значения, только проверяет данные.
+
         Raises:
-            ValidationError: Если данные некорректны.
+            ValidationError: Если данные некорректны (total_price отрицателен или pickup_point неактивен).
         """
         if self.total_price < 0:
             raise ValidationError(_("Общая стоимость не может быть отрицательной"))
@@ -88,6 +94,13 @@ class Order(TimeStampedModel):
         Сохраняет объект с автоматической проверкой.
 
         Вызывает full_clean() для валидации перед сохранением.
+
+        Args:
+            *args: Позиционные аргументы для метода save.
+            **kwargs: Именованные аргументы для метода save.
+
+        Returns:
+            None: Метод сохраняет объект в базе данных.
 
         Raises:
             ValidationError: Если данные не прошли валидацию.

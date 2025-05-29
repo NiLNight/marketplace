@@ -11,6 +11,13 @@ class OrderSerializer(serializers.ModelSerializer):
 
     Преобразует объекты Order в JSON, включая основные поля заказа для отображения в списке.
     Проверяет корректность статуса, общей стоимости и пункта выдачи.
+
+    Attributes:
+        id: Уникальный идентификатор заказа.
+        status: Статус заказа (processing, shipped, delivered, cancelled).
+        total_price: Общая стоимость заказа.
+        created: Дата создания заказа.
+        pickup_point: Данные о пункте выдачи.
     """
     pickup_point = PickupPointSerializer(read_only=True)
 
@@ -53,6 +60,14 @@ class OrderDetailSerializer(serializers.ModelSerializer):
 
     Преобразует объекты Order в JSON, включая элементы заказа и пункт выдачи.
     Проверяет корректность статуса, общей стоимости и связанных данных.
+
+    Attributes:
+        id: Уникальный идентификатор заказа.
+        status: Статус заказа (processing, shipped, delivered, cancelled).
+        total_price: Общая стоимость заказа.
+        created: Дата создания заказа.
+        items: Список элементов заказа из корзины.
+        pickup_point: Данные о пункте выдачи.
     """
     items = CartItemSerializer(
         many=True,

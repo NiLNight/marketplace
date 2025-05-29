@@ -52,6 +52,9 @@ class OrderListView(APIView):
 
         Returns:
             Response: Ответ с данными заказов или ошибкой.
+
+        Raises:
+            Exception: Если получение данных заказов не удалось (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id
         cached_data = CacheService.cache_order_list(request, user_id, request.GET.get('status', 'all'))
@@ -100,6 +103,10 @@ class OrderDetailView(APIView):
 
         Returns:
             Response: Ответ с данными заказа или ошибкой.
+
+        Raises:
+            ValueError: Если pk не является числом.
+            Exception: Если получение данных заказа не удалось (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id
         try:
@@ -149,6 +156,9 @@ class OrderCreateView(APIView):
 
         Returns:
             Response: Ответ с подтверждением создания заказа или ошибкой.
+
+        Raises:
+            Exception: Если создание заказа не удалось из-за некорректных данных или других ошибок (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id
         pickup_point_id = request.data.get('pickup_point_id')
@@ -197,6 +207,10 @@ class OrderCancelView(APIView):
 
         Returns:
             Response: Ответ с подтверждением отмены или ошибкой.
+
+        Raises:
+            ValueError: Если pk не является числом.
+            Exception: Если отмена заказа не удалась из-за некорректных данных или других ошибок (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id
         try:

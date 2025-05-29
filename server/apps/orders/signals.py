@@ -23,6 +23,12 @@ def track_status(sender, instance, **kwargs):
         sender: Класс модели, отправивший сигнал (Order).
         instance: Экземпляр модели Order, который сохраняется.
         kwargs: Дополнительные аргументы сигнала.
+
+    Returns:
+        None: Метод только устанавливает атрибут и не возвращает значения.
+
+    Raises:
+        ObjectDoesNotExist: Если заказ не найден в базе данных во время pre_save.
     """
     logger.debug(f"Tracking status for order={instance.id or 'new'}, user={instance.user.id}")
     try:
@@ -48,6 +54,12 @@ def order_post_save(sender, instance, created, **kwargs):
         instance: Экземпляр модели Order, который был сохранен.
         created (bool): Флаг, указывающий, был ли заказ создан.
         kwargs: Дополнительные аргументы сигнала.
+
+    Returns:
+        None: Метод только отправляет уведомления и инвалидирует кэш.
+
+    Raises:
+        Exception: Если обработка события сохранения не удалась из-за проблем с уведомлениями или кэшем.
     """
     logger.debug(f"Starting post_save for order={instance.id}, user={instance.user.id}")
     try:
