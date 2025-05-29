@@ -43,7 +43,7 @@ class Like(TimeStampedModel):
 
     Использует ContentType для связи с любой моделью (например, Review, Comment).
 
-    Атрибуты:
+    Attributes:
         user (ForeignKey): Пользователь, поставивший лайк.
         content_type (ForeignKey): Тип связанной сущности (например, Review или Comment).
         object_id (PositiveIntegerField): ID связанной сущности.
@@ -84,6 +84,9 @@ class Like(TimeStampedModel):
         """Валидация данных лайка перед сохранением.
 
         Проверяет, что объект существует.
+
+        Returns:
+            None: Метод не возвращает значения, только выполняет валидацию.
 
         Raises:
             ValidationError: Если связанный объект не существует.

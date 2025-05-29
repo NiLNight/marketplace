@@ -56,7 +56,10 @@ class CacheService:
         Args:
             key (str): Ключ кэша.
             data: Данные для сохранения.
-            timeout (int): Время жизни кэша в секундах (по умолчанию 15 минут).
+            timeout (int, optional): Время жизни кэша в секундах (по умолчанию 15 минут).
+
+        Returns:
+            None: Метод не возвращает значения, только сохраняет данные в кэш.
         """
         cache.set(key, data, timeout)
 
@@ -67,7 +70,10 @@ class CacheService:
 
         Args:
             prefix (str): Префикс ключа кэша (например, 'product_list').
-            pk (int, optional): ID объекта для точечной инвалидации.
+            pk (int, optional): ID объекта для точечной инвалидации. По умолчанию None.
+
+        Returns:
+            None: Метод не возвращает значения, только инвалидирует кэш.
         """
         if pk:
             cache.delete(f"{prefix}:{pk}")
