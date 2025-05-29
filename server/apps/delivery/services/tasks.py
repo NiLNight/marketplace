@@ -17,9 +17,12 @@ def index_pickup_point(pickup_point_id: int):
     Args:
         pickup_point_id (int): Идентификатор пункта выдачи.
 
+    Returns:
+        None: Метод не возвращает значения, только индексирует пункт выдачи.
+
     Raises:
         PickupPointNotFound: Если пункт выдачи не найден.
-        ElasticsearchDslException: Если ошибка в Elasticsearch.
+        ElasticsearchDslException: Если ошибка в Elasticsearch (повторяется до 3 раз с интервалом 60 секунд).
     """
     task_id = index_pickup_point.request.id
     try:
@@ -66,8 +69,11 @@ def update_search_vector(pickup_point_id: int):
     Args:
         pickup_point_id (int): Идентификатор пункта выдачи.
 
+    Returns:
+        None: Метод не возвращает значения, только обновляет поисковый вектор.
+
     Raises:
-        PickupPointNotFound: Если пункт выдачи не найден.
+        PickupPointNotFound: Если пункт выдачи не найден (повторяется до 3 раз с интервалом 60 секунд).
     """
     task_id = update_search_vector.request.id
     try:
