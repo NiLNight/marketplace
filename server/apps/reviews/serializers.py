@@ -50,10 +50,10 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
             attrs: Данные для валидации.
 
         Returns:
-            Проверенные данные.
+            dict: Проверенные данные для создания или обновления отзыва.
 
         Raises:
-            InvalidReviewData: Если данные некорректны.
+            InvalidReviewData: Если данные некорректны (например, оценка вне диапазона, слишком длинный текст или неподдерживаемый формат изображения).
         """
         logger.debug(f"Validating review data: {attrs}")
         # Проверяем product только при создании (если это не частичное обновление)
@@ -73,6 +73,7 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
 
         image = attrs.get('image')
         if image:
+            # Проверяем размер и формат изображения для предотвращения загрузки больших или неподдерживаемых файлов
             max_size = 5 * 1024 * 1024  # 5 MB
             if image.size > max_size:
                 logger.warning(f"Image size {image.size} exceeds {max_size}")

@@ -22,9 +22,9 @@ class StandardResultsSetPagination(PageNumberPagination):
     """Настройки пагинации для списков отзывов.
 
     Attributes:
-        page_size: Количество элементов на странице.
+        page_size: Количество элементов на странице (по умолчанию 10).
         page_size_query_param: Параметр запроса для размера страницы.
-        max_page_size: Максимальный размер страницы.
+        max_page_size: Максимальный размер страницы (100).
     """
     page_size = 10
     page_size_query_param = 'page_size'
@@ -32,21 +32,30 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 
 class ReviewListView(APIView):
-    """Представление для получения списка отзывов о продукте."""
+    """Представление для получения списка отзывов о продукте.
+
+    Attributes:
+        permission_classes: Классы разрешений для доступа (чтение для всех, запись для аутентифицированных).
+        pagination_class: Класс пагинации для списков отзывов.
+        serializer_class: Класс сериализатора для преобразования данных отзывов.
+    """
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = StandardResultsSetPagination
     serializer_class = ReviewSerializer
 
     @handle_api_errors
     def get(self, request, product_id: int):
-        """Обрабатывает GET-запрос для получения пагинированного списка отзывов.
+        """Обрабатывает GET-запрос для получения пагинированного списка отзывов о продукте.
 
         Args:
-            request: HTTP-запрос.
-            product_id: Идентификатор продукта.
+            request: HTTP-запрос с параметрами пагинации и сортировки.
+            product_id: Идентификатор продукта, для которого запрашиваются отзывы.
 
         Returns:
-            Пагинированный список отзывов или ошибка.
+            Response: Пагинированный список отзывов в формате JSON.
+
+        Raises:
+            Exception: Если получение списка отзывов не удалось (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(f"Fetching reviews for product={product_id}, user={user_id}, path={request.path}")
@@ -70,7 +79,12 @@ class ReviewListView(APIView):
 
 
 class ReviewCreateView(APIView):
-    """Представление для создания нового отзыва."""
+    """Представление для создания нового отзыва.
+
+    Attributes:
+        permission_classes: Классы разрешений для доступа (только для аутентифицированных пользователей).
+        serializer_class: Класс сериализатора для создания отзывов.
+    """
     permission_classes = [IsAuthenticated]
     serializer_class = ReviewCreateSerializer
 
@@ -79,10 +93,13 @@ class ReviewCreateView(APIView):
         """Обрабатывает POST-запрос для создания отзыва.
 
         Args:
-            request: HTTP-запрос с данными отзыва.
+            request: HTTP-запрос с данными отзыва (продукт, оценка, текст, изображение).
 
         Returns:
-            Данные созданного отзыва или ошибка.
+            Response: Данные созданного отзыва в формате JSON с кодом статуса 201.
+
+        Raises:
+            Exception: Если создание отзыва не удалось из-за некорректных данных или других ошибок (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(f"Creating review, user={user_id}, path={request.path}")
@@ -99,20 +116,28 @@ class ReviewCreateView(APIView):
 
 
 class ReviewUpdateView(APIView):
-    """Представление для обновления отзыва."""
+    """Представление для обновления отзыва.
+
+    Attributes:
+        permission_classes: Классы разрешений для доступа (только для аутентифицированных пользователей).
+        serializer_class: Класс сериализатора для обновления отзывов.
+    """
     permission_classes = [IsAuthenticated]
     serializer_class = ReviewCreateSerializer
 
     @handle_api_errors
     def patch(self, request, pk: int):
-        """Обрабатывает PATCH-запрос для обновления отзыва.
+        """Обрабатывает PATCH-запрос для частичного обновления отзыва.
 
         Args:
-            request: HTTP-запрос с данными.
-            pk: Идентификатор отзыва.
+            request: HTTP-запрос с данными для обновления (оценка, текст, изображение).
+            pk: Идентификатор отзыва, который нужно обновить.
 
         Returns:
-            Данные обновленного отзыва или ошибка.
+            Response: Данные обновленного отзыва в формате JSON с кодом статуса 200.
+
+        Raises:
+            Exception: Если обновление отзыва не удалось из-за некорректных данных, отсутствия прав или других ошибок (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(f"Updating review {pk}, user={user_id}, path={request.path}")
@@ -129,19 +154,26 @@ class ReviewUpdateView(APIView):
 
 
 class ReviewLikeView(APIView):
-    """Представление для управления лайками отзывов."""
+    """Представление для управления лайками отзывов.
+
+    Attributes:
+        permission_classes: Классы разрешений для доступа (только для аутентифицированных пользователей).
+    """
     permission_classes = [IsAuthenticated]
 
     @handle_api_errors
     def post(self, request, pk: int):
-        """Обрабатывает POST-запрос для переключения лайка отзыва.
+        """Обрабатывает POST-запрос для переключения лайка отзыва (добавить/удалить).
 
         Args:
-            request: HTTP-запрос.
-            pk: Идентификатор отзыва.
+            request: HTTP-запрос с информацией о пользователе.
+            pk: Идентификатор отзыва, для которого переключается лайк.
 
         Returns:
-            Результат операции с лайком или ошибка.
+            Response: Результат операции с лайком (действие и текущее количество лайков) в формате JSON с кодом статуса 200.
+
+        Raises:
+            LikeOperationFailed: Если операция с лайком не удалась из-за ошибки базы данных или других проблем.
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(f"Toggling like for review={pk}, user={user_id}, path={request.path}")

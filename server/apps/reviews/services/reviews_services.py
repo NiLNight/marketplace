@@ -31,10 +31,10 @@ class ReviewService:
             review: Существующий отзыв для обновления (опционально, используется для получения продукта).
 
         Returns:
-            Проверенные данные с объектом Product.
+            Dict[str, Any]: Проверенные данные с объектом Product.
 
         Raises:
-            InvalidReviewData: Если данные некорректны (продукт, оценка, текст, изображение).
+            InvalidReviewData: Если данные некорректны (продукт не существует, оценка вне диапазона, текст слишком длинный, изображение превышает размер или имеет неподдерживаемый формат).
         """
         product = data.get('product')
         if review:
@@ -87,10 +87,10 @@ class ReviewService:
             product_id: Идентификатор продукта.
 
         Returns:
-            QuerySet с отзывами, предзагруженными данными о продукте, пользователе и лайках.
+            QuerySet: QuerySet с отзывами, предзагруженными данными о продукте, пользователе и количестве лайков.
 
         Raises:
-            ReviewNotFound: Если продукт не существует или отзывы не найдены.
+            ReviewNotFound: Если продукт не существует, неактивен или произошла ошибка при получении отзывов.
         """
         logger.info(f"Fetching reviews for product={product_id}")
         try:
@@ -119,7 +119,7 @@ class ReviewService:
             ordering: Поле для сортировки (например, 'created', '-likes').
 
         Returns:
-            Отсортированный QuerySet.
+            QuerySet: Отсортированный QuerySet с отзывами.
 
         Raises:
             InvalidReviewData: Если поле сортировки недопустимо.
@@ -131,6 +131,7 @@ class ReviewService:
             raise InvalidReviewData(f"Недопустимое поле сортировки: {ordering}")
 
         if ordering.lstrip('-') == 'likes':
+            # Для сортировки по лайкам аннотируем количество лайков и сортируем по вычисленному полю
             content_type = ContentType.objects.get_for_model(Review)
             ordering_field = 'likes_count' if ordering == 'likes' else '-likes_count'
             reviews = reviews.annotate(
@@ -150,10 +151,10 @@ class ReviewService:
             user: Пользователь, создающий отзыв.
 
         Returns:
-            Созданный объект Review.
+            Review: Созданный объект Review.
 
         Raises:
-            InvalidReviewData: Если данные некорректны или пользователь уже оставил отзыв.
+            InvalidReviewData: Если данные некорректны или пользователь уже оставил отзыв на этот продукт.
         """
         user_id = user.id
         logger.info(f"Creating review for product={data.get('product')}, user={user_id}")
@@ -188,41 +189,38 @@ class ReviewService:
             user: Аутентифицированный пользователь, обновляющий отзыв.
 
         Returns:
-            Обновленный объект Review.
+            Review: Обновленный объект Review.
 
         Raises:
-            ReviewNotFound: Если отзыв или продукт не существуют/неактивны.
-            PermissionDenied: Если пользователь не является автором.
-            InvalidReviewData: Если данные некорректны.
+            ReviewNotFound: Если отзыв или связанный продукт не существуют или неактивны.
+            PermissionDenied: Если пользователь не является автором отзыва.
+            InvalidReviewData: Если данные для обновления некорректны.
         """
         logger.info(f"Updating review {review_id}, user={user.id}")
         try:
             # Получаем отзыв с предзагрузкой продукта
             review = Review.objects.select_related('product').get(pk=review_id)
-
-            # Проверяем, что продукт активен
             if not review.product.is_active:
                 logger.warning(f"Product {review.product.id} is inactive, review={review_id}, user={user.id}")
                 raise ReviewNotFound("Продукт неактивен.")
 
-            # Проверяем права доступа
             if review.user != user:
                 logger.warning(f"Permission denied for review {review_id}, user={user.id}")
                 raise PermissionDenied("Только автор может обновить отзыв.")
 
-            validated_data = ReviewService._validate_review_data(data, user.id, review=review)
+            validated_data = ReviewService._validate_review_data(data, str(user.id), review)
             for field, value in validated_data.items():
-                if field in {'value', 'text', 'image'} and value is not None:
+                if field != 'product' and value is not None:
                     setattr(review, field, value)
-
             review.full_clean()
             review.save()
             logger.info(f"Successfully updated review {review_id}, user={user.id}")
             return review
-
         except Review.DoesNotExist:
             logger.warning(f"Review {review_id} not found, user={user.id}")
             raise ReviewNotFound("Отзыв не найден.")
         except Exception as e:
             logger.error(f"Failed to update review {review_id}: {str(e)}, user={user.id}")
+            if isinstance(e, PermissionDenied):
+                raise
             raise InvalidReviewData(f"Ошибка обновления отзыва: {str(e)}")

@@ -1,3 +1,8 @@
+"""Модуль URL-шаблонов для приложения reviews.
+
+Определяет маршруты для операций с отзывами, таких как просмотр списка отзывов, создание, обновление и управление лайками.
+"""
+
 from django.urls import path
 from apps.reviews.views import (
     ReviewListView,

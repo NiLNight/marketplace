@@ -68,15 +68,18 @@ class Review(TimeStampedModel):
         """Возвращает строковое представление отзыва.
 
         Returns:
-            Название продукта, оценка и имя пользователя.
+            str: Название продукта, оценка и имя пользователя.
         """
         return f"{self.product.title}: {self.value} ({self.user.username})"
 
     def clean(self) -> None:
         """Проверяет данные отзыва перед сохранением.
 
+        Returns:
+            None: Функция ничего не возвращает.
+
         Raises:
-            ValidationError: Если оценка некорректна или отзыв уже существует.
+            ValidationError: Если оценка некорректна или отзыв уже существует для данного пользователя и продукта.
         """
         if self.value < 1 or self.value > 5:
             logger.warning(f"Invalid review value {self.value}, product={self.product.id}, user={self.user.id}")
@@ -88,8 +91,16 @@ class Review(TimeStampedModel):
     def save(self, *args, **kwargs) -> None:
         """Сохраняет отзыв с логированием.
 
+        Args:
+            *args: Позиционные аргументы для метода save.
+            **kwargs: Именованные аргументы для метода save.
+
+        Returns:
+            None: Функция ничего не возвращает.
+
         Raises:
-            ValidationError: Если данные отзыва некорректны.
+            ValidationError: Если данные отзыва некорректны из-за ошибок валидации.
+            Exception: Если сохранение не удалось по другим причинам (например, проблемы с базой данных).
         """
         user_id = self.user.id if self.user else 'anonymous'
         action = 'Creating' if self.pk is None else 'Updating'
