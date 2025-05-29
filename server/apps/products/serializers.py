@@ -28,10 +28,11 @@ class CategorySerializer(serializers.ModelSerializer):
             obj: Объект Category.
 
         Returns:
-            Список сериализованных дочерних категорий.
+            list: Список сериализованных дочерних категорий.
         """
         logger.debug(f"Retrieving children for category {obj.id}")
         try:
+            # Используем cached_children для оптимизации запросов к базе данных
             queryset = obj.cached_children
             serializer = CategorySerializer(queryset, many=True)
             return serializer.data
@@ -65,7 +66,7 @@ class ProductListSerializer(serializers.ModelSerializer):
             obj: Объект Product.
 
         Returns:
-            Цена после скидки.
+            Decimal: Цена после скидки.
         """
         try:
             return obj.price * (1 - obj.discount / 100) if obj.discount else obj.price
@@ -163,7 +164,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             obj: Объект Product.
 
         Returns:
-            Цена после скидки.
+            Decimal: Цена после скидки.
         """
         try:
             return obj.price * (1 - obj.discount / 100) if obj.discount else obj.price
@@ -179,10 +180,10 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             validated_data: Проверенные данные.
 
         Returns:
-            Обновленный объект Product.
+            Product: Обновленный объект Product.
 
         Raises:
-            InvalidProductData: Если обновление не удалось.
+            InvalidProductData: Если обновление не удалось из-за некорректных данных или ошибки сервиса.
         """
         user = self.context['request'].user
         logger.info(f"Updating product {instance.id} via serializer, user={user.id}")

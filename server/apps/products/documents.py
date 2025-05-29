@@ -52,7 +52,7 @@ class ProductDocument(Document):
             instance: Экземпляр Product.
 
         Returns:
-            Float-значение цены.
+            float: Float-значение цены.
         """
         return float(instance.price)
 
@@ -63,7 +63,7 @@ class ProductDocument(Document):
             instance: Экземпляр Product.
 
         Returns:
-            Float-значение скидки.
+            float: Float-значение скидки.
         """
         return float(instance.discount)
 
@@ -74,7 +74,7 @@ class ProductDocument(Document):
             instance: Экземпляр Product.
 
         Returns:
-            Float-значение цены с учётом скидки.
+            float: Float-значение цены с учётом скидки.
         """
         return float(instance.price_with_discount)
 
@@ -85,7 +85,7 @@ class ProductDocument(Document):
             instance: Экземпляр Product.
 
         Returns:
-            Словарь с данными категории или пустой словарь, если категория отсутствует.
+            dict: Словарь с данными категории или пустой словарь, если категория отсутствует.
         """
         try:
             return {
@@ -104,7 +104,7 @@ class ProductDocument(Document):
             instance: Экземпляр Product.
 
         Returns:
-            Float-значение показателя популярности.
+            float: Float-значение показателя популярности.
         """
         try:
             return calculate_popularity_score(instance)
@@ -119,7 +119,7 @@ class ProductDocument(Document):
             instance: Экземпляр Product.
 
         Returns:
-            Float-значение среднего рейтинга.
+            float: Float-значение среднего рейтинга.
         """
         try:
             rating_avg = instance.reviews.aggregate(Avg('value'))['value__avg'] or 0.0
@@ -133,6 +133,9 @@ class ProductDocument(Document):
 
         Args:
             **kwargs: Дополнительные аргументы для операции сохранения.
+
+        Returns:
+            None: Функция ничего не возвращает.
 
         Raises:
             Exception: Если сохранение в Elasticsearch не удалось.

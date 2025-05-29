@@ -11,6 +11,16 @@ class IsOwnerOrAdmin(BasePermission):
     """
 
     def has_object_permission(self, request, view, obj) -> bool:
+        """Проверяет, имеет ли пользователь права на доступ к объекту.
+
+        Args:
+            request: HTTP-запрос с информацией о пользователе.
+            view: Представление, к которому осуществляется доступ.
+            obj: Объект, к которому запрашивается доступ.
+
+        Returns:
+            bool: True, если пользователь является владельцем объекта или администратором, иначе False.
+        """
         if not request.user.is_authenticated or not obj.user:
             logger.warning(f"Permission denied: User={request.user.id or 'anonymous'}, obj={obj}")
             return False

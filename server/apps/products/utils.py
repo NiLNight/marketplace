@@ -14,6 +14,17 @@ logger = logging.getLogger(__name__)
 
 
 def get_filter_params(request: HttpRequest) -> Dict[str, Any]:
+    """Извлекает параметры фильтрации из HTTP-запроса.
+
+    Args:
+        request: HTTP-запрос с параметрами фильтрации.
+
+    Returns:
+        Dict[str, Any]: Словарь с параметрами фильтрации, такими как category_id, min_price и т.д.
+
+    Raises:
+        ProductServiceException: Если параметры фильтрации некорректны.
+    """
     params = request.GET
     result = {
         'category_id': None,
@@ -58,10 +69,19 @@ def get_filter_params(request: HttpRequest) -> Dict[str, Any]:
 
 
 def calculate_popularity_score(product) -> float:
+    """Вычисляет показатель популярности продукта на основе различных факторов.
+
+    Args:
+        product: Объект Product для вычисления популярности.
+
+    Returns:
+        float: Показатель популярности, рассчитанный на основе покупок, отзывов, рейтинга и возраста продукта.
+    """
     purchase_count = product.order_items.filter(order__status='delivered').count()
     review_count = product.reviews.count()
     rating_avg = product.reviews.aggregate(Avg('value'))['value__avg'] or 0.0
     days_since_created = (timezone.now() - product.created).days + 1
+    # Формула популярности: учитывает количество покупок (40%), отзывов (20%), средний рейтинг (30%) и новизну (10%)
     return (
             (purchase_count * 0.4) +
             (review_count * 0.2) +
@@ -79,7 +99,10 @@ def handle_api_errors(view_func):
         view_func: Функция представления для обертки.
 
     Returns:
-        Обернутая функция с обработкой ошибок.
+        callable: Обернутая функция с обработкой ошибок.
+
+    Raises:
+        None: Декоратор перехватывает все исключения и возвращает HTTP-ответы.
     """
 
     @wraps(view_func)

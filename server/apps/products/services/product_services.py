@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from typing import Dict, Any
 
 from apps.products.models import Product
-from apps.products.exceptions import ProductServiceException
+from apps.products.exceptions import ProductServiceException, ProductNotFound
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -37,6 +37,7 @@ class ProductServices:
         logger.info(f"Creating product with data={safe_data}, user={user_id}")
         try:
             product = Product(user=user, **data)
+            # Выполняем полную валидацию модели перед сохранением для проверки всех полей
             product.full_clean()
             product.save()
             logger.info(f"Created product {product.id}, user={user_id}")
@@ -71,6 +72,7 @@ class ProductServices:
 
             for failed, value in validated_data.items():
                 setattr(instance, failed, value)
+            # Выполняем полную валидацию модели перед сохранением для проверки всех полей
             instance.full_clean()
             instance.save()
             logger.info(f"Updated product {instance.id}, user={user_id}")

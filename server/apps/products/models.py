@@ -197,7 +197,7 @@ class Product(TimeStampedModel):
         """Проверяет данные продукта перед сохранением.
 
         Raises:
-            ValidationError: Если цена со скидкой некорректна.
+            ValidationError: Если цена со скидкой некорректна (меньше 0.01).
         """
         super().clean()
         if self.discount and self.price_with_discount < Decimal('0.01'):
@@ -220,6 +220,7 @@ class Product(TimeStampedModel):
                     self.slug = unique_slugify(self.title)
 
             category_title = self.category.title if self.category else ''
+            # Формируем поисковый вектор с разными весами для полей: title (A - высокий приоритет), description (B), category (C)
             self.search_vector = (
                     SearchVector(Value(self.title), weight='A') +
                     SearchVector(Value(self.description), weight='B') +

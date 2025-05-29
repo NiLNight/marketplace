@@ -98,7 +98,7 @@ class CategoryListView(BaseProductView):
             request: HTTP-запрос.
 
         Returns:
-            Response с данными категорий.
+            Response: Ответ с данными категорий.
 
         Raises:
             ProductServiceException: Если получение категорий не удалось.
@@ -132,7 +132,7 @@ class ProductListView(BaseProductView):
             request: HTTP-запрос с параметрами q, category_id, min_price, max_price, min_discount, in_stock, page, page_size, ordering.
 
         Returns:
-            Response с пагинированным списком продуктов.
+            Response: Ответ с пагинированным списком продуктов.
 
         Raises:
             ProductServiceException: Если запрос некорректен или обработка не удалась.
@@ -176,10 +176,10 @@ class ProductDetailView(BaseProductView):
             pk: Идентификатор продукта.
 
         Returns:
-            Response с данными продукта.
+            Response: Ответ с данными продукта.
 
         Raises:
-            ProductNotFound: Если продукт не найден.
+            ProductNotFound: Если продукт с указанным идентификатором не найден.
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(f"Retrieving product {pk}, user={user_id}, path={request.path}")

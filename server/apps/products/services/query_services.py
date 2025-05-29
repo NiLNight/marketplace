@@ -32,7 +32,7 @@ class ProductQueryService:
         """Возвращает базовый QuerySet для активных продуктов.
 
         Returns:
-            QuerySet с активными продуктами.
+            Any: QuerySet с активными продуктами.
         """
         logger.debug("Retrieving base queryset for active products")
         return Product.objects.filter(is_active=True)
@@ -232,6 +232,7 @@ class ProductQueryService:
             params = get_filter_params(request)
             search = ProductDocument.search().filter('term', is_active=True)
             if query:
+                # Используем multi_match для поиска по нескольким полям с разными весами и fuzziness для учета опечаток
                 search = search.query(
                     'multi_match',
                     query=query,
