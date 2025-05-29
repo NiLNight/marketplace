@@ -8,7 +8,11 @@ logger = logging.getLogger(__name__)
 
 
 class WishlistService:
-    """Сервис для управления списками желаний зарегистрированных и незарегистрированных пользователей."""
+    """Сервис для управления списками желаний зарегистрированных и незарегистрированных пользователей.
+
+    Attributes:
+        None: Класс не содержит статических атрибутов, только методы.
+    """
 
     @staticmethod
     @transaction.atomic
@@ -76,6 +80,9 @@ class WishlistService:
 
         Returns:
             QuerySet или список: Список элементов желаний для авторизованных или неавторизованных пользователей.
+
+        Raises:
+            Exception: Если произошла ошибка при получении данных списка желаний из-за проблем с базой данных.
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         if request.user.is_authenticated:

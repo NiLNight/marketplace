@@ -6,7 +6,7 @@ class WishlistException(APIException):
 
     Attributes:
         default_detail (str): Сообщение об ошибке по умолчанию.
-        status_code (int): HTTP-код статуса для ошибки.
+        status_code (int): HTTP-код статуса для ошибки (400).
         detail (str): Конкретное сообщение об ошибке.
     """
     default_detail = 'Ошибка списка желаний'
@@ -17,11 +17,21 @@ class WishlistException(APIException):
 
 
 class ProductNotAvailable(WishlistException):
-    """Исключение, если товар недоступен для добавления в список желаний."""
+    """Исключение, если товар недоступен для добавления в список желаний.
+
+    Attributes:
+        default_detail (str): Сообщение по умолчанию об ошибке.
+        status_code (int): Код HTTP-статуса (400, унаследован).
+    """
     default_detail = 'Товар недоступен для списка желаний'
 
 
 class WishlistItemNotFound(WishlistException):
-    """Исключение, если элемент не найден в списке желаний."""
+    """Исключение, если элемент не найден в списке желаний.
+
+    Attributes:
+        default_detail (str): Сообщение по умолчанию об ошибке.
+        status_code (int): Код HTTP-статуса (404).
+    """
     default_detail = 'Элемент списка желаний не найден'
     status_code = 404

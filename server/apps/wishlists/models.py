@@ -2,8 +2,10 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from apps.core.models import TimeStampedModel
 from apps.products.models import Product
+import logging
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 
 class WishlistItem(TimeStampedModel):
@@ -12,8 +14,8 @@ class WishlistItem(TimeStampedModel):
     Хранит информацию о товаре, добавленном в список желаний пользователем.
 
     Attributes:
-        user: Связь с пользователем, которому принадлежит элемент.
-        product: Связь с товаром, добавленным в список желаний.
+        user: Пользователь, добавивший товар в список желаний (опционально).
+        product: Товар, добавленный в список желаний.
     """
     user = models.ForeignKey(
         User,
@@ -50,5 +52,8 @@ class WishlistItem(TimeStampedModel):
 
         Returns:
             str: Название товара и ID пользователя.
+
+        Raises:
+            AttributeError: Если product.title или user.username недоступны из-за проблем с базой данных.
         """
         return f"{self.product.title} в списке желаний {self.user.username if self.user else 'гостя'}"

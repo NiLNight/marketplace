@@ -1,6 +1,9 @@
 from rest_framework import serializers
+import logging
 from apps.wishlists.models import WishlistItem
 from apps.products.serializers import ProductListSerializer
+
+logger = logging.getLogger(__name__)
 
 
 class WishlistItemSerializer(serializers.ModelSerializer):
@@ -8,6 +11,12 @@ class WishlistItemSerializer(serializers.ModelSerializer):
 
     Преобразует объекты WishlistItem в JSON и обратно, включая данные о товаре и временные метки.
     Используется для API-ответов, отображающих содержимое списка желаний.
+
+    Attributes:
+        id: Уникальный идентификатор элемента списка желаний.
+        product: Данные о товаре, добавленном в список желаний.
+        created: Дата и время добавления товара в список желаний.
+        updated: Дата и время последнего обновления элемента.
     """
     id = serializers.IntegerField(
         read_only=True,
@@ -47,9 +56,10 @@ class WishlistItemSerializer(serializers.ModelSerializer):
             dict: Валидированные данные.
 
         Raises:
-            serializers.ValidationError: Если товар неактивен.
+            serializers.ValidationError: Если товар неактивен или недоступен.
         """
         instance = self.instance
         if instance and not instance.product.is_active:
+            logger.warning(f"Validation error: Product {instance.product.id} is inactive")
             raise serializers.ValidationError("Товар неактивен.")
         return attrs

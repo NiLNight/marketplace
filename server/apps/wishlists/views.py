@@ -12,7 +12,12 @@ logger = logging.getLogger(__name__)
 
 
 class WishlistGetView(APIView):
-    """Получение списка желаний."""
+    """Получение списка желаний.
+
+    Attributes:
+        permission_classes: Классы разрешений для доступа (доступно всем).
+        serializer_class: Класс сериализатора для преобразования данных списка желаний.
+    """
     permission_classes = [AllowAny]
     serializer_class = WishlistItemSerializer
 
@@ -25,6 +30,9 @@ class WishlistGetView(APIView):
 
         Returns:
             Response: Ответ со списком элементов желаний или ошибкой.
+
+        Raises:
+            Exception: Если получение данных списка желаний не удалось (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         if request.user.is_authenticated:
@@ -47,7 +55,11 @@ class WishlistGetView(APIView):
 
 
 class WishlistAddView(APIView):
-    """Добавление товара в список желаний."""
+    """Добавление товара в список желаний.
+
+    Attributes:
+        permission_classes: Классы разрешений для доступа (доступно всем).
+    """
     permission_classes = [AllowAny]
 
     @handle_api_errors
@@ -59,6 +71,9 @@ class WishlistAddView(APIView):
 
         Returns:
             Response: Ответ с сообщением об успешном добавлении или ошибкой.
+
+        Raises:
+            Exception: Если добавление товара не удалось из-за некорректных данных или других ошибок (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         product_id = int(request.data['product_id'])
@@ -69,7 +84,11 @@ class WishlistAddView(APIView):
 
 
 class WishlistItemDeleteView(APIView):
-    """Удаление товара из списка желаний."""
+    """Удаление товара из списка желаний.
+
+    Attributes:
+        permission_classes: Классы разрешений для доступа (доступно всем).
+    """
     permission_classes = [AllowAny]
 
     @handle_api_errors
@@ -82,6 +101,9 @@ class WishlistItemDeleteView(APIView):
 
         Returns:
             Response: Ответ с подтверждением удаления или ошибкой.
+
+        Raises:
+            Exception: Если удаление товара не удалось из-за других ошибок (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         WishlistService.remove_from_wishlist(request, product_id=pk)
