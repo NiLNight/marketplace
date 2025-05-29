@@ -27,6 +27,11 @@ class UserRegistrationView(APIView):
     """API-представление для регистрации новых пользователей.
 
     Обрабатывает запросы на создание учетной записи и отправку кода подтверждения.
+
+    Attributes:
+        permission_classes (list): Список классов разрешений.
+        throttle_classes (list): Список классов для ограничения частоты запросов.
+        serializer_class (UserRegistrationSerializer): Класс сериализатора для обработки данных.
     """
     permission_classes = [AllowAny]
     throttle_classes = [AnonRateThrottle]
@@ -43,7 +48,8 @@ class UserRegistrationView(APIView):
             Response: Ответ с сообщением об успешной регистрации или необходимости активации.
 
         Raises:
-            serializers.ValidationError: Если данные некорректны.
+            serializers.ValidationError: Если данные некорректны или не прошли валидацию.
+            InvalidUserData: Если регистрация не удалась из-за некорректных данных.
         """
         logger.info(f"Processing registration request for email={request.data.get('email')}")
         serializer = self.serializer_class(data=request.data)
@@ -67,6 +73,11 @@ class UserLoginView(APIView):
     """API-представление для аутентификации пользователей.
 
     Обрабатывает запросы на вход и слияние корзины/списка желаний из сессии.
+
+    Attributes:
+        permission_classes (list): Список классов разрешений.
+        throttle_classes (list): Список классов для ограничения частоты запросов.
+        serializer_class (UserLoginSerializer): Класс сериализатора для обработки данных.
     """
     permission_classes = [AllowAny]
     throttle_classes = [AnonRateThrottle]
@@ -107,12 +118,14 @@ class UserLoginView(APIView):
         response = Response(response_data)
         # Слияние корзины из сессии, если она существует
         if request.session.get('cart'):
+            # Импортируем сервис корзины только при необходимости, чтобы избежать циклического импорта
             from apps.carts.services.cart_services import CartService
             CartService.merge_cart_on_login(user, request.session['cart'])
             del request.session['cart']
             logger.info(f"Cart merged for user={user.id}")
         # Слияние списка желаний из сессии, если он существует
         if request.session.get('wishlist'):
+            # Импортируем сервис списка желаний только при необходимости, чтобы избежать циклического импорта
             from apps.wishlists.services.wishlist_services import WishlistService
             WishlistService.merge_wishlist_on_login(user, request.session['wishlist'])
             del request.session['wishlist']
@@ -125,6 +138,9 @@ class UserLogoutView(APIView):
     """API-представление для выхода пользователей.
 
     Обрабатывает запросы на завершение сессии и инвалидацию токенов.
+
+    Attributes:
+        permission_classes (list): Список классов разрешений.
     """
     permission_classes = [IsAuthenticated]
 
@@ -155,6 +171,10 @@ class UserProfileView(APIView):
     """API-представление для управления профилем пользователя.
 
     Позволяет получать и обновлять данные профиля аутентифицированного пользователя.
+
+    Attributes:
+        permission_classes (list): Список классов разрешений.
+        serializer_class (UserSerializer): Класс сериализатора для обработки данных.
     """
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
@@ -211,6 +231,10 @@ class ResendCodeView(APIView):
     """API-представление для повторной отправки кода подтверждения.
 
     Обрабатывает запросы на повторную отправку кода для активации аккаунта.
+
+    Attributes:
+        permission_classes (list): Список классов разрешений.
+        throttle_classes (list): Список классов для ограничения частоты запросов.
     """
     permission_classes = [AllowAny]
     throttle_classes = [CeleryThrottle]
@@ -239,6 +263,10 @@ class ConfirmView(APIView):
     """API-представление для подтверждения регистрации.
 
     Активирует аккаунт пользователя по email и коду подтверждения.
+
+    Attributes:
+        permission_classes (list): Список классов разрешений.
+        throttle_classes (list): Список классов для ограничения частоты запросов.
     """
     permission_classes = [AllowAny]
     throttle_classes = [CeleryThrottle]
@@ -269,6 +297,11 @@ class PasswordResetRequestView(APIView):
     """API-представление для запроса сброса пароля.
 
     Обрабатывает запросы на отправку письма для сброса пароля.
+
+    Attributes:
+        permission_classes (list): Список классов разрешений.
+        serializer_class (PasswordResetSerializer): Класс сериализатора для обработки данных.
+        throttle_classes (list): Список классов для ограничения частоты запросов.
     """
     permission_classes = [AllowAny]
     serializer_class = PasswordResetSerializer
@@ -303,6 +336,11 @@ class PasswordResetConfirmView(APIView):
     """API-представление для подтверждения сброса пароля.
 
     Обрабатывает запросы на изменение пароля с использованием uid и token из URL.
+
+    Attributes:
+        serializer_class (PasswordResetConfirmSerializer): Класс сериализатора для обработки данных.
+        permission_classes (list): Список классов разрешений.
+        throttle_classes (list): Список классов для ограничения частоты запросов.
     """
     serializer_class = PasswordResetConfirmSerializer
     permission_classes = [AllowAny]

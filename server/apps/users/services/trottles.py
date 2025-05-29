@@ -5,10 +5,13 @@ logger = logging.getLogger(__name__)
 
 
 class CeleryThrottle(SimpleRateThrottle):
-    """
-    Ограничение частоты запросов для отправки кода подтверждения.
+    """Ограничение частоты запросов для отправки кода подтверждения.
 
     Ограничивает до 5 запросов в час на основе email или IP (для анонимных пользователей).
+
+    Attributes:
+        scope (str): Область действия ограничения.
+        _request (HttpRequest): Атрибут для хранения request.
     """
     scope = 'verification_code'
 
@@ -17,16 +20,17 @@ class CeleryThrottle(SimpleRateThrottle):
         self._request = None  # Атрибут для хранения request
 
     def get_cache_key(self, request, view):
-        """
-        Формирует ключ кэша на основе email или IP.
+        """Формирует ключ кэша на основе email или IP.
 
         Args:
-            request: HTTP-запрос.
-            view: Представление.
+            request (HttpRequest): HTTP-запрос.
+            view (APIView): Представление.
 
         Returns:
-            str: Ключ кэша.
+            str: Ключ кэша в формате 'throttle_verification_code_email_{email}' или
+                'throttle_verification_code_ip_{ip}'.
         """
+        # Проверяем email в теле запроса и в параметрах URL для максимальной совместимости
         email = request.data.get('email', '').lower() or request.query_params.get('email', '').lower()
         user_id = request.user.id if request.user.is_authenticated else None
         if email:
@@ -39,8 +43,7 @@ class CeleryThrottle(SimpleRateThrottle):
         return cache_key
 
     def get_rate(self):
-        """
-        Возвращает лимит частоты запросов.
+        """Возвращает лимит частоты запросов.
 
         Returns:
             str: Лимит '5/hour'.
@@ -48,14 +51,13 @@ class CeleryThrottle(SimpleRateThrottle):
         return '5/hour'
 
     def parse_rate(self, rate):
-        """
-        Парсит лимит частоты.
+        """Парсит лимит частоты.
 
         Args:
-            rate: Строка формата 'количество/период'.
+            rate (str): Строка формата 'количество/период'.
 
         Returns:
-            tuple: (количество, период в секундах).
+            tuple: Кортеж (количество, период в секундах).
         """
         num, period = super().parse_rate(rate)
         if period == 'hour':
@@ -63,12 +65,11 @@ class CeleryThrottle(SimpleRateThrottle):
         return num, period
 
     def allow_request(self, request, view):
-        """
-        Проверяет, разрешен ли запрос.
+        """Проверяет, разрешен ли запрос.
 
         Args:
-            request: HTTP-запрос.
-            view: Представление.
+            request (HttpRequest): HTTP-запрос.
+            view (APIView): Представление.
 
         Returns:
             bool: True, если запрос разрешен, иначе False.
@@ -80,8 +81,13 @@ class CeleryThrottle(SimpleRateThrottle):
         return True
 
     def throttle_failure(self):
-        """
-        Логирует превышение лимита.
+        """Логирует превышение лимита.
+
+        Записывает в лог информацию о превышении лимита запросов с указанием
+        email, user_id и IP-адреса.
+
+        Returns:
+            None: Метод ничего не возвращает.
         """
         request = self._request  # Используем сохранённый request
         email = request.data.get('email', '').lower() or request.query_params.get('email', '').lower()

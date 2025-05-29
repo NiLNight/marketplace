@@ -21,6 +21,12 @@ class UserService:
     """Сервис для управления пользователями.
 
     Предоставляет методы для регистрации, аутентификации, выхода и обновления данных пользователя.
+
+    Methods:
+        register_user: Регистрация нового пользователя.
+        login_user: Аутентификация пользователя.
+        logout_user: Выход пользователя с инвалидацией refresh-токена.
+        update_user_and_profile: Обновление пользователя и его профиля.
     """
 
     @staticmethod
@@ -47,7 +53,7 @@ class UserService:
                     password=password,
                     is_active=False
                 )
-                code = str(secrets.randbelow(1000000)).zfill(6)
+                code = str(secrets.randbelow(1000000)).zfill(6)  # Генерируем случайный 6-значный код для подтверждения
                 EmailVerified.objects.create(
                     user=user,
                     confirmation_code=code,
@@ -162,7 +168,14 @@ class UserService:
 
 
 class ConfirmCodeService:
-    """Сервис для управления кодами подтверждения."""
+    """Сервис для управления кодами подтверждения.
+
+    Предоставляет методы для отправки и подтверждения кодов активации аккаунта.
+
+    Methods:
+        resend_confirmation_code: Повторная отправка кода подтверждения.
+        confirm_account: Подтверждение аккаунта.
+    """
 
     @staticmethod
     def resend_confirmation_code(email: str) -> None:
@@ -195,13 +208,19 @@ class ConfirmCodeService:
     def confirm_account(email: str, code: str) -> None:
         """Подтверждение аккаунта.
 
+        Проверяет код подтверждения и активирует аккаунт пользователя.
+        Код должен быть действительным и не просрочен.
+
         Args:
             email (str): Адрес электронной почты.
             code (str): Код подтверждения.
 
+        Returns:
+            None: Метод ничего не возвращает.
+
         Raises:
             UserNotFound: Если пользователь не найден.
-            InvalidUserData: Если код неверный или истек срок действия.
+            InvalidUserData: Если код неверный или просрочен.
         """
         logger.info(f"Confirming account for email={email} with code={code}")
         try:
@@ -225,7 +244,15 @@ class ConfirmCodeService:
 
 
 class ConfirmPasswordService:
-    """Сервис для управления сбросом пароля."""
+    """Сервис для управления сбросом пароля.
+
+    Предоставляет методы для запроса, валидации и подтверждения сброса пароля.
+
+    Methods:
+        request_password_reset: Запрос на сброс пароля.
+        validate_reset_params: Проверка параметров сброса пароля.
+        confirm_password_reset: Подтверждение сброса пароля.
+    """
 
     @staticmethod
     def request_password_reset(email: str) -> None:
@@ -235,7 +262,7 @@ class ConfirmPasswordService:
             email (str): Адрес электронной почты.
 
         Raises:
-            UserNotFound: Если пользователь не найден.
+            UserNotFound: Если пользователь с указанным email не найден в системе.
         """
         logger.info(f"Requesting password reset for email={email}")
         try:
@@ -248,7 +275,7 @@ class ConfirmPasswordService:
             logger.info(f"Password reset requested for email={email}")
         except User.DoesNotExist:
             logger.warning(f"User not found for email={email}")
-            raise UserNotFound("Пользователь с таким email не найден")
+            raise UserNotFound("Пользователь не найден")
 
     @staticmethod
     def validate_reset_params(uid: str, token: str) -> str:

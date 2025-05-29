@@ -16,12 +16,21 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     Добавляет информацию о статусе активности пользователя в токен.
 
-    Args:
+    Attributes:
         user (User): Пользователь, для которого генерируется токен.
     """
 
     @classmethod
     def get_token(cls, user):
+        """Генерирует JWT-токен с дополнительной информацией.
+
+        Args:
+            cls: Класс сериализатора.
+            user (User): Пользователь, для которого генерируется токен.
+
+        Returns:
+            Token: Сгенерированный токен с дополнительной информацией.
+        """
         logger.info(f"Generating token for user={user.id}")
         token = super().get_token(user)
         token['is_active'] = user.is_active
@@ -33,6 +42,11 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     Преобразует данные для создания нового пользователя, включая имя, email и пароль.
     Используется в API для обработки запросов на регистрацию.
+
+    Attributes:
+        email (EmailField): Уникальный адрес электронной почты пользователя.
+        password (CharField): Пароль пользователя.
+        username (CharField): Имя пользователя.
     """
     email = serializers.EmailField(
         required=True,
@@ -78,6 +92,10 @@ class UserLoginSerializer(serializers.Serializer):
 
     Обрабатывает данные для входа пользователя, включая email и пароль.
     Используется в API для обработки запросов на вход.
+
+    Attributes:
+        email (EmailField): Адрес электронной почты пользователя.
+        password (CharField): Пароль пользователя.
     """
     email = serializers.EmailField(
         required=True,
@@ -115,6 +133,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     Преобразует данные профиля пользователя, включая публичный ID, телефон, дату рождения и аватар.
     Используется в API для отображения и обновления профиля.
+
+    Attributes:
+        public_id (CharField): Уникальный публичный идентификатор профиля.
+        phone (CharField): Номер телефона пользователя.
+        birth_date (DateField): Дата рождения пользователя.
+        avatar (ImageField): Аватар пользователя.
     """
     public_id = serializers.CharField(
         read_only=True,
@@ -164,6 +188,13 @@ class UserSerializer(serializers.ModelSerializer):
 
     Преобразует данные пользователя и его профиля для API-ответов.
     Используется для отображения и обновления информации о пользователе.
+
+    Attributes:
+        profile (UserProfileSerializer): Данные профиля пользователя.
+        username (CharField): Имя пользователя.
+        email (EmailField): Адрес электронной почты пользователя.
+        first_name (CharField): Имя пользователя.
+        last_name (CharField): Фамилия пользователя.
     """
     profile = UserProfileSerializer(
         required=False,
@@ -210,6 +241,7 @@ class UserSerializer(serializers.ModelSerializer):
         logger.info(f"Validating user data for user={self.instance.id if self.instance else 'new'}")
         username = attrs.get('username')
         if username and self.instance:
+            # Проверяем уникальность имени пользователя, исключая текущего пользователя
             if User.objects.exclude(id=self.instance.id).filter(username=username).exists():
                 logger.warning(f"Username {username} already taken for user={self.instance.id}")
                 raise serializers.ValidationError({"username": "Имя пользователя уже занято."})
@@ -226,7 +258,8 @@ class UserSerializer(serializers.ModelSerializer):
             User: Обновленный пользователь.
 
         Raises:
-            serializers.ValidationError: Если данные некорректны.
+            InvalidUserData: Если данные некорректны или обновление не удалось.
+            serializers.ValidationError: Если валидация данных не прошла.
         """
         logger.info(f"Updating user={instance.id} with validated data")
         try:

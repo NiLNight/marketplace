@@ -51,7 +51,7 @@ class EmailVerified(models.Model):
         """Возвращает строковое представление объекта верификации почты.
 
         Returns:
-            Строка в формате 'email-время_создания_кода'.
+            str: Строка в формате 'email-время_создания_кода'.
         """
         return f'{self.user.email}-{self.code_created_at}'
 
@@ -118,14 +118,17 @@ class UserProfile(models.Model):
         Если `public_id` не задан, генерируется уникальный идентификатор на основе имени пользователя.
 
         Raises:
-            Exception: Если сохранение профиля не удалось.
+            ValidationError: Если данные профиля не прошли валидацию.
+            DatabaseError: Если сохранение в базу данных не удалось.
         """
         user_id = self.user.id if self.user else 'anonymous'
         action = 'Creating' if self.pk is None else 'Updating'
         logger.info(f"{action} user profile for user={user_id}, data={self.__dict__}")
         try:
             if not self.public_id:
+                # Генерируем уникальный публичный идентификатор на основе имени пользователя
                 self.public_id = unique_slugify(self.user.username)
+            self.full_clean()  # Вызываем валидацию перед сохранением
             super().save(*args, **kwargs)
             logger.info(f"Successfully {action.lower()} user profile {self.pk}, user={user_id}")
         except Exception as e:

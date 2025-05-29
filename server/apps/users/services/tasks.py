@@ -14,13 +14,21 @@ logger = logging.getLogger(__name__)
 def send_confirmation_email(self, email: str, code: str) -> None:
     """Отправляет письмо с кодом подтверждения на указанный email.
 
+    Асинхронная задача Celery для отправки кода подтверждения.
+    В случае ошибки отправки выполняется до 3 повторных попыток с интервалом 60 секунд.
+
     Args:
         self: Экземпляр задачи Celery.
         email (str): Адрес электронной почты получателя.
         code (str): Код подтверждения для отправки.
 
+    Returns:
+        None: Функция ничего не возвращает.
+
     Raises:
-        SMTPException: Если отправка письма не удалась, задача повторяется до 3 раз с интервалом 60 секунд.
+        SMTPException: Если отправка письма не удалась.
+        gaierror: Если возникла ошибка DNS или сетевого соединения.
+        ValidationError: Если формат email некорректен.
     """
     logger.info(f"Sending confirmation email to {email} with code={code}, task_id={self.request.id}")
     try:
@@ -46,13 +54,22 @@ def send_confirmation_email(self, email: str, code: str) -> None:
 def send_password_reset_email(self, email: str, reset_url: str) -> None:
     """Отправляет письмо для сброса пароля на указанный email.
 
+    Асинхронная задача Celery для отправки ссылки сброса пароля.
+    В случае ошибки отправки выполняется до 3 повторных попыток с интервалом 60 секунд.
+    Проверяет длину URL для предотвращения слишком длинных ссылок.
+
     Args:
         self: Экземпляр задачи Celery.
         email (str): Адрес электронной почты получателя.
         reset_url (str): Ссылка для сброса пароля.
 
+    Returns:
+        None: Функция ничего не возвращает.
+
     Raises:
-        SMTPException: Если отправка письма не удалась, задача повторяется до 3 раз с интервалом 60 секунд.
+        SMTPException: Если отправка письма не удалась.
+        gaierror: Если возникла ошибка DNS или сетевого соединения.
+        ValidationError: Если формат email некорректен.
     """
     logger.info(f"Sending password reset email to {email} with reset_url={reset_url}, task_id={self.request.id}")
     if len(reset_url) > 2000:
