@@ -15,7 +15,12 @@ logger = logging.getLogger(__name__)
 
 
 class CartsGetView(APIView):
-    """Получение содержимого корзины."""
+    """Получение содержимого корзины.
+
+    Attributes:
+        permission_classes: Классы разрешений для доступа (доступно всем).
+        serializer_class: Класс сериализатора для преобразования данных корзины.
+    """
     permission_classes = [AllowAny]
     serializer_class = CartItemSerializer
 
@@ -28,6 +33,9 @@ class CartsGetView(APIView):
 
         Returns:
             Response: Ответ с данными корзины или ошибкой.
+
+        Raises:
+            Exception: Если получение данных корзины не удалось (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         if request.user.is_authenticated:
@@ -49,7 +57,12 @@ class CartsGetView(APIView):
 
 
 class CartsAddView(APIView):
-    """Добавление товара в корзину."""
+    """Добавление товара в корзину.
+
+    Attributes:
+        permission_classes: Классы разрешений для доступа (доступно всем).
+        serializer_class: Класс сериализатора для добавления элементов в корзину.
+    """
     permission_classes = [AllowAny]
     serializer_class = CartItemSerializer
 
@@ -62,6 +75,9 @@ class CartsAddView(APIView):
 
         Returns:
             Response: Ответ с сообщением об успешном добавлении или ошибкой.
+
+        Raises:
+            Exception: Если добавление товара не удалось из-за некорректных данных или других ошибок (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         product_id = int(request.data['product_id'])
@@ -73,7 +89,12 @@ class CartsAddView(APIView):
 
 
 class CartsItemUpdateView(APIView):
-    """Обновление количества товара в корзине."""
+    """Обновление количества товара в корзине.
+
+    Attributes:
+        permission_classes: Классы разрешений для доступа (доступно всем).
+        serializer_class: Класс сериализатора для обновления элементов корзины.
+    """
     permission_classes = [AllowAny]
     serializer_class = CartItemSerializer
 
@@ -87,6 +108,10 @@ class CartsItemUpdateView(APIView):
 
         Returns:
             Response: Ответ с обновленными данными или ошибкой.
+
+        Raises:
+            CartItemNotFound: Если товар не найден в корзине.
+            Exception: Если обновление не удалось из-за других ошибок (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         quantity = int(request.data.get('quantity', 1))
@@ -107,7 +132,11 @@ class CartsItemUpdateView(APIView):
 
 
 class CartsItemDeleteView(APIView):
-    """Удаление товара из корзины."""
+    """Удаление товара из корзины.
+
+    Attributes:
+        permission_classes: Классы разрешений для доступа (доступно всем).
+    """
     permission_classes = [AllowAny]
 
     @handle_api_errors
@@ -120,6 +149,10 @@ class CartsItemDeleteView(APIView):
 
         Returns:
             Response: Подтверждение удаления или ошибка.
+
+        Raises:
+            CartItemNotFound: Если товар не найден в корзине.
+            Exception: Если удаление не удалось из-за других ошибок (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         success = CartService.remove_from_cart(request, product_id=pk)

@@ -2,12 +2,14 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models import Q
 from rest_framework.exceptions import ValidationError
+import logging
 
 from apps.orders.models import Order
 from django.contrib.auth import get_user_model
 from apps.products.models import Product
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 
 class OrderItem(models.Model):
@@ -15,6 +17,12 @@ class OrderItem(models.Model):
 
     Представляет товар, добавленный пользователем в корзину или включенный в заказ.
     Хранит информацию о пользователе, товаре, количестве и связи с заказом.
+
+    Attributes:
+        order: Заказ, к которому относится элемент (опционально).
+        user: Пользователь, добавивший элемент в корзину (опционально).
+        product: Товар, связанный с элементом.
+        quantity: Количество товара (от 1 до 20).
     """
     order = models.ForeignKey(
         Order,
@@ -76,6 +84,9 @@ class OrderItem(models.Model):
 
         Returns:
             str: Количество и название товара.
+
+        Raises:
+            AttributeError: Если product или его title недоступны из-за проблем с базой данных.
         """
         return f"{self.quantity} x {self.product.title}"
 
@@ -85,11 +96,16 @@ class OrderItem(models.Model):
         Проверяет, что элемент привязан либо к пользователю (корзина), либо к заказу,
         но не к обоим одновременно.
 
+        Returns:
+            None: Функция ничего не возвращает.
+
         Raises:
             ValidationError: Если элемент одновременно привязан к пользователю и заказу
                             или не привязан ни к одному из них.
         """
         if self.order is not None and self.user is not None:
+            logger.warning(f"Invalid OrderItem: tied to both user and order, item_id={self.id}")
             raise ValidationError("Элемент не может одновременно принадлежать пользователю (корзина) и заказу.")
         if self.order is None and self.user is None:
+            logger.warning(f"Invalid OrderItem: not tied to user or order, item_id={self.id}")
             raise ValidationError("Элемент должен быть привязан либо к пользователю, либо к заказу.")

@@ -19,6 +19,9 @@ def handle_api_errors(view_func):
 
     Returns:
         wrapper: Обернутая функция с обработкой ошибок.
+
+    Raises:
+        None: Декоратор перехватывает все исключения и возвращает HTTP-ответы.
     """
 
     @wraps(view_func)

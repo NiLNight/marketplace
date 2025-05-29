@@ -8,7 +8,11 @@ logger = logging.getLogger(__name__)
 
 
 class CartService:
-    """Сервис для управления корзиной авторизованных и неавторизованных пользователей."""
+    """Сервис для управления корзиной авторизованных и неавторизованных пользователей.
+
+    Attributes:
+        None: Класс не содержит статических атрибутов, только методы.
+    """
 
     @staticmethod
     def _validate_cart_item(product_id: int, quantity: int, user_id: str) -> Product:
@@ -56,6 +60,9 @@ class CartService:
 
         Returns:
             QuerySet или список: Содержимое корзины для авторизованных или неавторизованных пользователей.
+
+        Raises:
+            Exception: Если произошла ошибка при получении данных корзины из-за проблем с базой данных.
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         if request.user.is_authenticated:

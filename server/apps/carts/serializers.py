@@ -1,6 +1,9 @@
 from rest_framework import serializers
+import logging
 from apps.carts.models import OrderItem
 from apps.products.serializers import ProductListSerializer
+
+logger = logging.getLogger(__name__)
 
 
 class CartItemSerializer(serializers.ModelSerializer):
@@ -8,6 +11,11 @@ class CartItemSerializer(serializers.ModelSerializer):
 
     Преобразует объекты OrderItem в JSON и обратно, включая данные о товаре и количестве.
     Используется для API-ответов, отображающих содержимое корзины.
+
+    Attributes:
+        id: Уникальный идентификатор элемента корзины (null для неавторизованных пользователей).
+        product: Данные о товаре, добавленном в корзину.
+        quantity: Количество единиц товара в корзине (от 1 до 20).
     """
     id = serializers.IntegerField(
         allow_null=True,
@@ -46,7 +54,7 @@ class CartItemSerializer(serializers.ModelSerializer):
             dict: Валидированные данные.
 
         Raises:
-            serializers.ValidationError: Если товар неактивен или недостаточно на складе.
+            serializers.ValidationError: Если товар неактивен или недостаточно на складе для указанного количества.
         """
         quantity = attrs.get('quantity')
         instance = self.instance
@@ -55,8 +63,10 @@ class CartItemSerializer(serializers.ModelSerializer):
         if instance:
             product = instance.product
             if not product.is_active:
+                logger.warning(f"Validation error: Product {product.id} is inactive")
                 raise serializers.ValidationError("Товар неактивен.")
             if quantity > product.stock:
+                logger.warning(f"Validation error: Not enough stock for product {product.id}, requested {quantity}, available {product.stock}")
                 raise serializers.ValidationError("Недостаточно товара на складе.")
 
         return attrs
