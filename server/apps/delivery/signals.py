@@ -18,6 +18,13 @@ def invalidate_pickup_point_cache(sender, instance, **kwargs):
         sender (Model): Класс модели.
         instance (PickupPoint): Экземпляр модели.
         kwargs (dict): Дополнительные аргументы.
+
+    Returns:
+        None: Метод только инвалидирует кэш.
+
+    Raises:
+        redis.exceptions.RedisError: Если Redis недоступен.
+        Exception: Если произошла непредвиденная ошибка при инвалидации кэша.
     """
     try:
         city_id = instance.city_id or 'all'
@@ -47,6 +54,13 @@ def invalidate_city_cache(sender, instance, **kwargs):
         sender (Model): Класс модели.
         instance (City): Экземпляр модели.
         kwargs (dict): Дополнительные аргументы.
+
+    Returns:
+        None: Метод только инвалидирует кэш и запускает обновление поисковых векторов.
+
+    Raises:
+        redis.exceptions.RedisError: Если Redis недоступен.
+        Exception: Если произошла непредвиденная ошибка при инвалидации кэша или обновлении векторов.
     """
     try:
         CacheService.invalidate_cache(prefix="city_list")

@@ -17,7 +17,7 @@ def get_filter_params(request: HttpRequest) -> Dict[str, Any]:
     Извлекает параметры фильтрации из HTTP-запроса.
 
     Args:
-        request (HttpRequest): HTTP-запрос.
+        request (HttpRequest): HTTP-запрос, содержащий параметры фильтрации.
 
     Returns:
         dict: Словарь с параметрами city_id и district.

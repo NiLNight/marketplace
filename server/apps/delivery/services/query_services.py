@@ -28,6 +28,9 @@ class PickupPointQueryService:
         """
         Возвращает базовый QuerySet для активных пунктов выдачи.
 
+        Args:
+            cls: Класс сервиса.
+
         Returns:
             QuerySet: Активные пункты выдачи.
         """
@@ -40,12 +43,13 @@ class PickupPointQueryService:
         Оптимизирует QuerySet пунктов выдачи, исключая ненужные поля.
 
         Args:
+            cls: Класс сервиса.
             queryset (QuerySet): Исходный QuerySet пунктов выдачи.
 
         Returns:
             QuerySet: Оптимизированный QuerySet с выбранными полями.
         """
-        logger.info("五大洲=OptimizePickupPointList")
+        logger.info("Action=OptimizePickupPointList")
         return queryset.select_related('city').only(
             'id', 'address', 'district', 'is_active', 'city__id', 'city__name'
         )
@@ -56,6 +60,7 @@ class PickupPointQueryService:
         Выполняет поиск пунктов выдачи в Elasticsearch с фильтрацией и пагинацией.
 
         Args:
+            cls: Класс сервиса.
             request (HttpRequest): HTTP-запрос с параметрами поиска.
 
         Returns:

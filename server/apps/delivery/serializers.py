@@ -8,6 +8,9 @@ class SearchSerializer(serializers.Serializer):
     Сериализатор для валидации поисковых запросов.
 
     Проверяет корректность параметров поиска, таких как запрос пользователя.
+
+    Attributes:
+        query: Поисковый запрос пользователя (строка, максимум 255 символов).
     """
     query = serializers.CharField(max_length=255, required=False)
 
@@ -22,7 +25,7 @@ class SearchSerializer(serializers.Serializer):
             str: Валидированное значение.
 
         Raises:
-            ValidationError: Если запрос пустой или содержит только пробелы.
+            serializers.ValidationError: Если запрос пустой или содержит только пробелы.
         """
         if value and not value.strip():
             raise serializers.ValidationError(_("Поисковый запрос не может быть пустым."))
@@ -34,6 +37,10 @@ class CitySerializer(serializers.ModelSerializer):
     Сериализатор для модели City.
 
     Используется для сериализации данных о городах.
+
+    Attributes:
+        id: Уникальный идентификатор города.
+        name: Название города.
     """
 
     class Meta:
@@ -47,6 +54,13 @@ class PickupPointSerializer(serializers.ModelSerializer):
     Сериализатор для модели PickupPoint.
 
     Используется для сериализации данных о пунктах выдачи, включая связанный город.
+
+    Attributes:
+        id: Уникальный идентификатор пункта выдачи.
+        city: Данные о связанном городе.
+        address: Адрес пункта выдачи.
+        district: Район пункта выдачи (опционально).
+        is_active: Статус активности пункта выдачи.
     """
     city = CitySerializer(read_only=True)
 

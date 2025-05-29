@@ -32,6 +32,9 @@ class City(models.Model):
 
         Returns:
             str: Название города.
+
+        Raises:
+            AttributeError: Если name недоступно из-за проблем с базой данных.
         """
         return self.name
 
@@ -39,8 +42,11 @@ class City(models.Model):
         """
         Проверяет корректность данных перед сохранением.
 
+        Returns:
+            None: Метод не возвращает значения, только проверяет данные.
+
         Raises:
-            ValidationError: Если название города некорректно.
+            ValidationError: Если название города некорректно (пустое).
         """
         if not self.name or not self.name.strip():
             raise ValidationError(_("Название города не может быть пустым"))
@@ -48,6 +54,13 @@ class City(models.Model):
     def save(self, *args, **kwargs):
         """
         Сохраняет город с предварительной валидацией.
+
+        Args:
+            *args: Позиционные аргументы для метода save.
+            **kwargs: Именованные аргументы для метода save.
+
+        Returns:
+            None: Метод сохраняет объект в базе данных.
 
         Raises:
             ValidationError: Если данные некорректны.
@@ -112,6 +125,9 @@ class PickupPoint(models.Model):
 
         Returns:
             str: Город и адрес пункта выдачи.
+
+        Raises:
+            AttributeError: Если city.name или address недоступны из-за проблем с базой данных.
         """
         return f"{self.city.name}, {self.address}"
 
@@ -119,8 +135,12 @@ class PickupPoint(models.Model):
         """
         Проверяет корректность данных перед сохранением.
 
+        Returns:
+            None: Метод не возвращает значения, только проверяет данные.
+
         Raises:
-            ValidationError: Если город отсутствует или адрес некорректен.
+            ValidationError: Если город отсутствует, адрес некорректен или изменение статуса активности запрещено.
+            PickupPoint.DoesNotExist: Если текущий объект не найден при проверке.
         """
         if not self.city:
             raise ValidationError(_("Город не может быть пустым"))
@@ -137,8 +157,16 @@ class PickupPoint(models.Model):
         """
         Сохраняет пункт выдачи с обновлением поискового вектора в транзакции.
 
+        Args:
+            *args: Позиционные аргументы для метода save.
+            **kwargs: Именованные аргументы для метода save.
+
+        Returns:
+            None: Метод сохраняет объект в базе данных.
+
         Raises:
             ValidationError: Если данные некорректны.
+            Exception: Если транзакция не удалась из-за проблем с базой данных.
         """
         with transaction.atomic():
             self.full_clean()

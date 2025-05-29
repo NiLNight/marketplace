@@ -15,6 +15,12 @@ class PickupPointDocument(Document):
     Документ Elasticsearch для модели PickupPoint.
 
     Используется для индексации пунктов выдачи в поисковом движке.
+
+    Attributes:
+        address: Текстовое поле для адреса с анализатором standard.
+        district: Текстовое поле для района с анализатором standard.
+        city: Объектное поле для данных города (id и name).
+        is_active: Булево поле для статуса активности.
     """
     address = fields.TextField(analyzer='standard', fields={'raw': fields.KeywordField()})
     district = fields.TextField(analyzer='standard', fields={'raw': fields.KeywordField()})
@@ -42,6 +48,9 @@ class PickupPointDocument(Document):
 
         Returns:
             QuerySet: QuerySet с выбранными связанными данными.
+
+        Raises:
+            Exception: Если запрос к базе данных не удался.
         """
         logger.info("Action=GetDocumentQueryset")
         return super().get_queryset().select_related('city')
@@ -54,7 +63,10 @@ class PickupPointDocument(Document):
             instance (PickupPoint): Экземпляр модели пункта выдачи.
 
         Returns:
-            dict: Данные города.
+            dict: Данные города или пустой словарь, если город отсутствует.
+
+        Raises:
+            Exception: Если доступ к данным города не удался из-за проблем с базой данных.
         """
         try:
             if not instance.city:
@@ -82,7 +94,10 @@ class PickupPointDocument(Document):
             instance (PickupPoint): Экземпляр модели пункта выдачи.
 
         Returns:
-            str: Название района или пустая строка.
+            str: Название района или пустая строка, если район отсутствует.
+
+        Raises:
+            AttributeError: Если доступ к district не удался из-за проблем с базой данных.
         """
         try:
             return instance.district or ''
@@ -98,10 +113,14 @@ class PickupPointDocument(Document):
         Сохраняет документ в Elasticsearch.
 
         Args:
-            kwargs (dict): Дополнительные аргументы.
+            kwargs (dict): Дополнительные аргументы для метода save.
+
+        Returns:
+            None: Метод сохраняет документ в Elasticsearch.
 
         Raises:
             ElasticsearchUnavailable: Если Elasticsearch недоступен.
+            Exception: Если произошла непредвиденная ошибка при сохранении документа.
         """
         task_id = getattr(self, 'task_id', 'unknown')
         logger.info(f"Action=SaveDocument ID={self.id}, task_id={task_id}")

@@ -1,3 +1,8 @@
+"""
+Модуль URL-шаблонов для приложения delivery.
+
+Определяет маршруты для операций с пунктами выдачи и списком городов.
+"""
 from django.urls import path
 
 from apps.delivery.views import (

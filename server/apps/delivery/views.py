@@ -122,6 +122,7 @@ class PickupPointListView(APIView):
             ValidationError: Если параметры запроса некорректны.
             CityNotFound: Если город не найден.
             ElasticsearchUnavailable: Если сервис поиска недоступен.
+            Exception: Если получение данных не удалось (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id
         city_id = request.GET.get('city_id', None)
@@ -193,6 +194,7 @@ class CityListView(APIView):
 
         Raises:
             CityNotFound: Если произошла ошибка при получении городов.
+            Exception: Если получение данных не удалось (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id
         page = request.GET.get('page', '1')
