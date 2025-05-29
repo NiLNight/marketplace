@@ -11,6 +11,18 @@ logger = logging.getLogger(__name__)
 
 @shared_task
 def update_elasticsearch_task(product_id):
+    """Обновляет данные продукта в Elasticsearch.
+
+    Args:
+        product_id (int): Идентификатор продукта для обновления.
+
+    Returns:
+        None: Функция ничего не возвращает.
+
+    Raises:
+        Product.DoesNotExist: Если продукт не найден.
+        Exception: Если обновление в Elasticsearch не удалось.
+    """
     try:
         product = Product.objects.get(pk=product_id)
         if product.should_update_elasticsearch():
@@ -27,6 +39,18 @@ def update_elasticsearch_task(product_id):
 
 @shared_task
 def update_popularity_score(product_id):
+    """Обновляет показатель популярности продукта.
+
+    Args:
+        product_id (int): Идентификатор продукта для обновления.
+
+    Returns:
+        None: Функция ничего не возвращает.
+
+    Raises:
+        Product.DoesNotExist: Если продукт не найден.
+        Exception: Если обновление популярности или инвалидация кэша не удались.
+    """
     logger.info(f"Starting update_popularity_score for product {product_id}")
     try:
         product = Product.objects.get(pk=product_id)
