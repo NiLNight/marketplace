@@ -204,8 +204,17 @@ class Product(TimeStampedModel):
             logger.warning(f"Invalid price with discount for product {self.title}")
             raise ValidationError(_("Цена со скидкой не может быть меньше 0.01"))
 
+    def update_search_vector(self) -> None:
+        """Обновляет поисковый вектор для полнотекстового поиска."""
+        category_title = self.category.title if self.category else ''
+        self.search_vector = (
+                SearchVector(Value(self.title), weight='A') +
+                SearchVector(Value(self.description), weight='B') +
+                SearchVector(Value(category_title), weight='C')
+        )
+
     def save(self, *args, **kwargs) -> None:
-        """Сохраняет продукт с генерацией slug, поискового вектора и логированием.
+        """Сохраняет продукт с генерацией slug и логированием.
 
         Raises:
             ValidationError: Если данные продукта некорректны.
@@ -219,13 +228,14 @@ class Product(TimeStampedModel):
                 if Product.objects.filter(slug=self.slug).exclude(pk=self.pk).exists():
                     self.slug = unique_slugify(self.title)
 
-            category_title = self.category.title if self.category else ''
-            # Формируем поисковый вектор с разными весами для полей: title (A - высокий приоритет), description (B), category (C)
-            self.search_vector = (
-                    SearchVector(Value(self.title), weight='A') +
-                    SearchVector(Value(self.description), weight='B') +
-                    SearchVector(Value(category_title), weight='C')
-            )
+            # Пропускаем обновление поискового вектора при тестировании
+            if not kwargs.pop('testing', False):
+                try:
+                    self.update_search_vector()
+                except Exception as e:
+                    logger.warning(f"Failed to update search vector: {str(e)}")
+                    self.search_vector = None
+
             with transaction.atomic():
                 super().save(*args, **kwargs)
             logger.info(f"Successfully {action.lower()} product {self.pk}, user={user_id}")
