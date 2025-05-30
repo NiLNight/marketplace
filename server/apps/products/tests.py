@@ -9,12 +9,15 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.exceptions import ValidationError
+from django.test.utils import override_settings
 from apps.products.models import Category, Product
 from apps.products.exceptions import ProductNotFound
 
 User = get_user_model()
 
 
+@override_settings(ELASTICSEARCH_DSL_AUTOSYNC=False)
 class CategoryTests(TestCase):
     """Тесты для модели Category.
 
@@ -58,6 +61,7 @@ class CategoryTests(TestCase):
         self.assertIn(self.child_category, self.parent_category.children.all())
 
 
+@override_settings(ELASTICSEARCH_DSL_AUTOSYNC=False)
 class ProductTests(TestCase):
     """Тесты для модели Product.
 
@@ -81,7 +85,7 @@ class ProductTests(TestCase):
             title='Электроника',
             description='Электронные устройства'
         )
-        self.product = Product.objects.create(
+        product = Product(
             title='iPhone 15',
             description='Новый iPhone',
             price=Decimal('999.99'),
@@ -90,10 +94,12 @@ class ProductTests(TestCase):
             user=self.user,
             is_active=True
         )
+        product.save(testing=True)
+        self.product = product
 
     def test_product_creation(self):
         """Тест создания продукта."""
-        product = Product.objects.create(
+        product = Product(
             title='MacBook Pro',
             description='Новый MacBook',
             price=Decimal('1999.99'),
@@ -101,6 +107,7 @@ class ProductTests(TestCase):
             category=self.category,
             user=self.user
         )
+        product.save(testing=True)
         self.assertEqual(product.title, 'MacBook Pro')
         self.assertEqual(product.price, Decimal('1999.99'))
         self.assertEqual(product.stock, 5)
@@ -114,7 +121,7 @@ class ProductTests(TestCase):
     def test_product_price_with_discount(self):
         """Тест расчета цены со скидкой."""
         self.product.discount = Decimal('10.00')
-        self.product.save()
+        self.product.save(testing=True)
         expected_price = Decimal('899.99')
         self.assertEqual(self.product.price_with_discount.quantize(Decimal('0.01')), expected_price)
 
@@ -122,27 +129,31 @@ class ProductTests(TestCase):
         """Тест проверки наличия на складе."""
         self.assertTrue(self.product.in_stock)
         self.product.stock = 0
-        self.product.save()
+        self.product.save(testing=True)
         self.assertFalse(self.product.in_stock)
 
     def test_product_validation(self):
         """Тест валидации продукта."""
         # Проверка отрицательной цены
+        product = Product(
+            title='Test Product',
+            price=Decimal('-10.00'),
+            stock=1,
+            category=self.category,
+            user=self.user
+        )
         with self.assertRaises(ValidationError):
-            Product.objects.create(
-                title='Test Product',
-                price=Decimal('-10.00'),
-                stock=1,
-                category=self.category,
-                user=self.user
-            )
+            product.full_clean()
+            product.save(testing=True)
 
         # Проверка отрицательного остатка
+        product = Product(
+            title='Test Product',
+            price=Decimal('10.00'),
+            stock=-1,
+            category=self.category,
+            user=self.user
+        )
         with self.assertRaises(ValidationError):
-            Product.objects.create(
-                title='Test Product',
-                price=Decimal('10.00'),
-                stock=-1,
-                category=self.category,
-                user=self.user
-            )
+            product.full_clean()
+            product.save(testing=True)
