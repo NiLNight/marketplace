@@ -26,12 +26,12 @@ class CityTests(TestCase):
         """Инициализация данных для тестов."""
         self.client = Client()
         self.cities_url = reverse('delivery:city_list')
-        self.city = City.objects.create(name='Москва')
+        self.city = City.objects.create(title='Москва')
 
     def test_city_creation(self):
         """Тест создания города."""
-        city = City.objects.create(name='Санкт-Петербург')
-        self.assertEqual(city.name, 'Санкт-Петербург')
+        city = City.objects.create(title='Санкт-Петербург')
+        self.assertEqual(city.title, 'Санкт-Петербург')
 
     def test_city_str(self):
         """Тест строкового представления города."""
@@ -52,7 +52,7 @@ class PickupPointTests(TestCase):
         """Инициализация данных для тестов."""
         self.client = Client()
         self.pickup_points_url = reverse('delivery:pickup_point_list')
-        self.city = City.objects.create(name='Москва')
+        self.city = City.objects.create(title='Москва')
         self.pickup_point = PickupPoint.objects.create(
             city=self.city,
             address='ул. Пушкина, д. 1',
@@ -71,7 +71,7 @@ class PickupPointTests(TestCase):
 
     def test_pickup_point_str(self):
         """Тест строкового представления пункта выдачи."""
-        expected = f"{self.city.name}, {self.pickup_point.address}"
+        expected = f"{self.city.title}, {self.pickup_point.address}"
         self.assertEqual(str(self.pickup_point), expected)
 
     def test_pickup_point_search(self):

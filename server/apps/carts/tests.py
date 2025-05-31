@@ -36,13 +36,14 @@ class CartTests(TestCase):
             email='test@example.com',
             password='testpass123'
         )
-        self.category = Category.objects.create(name='Test Category')
+        self.category = Category.objects.create(title='Test Category')
         self.product = Product.objects.create(
             title='Test Product',
             description='Test Description',
             price=100.00,
             category=self.category,
-            stock=10
+            stock=10,
+            user=self.user
         )
 
     def test_add_to_cart_authenticated(self):
