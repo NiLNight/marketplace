@@ -165,7 +165,6 @@ class Product(TimeStampedModel):
             models.Index(fields=['title']),
             models.Index(fields=['-created']),
             models.Index(fields=['is_active']),
-            GinIndex(fields=['search_vector']),
             models.Index(fields=['price']),
             models.Index(fields=['discount']),
             models.Index(fields=['stock']),
@@ -180,9 +179,13 @@ class Product(TimeStampedModel):
         """Цена с учетом скидки.
 
         Returns:
-            Цена после применения скидки.
+            Decimal: Цена после применения скидки.
         """
-        return self.price * (100 - self.discount) / 100
+        if isinstance(self.discount, float):
+            discount = Decimal(str(self.discount))
+        else:
+            discount = self.discount
+        return self.price * (Decimal('100') - discount) / Decimal('100')
 
     @property
     def in_stock(self) -> bool:
@@ -206,6 +209,10 @@ class Product(TimeStampedModel):
 
     def update_search_vector(self) -> None:
         """Обновляет поисковый вектор для полнотекстового поиска."""
+        from django.db import connection
+        if connection.vendor != 'postgresql':
+            return
+            
         category_title = self.category.title if self.category else ''
         self.search_vector = (
                 SearchVector(Value(self.title), weight='A') +
@@ -228,7 +235,7 @@ class Product(TimeStampedModel):
                 if Product.objects.filter(slug=self.slug).exclude(pk=self.pk).exists():
                     self.slug = unique_slugify(self.title)
 
-            # Пропускаем обновление поискового вектора при тестировании
+            # Пропускаем обновление поискового вектора при тестировании или если не PostgreSQL
             if not kwargs.pop('testing', False):
                 try:
                     self.update_search_vector()

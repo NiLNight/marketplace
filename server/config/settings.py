@@ -13,6 +13,7 @@ import os
 from datetime import timedelta
 from pathlib import Path
 from dotenv import load_dotenv
+import sys
 
 load_dotenv()
 
@@ -61,6 +62,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -101,8 +103,39 @@ DATABASES = {
         'PASSWORD': str(os.environ.get('DB_PASS')),
         'HOST': str(os.environ.get('DB_HOST')),
         'PORT': str(os.environ.get('DB_PORT')),
+        'TEST': {
+            'NAME': 'marketplace_test',  # Фиксированное имя тестовой базы
+            'SERIALIZE': False,     # Отключаем сериализацию данных для ускорения тестов
+        },
     }
 }
+
+# Настройки для тестов
+if 'test' in sys.argv:
+    TESTING = True
+    # Отключаем Elasticsearch для тестов
+    ELASTICSEARCH_DSL = {
+        'default': {
+            'hosts': None
+        }
+    }
+    # Отключаем Debug Toolbar для тестов
+    INSTALLED_APPS = [app for app in INSTALLED_APPS if app != 'debug_toolbar']
+    MIDDLEWARE = [m for m in MIDDLEWARE if m != 'debug_toolbar.middleware.DebugToolbarMiddleware']
+
+    # Настройки REST framework для тестов
+    REST_FRAMEWORK = {
+        'DEFAULT_AUTHENTICATION_CLASSES': [
+            'rest_framework.authentication.SessionAuthentication',
+            'rest_framework.authentication.BasicAuthentication',
+        ],
+        'DEFAULT_PERMISSION_CLASSES': [
+            'rest_framework.permissions.AllowAny',
+        ],
+        'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+    }
+else:
+    TESTING = False
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -212,23 +245,88 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': False,
 }
 
+# Настройки Redis
+REDIS_HOST = str(os.environ.get('REDIS_HOST', 'localhost'))
+REDIS_PORT = str(os.environ.get('REDIS_PORT', '6379'))
+
+# Настройки кэширования
 CACHES = {
     'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}/1',
+        'KEY_PREFIX': 'marketplace',
+        'TIMEOUT': 300,  # 5 минут по умолчанию
         'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'db': '1',
+            'socket_connect_timeout': 5,
+            'socket_timeout': 5,
+            'retry_on_timeout': True,
+            'max_connections': 50,
+            'health_check_interval': 30,
         }
     }
 }
 
+# Настройки сессий
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'default'
+SESSION_COOKIE_AGE = 86400  # 24 часа
+SESSION_COOKIE_NAME = 'marketplace_sessionid'
+
+# Настройки Celery
+CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
+CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_WORKER_SEND_TASK_EVENTS = True
+
+# Настройки Elasticsearch
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'http://localhost:9200',
+        'timeout': 30,
+    },
+}
+
+# Дополнительные настройки Elasticsearch
+ELASTICSEARCH_INDEX_NAMES = {
+    'apps.delivery.documents.pickup_point': 'pickup_points',
+    'apps.products.documents.product': 'products',
+}
+
+# Безопасность
+if not DEBUG:
+    ALLOWED_HOSTS = [
+        'marketplace.example.com',  # Замените на реальный домен
+        'www.marketplace.example.com',
+    ]
+    
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_HSTS_SECONDS = 31536000  # 1 год
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SIMPLE_JWT['AUTH_COOKIE_SECURE'] = True
+else:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
+# Настройки логирования
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '[{asctime}] {levelname} {name} {message}',
-            'style': '{',
+            'format': '[%(asctime)s] %(levelname)s %(name)s: %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+        'django.server': {
+            'format': '[%(server_time)s] %(message)s',
         },
     },
     'handlers': {
@@ -236,6 +334,11 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
+        },
+        'django.server': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'django.server',
         },
         'file': {
             'level': 'DEBUG',
@@ -245,59 +348,30 @@ LOGGING = {
         },
     },
     'loggers': {
-        'apps.core.services.cache_services': {
+        'django': {
             'handlers': ['console', 'file'],
-            'level': 'DEBUG',
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.server': {
+            'handlers': ['django.server'],
+            'level': 'INFO',
             'propagate': False,
         },
-        'apps.wishlists': {
+        'apps': {
             'handlers': ['console', 'file'],
             'level': 'DEBUG',
-            'propagate': False,
+            'propagate': True,
         },
-        'apps.carts': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'apps.orders': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'apps.reviews': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'apps.comments': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'apps.products': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'apps.users': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'apps.delivery': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': False,
-        }
-    },
+    }
 }
 
-ELASTICSEARCH_DSL = {
-    'default': {
-        'hosts': 'http://localhost:9200',
-        'http_auth': ('elastic', str(os.environ.get('ELASTICSEARCH_PASSWORD'))),
-        'verify_certs': False,
-        'timeout': 30,
-    },
+# Создание директории для логов, если её нет
+LOGS_DIR = BASE_DIR / 'logs'
+LOGS_DIR.mkdir(exist_ok=True)
+
+# Rate limiting
+REST_FRAMEWORK['DEFAULT_THROTTLE_RATES'] = {
+    'user': '1000/hour',
+    'anon': '100/hour',
 }

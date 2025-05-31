@@ -2,6 +2,8 @@ import logging
 from django.db import transaction
 from django.contrib.auth import get_user_model
 from typing import Dict, Any
+from django.core.exceptions import ValidationError
+from rest_framework.exceptions import PermissionDenied  # Добавляем импорт
 
 from apps.products.models import Product
 from apps.products.exceptions import ProductServiceException, ProductNotFound
@@ -37,7 +39,6 @@ class ProductServices:
         logger.info(f"Creating product with data={safe_data}, user={user_id}")
         try:
             product = Product(user=user, **data)
-            # Выполняем полную валидацию модели перед сохранением для проверки всех полей
             product.full_clean()
             product.save()
             logger.info(f"Created product {product.id}, user={user_id}")
@@ -48,11 +49,11 @@ class ProductServices:
 
     @staticmethod
     @transaction.atomic
-    def update_product(instance: Product, validated_data: Dict[str, Any], user: User) -> Product:
+    def update_product(product_id: int, validated_data: Dict[str, Any], user: User) -> Product:
         """Обновляет существующий продукт.
 
         Args:
-            instance: Объект Product для обновления.
+            product_id: Объект Product для обновления.
             validated_data: Проверенные данные для обновления.
             user: Пользователь, выполняющий обновление.
 
@@ -64,30 +65,34 @@ class ProductServices:
             ProductNotFound: Если продукт не существует.
         """
         user_id = user.id if user else 'anonymous'
-        logger.info(f"Updating product {instance.id}, user={user_id}")
+        logger.info(f"Updating product {product_id}, user={user_id}")
         try:
-            if instance.user != user and not user.is_staff:
-                logger.warning(f"Permission denied for product {instance.id}, user={user_id}")
-                raise ProductServiceException("Только владелец или администратор может обновить продукт.")
-
-            for failed, value in validated_data.items():
-                setattr(instance, failed, value)
-            # Выполняем полную валидацию модели перед сохранением для проверки всех полей
-            instance.full_clean()
+            instance = Product.objects.get(pk=product_id)
+            # Проверяем права доступа
+            if instance.user != user:
+                raise PermissionDenied("У вас нет доступа к продукту.")  # Изменяем на PermissionDenied
+            for attr, value in validated_data.items():
+                setattr(instance, attr, value)
             instance.save()
-            logger.info(f"Updated product {instance.id}, user={user_id}")
+            logger.info(f"Updated product {product_id}, user={user_id}")
             return instance
-        except Exception as e:
-            logger.error(f"Failed to update product {instance.id}: {str(e)}, user={user_id}")
+        except Product.DoesNotExist:
+            logger.warning(f"Product {product_id} not found")
+            raise ProductNotFound(f"Продукт с ID {product_id} не найден")
+        except ValidationError as e:
+            logger.error(f"Failed to update product {product_id}: {str(e)}, user={user_id}")
             raise ProductServiceException(f"Ошибка обновления продукта: {str(e)}")
+        except Exception as e:
+            logger.error(f"Unexpected error updating product {product_id}: {str(e)}, user={user_id}")
+            raise ProductServiceException(f"Неожиданная ошибка при обновлении продукта: {str(e)}")
 
     @staticmethod
     @transaction.atomic
-    def delete_product(instance: Product, user: User) -> None:
+    def delete_product(product_id: int, user: User) -> None:
         """Выполняет мягкое удаление продукта (устанавливает is_active=False).
 
         Args:
-            instance: Объект Product для удаления.
+            product_id: Объект Product для удаления.
             user: Пользователь, выполняющий удаление.
 
         Raises:
@@ -95,14 +100,17 @@ class ProductServices:
             ProductNotFound: Если продукт не существует.
         """
         user_id = user.id if user else 'anonymous'
-        logger.info(f"Deleting product {instance.id}, user={user_id}")
+        logger.info(f"Deleting product {product_id}, user={user_id}")
         try:
-            if instance.user != user and not user.is_staff:
-                logger.warning(f"Permission denied for product {instance.id}, user={user_id}")
-                raise ProductServiceException("Только владелец или администратор может удалить продукт.")
-            instance.is_active = False
-            instance.save(update_fields=['is_active'])
-            logger.info(f"Deleted product {instance.id}, user={user_id}")
+            instance = Product.objects.get(pk=product_id)
+            # Проверяем права доступа
+            if instance.user != user:
+                raise PermissionDenied("У вас нет доступа к продукту.")  # Изменяем на PermissionDenied
+            instance.delete()
+            logger.info(f"Deleted product {product_id}, user={user_id}")
+        except Product.DoesNotExist:
+            logger.warning(f"Product {product_id} not found")
+            raise ProductNotFound(f"Продукт с ID {product_id} не найден")
         except Exception as e:
-            logger.error(f"Failed to delete product {instance.id}: {str(e)}, user={user_id}")
+            logger.error(f"Failed to delete product {product_id}: {str(e)}, user={user_id}")
             raise ProductServiceException(f"Ошибка удаления продукта: {str(e)}")

@@ -264,15 +264,18 @@ class ProductUpdateView(BaseProductView):
                 product, data=request.data, context={'request': request}, partial=True
             )
             serializer.is_valid(raise_exception=True)
-            updated_product = ProductServices.update_product(product, serializer.validated_data, request.user)
+            updated_product = ProductServices.update_product(pk, serializer.validated_data, request.user)
 
             CacheService.invalidate_cache(prefix="product_detail", pk=product.id)
             CacheService.invalidate_cache(prefix="product_list")
             logger.info(f"Successfully updated product {pk}, user={user_id}")
             return Response(self.serializer_class(updated_product).data)
+        except ProductNotFound as e:
+            logger.error(f"Failed to update product {pk}: {str(e)}, user={user_id}")
+            raise  # Пропускаем исключение до декоратора
         except Exception as e:
             logger.error(f"Failed to update product {pk}: {str(e)}, user={user_id}")
-            raise InvalidProductData(f"Ошибка обновления продукта: {str(e)}")
+            raise  # Пропускаем исключение до декоратора
 
 
 class ProductDeleteView(BaseProductView):
@@ -300,11 +303,47 @@ class ProductDeleteView(BaseProductView):
             product = ProductQueryService.get_single_product(pk)
             self.check_object_permissions(request, product)
 
-            ProductServices.delete_product(product, request.user)
+            ProductServices.delete_product(pk, request.user)
             CacheService.invalidate_cache(prefix="product_detail", pk=product.id)
             CacheService.invalidate_cache(prefix="product_list")
             logger.info(f"Successfully deleted product {pk}, user={user_id}")
             return Response({"message": "Продукт удален"}, status=status.HTTP_204_NO_CONTENT)
+        except ProductNotFound as e:
+            logger.error(f"Failed to delete product {pk}: {str(e)}, user={user_id}")
+            raise  # Пропускаем исключение до декоратора
         except Exception as e:
             logger.error(f"Failed to delete product {pk}: {str(e)}, user={user_id}")
-            raise ProductServiceException(f"Ошибка удаления продукта: {str(e)}")
+            raise  # Пропускаем исключение до декоратора
+
+
+class CategoryDetailView(APIView):
+    """Представление для получения деталей категории."""
+    permission_classes = [AllowAny]
+
+    @handle_api_errors
+    def get(self, request: Any, pk: int) -> Response:
+        """Получает детали категории.
+
+        Args:
+            request: HTTP-запрос.
+            pk: ID категории.
+
+        Returns:
+            Response: Ответ с данными категории.
+        """
+        user_id = request.user.id if request.user.is_authenticated else 'anonymous'
+        logger.info(f"Retrieving category {pk}, user={user_id}, path={request.path}")
+        try:
+            category = Category.objects.prefetch_related('children', 'products').get(pk=pk)
+            serializer = CategorySerializer(category)
+            logger.info(f"Successfully retrieved category {pk}, user={user_id}")
+            return Response(serializer.data)
+        except Category.DoesNotExist:
+            logger.warning(f"Category {pk} not found, user={user_id}")
+            return Response(
+                {"error": "Категория не найдена", "code": "not_found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            logger.error(f"Failed to retrieve category {pk}: {str(e)}, user={user_id}")
+            raise ProductServiceException(f"Ошибка получения категории: {str(e)}")

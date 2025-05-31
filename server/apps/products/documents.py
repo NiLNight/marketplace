@@ -15,8 +15,19 @@ class ProductDocument(Document):
     Определяет структуру и настройки индексации продуктов в Elasticsearch.
     """
 
-    title = fields.TextField(analyzer='standard', fields={'raw': fields.KeywordField()})
-    description = fields.TextField(analyzer='standard')
+    title = fields.TextField(
+        analyzer='standard',
+        fields={
+            'raw': fields.KeywordField(),
+            'ngram': fields.TextField(analyzer='ngram_analyzer')
+        }
+    )
+    description = fields.TextField(
+        analyzer='standard',
+        fields={
+            'ngram': fields.TextField(analyzer='ngram_analyzer')
+        }
+    )
     price = fields.FloatField()
     discount = fields.FloatField()
     price_with_discount = fields.FloatField()
@@ -29,6 +40,7 @@ class ProductDocument(Document):
     is_active = fields.BooleanField()
     popularity_score = fields.FloatField()
     rating_avg = fields.FloatField()
+    created = fields.DateField()
 
     class Index:
         """Конфигурация индекса для Elasticsearch."""
@@ -36,6 +48,23 @@ class ProductDocument(Document):
         settings = {
             'number_of_shards': 1,
             'number_of_replicas': 1,
+            'analysis': {
+                'analyzer': {
+                    'ngram_analyzer': {
+                        'type': 'custom',
+                        'tokenizer': 'ngram_tokenizer',
+                        'filter': ['lowercase']
+                    }
+                },
+                'tokenizer': {
+                    'ngram_tokenizer': {
+                        'type': 'ngram',
+                        'min_gram': 3,
+                        'max_gram': 4,
+                        'token_chars': ['letter', 'digit']
+                    }
+                }
+            }
         }
 
     class Django:
