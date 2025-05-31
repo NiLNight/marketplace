@@ -71,6 +71,26 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         fields = ['username', 'email', 'password']
         read_only_fields = []
 
+    def validate_password(self, value):
+        """Проверка корректности пароля.
+
+        Args:
+            value (str): Пароль для проверки.
+
+        Returns:
+            str: Проверенный пароль.
+
+        Raises:
+            serializers.ValidationError: Если пароль не соответствует требованиям.
+        """
+        if len(value) < 8:
+            raise serializers.ValidationError("Пароль должен содержать не менее 8 символов.")
+        if not any(char.isdigit() for char in value):
+            raise serializers.ValidationError("Пароль должен содержать хотя бы одну цифру.")
+        if not any(char.isalpha() for char in value):
+            raise serializers.ValidationError("Пароль должен содержать хотя бы одну букву.")
+        return value
+
     def validate(self, attrs):
         """Проверка корректности данных перед регистрацией.
 
