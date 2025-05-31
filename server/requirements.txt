@@ -1,28 +1,48 @@
+# Django и DRF
 asgiref==3.8.1
-attrs==25.1.0
 Django==5.1.4
 djangorestframework==3.15.2
 djangorestframework_simplejwt==5.4.0
 drf-spectacular==0.28.0
+
+# База данных
+psycopg==3.2.4
+psycopg-binary==3.2.4
+
+# Кэширование и очереди
+redis==5.2.1
+celery==5.4.0
+django-redis==5.4.0
+flower==2.0.1
+
+# Elasticsearch
+django-elasticsearch-dsl==8.0
+elasticsearch-dsl==8.11.0
+
+# Утилиты
+Pillow==11.1.0
+python-dotenv==1.0.1
+pytils==0.4.1
+shortuuid==1.0.13
+django-mptt==0.16.0
+django-debug-toolbar==5.0.1
+django-cors-headers==4.3.1
+
+# Документация API
+PyYAML==6.0.2
+uritemplate==4.1.1
 inflection==0.5.1
 jsonschema==4.23.0
 jsonschema-specifications==2024.10.1
-pillow==11.1.0
-psycopg==3.2.4
-psycopg-binary==3.2.4
-PyJWT==2.10.1
-python-dotenv==1.0.1
-pytils==0.4.1
-PyYAML==6.0.2
+attrs==25.1.0
 referencing==0.36.2
-rest-framework-simplejwt==0.0.2
 rpds-py==0.22.3
-shortuuid==1.0.13
-sqlparse==0.5.3
-typing_extensions==4.12.2
-tzdata==2024.2
-uritemplate==4.1.1
-celery~=5.4.0
-django-mptt~=0.16.0
-django-debug-toolbar~=5.0.1
-redis~=5.2.1
+
+# Безопасность
+PyJWT==2.10.1
+
+# Форматирование и линтеры
+black==24.3.0
+flake8==7.0.0
+isort==5.13.2
+mypy==1.9.0
