@@ -5,7 +5,7 @@ from django.contrib.postgres.indexes import GinIndex, HashIndex
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from mptt.models import MPTTModel, TreeForeignKey
-from django.core.validators import MinValueValidator, FileExtensionValidator
+from django.core.validators import MinValueValidator, FileExtensionValidator, MaxValueValidator
 from django.utils.translation import gettext_lazy as _
 from apps.core.utils import unique_slugify
 from apps.core.models import TimeStampedModel
@@ -123,13 +123,17 @@ class Product(TimeStampedModel):
     price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        validators=[MinValueValidator(Decimal(0.00))],
+        validators=[MinValueValidator(Decimal('0.01'))],  # Цена должна быть > 0
         verbose_name='Цена'
     )
     discount = models.DecimalField(
         default=0.0,
         max_digits=10,
         decimal_places=2,
+        validators=[
+            MinValueValidator(Decimal('0.00')),
+            MaxValueValidator(Decimal('100.00'))
+        ],
         verbose_name='Скидка'
     )
     stock = models.PositiveIntegerField(default=0, verbose_name='Запас')
