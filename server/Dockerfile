@@ -21,8 +21,9 @@ RUN groupadd -r marketplace && useradd -r -g marketplace marketplace
 # Установка рабочей директории
 WORKDIR /app
 
-# Копирование установленных пакетов из builder
+# Копирование установленных пакетов и бинарных файлов из builder
 COPY --from=builder /usr/local/lib/python3.12/site-packages/ /usr/local/lib/python3.12/site-packages/
+COPY --from=builder /usr/local/bin/ /usr/local/bin/
 
 # Копирование кода проекта
 COPY . .
