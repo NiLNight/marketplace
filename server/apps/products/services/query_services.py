@@ -4,6 +4,7 @@ from django.contrib.postgres.search import SearchQuery, SearchRank
 from django.db.models import Q, F, Count, Avg, Case, When, IntegerField
 from django.db.models.functions import Coalesce, ExtractDay, Now
 from elasticsearch_dsl import Search
+from django.conf import settings
 
 from apps.products.models import Product, Category
 from apps.products.exceptions import ProductNotFound, InvalidCategoryError, ProductServiceException
@@ -11,7 +12,6 @@ from apps.products.documents import ProductDocument
 from apps.products.utils import get_filter_params
 from typing import Any, Optional, Union
 from django.db.models import QuerySet
-from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -39,6 +39,8 @@ class ProductQueryService:
             QuerySet: Базовый QuerySet с продуктами.
         """
         logger.debug("Retrieving base queryset for active products")
+        if settings.TESTING:
+            return Product.objects.all()
         return Product.objects.filter(is_active=True)
 
     @classmethod

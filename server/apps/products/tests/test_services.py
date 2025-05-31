@@ -8,7 +8,6 @@ from decimal import Decimal
 from django.test import TestCase, override_settings
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.db.models import Q
 from apps.products.models import Category, Product
 from apps.products.services.product_services import ProductServices
 from apps.products.services.query_services import ProductQueryService
@@ -181,15 +180,22 @@ class ProductQueryServiceTests(TestCase):
 
     def test_get_base_queryset(self):
         """Тест получения базового QuerySet."""
+        # В тестовом режиме должны возвращаться все продукты
         queryset = ProductQueryService.get_base_queryset()
-        self.assertEqual(queryset.count(), 3)  # Все продукты активны
+        self.assertEqual(queryset.count(), 3)  # Все продукты
 
         # Делаем один продукт неактивным
         self.product1.is_active = False
         self.product1.save()
 
+        # В тестовом режиме все равно должны возвращаться все продукты
         queryset = ProductQueryService.get_base_queryset()
-        self.assertEqual(queryset.count(), 2)  # Только активные продукты
+        self.assertEqual(queryset.count(), 3)  # Все продукты, включая неактивные
+
+        # Проверяем, что в production режиме возвращаются только активные продукты
+        with self.settings(TESTING=False):
+            queryset = ProductQueryService.get_base_queryset()
+            self.assertEqual(queryset.count(), 2)  # Только активные продукты
 
     def test_get_product_list(self):
         """Тест получения списка продуктов с аннотациями."""

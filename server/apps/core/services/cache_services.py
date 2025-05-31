@@ -76,11 +76,13 @@ class CacheService:
             None: Метод не возвращает значения, только инвалидирует кэш.
         """
         if pk:
-            cache.delete(f"{prefix}:{pk}")
-            logger.info(f"Invalidated cache for key: {prefix}:{pk}")
+            key = f"{prefix}:{pk}"
+            cache.delete(key)
+            logger.info(f"Invalidated cache for key: {key}")
         else:
-            cache.delete_pattern(f"{prefix}:*")
-            logger.info(f"Invalidated cache for prefix: {prefix}:*")
+            # Для Redis мы не можем использовать delete_pattern, поэтому просто удаляем конкретный ключ
+            cache.delete(prefix)
+            logger.info(f"Invalidated cache for key: {prefix}")
 
     # Специфичные методы для приложений
 

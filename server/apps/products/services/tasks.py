@@ -9,12 +9,14 @@ from apps.products.utils import calculate_popularity_score
 logger = logging.getLogger(__name__)
 
 
-@shared_task
-def update_elasticsearch_task(product_id):
-    """Обновляет данные продукта в Elasticsearch.
+@shared_task(bind=True, max_retries=3, default_retry_delay=60)
+def update_elasticsearch_task(self, product_id: int, delete: bool = False) -> None:
+    """Обновляет или удаляет данные продукта в Elasticsearch.
 
     Args:
+        self: Экземпляр задачи Celery.
         product_id (int): Идентификатор продукта для обновления.
+        delete (bool): Флаг, указывающий на необходимость удаления документа.
 
     Returns:
         None: Функция ничего не возвращает.
@@ -24,17 +26,32 @@ def update_elasticsearch_task(product_id):
         Exception: Если обновление в Elasticsearch не удалось.
     """
     try:
+        if delete:
+            # При удалении продукта удаляем его документ из Elasticsearch
+            doc = ProductDocument.get(id=product_id)
+            doc.delete()
+            logger.info(f"Deleted product {product_id} from Elasticsearch")
+            return
+
+        # При обновлении или создании
         product = Product.objects.get(pk=product_id)
         if product.should_update_elasticsearch():
             if product.is_active:
-                ProductDocument().update(product)
+                doc = ProductDocument.from_instance(product)
+                doc.save()
+                logger.info(f"Updated Elasticsearch for product {product_id}")
             else:
-                ProductDocument().delete(product)
-            logger.info(f"Updated Elasticsearch for product {product_id}")
+                # Если продукт неактивен, удаляем его из индекса
+                doc = ProductDocument.get(id=product_id)
+                doc.delete()
+                logger.info(f"Removed inactive product {product_id} from Elasticsearch")
+
     except Product.DoesNotExist:
         logger.warning(f"Product {product_id} not found")
     except Exception as e:
         logger.error(f"Failed to update Elasticsearch for product {product_id}: {str(e)}")
+        # Повторяем задачу при ошибке
+        raise self.retry(exc=e)
 
 
 @shared_task
