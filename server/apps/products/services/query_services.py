@@ -39,8 +39,6 @@ class ProductQueryService:
             QuerySet: Базовый QuerySet с продуктами.
         """
         logger.debug("Retrieving base queryset for active products")
-        if settings.TESTING:
-            return Product.objects.all()
         return Product.objects.filter(is_active=True)
 
     @classmethod
