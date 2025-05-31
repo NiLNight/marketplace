@@ -283,7 +283,7 @@ class ProductAPITests(TestCase):
         # Базовый поиск по слову 'iphone'
         response = self.client.get(reverse('products:product_list'), {'q': 'iphone'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['results']), 3)  # iPhone 14, iPhone 15 и Xiaomi Phone (в описании)
+        self.assertEqual(len(response.data['results']), 3)  # iPhone 14
         
         # Проверяем, что iPhone 14 и iPhone 15 в начале результатов (выше ранжированы)
         iphone_titles = [product['title'] for product in response.data['results'][:2]]

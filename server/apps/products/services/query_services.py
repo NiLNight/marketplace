@@ -233,46 +233,57 @@ class ProductQueryService:
             search = ProductDocument.search()
 
             if query:
-                search = search.query(
-                    'bool',
-                    must=[
-                        {
-                            'bool': {
-                                'should': [
-                                    # Точное совпадение с названием (высокий вес)
-                                    {'term': {'title.raw': {'value': query, 'boost': 10.0}}},
-                                    
-                                    # Поиск по названию
-                                    {'match': {
-                                        'title': {
-                                            'query': query,
-                                            'boost': 5.0,
-                                            'operator': 'and'
-                                        }
-                                    }},
-                                    
-                                    # Поиск по n-граммам в названии
-                                    {'match': {
-                                        'title.ngram': {
-                                            'query': query,
-                                            'boost': 3.0
-                                        }
-                                    }},
-                                    
-                                    # Поиск по описанию
-                                    {'match': {
-                                        'description': {
-                                            'query': query,
-                                            'boost': 1.0,
-                                            'operator': 'and'
-                                        }
-                                    }}
-                                ],
-                                'minimum_should_match': 1
+                # Проверяем, является ли запрос точным поиском (в кавычках)
+                is_exact_search = query.startswith('"') and query.endswith('"')
+                if is_exact_search:
+                    query = query[1:-1].strip()  # Убираем кавычки
+                    search = search.query(
+                        'bool',
+                        must=[
+                            {'term': {'title.raw': {'value': query, 'boost': 10.0}}}
+                        ]
+                    )
+                else:
+                    search = search.query(
+                        'bool',
+                        must=[
+                            {
+                                'bool': {
+                                    'should': [
+                                        # Точное совпадение с названием (высокий вес)
+                                        {'term': {'title.raw': {'value': query, 'boost': 10.0}}},
+                                        
+                                        # Поиск по названию
+                                        {'match': {
+                                            'title': {
+                                                'query': query,
+                                                'boost': 5.0,
+                                                'operator': 'and'
+                                            }
+                                        }},
+                                        
+                                        # Поиск по n-граммам в названии
+                                        {'match': {
+                                            'title.ngram': {
+                                                'query': query,
+                                                'boost': 3.0
+                                            }
+                                        }},
+                                        
+                                        # Поиск по описанию
+                                        {'match': {
+                                            'description': {
+                                                'query': query,
+                                                'boost': 1.0,
+                                                'operator': 'and'
+                                            }
+                                        }}
+                                    ],
+                                    'minimum_should_match': 1
+                                }
                             }
-                        }
-                    ]
-                )
+                        ]
+                    )
 
             # Применяем фильтры
             params = get_filter_params(request)
