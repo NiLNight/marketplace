@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+*.egg
+
+# Виртуальное окружение
+.env
+.venv
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Логи и временные файлы
+logs/
+*.log
+celerybeat-schedule
+celerybeat.pid
+
+# Тесты и документация
+tests/
+docs/
+README.md
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose.yml
+.docker/
+
+# Медиа и статические файлы (они должны храниться отдельно)
+media/
+static/
+
+# Кэш и временные файлы
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.cache/ 
