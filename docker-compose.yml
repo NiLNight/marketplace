@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:latest
+    container_name: marketplace-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.0
+    container_name: marketplace-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: marketplace-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: unless-stopped
+
+  celery:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: marketplace-celery
+    command: celery -A config worker -l info --pool=solo
+    volumes:
+      - ./server:/app
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings
+      - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq:5672//
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+      - rabbitmq
+    restart: unless-stopped
+
+  celery-beat:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: marketplace-celery-beat
+    command: celery -A config beat -l info
+    volumes:
+      - ./server:/app
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings
+      - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq:5672//
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+      - rabbitmq
+      - celery
+    restart: unless-stopped
+
+volumes:
+  elasticsearch_data: 
