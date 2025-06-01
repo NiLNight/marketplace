@@ -121,20 +121,20 @@ class ProductQueryService:
     ) -> Union[Any, Search]:
         """Применяет общие фильтры к QuerySet или объекту поиска Elasticsearch.
 
-                Args:
-                    source: QuerySet (для PostgreSQL) или объект Search (для Elasticsearch).
-                    category_id: ID категории для фильтрации.
-                    min_price: Минимальная цена (с учётом скидки для Elasticsearch).
-                    max_price: Максимальная цена (с учётом скидки для Elasticsearch).
-                    min_discount: Минимальная скидка (в процентах).
-                    in_stock: Фильтр по наличию на складе.
+        Args:
+            source: QuerySet (для PostgreSQL) или объект Search (для Elasticsearch).
+            category_id: ID категории для фильтрации.
+            min_price: Минимальная цена (с учётом скидки для Elasticsearch).
+            max_price: Максимальная цена (с учётом скидки для Elasticsearch).
+            min_discount: Минимальная скидка (в процентах).
+            in_stock: Фильтр по наличию на складе.
 
-                Returns:
-                    Отфильтрованный QuerySet или объект Search.
+        Returns:
+            Отфильтрованный QuerySet или объект Search.
 
-                Raises:
-                    InvalidCategoryError: Если категория или параметры некорректны.
-                """
+        Raises:
+            InvalidCategoryError: Если категория или параметры некорректны.
+        """
         logger.debug(f"Applying filters: category_id={category_id}, min_price={min_price}, max_price={max_price}")
         try:
             if isinstance(source, Search):
@@ -199,118 +199,141 @@ class ProductQueryService:
 
     @classmethod
     def apply_ordering(cls, queryset: Any, request: Any) -> Any:
-        """Применяет сортировку к QuerySet на основе параметра запроса.
+        """Применяет сортировку к QuerySet или объекту поиска Elasticsearch на основе параметра запроса.
+
+        Для поисковых запросов (q присутствует):
+        - Если ordering не указан или недопустим, сохраняется порядок по _score (для Elasticsearch) или текущий порядок (для QuerySet).
+        - Если ordering указан и допустим, применяется указанная сортировка.
+        Для не-поисковых запросов:
+        - Если ordering не указан или недопустим, применяется сортировка по -popularity_score.
+        - Если ordering указан и допустим, применяется указанная сортировка.
 
         Args:
-            queryset: QuerySet продуктов.
+            queryset: QuerySet продуктов или объект Search для Elasticsearch.
             request: HTTP-запрос с параметром сортировки.
 
         Returns:
-            Отсортированный QuerySet.
+            Отсортированный QuerySet или объект Search.
         """
         sort_by = request.GET.get('ordering')
-        logger.debug(f"Applying ordering with sort_by={sort_by}")
+        is_search = bool(request.GET.get('q', '').strip())
+        logger.debug(f"Applying ordering with sort_by={sort_by}, is_search={is_search}")
+
         if sort_by and sort_by not in cls.ALLOWED_ORDER_FIELDS:
             logger.warning(f"Invalid ordering field: {sort_by}")
             sort_by = None
-        return queryset.order_by(sort_by or '-popularity_score')
+
+        if isinstance(queryset, Search):
+            if sort_by:
+                logger.debug(f"Applying Elasticsearch sort: {sort_by}")
+                return queryset.sort(sort_by)
+            logger.debug("No valid sort_by for Elasticsearch search, preserving _score")
+            return queryset  # Сохраняем _score
+        else:
+            if is_search:
+                if sort_by:
+                    logger.debug(f"Applying QuerySet sort for search: {sort_by}")
+                    return queryset.order_by(sort_by)
+                logger.debug("No valid sort_by for search QuerySet, preserving _score order")
+                return queryset  # Сохраняем порядок _score через preserved_order
+            else:
+                if sort_by:
+                    logger.debug(f"Applying QuerySet sort for non-search: {sort_by}")
+                    return queryset.order_by(sort_by)
+                logger.debug("No valid sort_by for non-search QuerySet, sorting by -popularity_score")
+                return queryset.order_by('-popularity_score')
 
     @classmethod
     def search_products(cls, request: Any) -> Any:
-        """Выполняет поиск продуктов через Elasticsearch.
+        """Выполняет поиск продуктов через Elasticsearch и возвращает QuerySet, отсортированный по релевантности.
 
         Args:
-            request: HTTP-запрос с параметрами поиска.
+            request: HTTP-запрос с параметром поиска q.
 
         Returns:
-            QuerySet с результатами поиска.
+            QuerySet с результатами поиска, отсортированный по _score.
 
         Raises:
             ProductServiceException: При ошибках поиска.
         """
         try:
             query = request.GET.get('q', '').strip()
+            if not query:
+                logger.warning("Empty search query in search_products")
+                return cls.get_base_queryset().none()
+
             search = ProductDocument.search()
 
-            if query:
-                # Проверяем, является ли запрос точным поиском (в кавычках)
-                is_exact_search = query.startswith('"') and query.endswith('"')
-                if is_exact_search:
-                    query = query[1:-1].strip()  # Убираем кавычки
-                    search = search.query(
-                        'bool',
-                        must=[
-                            {'term': {'title.raw': {'value': query, 'boost': 10.0}}}
-                        ]
-                    )
-                else:
-                    search = search.query(
-                        'bool',
-                        must=[
-                            {
-                                'bool': {
-                                    'should': [
-                                        # Точное совпадение с названием (высокий вес)
-                                        {'term': {'title.raw': {'value': query, 'boost': 10.0}}},
-                                        
-                                        # Поиск по названию
-                                        {'match': {
-                                            'title': {
-                                                'query': query,
-                                                'boost': 5.0,
-                                                'operator': 'and'
-                                            }
-                                        }},
-                                        
-                                        # Поиск по n-граммам в названии
-                                        {'match': {
-                                            'title.ngram': {
-                                                'query': query,
-                                                'boost': 3.0
-                                            }
-                                        }},
-                                        
-                                        # Поиск по описанию
-                                        {'match': {
-                                            'description': {
-                                                'query': query,
-                                                'boost': 1.0,
-                                                'operator': 'and'
-                                            }
-                                        }}
-                                    ],
-                                    'minimum_should_match': 1
-                                }
-                            }
-                        ]
-                    )
-
-            # Применяем фильтры
-            params = get_filter_params(request)
-            search = cls.apply_common_filters(search, **params)
-
-            # Сортировка
-            ordering = request.GET.get('ordering')
-            if ordering and ordering.lstrip('-') in cls.ALLOWED_ORDER_FIELDS:
-                if ordering.startswith('-'):
-                    search = search.sort({ordering[1:]: {'order': 'desc'}})
-                else:
-                    search = search.sort({ordering: {'order': 'asc'}})
+            # Формируем поисковый запрос
+            is_exact_search = query.startswith('"') and query.endswith('"')
+            if is_exact_search:
+                query = query[1:-1].strip()  # Убираем кавычки
+                search = search.query(
+                    'bool',
+                    must=[
+                        {'term': {'title.raw': {'value': query, 'boost': 10.0}}}
+                    ]
+                )
             else:
-                # По умолчанию сортируем по релевантности и рейтингу
-                search = search.sort('_score', {'rating_avg': {'order': 'desc'}})
+                search = search.query(
+                    'bool',
+                    must=[
+                        {
+                            'bool': {
+                                'should': [
+                                    # Точное совпадение с названием (высокий вес)
+                                    {'term': {'title.raw': {'value': query, 'boost': 10.0}}},
+
+                                    # Поиск по названию
+                                    {'match': {
+                                        'title': {
+                                            'query': query,
+                                            'boost': 5.0,
+                                            'operator': 'and'
+                                        }
+                                    }},
+
+                                    # Поиск по n-граммам в названии
+                                    {'match': {
+                                        'title.ngram': {
+                                            'query': query,
+                                            'boost': 3.0
+                                        }
+                                    }},
+
+                                    # Поиск по описанию
+                                    {'match': {
+                                        'description': {
+                                            'query': query,
+                                            'boost': 1.0,
+                                            'operator': 'and'
+                                        }
+                                    }}
+                                ],
+                                'minimum_should_match': 1
+                            }
+                        }
+                    ]
+                )
+
+            # Сортировка по релевантности
+            search = search.sort('_score')
 
             # Получаем ID продуктов из Elasticsearch
             search = search[:cls.LARGE_PAGE_SIZE]
             response = search.execute()
+
+            # Логируем результаты и их _score
+            logger.debug(f"Elasticsearch hits: {[(hit.meta.id, hit.meta.score) for hit in response]}")
 
             if not response.hits:
                 return cls.get_base_queryset().none()
 
             # Получаем продукты из базы данных с сохранением порядка из Elasticsearch
             product_ids = [hit.meta.id for hit in response]
-            products = cls.get_product_list().filter(id__in=product_ids)
-            
+            logger.debug(f"Final product_ids order: {product_ids}")
+            products = cls.get_base_queryset().filter(id__in=product_ids)
+
             # Сохраняем порядок сортировки из Elasticsearch
             preserved_order = Case(
                 *[When(pk=pk, then=pos) for pos, pk in enumerate(product_ids)],
@@ -345,7 +368,7 @@ class ProductQueryService:
             query = SearchQuery(search_query, config='russian', search_type='websearch')
             return queryset.annotate(
                 rank=SearchRank('search_vector', query)
-            ).filter(search_vector=query).order_by('-rank')
+            ).filter(search_vector=query)
         except Exception as e:
             logger.error(f"Search failed: {str(e)}")
             raise ProductServiceException(f"Ошибка поиска: {str(e)}")
