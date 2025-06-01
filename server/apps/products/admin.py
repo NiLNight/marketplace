@@ -67,7 +67,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = (
         'thumbnail_preview',
         'title',
-        'price_with_discount',
+        'price_with_discount_display',
         'stock_status',
         'category_tree',
         'is_active',
@@ -82,7 +82,7 @@ class ProductAdmin(admin.ModelAdmin):
         'created',
         'updated',
         'thumbnail_preview',
-        'price_with_discount'
+        'price_with_discount_display'
     )
     autocomplete_fields = ('category', 'user')
     prepopulated_fields = {'slug': ('title',)}
@@ -100,7 +100,7 @@ class ProductAdmin(admin.ModelAdmin):
             'fields': (
                 'price',
                 'discount',
-                'price_with_discount',
+                'price_with_discount_display',
                 'stock'
             )
         }),
@@ -177,6 +177,22 @@ class ProductAdmin(admin.ModelAdmin):
         )
 
     category_tree.short_description = _('Иерархия категорий')
+
+    def price_with_discount_display(self, obj):
+        """Форматирует цену с учетом скидки для отображения в админке.
+
+        Args:
+            obj: Объект Product.
+
+        Returns:
+            str: Форматированная цена или дефис, если цена не указана.
+        """
+        price_with_discount = obj.price_with_discount
+        if price_with_discount is None:
+            return '-'
+        return f"{price_with_discount:.2f}"
+
+    price_with_discount_display.short_description = _('Цена со скидкой')
 
     def get_queryset(self, request):
         """Возвращает QuerySet с предварительной загрузкой связанных данных.

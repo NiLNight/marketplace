@@ -184,7 +184,11 @@ class Product(TimeStampedModel):
 
         Returns:
             Decimal: Цена после применения скидки.
+            Если цена или скидка равны None, возвращает None.
         """
+        if self.price is None or self.discount is None:
+            return None
+        
         if isinstance(self.discount, float):
             discount = Decimal(str(self.discount))
         else:

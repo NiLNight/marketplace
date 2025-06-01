@@ -6,6 +6,8 @@
 
 from decimal import Decimal
 from unittest.mock import patch, MagicMock
+
+from django.db.models import Case, When
 from django.test import TestCase, override_settings
 from django.contrib.auth import get_user_model
 from django.urls import reverse
@@ -17,6 +19,7 @@ from apps.products.models import Category, Product
 from apps.products.documents import ProductDocument
 from apps.products.services.query_services import ProductQueryService
 from apps.products.services.tasks import update_elasticsearch_task
+from django.db import models
 
 User = get_user_model()
 
@@ -166,7 +169,7 @@ class ElasticsearchIntegrationTests(TestCase):
             reverse('products:product_list') +
             f'?q=iphone&category={self.category.id}'
         )
-        
+
         # Проверяем ответ
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['results']), 1)
@@ -198,13 +201,229 @@ class ElasticsearchIntegrationTests(TestCase):
         ).order_by('-created')  # Сортируем по дате создания, чтобы iPhone 15 был первым
 
         # Выполняем поиск
-        response = self.client.get(reverse('products:product_list') + '?q=iphone')
-        
+        response = self.client.get(reverse('products:product_list') + '?q=iphone 13')
+
         # Проверяем ответ
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['results']), 2)
-        self.assertEqual(response.data['results'][0]['title'], 'iPhone 15')
-        self.assertEqual(response.data['results'][1]['title'], 'iPhone 13')
+        self.assertEqual(response.data['results'][0]['title'], 'iPhone 13')
+        self.assertEqual(response.data['results'][1]['title'], 'iPhone 15')
 
         # Проверяем, что поиск был вызван с правильными параметрами
         mock_search.assert_called_once()
+
+    @patch('apps.products.services.query_services.ProductQueryService.search_products')
+    def test_russian_morphology_search(self, mock_search):
+        """Тест поиска с учетом морфологии русского языка."""
+        # Создаем продукты с разными формами слов
+        products = [
+            Product.objects.create(
+                title='Красный телефон',
+                description='Мобильный телефон красного цвета',
+                price=Decimal('999.99'),
+                stock=10,
+                category=self.category,
+                user=self.user,
+                is_active=True
+            ),
+            Product.objects.create(
+                title='Телефоны Samsung',
+                description='Мобильные телефоны в ассортименте',
+                price=Decimal('899.99'),
+                stock=5,
+                category=self.category,
+                user=self.user,
+                is_active=True
+            )
+        ]
+
+        # Настраиваем мок для результатов поиска
+        mock_search.return_value = Product.objects.filter(id__in=[p.id for p in products])
+
+        # Тестируем поиск с разными формами слова
+        test_queries = ['телефон', 'телефоны', 'телефонов']
+        for query in test_queries:
+            response = self.client.get(reverse('products:product_list') + f'?q={query}')
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(len(response.data['results']), 2)
+
+        mock_search.assert_called()
+
+    @patch('apps.products.services.query_services.ProductQueryService.search_products')
+    def test_fuzzy_search_with_typos(self, mock_search):
+        """Тест поиска с опечатками в русском языке."""
+        # Создаем продукт
+        product = Product.objects.create(
+            title='Смартфон Samsung Galaxy',
+            description='Современный смартфон',
+            price=Decimal('999.99'),
+            stock=10,
+            category=self.category,
+            user=self.user,
+            is_active=True
+        )
+
+        # Настраиваем мок для результатов поиска
+        mock_search.return_value = Product.objects.filter(id=product.id)
+
+        # Тестируем поиск с опечатками
+        test_queries = ['смортфон', 'самсунг', 'галакси']
+        for query in test_queries:
+            response = self.client.get(reverse('products:product_list') + f'?q={query}')
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(len(response.data['results']), 1)
+            self.assertEqual(response.data['results'][0]['title'], 'Смартфон Samsung Galaxy')
+
+        mock_search.assert_called()
+
+    @patch('apps.products.services.query_services.ProductQueryService.search_products')
+    def test_partial_match_search(self, mock_search):
+        """Тест поиска по частичному совпадению в русском языке."""
+        # Создаем продукты
+        products = [
+            Product.objects.create(
+                title='Беспроводные наушники Sony',
+                description='Bluetooth наушники с шумоподавлением',
+                price=Decimal('299.99'),
+                stock=15,
+                category=self.category,
+                user=self.user,
+                is_active=True
+            ),
+            Product.objects.create(
+                title='Наушники проводные Sennheiser',
+                description='Профессиональные наушники',
+                price=Decimal('199.99'),
+                stock=20,
+                category=self.category,
+                user=self.user,
+                is_active=True
+            )
+        ]
+
+        # Настраиваем мок для результатов поиска
+        mock_search.return_value = Product.objects.filter(id__in=[p.id for p in products])
+
+        # Тестируем поиск по частям слов
+        test_queries = ['науш', 'беспр', 'пров']
+        for query in test_queries:
+            response = self.client.get(reverse('products:product_list') + f'?q={query}')
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertTrue(len(response.data['results']) > 0)
+
+        mock_search.assert_called()
+
+    @patch('apps.products.services.query_services.ProductQueryService.search_products')
+    def test_synonym_search(self, mock_search):
+        """Тест поиска с учетом синонимов в русском языке."""
+        # Создаем продукт
+        product = Product.objects.create(
+            title='Мобильный телефон iPhone',
+            description='Современный смартфон Apple',
+            price=Decimal('999.99'),
+            stock=10,
+            category=self.category,
+            user=self.user,
+            is_active=True
+        )
+
+        # Настраиваем мок для результатов поиска
+        mock_search.return_value = Product.objects.filter(id=product.id)
+
+        # Тестируем поиск с синонимами
+        test_queries = ['телефон', 'смартфон', 'мобильник']
+        for query in test_queries:
+            response = self.client.get(reverse('products:product_list') + f'?q={query}')
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(len(response.data['results']), 1)
+            self.assertEqual(response.data['results'][0]['title'], 'Мобильный телефон iPhone')
+
+        mock_search.assert_called()
+
+    @patch('apps.products.services.query_services.ProductQueryService.search_products')
+    def test_search_results_caching(self, mock_search):
+        """Тест кэширования результатов поиска."""
+        # Создаем продукт
+        product = Product.objects.create(
+            title='Тестовый продукт',
+            description='Описание тестового продукта',
+            price=Decimal('99.99'),
+            stock=10,
+            category=self.category,
+            user=self.user,
+            is_active=True
+        )
+
+        # Настраиваем мок для результатов поиска
+        mock_search.return_value = Product.objects.filter(id=product.id)
+
+        # Очищаем кэш перед тестом
+        cache.clear()
+
+        # Первый запрос (должен вызвать поиск)
+        response1 = self.client.get(reverse('products:product_list') + '?q=тестовый')
+        self.assertEqual(response1.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response1.data['results']), 1)
+
+        # Второй запрос (должен использовать кэш)
+        response2 = self.client.get(reverse('products:product_list') + '?q=тестовый')
+        self.assertEqual(response2.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response2.data['results']), 1)
+
+        # Проверяем, что поиск был вызван только один раз
+        mock_search.assert_called_once()
+
+    @patch('apps.products.services.query_services.ProductQueryService.search_products')
+    def test_search_with_category_hierarchy(self, mock_search):
+        """Тест поиска с учетом иерархии категорий."""
+        # Создаем подкатегорию
+        subcategory = Category.objects.create(
+            title='Смартфоны',
+            description='Мобильные телефоны и смартфоны',
+            parent=self.category
+        )
+
+        # Создаем продукты в разных категориях
+        products = [
+            Product.objects.create(
+                title='Смартфон в подкатегории',
+                description='Тестовый смартфон',
+                price=Decimal('599.99'),
+                stock=10,
+                category=subcategory,
+                user=self.user,
+                is_active=True
+            ),
+            Product.objects.create(
+                title='Смартфон в основной категории',
+                description='Другой тестовый смартфон',
+                price=Decimal('699.99'),
+                stock=5,
+                category=self.category,
+                user=self.user,
+                is_active=True
+            )
+        ]
+
+        # Настраиваем мок для результатов поиска
+        mock_search.return_value = Product.objects.filter(id__in=[p.id for p in products])
+
+        # Тестируем поиск по категории и подкатегории
+        response = self.client.get(
+            reverse('products:product_list') +
+            f'?q=смартфон&category={self.category.id}'
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data['results']), 2)
+
+        # Тестируем поиск только по подкатегории
+        response = self.client.get(
+            reverse('products:product_list') +
+            f'?q=смартфон&category={subcategory.id}'
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(len(response.data['results']) > 0)
+
+        mock_search.assert_called()

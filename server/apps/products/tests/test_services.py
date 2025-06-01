@@ -8,6 +8,8 @@ from decimal import Decimal
 from django.test import TestCase, override_settings
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.exceptions import ValidationError
+from rest_framework.exceptions import PermissionDenied
 from apps.products.models import Category, Product
 from apps.products.services.product_services import ProductServices
 from apps.products.services.query_services import ProductQueryService
@@ -120,6 +122,86 @@ class ProductServicesTests(TestCase):
 
         with self.assertRaises(ProductServiceException):
             ProductServices.delete_product(product.id, other_user)
+
+    def test_create_product_with_invalid_price(self):
+        """Тест создания продукта с некорректной ценой."""
+        invalid_data = self.valid_data.copy()
+        invalid_data['price'] = Decimal('-100.00')
+
+        with self.assertRaises(ProductServiceException) as context:
+            ProductServices.create_product(invalid_data, self.user)
+        self.assertIn('цена', str(context.exception).lower())
+
+    def test_create_product_with_invalid_discount(self):
+        """Тест создания продукта с некорректной скидкой."""
+        invalid_data = self.valid_data.copy()
+        invalid_data['discount'] = Decimal('150.00')  # Скидка больше 100%
+
+        with self.assertRaises(ProductServiceException) as context:
+            ProductServices.create_product(invalid_data, self.user)
+        self.assertIn('скидк', str(context.exception).lower())
+
+    def test_create_product_with_invalid_image(self):
+        """Тест создания продукта с некорректным форматом изображения."""
+        invalid_image = SimpleUploadedFile(
+            name='test.txt',
+            content=b'Invalid image content',
+            content_type='text/plain'
+        )
+        invalid_data = self.valid_data.copy()
+        invalid_data['thumbnail'] = invalid_image
+
+        with self.assertRaises(ProductServiceException) as context:
+            ProductServices.create_product(invalid_data, self.user)
+        self.assertIn('изображен', str(context.exception).lower())
+
+    def test_update_product_permission_denied(self):
+        """Тест обновления продукта другим пользователем."""
+        product = ProductServices.create_product(self.valid_data, self.user)
+        other_user = User.objects.create_user(
+            username='otheruser',
+            email='other@example.com',
+            password='testpass123'
+        )
+
+        update_data = {'title': 'New Title'}
+        with self.assertRaises(PermissionDenied):
+            ProductServices.update_product(product.id, update_data, other_user)
+
+    def test_update_product_with_category(self):
+        """Тест обновления категории продукта."""
+        product = ProductServices.create_product(self.valid_data, self.user)
+        new_category = Category.objects.create(
+            title='Смартфоны',
+            description='Мобильные телефоны'
+        )
+
+        update_data = {'category': new_category}
+        updated_product = ProductServices.update_product(product.id, update_data, self.user)
+        self.assertEqual(updated_product.category, new_category)
+
+    def test_update_product_price_and_discount(self):
+        """Тест обновления цены и скидки продукта."""
+        product = ProductServices.create_product(self.valid_data, self.user)
+        update_data = {
+            'price': Decimal('1099.99'),
+            'discount': Decimal('10.00')
+        }
+
+        updated_product = ProductServices.update_product(product.id, update_data, self.user)
+        self.assertEqual(updated_product.price, Decimal('1099.99'))
+        self.assertEqual(updated_product.discount, Decimal('10.00'))
+        # Проверяем расчет цены со скидкой
+        expected_price = Decimal('1099.99') * Decimal('0.90')
+        self.assertEqual(updated_product.price_with_discount, expected_price)
+
+    def test_delete_product_with_reviews(self):
+        """Тест удаления продукта с отзывами."""
+        product = ProductServices.create_product(self.valid_data, self.user)
+        # TODO: Добавить создание отзывов после реализации ReviewService
+        ProductServices.delete_product(product.id, self.user)
+        with self.assertRaises(ProductNotFound):
+            ProductQueryService.get_single_product(product.id)
 
 
 @override_settings(ELASTICSEARCH_DSL_AUTOSYNC=False)
@@ -275,4 +357,162 @@ class ProductQueryServiceTests(TestCase):
         # Некорректное поле сортировки
         request = MockRequest('invalid_field')
         queryset = ProductQueryService.apply_ordering(Product.objects.all(), request)
-        self.assertTrue(queryset.ordered)  # Проверяем, что сортировка применена (по умолчанию) 
+        self.assertTrue(queryset.ordered)  # Проверяем, что сортировка применена (по умолчанию)
+
+    def test_complex_filtering(self):
+        """Тест комбинированной фильтрации продуктов."""
+        # Фильтр по категории, цене и наличию
+        queryset = ProductQueryService.apply_common_filters(
+            Product.objects.all(),
+            category_id=self.phones.id,
+            min_price=Decimal('90.00'),
+            max_price=Decimal('500.00'),
+            in_stock=True
+        )
+        self.assertEqual(queryset.count(), 1)
+        self.assertEqual(queryset.first(), self.product2)
+
+        # Фильтр по скидке и наличию
+        queryset = ProductQueryService.apply_common_filters(
+            Product.objects.all(),
+            min_discount=Decimal('5.00'),
+            in_stock=True
+        )
+        self.assertEqual(queryset.count(), 1)
+        self.assertEqual(queryset.first(), self.product2)
+
+        # Фильтр по цене, наличию и активности
+        with self.settings(TESTING=False):
+            self.product1.is_active = False
+            self.product1.save()
+            queryset = ProductQueryService.apply_common_filters(
+                Product.objects.all(),
+                min_price=Decimal('50.00'),
+                in_stock=True
+            )
+            self.assertEqual(queryset.count(), 1)
+            self.assertEqual(queryset.first(), self.product2)
+
+    def test_pagination(self):
+        """Тест пагинации продуктов."""
+        # Создаем дополнительные продукты для тестирования пагинации
+        for i in range(25):  # Создаем 25 дополнительных продуктов
+            Product.objects.create(
+                title=f'Test Product {i}',
+                description=f'Description {i}',
+                price=Decimal('100.00'),
+                stock=10,
+                category=self.phones,
+                user=self.user,
+                is_active=True
+            )
+
+        # Проверяем первую страницу (по умолчанию 20 элементов)
+        class MockRequest:
+            def __init__(self, page=None):
+                self.GET = {'page': page} if page else {}
+
+        request = MockRequest()
+        paginator = ProductQueryService.LARGE_PAGE_SIZE
+        queryset = ProductQueryService.get_product_list()
+        
+        # Проверяем количество на первой странице
+        self.assertEqual(queryset.count(), 28)  # 25 новых + 3 исходных
+
+        # Проверяем работу с page_size
+        request.GET['page_size'] = '10'
+        self.assertTrue(queryset.count() > 10)  # Убеждаемся, что есть что пагинировать
+
+    def test_popularity_score_ordering(self):
+        """Тест сортировки по рейтингу популярности."""
+        # Обновляем popularity_score для продуктов
+        self.product1.popularity_score = 4.5
+        self.product1.save()
+        self.product2.popularity_score = 3.8
+        self.product2.save()
+        self.product3.popularity_score = 4.2
+        self.product3.save()
+
+        # Сортировка по убыванию popularity_score
+        class MockRequest:
+            def __init__(self, ordering):
+                self.GET = {'ordering': ordering}
+
+        request = MockRequest('-popularity_score')
+        queryset = ProductQueryService.apply_ordering(Product.objects.all(), request)
+        products = list(queryset)
+        self.assertEqual(products[0], self.product1)  # Самый популярный
+        self.assertEqual(products[-1], self.product2)  # Наименее популярный
+
+        # Сортировка по возрастанию popularity_score
+        request = MockRequest('popularity_score')
+        queryset = ProductQueryService.apply_ordering(Product.objects.all(), request)
+        products = list(queryset)
+        self.assertEqual(products[0], self.product2)  # Наименее популярный
+        self.assertEqual(products[-1], self.product1)  # Самый популярный
+
+    def test_cache_invalidation(self):
+        """Тест инвалидации кэша при изменении продуктов."""
+        from django.core.cache import cache
+        from apps.core.services.cache_services import CacheService
+
+        # Очищаем кэш перед тестом
+        cache.clear()
+
+        # Получаем список продуктов (должен закэшироваться)
+        class MockRequest:
+            def __init__(self):
+                self.GET = {}
+                self.path = '/products/list/'
+
+        request = MockRequest()
+        cache_key = CacheService.build_cache_key(request, prefix="product_list")
+        
+        # Первый запрос (кэш пустой)
+        queryset = ProductQueryService.get_product_list()
+        initial_count = queryset.count()
+        
+        # Создаем новый продукт
+        new_product = Product.objects.create(
+            title='New Product',
+            description='Test Description',
+            price=Decimal('199.99'),
+            stock=5,
+            category=self.phones,
+            user=self.user,
+            is_active=True
+        )
+
+        # Проверяем, что кэш инвалидирован и новый продукт виден
+        CacheService.invalidate_cache(prefix="product_list")
+        queryset = ProductQueryService.get_product_list()
+        self.assertEqual(queryset.count(), initial_count + 1)
+
+    def test_search_with_filters(self):
+        """Тест поиска с применением фильтров."""
+        # Создаем продукты для тестирования поиска
+        budget_phone = Product.objects.create(
+            title='Budget iPhone',
+            description='Бюджетный телефон',
+            price=Decimal('299.99'),
+            stock=15,
+            category=self.phones,
+            user=self.user,
+            is_active=True
+        )
+
+        # Поиск с фильтром по цене
+        class MockRequest:
+            def __init__(self, **kwargs):
+                self.GET = kwargs
+
+        request = MockRequest(q='iphone', min_price='200', max_price='300')
+        queryset = ProductQueryService.search_products(request)
+        self.assertEqual(queryset.count(), 1)
+        self.assertEqual(queryset.first(), budget_phone)
+
+        # Поиск с фильтром по наличию
+        request = MockRequest(q='phone', in_stock='true')
+        queryset = ProductQueryService.search_products(request)
+        self.assertTrue(queryset.count() > 0)
+        self.assertTrue(all(p.stock > 0 for p in queryset)) 
