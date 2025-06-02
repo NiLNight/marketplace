@@ -93,18 +93,12 @@ def calculate_popularity_score(product) -> float:
 def handle_api_errors(view_func):
     """Декоратор для обработки ошибок в API-представлениях приложения products.
 
-    Логирует ошибки и возвращает стандартизированные HTTP-ответы.
-
     Args:
-        view_func: Функция представления для обертки.
+        view_func: Функция представления для декорирования.
 
     Returns:
-        callable: Обернутая функция с обработкой ошибок.
-
-    Raises:
-        None: Декоратор перехватывает все исключения и возвращает HTTP-ответы.
+        Функция-обертка, обрабатывающая исключения.
     """
-
     @wraps(view_func)
     def wrapper(self, request, *args, **kwargs):
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
@@ -126,7 +120,8 @@ def handle_api_errors(view_func):
         except PermissionDenied as e:
             logger.warning(f"Permission denied: {str(e)}, user={user_id}, path={path}")
             return Response(
-                {"error": str(e), "code": "permission_denied"},
+                {"error": str(e) or "У вас недостаточно прав для выполнения данного действия.",
+                 "code": "permission_denied"},
                 status=status.HTTP_403_FORBIDDEN
             )
         except ProductNotFound as e:
@@ -148,10 +143,9 @@ def handle_api_errors(view_func):
                 status=e.status_code
             )
         except Exception as e:
-            logger.error(f"Server error: {str(e)}, user={user_id}, path={path}")
+            logger.error(f"Unexpected error: {str(e)}, user={user_id}, path={path}")
             return Response(
-                {"error": "Внутренняя ошибка сервера", "code": "server_error"},
+                {"error": "Произошла внутренняя ошибка сервера", "code": "internal_error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-
     return wrapper

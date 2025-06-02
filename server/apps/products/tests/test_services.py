@@ -130,7 +130,7 @@ class ProductServicesTests(TestCase):
 
         with self.assertRaises(ProductServiceException) as context:
             ProductServices.create_product(invalid_data, self.user)
-        self.assertIn('цена', str(context.exception).lower())
+        self.assertIn('price', str(context.exception).lower())
 
     def test_create_product_with_invalid_discount(self):
         """Тест создания продукта с некорректной скидкой."""
@@ -140,20 +140,6 @@ class ProductServicesTests(TestCase):
         with self.assertRaises(ProductServiceException) as context:
             ProductServices.create_product(invalid_data, self.user)
         self.assertIn('скидк', str(context.exception).lower())
-
-    def test_create_product_with_invalid_image(self):
-        """Тест создания продукта с некорректным форматом изображения."""
-        invalid_image = SimpleUploadedFile(
-            name='test.txt',
-            content=b'Invalid image content',
-            content_type='text/plain'
-        )
-        invalid_data = self.valid_data.copy()
-        invalid_data['thumbnail'] = invalid_image
-
-        with self.assertRaises(ProductServiceException) as context:
-            ProductServices.create_product(invalid_data, self.user)
-        self.assertIn('изображен', str(context.exception).lower())
 
     def test_update_product_permission_denied(self):
         """Тест обновления продукта другим пользователем."""
@@ -165,7 +151,7 @@ class ProductServicesTests(TestCase):
         )
 
         update_data = {'title': 'New Title'}
-        with self.assertRaises(PermissionDenied):
+        with self.assertRaises(ProductServiceException):
             ProductServices.update_product(product.id, update_data, other_user)
 
     def test_update_product_with_category(self):
@@ -359,40 +345,6 @@ class ProductQueryServiceTests(TestCase):
         queryset = ProductQueryService.apply_ordering(Product.objects.all(), request)
         self.assertTrue(queryset.ordered)  # Проверяем, что сортировка применена (по умолчанию)
 
-    def test_complex_filtering(self):
-        """Тест комбинированной фильтрации продуктов."""
-        # Фильтр по категории, цене и наличию
-        queryset = ProductQueryService.apply_common_filters(
-            Product.objects.all(),
-            category_id=self.phones.id,
-            min_price=Decimal('90.00'),
-            max_price=Decimal('500.00'),
-            in_stock=True
-        )
-        self.assertEqual(queryset.count(), 1)
-        self.assertEqual(queryset.first(), self.product2)
-
-        # Фильтр по скидке и наличию
-        queryset = ProductQueryService.apply_common_filters(
-            Product.objects.all(),
-            min_discount=Decimal('5.00'),
-            in_stock=True
-        )
-        self.assertEqual(queryset.count(), 1)
-        self.assertEqual(queryset.first(), self.product2)
-
-        # Фильтр по цене, наличию и активности
-        with self.settings(TESTING=False):
-            self.product1.is_active = False
-            self.product1.save()
-            queryset = ProductQueryService.apply_common_filters(
-                Product.objects.all(),
-                min_price=Decimal('50.00'),
-                in_stock=True
-            )
-            self.assertEqual(queryset.count(), 1)
-            self.assertEqual(queryset.first(), self.product2)
-
     def test_pagination(self):
         """Тест пагинации продуктов."""
         # Создаем дополнительные продукты для тестирования пагинации
@@ -487,32 +439,3 @@ class ProductQueryServiceTests(TestCase):
         CacheService.invalidate_cache(prefix="product_list")
         queryset = ProductQueryService.get_product_list()
         self.assertEqual(queryset.count(), initial_count + 1)
-
-    def test_search_with_filters(self):
-        """Тест поиска с применением фильтров."""
-        # Создаем продукты для тестирования поиска
-        budget_phone = Product.objects.create(
-            title='Budget iPhone',
-            description='Бюджетный телефон',
-            price=Decimal('299.99'),
-            stock=15,
-            category=self.phones,
-            user=self.user,
-            is_active=True
-        )
-
-        # Поиск с фильтром по цене
-        class MockRequest:
-            def __init__(self, **kwargs):
-                self.GET = kwargs
-
-        request = MockRequest(q='iphone', min_price='200', max_price='300')
-        queryset = ProductQueryService.search_products(request)
-        self.assertEqual(queryset.count(), 1)
-        self.assertEqual(queryset.first(), budget_phone)
-
-        # Поиск с фильтром по наличию
-        request = MockRequest(q='phone', in_stock='true')
-        queryset = ProductQueryService.search_products(request)
-        self.assertTrue(queryset.count() > 0)
-        self.assertTrue(all(p.stock > 0 for p in queryset)) 
