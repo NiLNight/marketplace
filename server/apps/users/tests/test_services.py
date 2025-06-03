@@ -177,31 +177,32 @@ class ConfirmPasswordServiceTests(TestCase):
 
     def test_confirm_password_reset(self):
         """Тест подтверждения сброса пароля."""
-        # Запрашиваем сброс пароля (если это нужно для создания контекста)
+        # Запрашиваем сброс пароля
         ConfirmPasswordService.request_password_reset('test@example.com')
-
-        # Генерируем действительный токен для пользователя
+        
+        # Получаем uid и token
+        uid = urlsafe_base64_encode(force_bytes(self.user.pk))
         token = default_token_generator.make_token(self.user)
-        uid = urlsafe_base64_encode(force_bytes(self.user.id))
-
-        # Подтверждаем сброс пароля с действительным токеном
+        
+        # Подтверждаем сброс пароля
         user = ConfirmPasswordService.confirm_password_reset(
             uid=uid,
             token=token,
             new_password='NewPass123!'
         )
-
-        # Проверяем, что пароль успешно изменен
         self.assertTrue(user.check_password('NewPass123!'))
 
     def test_confirm_password_reset_invalid_code(self):
         """Тест подтверждения сброса пароля с неверным кодом."""
         # Запрашиваем сброс пароля
         ConfirmPasswordService.request_password_reset('test@example.com')
-
+        
+        # Получаем uid в правильном формате
+        uid = urlsafe_base64_encode(force_bytes(self.user.pk))
+        
         with self.assertRaises(InvalidUserData):
             ConfirmPasswordService.confirm_password_reset(
-                uid=str(self.user.id),
+                uid=uid,
                 token='invalid-token',
                 new_password='NewPass123!'
             )
