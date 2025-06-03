@@ -29,7 +29,7 @@ class LikeService:
             user (User): Пользователь, выполняющий действие.
 
         Returns:
-            Dict[str, Any]: Словарь с действием ('liked' или 'unliked') и дополнительной информацией (например, product_id).
+            Dict[str, Any]: Словарь с действием ('liked' или 'unliked'), количеством лайков и дополнительной информацией.
 
         Raises:
             ReviewNotFound: Если объект не существует.
@@ -63,7 +63,13 @@ class LikeService:
                 action = 'liked'
                 logger.info(f"Liked {content_type.model}:{object_id}, user={user_id}")
 
-            return {'action': action, **additional_data}
+            # Подсчитываем количество лайков
+            likes_count = Like.objects.filter(
+                content_type=content_type,
+                object_id=object_id
+            ).count()
+
+            return {'action': action, 'likes_count': likes_count, **additional_data}
 
         except IntegrityError as e:
             logger.error(

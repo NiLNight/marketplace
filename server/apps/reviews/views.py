@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 
-from apps.reviews.exceptions import LikeOperationFailed
+from apps.reviews.exceptions import LikeOperationFailed, ReviewNotFound
 from apps.core.services.cache_services import CacheService
 from apps.core.services.like_services import LikeService
 from apps.reviews.models import Review
@@ -180,10 +180,14 @@ class ReviewLikeView(APIView):
 
         content_type = ContentType.objects.get_for_model(Review)
         try:
+            review = Review.objects.get(pk=pk)
             result = LikeService.toggle_like(content_type, pk, request.user)
-            CacheService.invalidate_cache(prefix=f"reviews")
+            CacheService.invalidate_cache(prefix=f"reviews:{review.product_id}")
             logger.info(f"Like toggled for review={pk}: {result['action']}, user={user_id}")
             return Response(result, status=status.HTTP_200_OK)
+        except Review.DoesNotExist:
+            logger.error(f"Review {pk} not found, user={user_id}")
+            raise ReviewNotFound(f"Отзыв с ID {pk} не найден.")
         except Exception as e:
             logger.error(f"Failed to toggle like for review={pk}: {str(e)}, user={user_id}")
             raise LikeOperationFailed(f"Ошибка при обработке лайка: {str(e)}")
