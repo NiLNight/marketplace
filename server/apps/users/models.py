@@ -33,6 +33,7 @@ class EmailVerified(models.Model):
         verbose_name='Код подтверждения'
     )
     code_created_at = models.DateTimeField(
+        auto_now_add=True,
         null=True,
         blank=True,
         verbose_name='Время создания кода'

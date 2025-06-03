@@ -72,3 +72,29 @@ class AccountNotActivated(UserException):
     status_code = 403
     default_detail = 'Аккаунт не активирован'
     default_code = 'account_not_activated'
+
+
+class InvalidConfirmationCode(UserException):
+    """Исключение, вызываемое при неверном коде подтверждения.
+
+    Возникает, когда предоставленный код подтверждения не соответствует сохраненному.
+
+    Attributes:
+        default_detail (str): Сообщение по умолчанию об ошибке.
+        default_code (str): Код ошибки по умолчанию.
+    """
+    default_detail = 'Неверный код'
+    default_code = 'invalid_code'
+
+
+class ExpiredConfirmationCode(UserException):
+    """Исключение, вызываемое при истекшем коде подтверждения.
+
+    Возникает, когда срок действия кода подтверждения истек.
+
+    Attributes:
+        default_detail (str): Сообщение по умолчанию об ошибке.
+        default_code (str): Код ошибки по умолчанию.
+    """
+    default_detail = 'Срок действия кода истек'
+    default_code = 'expired_code'
