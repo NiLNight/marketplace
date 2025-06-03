@@ -19,7 +19,18 @@ class ReviewSerializer(serializers.ModelSerializer):
     """
     user = serializers.StringRelatedField()
     product = serializers.StringRelatedField()
-    likes_count = serializers.IntegerField()
+    likes_count = serializers.SerializerMethodField()
+
+    def get_likes_count(self, obj) -> int:
+        """Подсчитывает количество лайков отзыва.
+
+        Args:
+            obj (Review): Объект отзыва.
+
+        Returns:
+            int: Общее количество лайков.
+        """
+        return obj.likes.count()
 
     class Meta:
         model = Review
