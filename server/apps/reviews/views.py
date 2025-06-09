@@ -108,9 +108,6 @@ class ReviewCreateView(APIView):
         serializer.is_valid(raise_exception=True)
 
         review = ReviewService.create_review(serializer.validated_data, request.user)
-        # Обновляем popularity_score и инвалидируем кэш
-        update_popularity_score.delay(review.product_id)
-        CacheService.invalidate_cache(prefix=f"reviews:{review.product_id}")
         logger.info(f"Created review {review.id}, user={user_id}")
         return Response(ReviewSerializer(review).data, status=status.HTTP_201_CREATED)
 
@@ -146,9 +143,6 @@ class ReviewUpdateView(APIView):
         serializer.is_valid(raise_exception=True)
 
         review = ReviewService.update_review(pk, serializer.validated_data, request.user)
-        # Обновляем popularity_score и инвалидируем кэш
-        update_popularity_score.delay(review.product.id)
-        CacheService.invalidate_cache(prefix=f"reviews:{review.product_id}")
         logger.info(f"Updated review {pk}, user={user_id}")
         return Response(ReviewSerializer(review).data, status=status.HTTP_200_OK)
 
