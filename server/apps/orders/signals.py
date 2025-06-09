@@ -68,7 +68,7 @@ def order_post_save(sender, instance, created, **kwargs):
             NotificationService.send_notification(
                 instance.user, f"{_('Ваш заказ')} #{instance.id} {_('создан')}. {delivery_info}"
             )
-            logger.info(f"Notification queued for order creation, "
+            logger.info(f"Notification and popularity updates queued for order creation, "
                         f"order={instance.id}, user={instance.user.id}")
         elif hasattr(instance, "__original_status") and instance.status != instance.__original_status:
             if instance.status == 'delivered':
@@ -77,11 +77,6 @@ def order_post_save(sender, instance, created, **kwargs):
                 )
                 logger.info(f"Notification queued for order delivered, "
                             f"order={instance.id}, user={instance.user.id}")
-                order_items = instance.order_items.select_related('product')
-                for item in order_items:
-                    update_popularity_score.delay(item.product.id)
-                    logger.info(f"Scheduled popularity score update for product={item.product.id}"
-                                f" in order={instance.id}")
             else:
                 NotificationService.send_notification(
                     instance.user,
@@ -92,7 +87,7 @@ def order_post_save(sender, instance, created, **kwargs):
 
         # Инвалидация кэша после изменения заказа
         CacheService.invalidate_cache(prefix=f"order_list:{instance.user.id}")
-        CacheService.invalidate_cache(prefix=f"order_detail:{instance.id}:{instance.user.id}")
+        CacheService.invalidate_cache(prefix=f"order_detail:{instance.id}", pk=instance.user.id)
         logger.info(f"Invalidated cache for order={instance.id}, user={instance.user.id}")
     except Exception as e:
         logger.error(f"Failed to process post_save for order={instance.id},"
