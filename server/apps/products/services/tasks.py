@@ -75,11 +75,10 @@ def update_popularity_score(product_id):
         logger.debug(f"Calculated popularity_score={new_score} for product {product_id}")
         product.popularity_score = new_score
         product.save(update_fields=['popularity_score'])
-
         # Инвалидация кэша
         try:
-            CacheService.invalidate_cache(prefix="product_detail", pk=product.id)
             CacheService.invalidate_cache(prefix="product_list")
+            CacheService.invalidate_cache(prefix="product_detail", pk=product.id)
             logger.info(f"Invalidated cache for product {product_id} (product_detail, product_list)")
         except Exception as cache_error:
             logger.error(f"Failed to invalidate cache for product {product_id}: {str(cache_error)}")
