@@ -6,7 +6,6 @@
 import os
 from celery import Celery
 from celery.schedules import crontab
-from django.conf import settings
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
@@ -14,18 +13,21 @@ app = Celery('marketplace')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 
-# Настройки очередей
+# Настройки очередей с RabbitMQ
 app.conf.task_queues = {
     'high': {
         'exchange': 'high',
+        'exchange_type': 'direct',
         'routing_key': 'high',
     },
     'default': {
         'exchange': 'default',
+        'exchange_type': 'direct',
         'routing_key': 'default',
     },
     'low': {
         'exchange': 'low',
+        'exchange_type': 'direct',
         'routing_key': 'low',
     }
 }
@@ -34,7 +36,7 @@ app.conf.task_queues = {
 app.conf.task_routes = {
     'apps.orders.*': {'queue': 'high'},
     'apps.delivery.*': {'queue': 'high'},
-    'apps.users.tasks.send_email': {'queue': 'high'},
+    'apps.users.services.tasks.*': {'queue': 'high'},
     'apps.products.*': {'queue': 'default'},
     'apps.reviews.*': {'queue': 'default'},
     'apps.comments.*': {'queue': 'default'},
