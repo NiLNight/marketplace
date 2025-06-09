@@ -42,17 +42,27 @@ class PickupPointDocument(Document):
         fields = ['id']
         related_models = [City]
 
-    def get_queryset(self):
+    def get_instances_from_related(self, related_instance):
         """
-        Возвращает оптимизированный запрос для индексации.
+        Получает связанные экземпляры PickupPoint для обновления в Elasticsearch.
+
+        Args:
+            related_instance: Связанный объект (City).
 
         Returns:
-            QuerySet: QuerySet с выбранными связанными данными.
-
-        Raises:
-            Exception: Если запрос к базе данных не удался.
+            QuerySet: Набор связанных объектов PickupPoint.
         """
-        logger.info("Action=GetDocumentQueryset")
+        if isinstance(related_instance, City):
+            return related_instance.pickup_points.all()
+        return []
+
+    def get_queryset(self):
+        """
+        Получает QuerySet для индексации.
+
+        Returns:
+            QuerySet: Оптимизированный QuerySet с предзагрузкой связанных данных.
+        """
         return super().get_queryset().select_related('city')
 
     def prepare_city(self, instance):
