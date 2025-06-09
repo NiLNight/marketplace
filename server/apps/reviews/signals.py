@@ -7,6 +7,8 @@
 import logging
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
+
+from apps.core.services.cache_services import CacheService
 from apps.reviews.models import Review
 from apps.products.services.tasks import update_elasticsearch_task, update_popularity_score
 
@@ -20,6 +22,7 @@ def update_product_data(sender, instance, **kwargs):
     Запускает асинхронные задачи для обновления:
     - Данных продукта в Elasticsearch
     - Показателя популярности продукта
+    - Инвалидирует все связанные кэши
 
     Args:
         sender: Класс модели, отправивший сигнал.
@@ -36,6 +39,8 @@ def update_product_data(sender, instance, **kwargs):
     product_id = instance.product.id
     action = 'deleted' if kwargs.get('signal') == post_delete else 'saved'
     logger.info(f"Review {instance.id} {action} for product={product_id}, user={user_id}")
+
+    CacheService.invalidate_cache(prefix=f"reviews:{instance.product_id}")
 
     # Обновляем данные в Elasticsearch и показатель популярности
     update_elasticsearch_task.delay(product_id)
