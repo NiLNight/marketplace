@@ -77,7 +77,7 @@ def calculate_popularity_score(product) -> float:
     Returns:
         float: Показатель популярности, рассчитанный на основе покупок, отзывов, рейтинга и возраста продукта.
     """
-    purchase_count = product.order_items.filter(order__status='delivered').count()
+    purchase_count = product.order_items.filter(order__status__in=['delivered', 'processing']).count()
     review_count = product.reviews.count()
     rating_avg = product.reviews.aggregate(Avg('value'))['value__avg'] or 0.0
     days_since_created = (timezone.now() - product.created).days + 1
