@@ -156,6 +156,7 @@ class OrderService:
                     f"pickup_point_id={pickup_point_id}, "
                     f"IP={request.META.get('REMOTE_ADDR')}")
         cart_items = OrderItem.objects.filter(user=user, order__isnull=True)
+        logger.debug(f"Found {cart_items.count()} cart items for user={user.id}")
         if not cart_items.exists():
             logger.warning(f"Cart is empty for user={user.id}, "
                            f"IP={request.META.get('REMOTE_ADDR')}")
