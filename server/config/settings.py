@@ -252,17 +252,17 @@ REDIS_PORT = str(os.environ.get('REDIS_PORT', '6379'))
 # Настройки кэширования
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}/1',
         'KEY_PREFIX': 'marketplace',
         'TIMEOUT': 300,  # 5 минут по умолчанию
         'OPTIONS': {
-            'db': '1',
-            'socket_connect_timeout': 5,
-            'socket_timeout': 5,
-            'retry_on_timeout': True,
-            'max_connections': 50,
-            'health_check_interval': 30,
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'SOCKET_CONNECT_TIMEOUT': 5,
+            'SOCKET_TIMEOUT': 5,
+            'RETRY_ON_TIMEOUT': True,
+            'MAX_CONNECTIONS': 50,
+            'HEALTH_CHECK_INTERVAL': 30,
         }
     }
 }
@@ -274,7 +274,7 @@ SESSION_COOKIE_AGE = 86400  # 24 часа
 SESSION_COOKIE_NAME = 'marketplace_sessionid'
 
 # Настройки Celery
-CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
 CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
