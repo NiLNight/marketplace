@@ -19,6 +19,7 @@ from apps.products.utils import calculate_popularity_score
 from apps.orders.models import Order
 from apps.carts.models import OrderItem
 from apps.delivery.models import PickupPoint, City
+from apps.products.services.tasks import update_popularity_score
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -80,6 +81,9 @@ class ReviewIntegrationTests(TestCase):
         }
         response = self.client.post(reverse('review-create'), data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # Для тестов вызываем обновление популярности синхронно
+        update_popularity_score(self.product.id)
 
         # Проверяем, что кэш инвалидирован
         self.assertIsNone(cache.get(f'product_detail:{self.product.id}'))
@@ -252,13 +256,16 @@ class ReviewIntegrationTests(TestCase):
         rating_before = self.get_rating_avg(self.product.id)
         popularity_before = calculate_popularity_score(self.product)
 
-        # Обновляем отзыв
+        # Обновляем отзыв через PATCH
         data = {
             'value': 5,
             'text': 'Отличный продукт!'
         }
-        response = self.client.put(reverse('review-update', args=[review.id]), data)
+        response = self.client.patch(reverse('review-update', args=[review.id]), data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Для тестов вызываем обновление популярности синхронно
+        update_popularity_score(self.product.id)
 
         # Проверяем метрики после обновления
         rating_after = self.get_rating_avg(self.product.id)
