@@ -71,16 +71,24 @@ def send_password_reset_email(self, email: str, reset_url: str) -> None:
         gaierror: Если возникла ошибка DNS или сетевого соединения.
         ValidationError: Если формат email некорректен.
     """
-    logger.info(f"Sending password reset email to {email} with reset_url={reset_url}, task_id={self.request.id}")
+    logger.info(f"Starting password reset email task for {email}, task_id={self.request.id}")
+    
+    logger.debug(f"Checking reset URL length: {len(reset_url)} characters")
     if len(reset_url) > 2000:
         logger.error(f"Reset URL too long: {len(reset_url)} characters, task_id={self.request.id}")
         return
+        
+    logger.debug(f"Validating email format: {email}")
     try:
         validate_email(email)
     except ValidationError:
         logger.error(f"Invalid email format: {email}, task_id={self.request.id}")
         return
+        
     try:
+        logger.debug(f"Preparing to send email to {email}")
+        logger.debug(f"Using FROM_EMAIL: {settings.DEFAULT_FROM_EMAIL}")
+        
         send_mail(
             subject="Сброс пароля",
             message=f"Для сброса пароля перейдите по ссылке: {reset_url}",
@@ -89,7 +97,11 @@ def send_password_reset_email(self, email: str, reset_url: str) -> None:
             recipient_list=[email],
             fail_silently=False
         )
-        logger.info(f"Password reset email sent to {email}, task_id={self.request.id}")
+        logger.info(f"Password reset email successfully sent to {email}, task_id={self.request.id}")
     except (SMTPException, gaierror) as e:
         logger.error(f"Failed to send password reset email to {email}: {str(e)}, task_id={self.request.id}")
+        logger.debug(f"Will retry in 60 seconds, attempt {self.request.retries + 1} of 3")
         raise self.retry(exc=e, countdown=60)
+    except Exception as e:
+        logger.error(f"Unexpected error sending password reset email: {str(e)}, task_id={self.request.id}")
+        raise
