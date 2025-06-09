@@ -264,18 +264,30 @@ class ConfirmPasswordService:
         Raises:
             UserNotFound: Если пользователь с указанным email не найден в системе.
         """
-        logger.info(f"Requesting password reset for email={email}")
+        logger.info(f"Starting password reset request for email={email}")
         try:
+            logger.debug(f"Looking up user with email={email}")
             user = User.objects.get(email=email)
+            logger.debug(f"Found user with id={user.id}")
+            
             token = PasswordResetTokenGenerator().make_token(user)
+            logger.debug(f"Generated reset token for user={user.id}")
+            
             uid = urlsafe_base64_encode(force_bytes(user.id))
-            logger.info(f"Generated uid={uid} for user={user.id}")
+            logger.debug(f"Generated uid={uid} for user={user.id}")
+            
             reset_url = f"http://localhost:8000/user/password-reset-confirm/?token={token}&uid={uid}"
+            logger.debug(f"Generated reset URL: {reset_url}")
+            
+            logger.info(f"Sending password reset task to Celery for email={email}")
             send_password_reset_email.delay(email, reset_url)
-            logger.info(f"Password reset requested for email={email}")
+            logger.info(f"Password reset task sent successfully for email={email}")
         except User.DoesNotExist:
             logger.warning(f"User not found for email={email}")
             raise UserNotFound("Пользователь не найден")
+        except Exception as e:
+            logger.error(f"Unexpected error during password reset request: {str(e)}")
+            raise
 
     @staticmethod
     def validate_reset_params(uid: str, token: str) -> str:
