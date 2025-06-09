@@ -1,6 +1,8 @@
 import hashlib
 from django.core.cache import cache
 import logging
+from typing import Any, Optional
+from rest_framework.request import Request
 
 logger = logging.getLogger(__name__)
 
@@ -11,10 +13,18 @@ class CacheService:
     Предоставляет методы для создания ключей кэша, получения/сохранения данных и инвалидации кэша.
     """
 
+    CACHE_TIMEOUT = 300  # 5 минут по умолчанию
+    PRODUCT_RELATED_PREFIXES = [
+        'reviews',
+        'product_detail',
+        'product_list',
+        'category',
+        'search_results'
+    ]
+
     @staticmethod
-    def build_cache_key(request, prefix: str) -> str:
-        """
-        Создает уникальный ключ кэша на основе параметров запроса.
+    def build_cache_key(request: Request, prefix: str) -> str:
+        """Создает уникальный ключ кэша на основе параметров запроса.
 
         Args:
             request: HTTP-запрос, содержащий GET-параметры.
@@ -34,9 +44,8 @@ class CacheService:
         return f"{prefix}:{params_hash}"
 
     @staticmethod
-    def get_cached_data(key: str):
-        """
-        Получает данные из кэша по ключу.
+    def get_cached_data(key: str) -> Optional[Any]:
+        """Получает данные из кэша по ключу.
 
         Args:
             key (str): Ключ кэша.
@@ -44,29 +53,35 @@ class CacheService:
         Returns:
             Данные из кэша или None, если кэш пуст.
         """
-        data = cache.get(key)
-        logger.debug(f"Cache {'hit' if data else 'miss'} for key: {key}")
-        return data
+        try:
+            data = cache.get(key)
+            logger.debug(f"Cache {'hit' if data else 'miss'} for key: {key}")
+            return data
+        except Exception as e:
+            logger.error(f"Failed to get cache for key {key}: {str(e)}")
+            return None
 
     @staticmethod
-    def set_cached_data(key: str, data, timeout: int = 900):
-        """
-        Сохраняет данные в кэш.
+    def set_cached_data(key: str, data: Any, timeout: Optional[int] = None) -> None:
+        """Сохраняет данные в кэш.
 
         Args:
             key (str): Ключ кэша.
             data: Данные для сохранения.
-            timeout (int, optional): Время жизни кэша в секундах (по умолчанию 15 минут).
+            timeout (int, optional): Время жизни кэша в секундах.
 
         Returns:
             None: Метод не возвращает значения, только сохраняет данные в кэш.
         """
-        cache.set(key, data, timeout)
+        try:
+            cache.set(key, data, timeout or CacheService.CACHE_TIMEOUT)
+            logger.debug(f"Cache set for key: {key}")
+        except Exception as e:
+            logger.error(f"Failed to set cache for key {key}: {str(e)}")
 
     @staticmethod
-    def invalidate_cache(prefix: str, pk: int = None):
-        """
-        Инвалидирует кэш по префиксу или конкретному ID.
+    def invalidate_cache(prefix: str, pk: Optional[int] = None) -> None:
+        """Инвалидирует кэш по префиксу или конкретному ID.
 
         Args:
             prefix (str): Префикс ключа кэша (например, 'product_list').
@@ -75,14 +90,16 @@ class CacheService:
         Returns:
             None: Метод не возвращает значения, только инвалидирует кэш.
         """
-        if pk:
-            key = f"{prefix}:{pk}"
-            cache.delete(key)
-            logger.info(f"Invalidated cache for key: {key}")
-        else:
-            # Для Redis мы не можем использовать delete_pattern, поэтому просто удаляем конкретный ключ
-            cache.delete(prefix)
-            logger.info(f"Invalidated cache for key: {prefix}")
+        try:
+            if pk:
+                key = f"{prefix}:{pk}"
+                cache.delete(key)
+                logger.debug(f"Invalidated cache for key: {key}")
+            else:
+                cache.delete_pattern(f'{prefix}:*')
+                logger.debug(f"Invalidated cache for key: {prefix}:*")
+        except Exception as e:
+            logger.error(f"Failed to invalidate cache for key {prefix}: {str(e)}")
 
     # Специфичные методы для приложений
 
@@ -110,12 +127,16 @@ class CacheService:
     @staticmethod
     def cache_review_list(product_id: int, request):
         """Кэширует список отзывов для продукта."""
-        return CacheService.get_cached_data(CacheService.build_cache_key(request, prefix=f"reviews:{product_id}"))
+        return CacheService.get_cached_data(
+            CacheService.build_cache_key(request, prefix=f"reviews:{product_id}")
+        )
 
     @staticmethod
     def cache_comment_list(review_id: int, request):
         """Кэширует список комментариев для отзыва."""
-        return CacheService.get_cached_data(CacheService.build_cache_key(request, prefix=f"comments:{review_id}"))
+        return CacheService.get_cached_data(
+            CacheService.build_cache_key(request, prefix=f"comments:{review_id}")
+        )
 
     @staticmethod
     def cache_cart(user_id: int):
@@ -135,7 +156,9 @@ class CacheService:
     @staticmethod
     def cache_delivery_list(user_id: int, request):
         """Кэширует список вариантов доставки для пользователя."""
-        return CacheService.get_cached_data(CacheService.build_cache_key(request, prefix=f"delivery_list:{user_id}"))
+        return CacheService.get_cached_data(
+            CacheService.build_cache_key(request, prefix=f"delivery_list:{user_id}")
+        )
 
     @staticmethod
     def cache_pickup_points_list(request, city: str = None):
