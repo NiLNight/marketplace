@@ -1,6 +1,7 @@
 import logging
 from django.contrib.auth import get_user_model
 from django.db import transaction
+from django.db.models import Count
 from rest_framework.exceptions import PermissionDenied
 from typing import Dict, Any, List
 from apps.comments.models import Comment
@@ -51,48 +52,65 @@ class CommentService:
             raise InvalidCommentData("Поле review должно быть ID или объектом Review.")
 
         parent = data.get('parent')
-        if parent and not isinstance(parent, Comment):
+        validated_data = {'review': review, 'text': data['text'], 'parent': None}
+        if parent:
             try:
-                parent = Comment.objects.get(pk=parent)
-                if parent.review_id != review.id:
-                    logger.warning(f"Parent comment {parent.id} does not belong to review {review.id}, user={user_id}")
+                parent_comment = parent if isinstance(parent, Comment) else Comment.objects.get(pk=int(parent))
+                if parent_comment.review_id != review.id:
+                    logger.warning(
+                        f"Parent comment {parent_comment.id} does not belong to review {review.id}, user={user_id}")
                     raise InvalidCommentData("Родительский комментарий должен относиться к тому же отзыву.")
-            except Comment.DoesNotExist:
-                logger.warning(f"Parent comment {parent} not found, user={user_id}")
+                validated_data['parent'] = parent_comment
+            except (Comment.DoesNotExist, ValueError):
+                logger.warning(f"Invalid parent comment {parent}, user={user_id}")
                 raise InvalidCommentData("Указанный родительский комментарий не существует.")
 
-        return {'review': review, 'text': data['text'], 'parent': parent}
+        return validated_data
 
     @staticmethod
-    def get_comments(review_id: int) -> List[Comment]:
-        """Получает список комментариев для указанного отзыва.
-
-        Извлекает комментарии с древовидной структурой, используя кэширование для оптимизации.
+    def get_comments(review_id: int, request: Any) -> List[Comment]:
+        """Получает список комментариев для отзыва.
 
         Args:
-            review_id (int): ID отзыва, для которого нужно получить комментарии.
+            review_id (int): ID отзыва.
+            request (Any): Объект запроса с параметрами сортировки.
 
         Returns:
-            List[Comment]: Список корневых узлов комментариев в древовидной структуре.
+            List[Comment]: Список комментариев.
 
         Raises:
-            CommentNotFound: Если комментарии для отзыва не найдены или произошла ошибка.
+            CommentNotFound: Если отзыв не найден или произошла ошибка при получении комментариев.
         """
-        logger.info(f"Retrieving comments for review={review_id}, user=anonymous")
-
         try:
-            # Проверка существования отзыва
             if not Review.objects.filter(pk=review_id).exists():
                 logger.warning(f"Review {review_id} not found")
                 raise CommentNotFound("Указанный отзыв не существует.")
-            comments = Comment.objects.prefetch_related('children', 'user', 'likes').filter(review_id=review_id)
+
+            ordering = request.GET.get('ordering', 'created')  # По умолчанию по дате создания
+            allowed_orderings = ['created', '-created', 'likes_count', '-likes_count']
+            if ordering not in allowed_orderings:
+                logger.warning(f"Invalid ordering {ordering} for review={review_id}")
+                ordering = 'created'
+
+            # Получаем все комментарии для отзыва
+            comments = Comment.objects.prefetch_related('children', 'user', 'likes').filter(
+                review_id=review_id
+            )
+
+            # Аннотируем likes_count для сортировки
+            if 'likes_count' in ordering:
+                comments = comments.annotate(likes_count=Count('likes'))
+
+            # Применяем сортировку
+            comments = comments.order_by(ordering)
 
             if not comments.exists():
                 logger.info(f"No comments found for review={review_id}")
                 return []
 
+            # Получаем дерево комментариев
             root_nodes = get_cached_trees(comments)
-            logger.info(f"Retrieved {len(root_nodes)} comments for review={review_id}")
+            logger.info(f"Retrieved {len(root_nodes)} root comments for review={review_id}")
             return root_nodes
 
         except Exception as e:
@@ -180,6 +198,8 @@ class CommentService:
         except Comment.DoesNotExist:
             logger.warning(f"Comment {comment_id} not found, user={user_id}")
             raise CommentNotFound()
+        except PermissionDenied:
+            raise
         except Exception as e:
             logger.error(f"Failed to update Comment {comment_id}: {str(e)}, data={data}, user={user_id}")
             raise InvalidCommentData(f"Ошибка обновления комментария: {str(e)}")

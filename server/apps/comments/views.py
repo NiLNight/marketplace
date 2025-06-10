@@ -65,7 +65,7 @@ class CommentListView(APIView):
         if cached_data:
             return Response(cached_data)
 
-        root_nodes = CommentService.get_comments(review_id)
+        root_nodes = CommentService.get_comments(review_id, request)
         paginator = self.pagination_class()
         page = paginator.paginate_queryset(root_nodes, request)
         serializer = self.serializer_class(page, many=True)

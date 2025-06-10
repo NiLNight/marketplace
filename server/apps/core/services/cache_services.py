@@ -36,7 +36,6 @@ class CacheService:
         params = [
             f"{key}={value}"
             for key, value in sorted(request.GET.items())
-            if key != 'page'
         ]
         # Создаем хеш из параметров
         params_str = "&".join(params)
