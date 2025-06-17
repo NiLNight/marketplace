@@ -15,8 +15,6 @@ from rest_framework import status
 from apps.comments.models import Comment
 from apps.products.models import Product, Category
 from apps.reviews.models import Review
-from apps.core.models import Like
-from apps.core.services.cache_services import CacheService
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
