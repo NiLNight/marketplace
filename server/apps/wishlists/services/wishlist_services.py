@@ -119,7 +119,15 @@ class WishlistService:
         for product_id_str in session_wishlist:
             try:
                 product = Product.objects.get(id=int(product_id_str), is_active=True)
-                WishlistItem.objects.get_or_create(user=user, product=product)
-                logger.info(f"Product {product_id_str} merged into wishlist for user={user_id}")
             except Product.DoesNotExist:
-                raise ProductNotAvailable(f"Товар с ID {product_id_str} не найден или неактивен")
+                logger.debug(
+                    f"Product with ID {product_id_str} not found or inactive during wishlist merge for user={user_id}"
+                )
+                continue
+            except ValueError:
+                logger.debug(f"Invalid product ID '{product_id_str}' in session wishlist for user={user_id}")
+                continue
+
+            WishlistItem.objects.get_or_create(user=user, product=product)
+            logger.info(f"Product {product_id_str} merged into wishlist for user={user_id}")
+
