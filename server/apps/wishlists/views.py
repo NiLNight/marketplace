@@ -1,4 +1,6 @@
 import logging
+
+from django.core.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -76,7 +78,13 @@ class WishlistAddView(APIView):
             Exception: Если добавление товара не удалось из-за некорректных данных или других ошибок (обрабатывается декоратором handle_api_errors).
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
-        product_id = int(request.data['product_id'])
+        if 'product_id' not in request.data:
+            raise ValidationError("Поле product_id обязательно")
+        try:
+            product_id = int(request.data['product_id'])
+        except ValueError:
+            logger.error(f"Invalid product_id: {request.data.get('product_id')}, user={user_id}, path={request.path}")
+            raise ValidationError("Некорректный product_id")
         WishlistService.add_to_wishlist(request, product_id)
         CacheService.invalidate_cache(prefix=f"wishlist", pk=user_id)
         logger.info(f"Product {product_id} added to wishlist via API for user={user_id}, path={request.path}")
