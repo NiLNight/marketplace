@@ -5,6 +5,8 @@ from apps.carts.models import OrderItem
 from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 
+from decimal import Decimal
+
 User = get_user_model()
 
 
@@ -19,7 +21,7 @@ class CartModelsTests(TestCase):
         self.product = Product.objects.create(
             title='Test Product',
             description='Test Description',
-            price=100.00,
+            price=Decimal('100.00'),
             category=self.category,
             stock=10,
             user=self.user

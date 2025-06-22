@@ -141,10 +141,17 @@ class CartService:
 
         Raises:
             ProductNotAvailable: Если товар не существует, неактивен или недостаточно на складе.
-            CartException: Если превышен лимит количества (20 единиц).
+            CartItemNotFound: Если элемент корзины не найден и quantity > 0.
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
-        product = CartService._validate_cart_item(product_id, quantity, user_id)
+        if quantity > 0:
+            product = CartService._validate_cart_item(product_id, quantity, user_id)
+        else:
+            try:
+                product = Product.objects.get(id=product_id, is_active=True)
+            except Product.DoesNotExist:
+                logger.warning(f"Product {product_id} not found or inactive, user={user_id}")
+                raise ProductNotAvailable()
 
         if request.user.is_authenticated:
             try:
@@ -160,20 +167,26 @@ class CartService:
                     return None
             except OrderItem.DoesNotExist:
                 logger.warning(f"Cart item {product_id} not found, user={user_id}")
-                return None
+                if quantity > 0:
+                    raise CartItemNotFound()
+                return None  # Для quantity=0 возвращаем None
         else:
             cart = request.session.get('cart', {})
             product_id_str = str(product_id)
+            if product_id_str not in cart:
+                logger.warning(f"Cart item {product_id} not found, user={user_id}")
+                if quantity > 0:
+                    raise CartItemNotFound()
+                return None  # Для quantity=0 возвращаем None
             if quantity > 0:
                 cart[product_id_str] = quantity
                 request.session['cart'] = cart
                 logger.info(f"Updated session cart item {product_id}, quantity={quantity}, user={user_id}")
                 return {'product_id': product_id, 'quantity': quantity}
             else:
-                if product_id_str in cart:
-                    del cart[product_id_str]
-                    request.session['cart'] = cart
-                    logger.info(f"Removed session cart item {product_id}, user={user_id}")
+                del cart[product_id_str]
+                request.session['cart'] = cart
+                logger.info(f"Removed session cart item {product_id}, user={user_id}")
                 return None
 
     @staticmethod

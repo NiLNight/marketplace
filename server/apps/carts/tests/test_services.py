@@ -4,9 +4,9 @@ from django.contrib.auth import get_user_model
 from apps.products.models import Product, Category
 from django.contrib.auth.models import AnonymousUser
 from apps.carts.models import OrderItem
+from decimal import Decimal
 from apps.carts.exceptions import ProductNotAvailable, InvalidQuantity, CartItemNotFound, CartException
 from apps.carts.services.cart_services import CartService
-from django.core.exceptions import ValidationError
 from django.http import HttpRequest
 
 User = get_user_model()
@@ -23,7 +23,7 @@ class CartServicesTests(TestCase):
         self.product = Product.objects.create(
             title='Test Product',
             description='Test Description',
-            price=100.00,
+            price=Decimal('100.00'),
             category=self.category,
             stock=10,  # Ensure enough stock for tests
             is_active=True,  # Ensure product is active
@@ -139,10 +139,10 @@ class CartServicesTests(TestCase):
         self.assertIn("Нельзя добавить больше 20 единиц товара", str(cm.exception))
         self.assertEqual(request_unauthenticated.session.get('cart', {}).get(str(self.product.id)), 18)
 
-    # Tests for update_cart_item
+        # Tests for update_cart_item
 
     def test_update_cart_item_authenticated(self):
-        OrderItem.objects.create(user=self.user, product=self.product, quantity=5, order__isnull=True)
+        OrderItem.objects.create(user=self.user, product=self.product, quantity=5)
         updated_item = CartService.update_cart_item(self.request, self.product.id, 3)
         self.assertEqual(OrderItem.objects.get(user=self.user, product=self.product, order__isnull=True).quantity, 3)
         self.assertEqual(updated_item['quantity'], 3)
@@ -180,10 +180,11 @@ class CartServicesTests(TestCase):
         updated_item = CartService.update_cart_item(request_unauthenticated, 999999, 1)
         self.assertIsNone(updated_item)
 
-    # Tests for remove_from_cart
+        # Tests for remove_from_cart
 
     def test_remove_from_cart_authenticated(self):
-        OrderItem.objects.create(user=self.user, product=self.product, quantity=5, order__isnull=True)
+        OrderItem.objects.create(user=self.user, product=self.product, quantity=5)
+
         success = CartService.remove_from_cart(self.request, self.product.id)
         self.assertTrue(success)
         self.assertFalse(OrderItem.objects.filter(user=self.user, product=self.product, order__isnull=True).exists())
@@ -207,7 +208,7 @@ class CartServicesTests(TestCase):
         with self.assertRaises(CartItemNotFound):
             CartService.remove_from_cart(request_unauthenticated, 999999)
 
-    # Tests for merge_cart_on_login
+        # Tests for merge_cart_on_login
 
     def test_merge_cart_on_login_empty_session_cart(self):
         session_cart = {}
@@ -218,7 +219,7 @@ class CartServicesTests(TestCase):
         product2 = Product.objects.create(
             title='Test Product 2',
             description='Desc 2',
-            price=200.00,
+            price=Decimal('200.00'),
             category=self.category,
             stock=5,
             user=self.user
@@ -230,7 +231,8 @@ class CartServicesTests(TestCase):
         self.assertEqual(OrderItem.objects.get(user=self.user, product=product2, order__isnull=True).quantity, 3)
 
     def test_merge_cart_on_login_existing_items(self):
-        OrderItem.objects.create(user=self.user, product=self.product, quantity=1, order__isnull=True)
+        OrderItem.objects.create(user=self.user, product=self.product, quantity=1)
+
         session_cart = {str(self.product.id): 2}
         CartService.merge_cart_on_login(self.user, session_cart)
         self.assertEqual(OrderItem.objects.filter(user=self.user, product=self.product, order__isnull=True).count(), 1)
@@ -240,12 +242,13 @@ class CartServicesTests(TestCase):
         product2 = Product.objects.create(
             title='Test Product 2',
             description='Desc 2',
-            price=200.00,
+            price=Decimal('200.00'),
             category=self.category,
             stock=5,
             user=self.user
         )
-        OrderItem.objects.create(user=self.user, product=self.product, quantity=1, order__isnull=True)
+
+        OrderItem.objects.create(user=self.user, product=self.product, quantity=1)
         session_cart = {str(self.product.id): 2, str(product2.id): 3}
         CartService.merge_cart_on_login(self.user, session_cart)
         self.assertEqual(OrderItem.objects.filter(user=self.user, order__isnull=True).count(), 2)
@@ -253,7 +256,7 @@ class CartServicesTests(TestCase):
         self.assertEqual(OrderItem.objects.get(user=self.user, product=product2, order__isnull=True).quantity, 3)
 
     def test_merge_cart_on_login_quantity_limit(self):
-        OrderItem.objects.create(user=self.user, product=self.product, quantity=18, order__isnull=True)
+        OrderItem.objects.create(user=self.user, product=self.product, quantity=18)
         session_cart = {str(self.product.id): 5}
         CartService.merge_cart_on_login(self.user, session_cart)
         self.assertEqual(OrderItem.objects.get(user=self.user, product=self.product, order__isnull=True).quantity, 20)
@@ -262,7 +265,7 @@ class CartServicesTests(TestCase):
         product2 = Product.objects.create(
             title='Test Product 2',
             description='Desc 2',
-            price=200.00,
+            price=Decimal('200.00'),
             category=self.category,
             stock=1,
             user=self.user

@@ -188,12 +188,10 @@ class Product(TimeStampedModel):
         """
         if self.price is None or self.discount is None:
             return None
-        
-        if isinstance(self.discount, float):
-            discount = Decimal(str(self.discount))
-        else:
-            discount = self.discount
-        return self.price * (Decimal('100') - discount) / Decimal('100')
+
+        price_decimal = Decimal(str(self.price)) if isinstance(self.price, float) else self.price
+        discount_decimal = Decimal(str(self.discount)) if isinstance(self.discount, float) else self.discount
+        return price_decimal * (Decimal('100') - discount_decimal) / Decimal('100')
 
     @property
     def in_stock(self) -> bool:
