@@ -127,8 +127,9 @@ class CartsItemUpdateView(APIView):
             CacheService.invalidate_cache(prefix=f"cart", pk=user_id)
             logger.info(f"Updated cart item {pk}, quantity={quantity}, user={user_id}")
             return Response(serializer.data)
-        logger.warning(f"Cart item {pk} not found, user={user_id}")
-        raise CartItemNotFound()
+        CacheService.invalidate_cache(prefix=f"cart", pk=user_id)
+        logger.info(f"Removed cart item {pk} (quantity=0), user={user_id}")
+        return Response(status=status.HTTP_200_OK)
 
 
 class CartsItemDeleteView(APIView):
