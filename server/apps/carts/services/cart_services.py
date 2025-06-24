@@ -37,17 +37,18 @@ class CartService:
 
         try:
             product = Product.objects.get(id=product_id, is_active=True)
+
         except Product.DoesNotExist:
             logger.warning(f"Product {product_id} not found or inactive, user={user_id}")
             raise ProductNotAvailable()
 
-        if quantity > product.stock:
-            logger.warning(f"Insufficient stock for product {product_id}, user={user_id}")
-            raise ProductNotAvailable("Недостаточно товара на складе.")
-
         if quantity > 20:
             logger.warning(f"Quantity limit exceeded for product {product_id}, user={user_id}")
             raise CartException(f"Нельзя добавить больше 20 единиц товара {product.title} в корзину.")
+
+        if quantity > product.stock:
+            logger.warning(f"Insufficient stock for product {product_id}, user={user_id}")
+            raise ProductNotAvailable("Недостаточно товара на складе.")
 
         return product
 
@@ -247,11 +248,14 @@ class CartService:
                         user=user,
                         product=product,
                         order__isnull=True,
-                        defaults={'quantity': 0}
+                        defaults={'quantity': min(quantity, 20)}
                     )
-                    new_quantity = min(cart_item.quantity + quantity, 20, product.stock)
-                    cart_item.quantity = new_quantity
-                    cart_item.save()
+                    if not created:
+                        new_quantity = min(cart_item.quantity + quantity, 20)
+                        if new_quantity > product.stock:
+                            raise ProductNotAvailable("Недостаточно товара на складе.")
+                        cart_item.quantity = new_quantity
+                        cart_item.save()
                     logger.info(f"Merged product {product_id} to cart, user={user_id}")
                 except Product.DoesNotExist:
                     logger.warning(f"Product {product_id_str} not found or inactive, user={user_id}")

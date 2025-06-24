@@ -148,7 +148,7 @@ class CartServicesTests(TestCase):
         self.assertEqual(updated_item['quantity'], 3)
 
     def test_update_cart_item_authenticated_remove(self):
-        OrderItem.objects.create(user=self.user, product=self.product, quantity=5, order__isnull=True)
+        OrderItem.objects.create(user=self.user, product=self.product, quantity=5, order=None)  # Use order=None
         updated_item = CartService.update_cart_item(self.request, self.product.id, 0)
         self.assertFalse(OrderItem.objects.filter(user=self.user, product=self.product, order__isnull=True).exists())
         self.assertIsNone(updated_item)
@@ -222,6 +222,7 @@ class CartServicesTests(TestCase):
             price=Decimal('200.00'),
             category=self.category,
             stock=5,
+            is_active=True,  # Set is_active=True
             user=self.user
         )
         session_cart = {str(self.product.id): 2, str(product2.id): 3}
@@ -245,9 +246,9 @@ class CartServicesTests(TestCase):
             price=Decimal('200.00'),
             category=self.category,
             stock=5,
+            is_active=True,  # Set is_active=True
             user=self.user
         )
-
         OrderItem.objects.create(user=self.user, product=self.product, quantity=1)
         session_cart = {str(self.product.id): 2, str(product2.id): 3}
         CartService.merge_cart_on_login(self.user, session_cart)
