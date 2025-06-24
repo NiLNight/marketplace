@@ -44,3 +44,7 @@ class CartItemNotFound(CartException):
     """
     default_detail = 'Элемент корзины не найден'
     status_code = 404
+
+
+class ProductNotFound(CartException):
+    default_detail = 'Товар не найден'

@@ -29,27 +29,17 @@ class CartService:
         Raises:
             InvalidQuantity: Если количество меньше 1.
             ProductNotAvailable: Если товар не существует, неактивен или недостаточно на складе.
-            CartException: Если превышен лимит количества (20 единиц).
         """
-        if quantity < 1:
-            logger.warning(f"Invalid quantity {quantity} for product {product_id}, user={user_id}")
-            raise InvalidQuantity("Количество должно быть положительным.")
-
-        try:
-            product = Product.objects.get(id=product_id, is_active=True)
-
-        except Product.DoesNotExist:
-            logger.warning(f"Product {product_id} not found or inactive, user={user_id}")
-            raise ProductNotAvailable()
-
-        if quantity > 20:
-            logger.warning(f"Quantity limit exceeded for product {product_id}, user={user_id}")
-            raise CartException(f"Нельзя добавить больше 20 единиц товара {product.title} в корзину.")
-
+        product = Product.objects.filter(id=product_id, is_active=True).first()
+        if not product:
+            raise ProductNotAvailable("Товар не найден или неактивен")
+        if quantity <= 0:
+            raise InvalidQuantity("Количество должно быть больше 0")
         if quantity > product.stock:
-            logger.warning(f"Insufficient stock for product {product_id}, user={user_id}")
-            raise ProductNotAvailable("Недостаточно товара на складе.")
-
+            raise ProductNotAvailable("Недостаточно товара на складе")
+        if quantity > 20:
+            quantity = 20  # Ограничиваем до 20 для лимита корзины
+            logger.info(f"Quantity {quantity} for product {product_id} exceeds limit, setting to 20, user={user_id}")
         return product
 
     @staticmethod
@@ -96,7 +86,6 @@ class CartService:
         Raises:
             InvalidQuantity: Если количество меньше 1.
             ProductNotAvailable: Если товар не существует, неактивен или недостаточно на складе.
-            CartException: Если превышен лимит количества (20 единиц).
         """
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         product = CartService._validate_cart_item(product_id, quantity, user_id)
@@ -108,24 +97,18 @@ class CartService:
                 order__isnull=True,
                 defaults={'quantity': 0}
             )
-            new_quantity = cart_item.quantity + quantity
-            if new_quantity > 20:
-                logger.warning(f"Quantity limit exceeded for product {product_id}, user={user_id}")
-                raise CartException(f"Нельзя добавить больше 20 единиц товара {product.title} в корзину.")
+            new_quantity = min(cart_item.quantity + quantity, 20)  # Ограничиваем до 20
             cart_item.quantity = new_quantity
             cart_item.save()
-            logger.info(f"Added product {product_id} to cart, user={user_id}")
+            logger.info(f"Added product {product_id} to cart, user={user_id}, quantity={new_quantity}")
         else:
             cart = request.session.get('cart', {})
             product_id_str = str(product_id)
             current_quantity = cart.get(product_id_str, 0)
-            new_quantity = current_quantity + quantity
-            if new_quantity > 20:
-                logger.warning(f"Quantity limit exceeded for product {product_id}, user={user_id}")
-                raise CartException(f"Нельзя добавить больше 20 единиц товара {product.title} в корзину.")
+            new_quantity = min(current_quantity + quantity, 20)  # Ограничиваем до 20
             cart[product_id_str] = new_quantity
             request.session['cart'] = cart
-            logger.info(f"Added product {product_id} to session cart, user={user_id}")
+            logger.info(f"Added product {product_id} to session cart, user={user_id}, quantity={new_quantity}")
 
     @staticmethod
     @transaction.atomic
@@ -158,9 +141,9 @@ class CartService:
             try:
                 cart_item = OrderItem.objects.get(user=request.user, product_id=product_id, order__isnull=True)
                 if quantity > 0:
-                    cart_item.quantity = quantity
+                    cart_item.quantity = min(quantity, 20)  # Ограничиваем до 20
                     cart_item.save()
-                    logger.info(f"Updated cart item {product_id}, quantity={quantity}, user={user_id}")
+                    logger.info(f"Updated cart item {product_id}, quantity={cart_item.quantity}, user={user_id}")
                     return {'id': cart_item.id, 'product_id': cart_item.product_id, 'quantity': cart_item.quantity}
                 else:
                     cart_item.delete()
@@ -180,10 +163,10 @@ class CartService:
                     raise CartItemNotFound()
                 return None  # Для quantity=0 возвращаем None
             if quantity > 0:
-                cart[product_id_str] = quantity
+                cart[product_id_str] = min(quantity, 20)  # Ограничиваем до 20
                 request.session['cart'] = cart
-                logger.info(f"Updated session cart item {product_id}, quantity={quantity}, user={user_id}")
-                return {'product_id': product_id, 'quantity': quantity}
+                logger.info(f"Updated session cart item {product_id}, quantity={cart[product_id_str]}, user={user_id}")
+                return {'product_id': product_id, 'quantity': cart[product_id_str]}
             else:
                 del cart[product_id_str]
                 request.session['cart'] = cart
