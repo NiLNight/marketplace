@@ -1,8 +1,6 @@
-import pytest
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from decimal import Decimal
 from apps.orders.models import Order
 from apps.delivery.models import PickupPoint, City
 
