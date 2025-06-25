@@ -9,16 +9,19 @@ from apps.carts.models import OrderItem
 
 User = get_user_model()
 
+
 class OrderSerializerTest(TestCase):
     """
     Тесты для OrderSerializer и OrderDetailSerializer: валидация, сериализация, edge-cases.
     """
+
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', email='test@example.com', password='testpass123')
         self.city = City.objects.create(name='Test City')
         self.pickup_point = PickupPoint.objects.create(city=self.city, address='Test address', is_active=True)
         self.category = Category.objects.create(title='TestCat')
-        self.product = Product.objects.create(title='TestProd', description='desc', price=Decimal('10.00'), category=self.category, stock=5, user=self.user, is_active=True)
+        self.product = Product.objects.create(title='TestProd', description='desc', price=Decimal('10.00'),
+                                              category=self.category, stock=5, user=self.user, is_active=True)
         self.order = Order.objects.create(user=self.user, total_price=20, pickup_point=self.pickup_point)
         self.order_item = OrderItem.objects.create(order=self.order, product=self.product, quantity=2)
 
@@ -40,8 +43,9 @@ class OrderSerializerTest(TestCase):
 
     def test_order_detail_serializer_inactive_pickup_point(self):
         inactive_pickup = PickupPoint.objects.create(city=self.city, address='Inactive address', is_active=False)
-        self.order.pickup_point = inactive_pickup
-        self.order.save()
+        # Обновляем заказ без валидации модели
+        Order.objects.filter(id=self.order.id).update(pickup_point=inactive_pickup)
+        self.order.refresh_from_db()  # Синхронизируем объект с базой
         serializer = OrderDetailSerializer(instance=self.order)
         with self.assertRaises(Exception):
             serializer.is_valid(raise_exception=True)
@@ -52,4 +56,4 @@ class OrderSerializerTest(TestCase):
         self.order.refresh_from_db()
         serializer = OrderDetailSerializer(instance=self.order)
         with self.assertRaises(Exception):
-            serializer.is_valid(raise_exception=True) 
+            serializer.is_valid(raise_exception=True)

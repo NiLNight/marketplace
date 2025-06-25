@@ -171,6 +171,16 @@ class OrderCreateView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+        try:
+            pickup_point_id = int(pickup_point_id)
+        except (TypeError, ValueError):
+            logger.warning(
+                f"Invalid pickup_point_id={pickup_point_id} for user={user_id}, path={request.path}, IP={request.META.get('REMOTE_ADDR')}")
+            return Response(
+                {"error": _("Идентификатор пункта выдачи должен быть числом"), "code": "invalid_input"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         order = OrderService.create_order(
             user=request.user,
             pickup_point_id=pickup_point_id,
