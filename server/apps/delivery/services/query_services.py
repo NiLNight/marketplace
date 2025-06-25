@@ -124,7 +124,7 @@ class PickupPointQueryService:
                     )
 
             if district:
-                search = search.filter('term', **{'district': district})
+                search = search.filter('term', **{'district.raw': district})
 
             if query:
                 search = search.query(
@@ -134,7 +134,7 @@ class PickupPointQueryService:
                     fuzziness=2
                 )
             else:
-                search = search.sort('city.name', 'address')
+                search = search.sort('city.name.raw', 'address.raw')
 
             search = search[(page - 1) * page_size:page * page_size]
             response = search.execute()

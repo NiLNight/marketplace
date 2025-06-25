@@ -26,7 +26,7 @@ class PickupPointDocument(Document):
     district = fields.TextField(analyzer='standard', fields={'raw': fields.KeywordField()})
     city = fields.ObjectField(properties={
         'id': fields.IntegerField(),
-        'name': fields.TextField(analyzer='standard'),
+        'name': fields.TextField(analyzer='standard', fields={'raw': fields.KeywordField()}),
     })
     is_active = fields.BooleanField()
 
