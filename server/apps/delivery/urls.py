@@ -10,6 +10,8 @@ from apps.delivery.views import (
     PickupPointListView,
 )
 
+app_name = 'delivery'
+
 urlpatterns = [
     path('pickup_points/', PickupPointListView.as_view(), name='pickup_points'),
     path('city_list/', CityListView.as_view(), name='city_list'),
