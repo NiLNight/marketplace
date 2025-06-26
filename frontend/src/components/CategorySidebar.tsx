@@ -1,11 +1,14 @@
 // src/components/CategorySidebar.tsx
+
 import {useQuery} from '@tanstack/react-query';
 import axios from 'axios';
 import {useFilterStore} from '../stores/useFilterStore';
 import {List, ChevronRight, ChevronDown} from 'lucide-react';
-import {useState, useCallback, useMemo, useEffect} from 'react';
+import {useState, useCallback, useMemo} from 'react';
 
+// 1. Обновляем тип, добавляем id
 type Category = {
+    id: number; // <-- Добавили!
     slug: string;
     title: string;
     description?: string;
@@ -13,25 +16,11 @@ type Category = {
     children: Category[];
 };
 
-// Маппинг slug → id на основе структуры категорий
-const slugToIdMap: Record<string, number> = {
-    'produkty': 1,
-    'ovoshi': 2,
-    'fructi': 3,
-    'yagody': 4,
-    'molochnye-produkty': 5,
-    'myasnye-produkty': 6,
-    'hlebobulochnye-izdeliya': 7,
-    'napitki': 8,
-    'sladosti': 9,
-    'zamorozhennye-produkty': 10,
-    'morozhenoe': 11
-};
-
 const fetchCategories = async (): Promise<Category[]> => {
+    // Давайте сразу перенесем URL в переменную окружения
+    const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/products/categories/`;
     try {
-        const {data} = await axios.get('http://localhost:8000/products/categories/');
-        console.log('Fetched categories:', data);
+        const {data} = await axios.get(apiUrl);
         if (!Array.isArray(data)) {
             console.error('Expected an array, got:', data);
             return [];
@@ -43,27 +32,30 @@ const fetchCategories = async (): Promise<Category[]> => {
     }
 };
 
-function findCategoryPath(Categories: Category[], selectedId: number | null): number[] {
+// 3. Упрощаем функцию поиска пути, теперь она работает с id
+function findCategoryPath(categories: Category[], selectedId: number | null): number[] {
     if (selectedId === null) return [];
     const path: number[] = [];
 
     function dfs(nodes: Category[], currentPath: number[]): boolean {
         for (const node of nodes) {
-            const nodeId = slugToIdMap[node.slug];
-            if (nodeId === selectedId) {
-                path.push(...currentPath, nodeId);
+            if (node.id === selectedId) {
+                path.push(...currentPath, node.id);
                 return true;
             }
             if (node.children && node.children.length > 0) {
-                if (dfs(node.children, [...currentPath, nodeId])) return true;
+                if (dfs(node.children, [...currentPath, node.id])) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
-    dfs(Categories, []);
+    dfs(categories, []);
     return path;
 }
+
 
 function CategoryListItem({
                               category,
@@ -71,31 +63,29 @@ function CategoryListItem({
                               expanded,
                               toggleExpand,
                               selectedCategory,
-                              pathToSelected
+                              pathToSelected,
                           }: {
     category: Category;
     level: number;
-    expanded: Record<string, boolean>;
-    toggleExpand: (slug: string) => void;
+    expanded: Record<number, boolean>; // Используем id в качестве ключа
+    toggleExpand: (id: number) => void;
     selectedCategory: number | null;
     pathToSelected: number[];
 }) {
     const {setCategory} = useFilterStore();
-    console.log('CategoryListItem received category:', category);
-    const categoryId = slugToIdMap[category.slug];
-    const isActive = selectedCategory === categoryId;
-    const isInPath = pathToSelected.includes(categoryId);
+    const isActive = selectedCategory === category.id;
+    const isInPath = pathToSelected.includes(category.id);
     const hasChildren = category.children && category.children.length > 0;
-    const isExpanded = expanded[category.slug] || false;
+    const isExpanded = expanded[category.id] || isInPath; // Категория раскрыта, если она в пути к выбранной
 
     return (
-        <li key={category.slug}>
+        <li key={category.id}>
             <div className="flex items-center">
                 {hasChildren && (
                     <button
                         type="button"
                         aria-label={isExpanded ? 'Свернуть' : 'Раскрыть'}
-                        onClick={() => toggleExpand(category.slug)}
+                        onClick={() => toggleExpand(category.id)}
                         className="mr-1 text-slate-400 hover:text-cyan-400 focus:outline-none"
                         style={{marginLeft: `${level * 1.25}rem`}}
                     >
@@ -104,20 +94,11 @@ function CategoryListItem({
                 )}
                 {!hasChildren && <span style={{marginLeft: `${level * 1.25 + 1.25}rem`}}/>}
                 <button
-                    onClick={() => {
-                        if (category.slug === undefined) {
-                            console.error('Category slug is undefined:', category);
-                            return;
-                        }
-                        console.log('Category clicked:', category.slug, 'Mapped ID:', categoryId);
-                        setCategory(categoryId);
-                    }}
+                    onClick={() => setCategory(category.id)} // <--- Передаем сразу id
                     className={`flex-1 text-left rounded-md p-2 text-sm transition-colors ${
                         isActive
                             ? 'bg-cyan-500/20 font-semibold text-cyan-300'
-                            : isInPath
-                                ? 'bg-cyan-900/10 text-cyan-200'
-                                : 'text-slate-300 hover:bg-slate-700'
+                            : 'text-slate-300 hover:bg-slate-700'
                     }`}
                 >
                     {category.title}
@@ -126,16 +107,15 @@ function CategoryListItem({
             {hasChildren && isExpanded && (
                 <ul className="mt-1">
                     {category.children.map((child) => (
-                        <li key={child.slug}>
-                            <CategoryListItem
-                                category={child}
-                                level={level + 1}
-                                expanded={expanded}
-                                toggleExpand={toggleExpand}
-                                selectedCategory={selectedCategory}
-                                pathToSelected={pathToSelected}
-                            />
-                        </li>
+                        <CategoryListItem
+                            key={child.id}
+                            category={child}
+                            level={level + 1}
+                            expanded={expanded}
+                            toggleExpand={toggleExpand}
+                            selectedCategory={selectedCategory}
+                            pathToSelected={pathToSelected}
+                        />
                     ))}
                 </ul>
             )}
@@ -147,37 +127,20 @@ export function CategorySidebar() {
     const {category: selectedCategory, setCategory} = useFilterStore();
     const {data: categories, isLoading, isError} = useQuery({
         queryKey: ['categories'],
-        queryFn: fetchCategories
+        queryFn: fetchCategories,
     });
 
-    useEffect(() => {
-        console.log('Current selected category:', selectedCategory);
-    }, [selectedCategory]);
+    const [expanded, setExpanded] = useState<Record<number, boolean>>({});
 
-    const [expanded, setExpanded] = useState<Record<string, boolean>>({});
-
-    const pathToSelected = useMemo(() =>
-            categories ? findCategoryPath(categories, selectedCategory) : [],
+    const pathToSelected = useMemo(
+        () => (categories ? findCategoryPath(categories, selectedCategory) : []),
         [categories, selectedCategory]
     );
 
-    useMemo(() => {
-        if (!categories || !selectedCategory) return;
-        const path = findCategoryPath(categories, selectedCategory);
-        if (path.length > 0) {
-            setExpanded((prev) => {
-                const next = {...prev};
-                path.forEach((id) => {
-                    next[id] = true;
-                });
-                return next;
-            });
-        }
-    }, [categories, selectedCategory]);
-
-    const toggleExpand = useCallback((slug: string) => {
-        setExpanded((prev) => ({...prev, [slug]: !prev[slug]}));
+    const toggleExpand = useCallback((id: number) => {
+        setExpanded((prev) => ({...prev, [id]: !prev[id]}));
     }, []);
+
 
     if (isLoading) return <div className="p-4 text-slate-400">Загрузка категорий...</div>;
     if (isError) return <div className="p-4 text-red-500">Ошибка загрузки.</div>;
@@ -189,12 +152,11 @@ export function CategorySidebar() {
                 <ul className="space-y-1">
                     <li>
                         <button
-                            onClick={() => {
-                                console.log('All products clicked');
-                                setCategory(null);
-                            }}
+                            onClick={() => setCategory(null)}
                             className={`flex w-full items-center rounded-md p-2 text-sm transition-colors ${
-                                selectedCategory === null ? 'bg-cyan-500/20 font-semibold text-cyan-300' : 'text-slate-300 hover:bg-slate-700'
+                                selectedCategory === null
+                                    ? 'bg-cyan-500/20 font-semibold text-cyan-300'
+                                    : 'text-slate-300 hover:bg-slate-700'
                             }`}
                         >
                             <List className="mr-3 h-4 w-4"/>
@@ -202,16 +164,15 @@ export function CategorySidebar() {
                         </button>
                     </li>
                     {categories?.map((category) => (
-                        <li key={category.slug}>
-                            <CategoryListItem
-                                category={category}
-                                level={0}
-                                expanded={expanded}
-                                toggleExpand={toggleExpand}
-                                selectedCategory={selectedCategory}
-                                pathToSelected={pathToSelected}
-                            />
-                        </li>
+                        <CategoryListItem
+                            key={category.id}
+                            category={category}
+                            level={0}
+                            expanded={expanded}
+                            toggleExpand={toggleExpand}
+                            selectedCategory={selectedCategory}
+                            pathToSelected={pathToSelected}
+                        />
                     ))}
                 </ul>
             </nav>

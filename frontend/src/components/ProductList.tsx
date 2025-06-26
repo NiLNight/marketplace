@@ -22,16 +22,20 @@ type ApiResponse = {
 
 const fetchProducts = async (filters: FilterStore): Promise<ApiResponse> => {
     const params = new URLSearchParams();
-    if (filters.category !== null && filters.category !== undefined && !isNaN(filters.category)) {
+    if (filters.category !== null) { // Упростили проверку
         params.append('category', String(filters.category));
     }
     if (filters.searchTerm) params.append('q', filters.searchTerm);
     if (filters.minPrice) params.append('price__gte', filters.minPrice);
     if (filters.maxPrice) params.append('price__lte', filters.maxPrice);
-    if (filters.ordering) params.append('ordering', filters.ordering);
+    // Вот ключевое изменение:
+    if (filters.ordering) { // <-- Отправляем ordering, только если он не пустой
+        params.append('ordering', filters.ordering);
+    }
 
-    console.log('Request URL:', `http://localhost:8000/products/list/?${params.toString()}`);
-    const {data} = await axios.get(`http://localhost:8000/products/list/`, {params});
+    const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/products/list/`;
+    console.log('Request URL:', `${apiUrl}?${params.toString()}`);
+    const {data} = await axios.get(apiUrl, {params});
     return data;
 };
 
