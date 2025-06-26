@@ -1,15 +1,12 @@
+import {ProductList} from "./components/ProductList";
+
 function App() {
     return (
-        <div className="flex min-h-screen items-center justify-center bg-slate-900 text-center">
-            <div>
-                <h1 className="text-5xl font-bold text-green-400">
-                    ПОЛУЧИЛОСЬ!
-                </h1>
-                <p className="mt-4 text-lg text-slate-300">
-                    React, TypeScript и Tailwind CSS успешно настроены.
-                </p>
+        <main className="min-h-screen bg-slate-900 p-4 sm:p-8">
+            <div className="mx-auto w-full max-w-7xl">
+                <ProductList/>
             </div>
-        </div>
+        </main>
     )
 }
 
