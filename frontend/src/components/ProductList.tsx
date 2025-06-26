@@ -1,8 +1,9 @@
+// src/components/ProductList.tsx
 import {useQuery} from '@tanstack/react-query';
 import axios from 'axios';
 import {ImageIcon} from 'lucide-react';
 import {Link} from 'react-router-dom';
-import {useFilterStore, type FilterStore} from '../stores/useFilterStore'; // Импортируем тип
+import {useFilterStore, type FilterStore} from '../stores/useFilterStore';
 import {useDebounce} from '../hooks/useDebounce';
 
 type Product = {
@@ -21,18 +22,22 @@ type ApiResponse = {
 
 const fetchProducts = async (filters: FilterStore): Promise<ApiResponse> => {
     const params = new URLSearchParams();
-    if (filters.category) params.append('category', filters.category.toString());
+    if (filters.category !== null && filters.category !== undefined && !isNaN(filters.category)) {
+        params.append('category', String(filters.category));
+    }
     if (filters.searchTerm) params.append('q', filters.searchTerm);
     if (filters.minPrice) params.append('price__gte', filters.minPrice);
     if (filters.maxPrice) params.append('price__lte', filters.maxPrice);
     if (filters.ordering) params.append('ordering', filters.ordering);
 
+    console.log('Request URL:', `http://localhost:8000/products/list/?${params.toString()}`);
     const {data} = await axios.get(`http://localhost:8000/products/list/`, {params});
     return data;
 };
 
 export function ProductList() {
-    const filters = useFilterStore(); // Теперь TypeScript знает, что filters имеет тип FilterStore
+    const filters = useFilterStore();
+    console.log('Filters in ProductList:', filters);
     const debouncedSearchTerm = useDebounce(filters.searchTerm, 500);
     const queryFilters = {...filters, searchTerm: debouncedSearchTerm};
 
@@ -77,7 +82,8 @@ export function ProductList() {
                     return (
                         <Link to={`/products/${product.id}`} key={product.id} className="group flex">
                             <div
-                                className="flex w-full flex-col overflow-hidden rounded-lg bg-slate-800 shadow-lg transition-shadow duration-300 hover:shadow-cyan-500/30">
+                                className="flex w-full flex-col overflow-hidden rounded-lg bg-slate-800 shadow-lg transition-shadow duration-300 hover:shadow-cyan-500/30"
+                            >
                                 <div className="relative w-full aspect-[4/5] bg-slate-700">
                                     {imageUrl ? (
                                         <img
