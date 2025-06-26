@@ -1,124 +1,149 @@
-# Marketplace
 
-Проект маркетплейса на Django REST Framework.
-
-## Требования
-
+## Технический стек
 - Python 3.11+
+- Django 5.1+
+- Django REST Framework (DRF)
 - PostgreSQL 15+
 - Redis 7+
+- Celery 5+
 - Elasticsearch 8+
+- django-elasticsearch-dsl
+- drf-spectacular (OpenAPI/Swagger)
+- JWT (SimpleJWT)
+- MPTT (иерархия категорий, комментариев)
+- Pillow, pytils, shortuuid
+- Black, Flake8, isort, mypy (линтеры и форматирование)
 
-## Установка
+Полный список — в [requirements.txt](requirements.txt).
+
+---
+
+## Установка и запуск
 
 1. Клонируйте репозиторий:
-```bash
-git clone https://github.com/your-username/marketplace.git
-cd marketplace/server
-```
-
-2. Создайте и активируйте виртуальное окружение:
-```bash
-python -m venv .venv
-source .venv/bin/activate  # Linux/macOS
-.venv\Scripts\activate     # Windows
-```
-
+   ```bash
+   git clone https://github.com/your-username/marketplace.git
+   cd marketplace/server
+   ```
+2. Создайте виртуальное окружение и активируйте его:
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # Linux/macOS
+   .venv\Scripts\activate    # Windows
+   ```
 3. Установите зависимости:
-```bash
-pip install -r requirements.txt
-```
-
-4. Создайте файл .env на основе .env.example и заполните его своими значениями:
-```bash
-cp .env.example .env
-```
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Создайте файл .env на основе .env.example и заполните своими значениями:
+   ```bash
+   cp .env.example .env
+   ```
+   **Ключевые переменные .env:**
+   - SECRET_KEY
+   - DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_NAME
+   - REDIS_HOST, REDIS_PORT
+   - ELASTICSEARCH_HOST, ELASTICSEARCH_PORT
+   - EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
 
 5. Примените миграции:
-```bash
-python manage.py migrate
-```
-
+   ```bash
+   python manage.py migrate
+   ```
 6. Создайте суперпользователя:
-```bash
-python manage.py createsuperuser
-```
-
+   ```bash
+   python manage.py createsuperuser
+   ```
 7. Соберите статические файлы:
-```bash
-python manage.py collectstatic
-```
+   ```bash
+   python manage.py collectstatic
+   ```
 
-## Запуск
+### Запуск сервисов
 
-1. Запустите Redis:
-```bash
-redis-server
-```
+1. Запустите Redis и Elasticsearch (локально или через Docker).
+2. Запустите Celery worker и beat:
+   ```bash
+   celery -A config worker -l info
+   celery -A config beat -l info
+   ```
+3. (Опционально) Запустите Flower для мониторинга задач:
+   ```bash
+   celery -A config flower
+   ```
+4. Запустите Django сервер:
+   ```bash
+   python manage.py runserver
+   ```
 
-2. Запустите Elasticsearch:
-```bash
-elasticsearch
-```
+### Docker (если используется)
 
-3. Запустите Celery worker:
-```bash
-celery -A config worker -l info
-```
-
-4. Запустите Celery beat:
-```bash
-celery -A config beat -l info
-```
-
-5. Запустите Flower для мониторинга Celery (опционально):
-```bash
-celery -A config flower
-```
-
-6. Запустите Django сервер:
-```bash
-python manage.py runserver
-```
-
-## Запуск с Docker
-
-1. Установите Docker и Docker Compose
-
+1. Установите Docker и Docker Compose.
 2. Запустите все сервисы:
-```bash
-docker-compose up -d
-```
+   ```bash
+   docker-compose up -d
+   ```
+3. Остановите сервисы:
+   ```bash
+   docker-compose down
+   ```
 
-3. Проверьте статус сервисов:
-```bash
-docker-compose ps
-```
-
-4. Остановите сервисы:
-```bash
-docker-compose down
-```
-
-5. Просмотр логов:
-```bash
-docker-compose logs -f
-```
-
-### Переменные окружения для Docker
-
-При использовании Docker, в файле .env нужно указать следующие значения:
-```
-DB_HOST=postgres
-DB_PORT=5432
-DB_USER=postgres
-DB_PASS=postgres
-REDIS_HOST=redis
-REDIS_PORT=6379
-ELASTICSEARCH_HOST=elasticsearch
-ELASTICSEARCH_PORT=9200
-```
+---
 
 ## Структура проекта
 
-- `apps/`
+- `apps/core/` — базовые сервисы, кэш, лайки, timestamp-модель
+- `apps/users/` — регистрация, подтверждение email, JWT, профиль, сброс пароля
+- `apps/products/` — товары, категории (MPTT), поиск (Elasticsearch), фильтрация, сортировка
+- `apps/carts/` — корзина (авторизованные и гости), добавление/удаление/обновление товаров
+- `apps/orders/` — оформление заказов, статусы, интеграция с доставкой
+- `apps/delivery/` — города, пункты выдачи, поиск, фильтрация, интеграция с заказами
+- `apps/reviews/` — отзывы к товарам, лайки, вложения, сортировка
+- `apps/comments/` — древовидные комментарии к отзывам, лайки, вложенность
+- `apps/wishlists/` — список желаемого (авторизованные и гости)
+- `config/` — настройки, celery, urls, wsgi/asgi
+- `requirements.txt`, `README.md`, `.env.example`, `docker-compose.yml` (если есть)
+
+---
+
+## Рекомендации по разработке
+- Следуйте PEP 8, используйте типизацию, пишите документацию и тесты
+- Используйте feature branches, Conventional Commits, проверяйте код линтером
+- Не коммитьте .env файлы, используйте безопасные настройки в production
+- Регулярно обновляйте зависимости
+
+---
+
+## Мониторинг и отладка
+- Логи: `server/logs/app.log`, ротация логов
+- Flower для мониторинга Celery задач
+- Elasticsearch: http://localhost:9200
+- Django Debug Toolbar (dev)
+
+---
+
+## Тестирование
+- Покрытие тестами: сервисы, API, валидация, ошибки
+- Запуск тестов:
+  ```bash
+  python manage.py test
+  ```
+
+---
+
+## Безопасность
+- JWT, подтверждение email, ограничения на изменение критичных полей, rate limiting, CORS
+
+---
+
+## Кэширование и производительность
+- Redis для кэша, оптимизация запросов (select_related, prefetch_related)
+
+---
+
+## Документация API
+- drf-spectacular, OpenAPI/Swagger: `/api/schema/` (JSON), `/api/docs/` (Swagger UI)
+
+---
+
+**Вопросы и предложения:** создавайте issue или pull request.
