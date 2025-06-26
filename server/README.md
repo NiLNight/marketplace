@@ -1,5 +1,5 @@
-
 ## Технический стек
+
 - Python 3.11+
 - Django 5.1+
 - Django REST Framework (DRF)
@@ -40,11 +40,11 @@
    cp .env.example .env
    ```
    **Ключевые переменные .env:**
-   - SECRET_KEY
-   - DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_NAME
-   - REDIS_HOST, REDIS_PORT
-   - ELASTICSEARCH_HOST, ELASTICSEARCH_PORT
-   - EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
+    - SECRET_KEY
+    - DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_NAME
+    - REDIS_HOST, REDIS_PORT
+    - ELASTICSEARCH_HOST, ELASTICSEARCH_PORT
+    - EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
 
 5. Примените миграции:
    ```bash
@@ -62,16 +62,16 @@
 ### Запуск сервисов
 
 1. Запустите Redis и Elasticsearch (локально или через Docker).
+
+```bash
+   docker-compose up -d
+   ```
+
 2. Запустите Celery worker и beat:
    ```bash
-   celery -A config worker -l info
-   celery -A config beat -l info
+   celery -A config worker -l debug --pool=solo
    ```
-3. (Опционально) Запустите Flower для мониторинга задач:
-   ```bash
-   celery -A config flower
-   ```
-4. Запустите Django сервер:
+3. Запустите Django сервер:
    ```bash
    python manage.py runserver
    ```
@@ -107,6 +107,7 @@
 ---
 
 ## Рекомендации по разработке
+
 - Следуйте PEP 8, используйте типизацию, пишите документацию и тесты
 - Используйте feature branches, Conventional Commits, проверяйте код линтером
 - Не коммитьте .env файлы, используйте безопасные настройки в production
@@ -115,6 +116,7 @@
 ---
 
 ## Мониторинг и отладка
+
 - Логи: `server/logs/app.log`, ротация логов
 - Flower для мониторинга Celery задач
 - Elasticsearch: http://localhost:9200
@@ -123,25 +125,29 @@
 ---
 
 ## Тестирование
+
 - Покрытие тестами: сервисы, API, валидация, ошибки
 - Запуск тестов:
   ```bash
-  python manage.py test
+  python manage.py test --keepdb
   ```
 
 ---
 
 ## Безопасность
+
 - JWT, подтверждение email, ограничения на изменение критичных полей, rate limiting, CORS
 
 ---
 
 ## Кэширование и производительность
+
 - Redis для кэша, оптимизация запросов (select_related, prefetch_related)
 
 ---
 
 ## Документация API
+
 - drf-spectacular, OpenAPI/Swagger: `/api/schema/` (JSON), `/api/docs/` (Swagger UI)
 
 ---
