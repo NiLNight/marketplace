@@ -1,0 +1,139 @@
+[2025-06-26 14:59:10] INFO apps.users.models: Creating user profile for new user=10166
+[2025-06-26 14:59:10] INFO apps.users.models: Creating user profile for user=10166, data={'_state': <django.db.models.base.ModelState object at 0x0000013880E03E00>, 'id': None, 'public_id': '', 'user_id': 10166, 'phone': None, 'birth_date': None, 'avatar': 'images/avatars/default.png'}
+[2025-06-26 14:59:10] DEBUG apps.core.utils: Generating unique slug for name='testuser'
+[2025-06-26 14:59:10] DEBUG apps.core.utils: Generated unique slug: testuser-f83b575e
+[2025-06-26 14:59:10] INFO apps.users.models: Successfully creating user profile 10104, user=10166
+[2025-06-26 14:59:10] INFO apps.users.models: Saving user profile for user=10166
+[2025-06-26 14:59:10] INFO apps.users.models: Updating user profile for user=10166, data={'_state': <django.db.models.base.ModelState object at 0x0000013880E03E00>, 'id': 10104, 'public_id': 'testuser-f83b575e', 'user_id': 10166, 'phone': None, 'birth_date': None, 'avatar': <ImageFieldFile: images/avatars/default.png>}
+[2025-06-26 14:59:10] INFO apps.users.models: Successfully updating user profile 10104, user=10166
+[2025-06-26 14:59:10] INFO apps.users.models: Creating user profile for new user=10167
+[2025-06-26 14:59:10] INFO apps.users.models: Creating user profile for user=10167, data={'_state': <django.db.models.base.ModelState object at 0x0000013880E03AD0>, 'id': None, 'public_id': '', 'user_id': 10167, 'phone': None, 'birth_date': None, 'avatar': 'images/avatars/default.png'}
+[2025-06-26 14:59:10] DEBUG apps.core.utils: Generating unique slug for name='testuser'
+[2025-06-26 14:59:10] DEBUG apps.core.utils: Generated unique slug: testuser-f866b93f
+[2025-06-26 14:59:10] INFO apps.users.models: Successfully creating user profile 10105, user=10167
+[2025-06-26 14:59:10] INFO apps.users.models: Saving user profile for user=10167
+[2025-06-26 14:59:10] INFO apps.users.models: Updating user profile for user=10167, data={'_state': <django.db.models.base.ModelState object at 0x0000013880E03AD0>, 'id': 10105, 'public_id': 'testuser-f866b93f', 'user_id': 10167, 'phone': None, 'birth_date': None, 'avatar': <ImageFieldFile: images/avatars/default.png>}
+[2025-06-26 14:59:10] INFO apps.users.models: Successfully updating user profile 10105, user=10167
+[2025-06-26 14:59:10] INFO apps.users.models: Creating user profile for new user=10168
+[2025-06-26 14:59:10] INFO apps.users.models: Creating user profile for user=10168, data={'_state': <django.db.models.base.ModelState object at 0x0000013880E54980>, 'id': None, 'public_id': '', 'user_id': 10168, 'phone': None, 'birth_date': None, 'avatar': 'images/avatars/default.png'}
+[2025-06-26 14:59:10] DEBUG apps.core.utils: Generating unique slug for name='testuser'
+[2025-06-26 14:59:10] DEBUG apps.core.utils: Generated unique slug: testuser-f88b17e0
+[2025-06-26 14:59:10] INFO apps.users.models: Successfully creating user profile 10106, user=10168
+[2025-06-26 14:59:10] INFO apps.users.models: Saving user profile for user=10168
+[2025-06-26 14:59:10] INFO apps.users.models: Updating user profile for user=10168, data={'_state': <django.db.models.base.ModelState object at 0x0000013880E54980>, 'id': 10106, 'public_id': 'testuser-f88b17e0', 'user_id': 10168, 'phone': None, 'birth_date': None, 'avatar': <ImageFieldFile: images/avatars/default.png>}
+[2025-06-26 14:59:10] INFO apps.users.models: Successfully updating user profile 10106, user=10168
+[2025-06-26 14:59:10] WARNING apps.core.models: Object logentry:999999 does not exist, user=10168
+[2025-06-26 14:59:11] INFO apps.users.models: Creating user profile for new user=10169
+[2025-06-26 14:59:11] INFO apps.users.models: Creating user profile for user=10169, data={'_state': <django.db.models.base.ModelState object at 0x0000013880E55520>, 'id': None, 'public_id': '', 'user_id': 10169, 'phone': None, 'birth_date': None, 'avatar': 'images/avatars/default.png'}
+[2025-06-26 14:59:11] DEBUG apps.core.utils: Generating unique slug for name='testuser'
+[2025-06-26 14:59:11] DEBUG apps.core.utils: Generated unique slug: testuser-f8b49272
+[2025-06-26 14:59:11] INFO apps.users.models: Successfully creating user profile 10107, user=10169
+[2025-06-26 14:59:11] INFO apps.users.models: Saving user profile for user=10169
+[2025-06-26 14:59:11] INFO apps.users.models: Updating user profile for user=10169, data={'_state': <django.db.models.base.ModelState object at 0x0000013880E55520>, 'id': 10107, 'public_id': 'testuser-f8b49272', 'user_id': 10169, 'phone': None, 'birth_date': None, 'avatar': <ImageFieldFile: images/avatars/default.png>}
+[2025-06-26 14:59:11] INFO apps.users.models: Successfully updating user profile 10107, user=10169
+[2025-06-26 14:59:11] ERROR apps.core.services.cache_services: Failed to get cache for key err_key: fail
+[2025-06-26 14:59:11] DEBUG apps.core.services.cache_services: Cache set for key: test_invalidate:123
+[2025-06-26 14:59:11] DEBUG apps.core.services.cache_services: Invalidated cache for key: test_invalidate:123
+[2025-06-26 14:59:11] DEBUG apps.core.services.cache_services: Cache miss for key: test_invalidate:123
+[2025-06-26 14:59:11] DEBUG apps.core.services.cache_services: Invalidated cache for key: prefix:*
+[2025-06-26 14:59:11] DEBUG apps.core.services.cache_services: Cache set for key: test_key
+[2025-06-26 14:59:11] DEBUG apps.core.services.cache_services: Cache hit for key: test_key
+[2025-06-26 14:59:11] ERROR apps.core.services.cache_services: Failed to set cache for key err_key: fail
+[2025-06-26 14:59:11] INFO apps.users.models: Creating user profile for new user=10170
+[2025-06-26 14:59:11] INFO apps.users.models: Creating user profile for user=10170, data={'_state': <django.db.models.base.ModelState object at 0x0000013880E6EBA0>, 'id': None, 'public_id': '', 'user_id': 10170, 'phone': None, 'birth_date': None, 'avatar': 'images/avatars/default.png'}
+[2025-06-26 14:59:11] DEBUG apps.core.utils: Generating unique slug for name='testuser'
+[2025-06-26 14:59:11] DEBUG apps.core.utils: Generated unique slug: testuser-f8e6d45d
+[2025-06-26 14:59:11] INFO apps.users.models: Successfully creating user profile 10108, user=10170
+[2025-06-26 14:59:11] INFO apps.users.models: Saving user profile for user=10170
+[2025-06-26 14:59:11] INFO apps.users.models: Updating user profile for user=10170, data={'_state': <django.db.models.base.ModelState object at 0x0000013880E6EBA0>, 'id': 10108, 'public_id': 'testuser-f8e6d45d', 'user_id': 10170, 'phone': None, 'birth_date': None, 'avatar': <ImageFieldFile: images/avatars/default.png>}
+[2025-06-26 14:59:11] INFO apps.users.models: Successfully updating user profile 10108, user=10170
+[2025-06-26 14:59:11] INFO apps.products.models: Creating category with title=Test Category, user=anonymous
+[2025-06-26 14:59:11] DEBUG apps.core.utils: Generating unique slug for name='Test Category'
+[2025-06-26 14:59:11] DEBUG apps.core.utils: Generated unique slug: test-category-f8e78bd5
+[2025-06-26 14:59:11] INFO apps.products.models: Successfully creating category 8583, user=anonymous
+[2025-06-26 14:59:11] INFO apps.products.models: Creating product with title=Test Product, user=10170
+[2025-06-26 14:59:11] DEBUG apps.core.utils: Generating unique slug for name='Test Product'
+[2025-06-26 14:59:11] DEBUG apps.core.utils: Generated unique slug: test-product-f8eac5c5
+[2025-06-26 14:59:11] INFO apps.products.signals: Creating product: title=Test Product, user=10170, is_active=False
+[2025-06-26 14:59:11] INFO apps.products.models: Successfully creating product 12415, user=10170
+[2025-06-26 14:59:11] INFO apps.reviews.models: Creating review for product=12415, user=10170
+[2025-06-26 14:59:11] INFO apps.reviews.signals: Review 4918 saved for product=12415, user=10170
+[2025-06-26 14:59:11] DEBUG apps.core.services.cache_services: Invalidated cache for key: reviews:12415:*
+[2025-06-26 14:59:11] INFO apps.reviews.models: Successfully creating review 4918, user=10170
+[2025-06-26 14:59:12] INFO apps.users.models: Creating user profile for new user=10171
+[2025-06-26 14:59:12] INFO apps.users.models: Creating user profile for user=10171, data={'_state': <django.db.models.base.ModelState object at 0x0000013880E57E00>, 'id': None, 'public_id': '', 'user_id': 10171, 'phone': None, 'birth_date': None, 'avatar': 'images/avatars/default.png'}
+[2025-06-26 14:59:12] DEBUG apps.core.utils: Generating unique slug for name='anotheruser'
+[2025-06-26 14:59:12] DEBUG apps.core.utils: Generated unique slug: anotheruser-f963b5ad
+[2025-06-26 14:59:12] INFO apps.users.models: Successfully creating user profile 10109, user=10171
+[2025-06-26 14:59:12] INFO apps.users.models: Saving user profile for user=10171
+[2025-06-26 14:59:12] INFO apps.users.models: Updating user profile for user=10171, data={'_state': <django.db.models.base.ModelState object at 0x0000013880E57E00>, 'id': 10109, 'public_id': 'anotheruser-f963b5ad', 'user_id': 10171, 'phone': None, 'birth_date': None, 'avatar': <ImageFieldFile: images/avatars/default.png>}
+[2025-06-26 14:59:12] INFO apps.users.models: Successfully updating user profile 10109, user=10171
+[2025-06-26 14:59:12] INFO apps.core.services.like_services: Toggling like for review:4918, user=10171
+[2025-06-26 14:59:12] INFO apps.core.services.like_services: Liked review:4918, user=10171
+[2025-06-26 14:59:12] INFO apps.core.services.like_services: Toggling like for review:4918, user=10171
+[2025-06-26 14:59:12] INFO apps.core.services.like_services: Unliked review:4918, user=10171
+[2025-06-26 14:59:12] WARNING apps.products.services.tasks: Product 12415 not found
+[2025-06-26 14:59:12] WARNING apps.products.services.tasks: Product 12415 not found
+[2025-06-26 14:59:12] INFO apps.products.services.tasks: Starting update_popularity_score for product 12415
+[2025-06-26 14:59:12] WARNING apps.products.services.tasks: Product 12415 not found
+[2025-06-26 14:59:12] INFO apps.users.models: Creating user profile for new user=10172
+[2025-06-26 14:59:12] INFO apps.users.models: Creating user profile for user=10172, data={'_state': <django.db.models.base.ModelState object at 0x0000013880E57E30>, 'id': None, 'public_id': '', 'user_id': 10172, 'phone': None, 'birth_date': None, 'avatar': 'images/avatars/default.png'}
+[2025-06-26 14:59:12] DEBUG apps.core.utils: Generating unique slug for name='testuser'
+[2025-06-26 14:59:12] DEBUG apps.core.utils: Generated unique slug: testuser-f98ad4be
+[2025-06-26 14:59:12] INFO apps.users.models: Successfully creating user profile 10110, user=10172
+[2025-06-26 14:59:12] INFO apps.users.models: Saving user profile for user=10172
+[2025-06-26 14:59:12] INFO apps.users.models: Updating user profile for user=10172, data={'_state': <django.db.models.base.ModelState object at 0x0000013880E57E30>, 'id': 10110, 'public_id': 'testuser-f98ad4be', 'user_id': 10172, 'phone': None, 'birth_date': None, 'avatar': <ImageFieldFile: images/avatars/default.png>}
+[2025-06-26 14:59:12] INFO apps.users.models: Successfully updating user profile 10110, user=10172
+[2025-06-26 14:59:12] INFO apps.products.models: Creating category with title=Test Category, user=anonymous
+[2025-06-26 14:59:12] DEBUG apps.core.utils: Generating unique slug for name='Test Category'
+[2025-06-26 14:59:12] DEBUG apps.core.utils: Generated unique slug: test-category-f98b7102
+[2025-06-26 14:59:12] INFO apps.products.models: Successfully creating category 8584, user=anonymous
+[2025-06-26 14:59:12] INFO apps.products.models: Creating product with title=Test Product, user=10172
+[2025-06-26 14:59:12] DEBUG apps.core.utils: Generating unique slug for name='Test Product'
+[2025-06-26 14:59:12] DEBUG apps.core.utils: Generated unique slug: test-product-f98babbe
+[2025-06-26 14:59:12] INFO apps.products.signals: Creating product: title=Test Product, user=10172, is_active=False
+[2025-06-26 14:59:12] INFO apps.products.models: Successfully creating product 12416, user=10172
+[2025-06-26 14:59:12] INFO apps.reviews.models: Creating review for product=12416, user=10172
+[2025-06-26 14:59:12] INFO apps.reviews.signals: Review 4919 saved for product=12416, user=10172
+[2025-06-26 14:59:12] DEBUG apps.core.services.cache_services: Invalidated cache for key: reviews:12416:*
+[2025-06-26 14:59:12] INFO apps.reviews.models: Successfully creating review 4919, user=10172
+[2025-06-26 14:59:12] INFO apps.core.services.like_services: Toggling like for review:4919, user=10172
+[2025-06-26 14:59:12] ERROR apps.core.services.like_services: Integrity error toggling like for review:4919: db error, user=10172
+[2025-06-26 14:59:12] WARNING apps.products.services.tasks: Product 12416 not found
+[2025-06-26 14:59:12] WARNING apps.products.services.tasks: Product 12416 not found
+[2025-06-26 14:59:12] INFO apps.products.services.tasks: Starting update_popularity_score for product 12416
+[2025-06-26 14:59:12] WARNING apps.products.services.tasks: Product 12416 not found
+[2025-06-26 14:59:12] INFO apps.users.models: Creating user profile for new user=10173
+[2025-06-26 14:59:12] INFO apps.users.models: Creating user profile for user=10173, data={'_state': <django.db.models.base.ModelState object at 0x0000013880F74800>, 'id': None, 'public_id': '', 'user_id': 10173, 'phone': None, 'birth_date': None, 'avatar': 'images/avatars/default.png'}
+[2025-06-26 14:59:12] DEBUG apps.core.utils: Generating unique slug for name='testuser'
+[2025-06-26 14:59:12] DEBUG apps.core.utils: Generated unique slug: testuser-f9b7ccc4
+[2025-06-26 14:59:12] INFO apps.users.models: Successfully creating user profile 10111, user=10173
+[2025-06-26 14:59:12] INFO apps.users.models: Saving user profile for user=10173
+[2025-06-26 14:59:12] INFO apps.users.models: Updating user profile for user=10173, data={'_state': <django.db.models.base.ModelState object at 0x0000013880F74800>, 'id': 10111, 'public_id': 'testuser-f9b7ccc4', 'user_id': 10173, 'phone': None, 'birth_date': None, 'avatar': <ImageFieldFile: images/avatars/default.png>}
+[2025-06-26 14:59:12] INFO apps.users.models: Successfully updating user profile 10111, user=10173
+[2025-06-26 14:59:12] INFO apps.products.models: Creating category with title=Test Category, user=anonymous
+[2025-06-26 14:59:12] DEBUG apps.core.utils: Generating unique slug for name='Test Category'
+[2025-06-26 14:59:12] DEBUG apps.core.utils: Generated unique slug: test-category-f9b81ae4
+[2025-06-26 14:59:12] INFO apps.products.models: Successfully creating category 8585, user=anonymous
+[2025-06-26 14:59:12] INFO apps.products.models: Creating product with title=Test Product, user=10173
+[2025-06-26 14:59:12] DEBUG apps.core.utils: Generating unique slug for name='Test Product'
+[2025-06-26 14:59:12] DEBUG apps.core.utils: Generated unique slug: test-product-f9b883b5
+[2025-06-26 14:59:12] INFO apps.products.signals: Creating product: title=Test Product, user=10173, is_active=False
+[2025-06-26 14:59:12] INFO apps.products.models: Successfully creating product 12417, user=10173
+[2025-06-26 14:59:12] INFO apps.reviews.models: Creating review for product=12417, user=10173
+[2025-06-26 14:59:12] INFO apps.reviews.signals: Review 4920 saved for product=12417, user=10173
+[2025-06-26 14:59:12] DEBUG apps.core.services.cache_services: Invalidated cache for key: reviews:12417:*
+[2025-06-26 14:59:12] INFO apps.reviews.models: Successfully creating review 4920, user=10173
+[2025-06-26 14:59:12] INFO apps.core.services.like_services: Toggling like for user:999999, user=10173
+[2025-06-26 14:59:12] WARNING apps.core.services.like_services: user 999999 not found, user=10173
+[2025-06-26 14:59:12] WARNING apps.products.services.tasks: Product 12417 not found
+[2025-06-26 14:59:12] WARNING apps.products.services.tasks: Product 12417 not found
+[2025-06-26 14:59:12] INFO apps.products.services.tasks: Starting update_popularity_score for product 12417
+[2025-06-26 14:59:12] WARNING apps.products.services.tasks: Product 12417 not found
+[2025-06-26 14:59:12] DEBUG apps.core.utils: Generating unique slug for name='Test Title'
+[2025-06-26 14:59:12] DEBUG apps.core.utils: Generated unique slug: test-title-f9d956ae
+[2025-06-26 14:59:12] DEBUG apps.core.utils: Generating unique slug for name='Тестовый Заголовок'
+[2025-06-26 14:59:12] DEBUG apps.core.utils: Generated unique slug: testovyij-zagolovok-f9d99167
+[2025-06-26 14:59:12] DEBUG apps.core.utils: Generating unique slug for name='123'
+[2025-06-26 14:59:12] ERROR apps.core.utils: Invalid input type for name: <class 'int'>, expected str
+[2025-06-26 14:59:12] ERROR apps.core.utils: Failed to generate unique slug for name='123': Аргумент 'name' должен быть строкой
