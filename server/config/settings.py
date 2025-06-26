@@ -372,6 +372,6 @@ LOGS_DIR.mkdir(exist_ok=True)
 
 # Rate limiting
 REST_FRAMEWORK['DEFAULT_THROTTLE_RATES'] = {
-    'user': '1000/hour',
-    'anon': '100/hour',
+    'user': '5000/min',
+    'anon': '500/min',
 }
