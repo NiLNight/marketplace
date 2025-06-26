@@ -326,7 +326,7 @@ LOGGING = {
             'datefmt': '%Y-%m-%d %H:%M:%S'
         },
         'django.server': {
-            'format': '[%(server_time)s] %(message)s',
+            'format': ' %(message)s',
         },
     },
     'handlers': {
