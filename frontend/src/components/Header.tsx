@@ -38,7 +38,6 @@ export function Header() {
     return (
         <>
             <header className="mb-8 flex items-center justify-between rounded-lg bg-slate-800 p-4">
-                {/* ... остальной код шапки без изменений ... */}
                 <a href="/" className="text-2xl font-bold text-white">
                     Marketplace
                 </a>
@@ -82,7 +81,7 @@ export function Header() {
                 {modalView === 'LOGIN' && (
                     <LoginForm
                         onSuccess={closeModal}
-                        onActivateAccount={switchToConfirmView} // <-- Передаем новый колбэк
+                        onActivateAccount={switchToConfirmView}
                     />
                 )}
                 {modalView === 'REGISTER' && (

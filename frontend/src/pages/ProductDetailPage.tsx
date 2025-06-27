@@ -1,6 +1,7 @@
+// src/components/ProductDetailPage.tsx
 import {useQuery} from '@tanstack/react-query';
 import {useParams} from 'react-router-dom';
-import axios from 'axios';
+import apiClient from '../api'; // <-- Используем apiClient
 
 // Тип на основе схемы ProductDetail из вашего OpenAPI
 type ProductDetail = {
@@ -21,23 +22,17 @@ type ProductDetail = {
     };
 };
 
-// Функция для загрузки ОДНОГО товара по ID
 const fetchProductById = async (productId: string): Promise<ProductDetail> => {
-    const {data} = await axios.get(`http://localhost:8000/products/${productId}/`);
+    const {data} = await apiClient.get(`/products/${productId}/`); // <-- Используем apiClient
     return data;
 };
 
 export function ProductDetailPage() {
-    // Получаем productId из URL (например, "1", "2", ...)
     const {productId} = useParams<{ productId: string }>();
 
-    // TanStack Query для динамического запроса
     const {data: product, isLoading, isError, error} = useQuery({
-        // Ключ теперь динамический! Он включает ID товара.
-        // Это позволяет кэшировать каждый товар отдельно.
         queryKey: ['product', productId],
         queryFn: () => fetchProductById(productId!),
-        // Запрос не будет выполняться, если productId еще не определен
         enabled: !!productId,
     });
 
@@ -62,7 +57,6 @@ export function ProductDetailPage() {
             <div className="max-w-4xl mx-auto">
                 <h1 className="text-4xl font-bold mb-4">{product.title}</h1>
                 <p className="text-lg text-slate-400 mb-6">Категория: {product.category.title}</p>
-
                 <div className="grid md:grid-cols-2 gap-8">
                     <div>
                         {imageUrl ? (

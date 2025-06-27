@@ -8,7 +8,6 @@ export interface FilterStore {
     minPrice: string;
     maxPrice: string;
     ordering: string;
-
     setCategory: (id: number | null) => void;
     setSearchTerm: (term: string) => void;
     setMinPrice: (price: string) => void;
@@ -20,7 +19,7 @@ const defaultOrdering = '-popularity_score';
 
 export const useFilterStore = create<FilterStore>()(
     devtools(
-        (set, get) => ({ // <-- Добавляем `get` для доступа к текущему состоянию
+        (set, get) => ({
             category: null,
             searchTerm: '',
             minPrice: '',
@@ -29,19 +28,13 @@ export const useFilterStore = create<FilterStore>()(
             setCategory: (id) => {
                 set({category: id}, false, 'SET_CATEGORY');
             },
-            // Вот ключевое изменение:
             setSearchTerm: (term) => {
                 const previousTerm = get().searchTerm;
-                // Если пользователь начал поиск (раньше поле было пустым)
                 if (!previousTerm && term) {
-                    set({searchTerm: term, ordering: ''}, false, 'START_SEARCH'); // Сбрасываем сортировку
-                }
-                // Если пользователь очистил поиск
-                else if (previousTerm && !term) {
-                    set({searchTerm: term, ordering: defaultOrdering}, false, 'CLEAR_SEARCH'); // Возвращаем сортировку по умолчанию
-                }
-                // Во всех остальных случаях просто меняем поисковый запрос
-                else {
+                    set({searchTerm: term, ordering: ''}, false, 'START_SEARCH');
+                } else if (previousTerm && !term) {
+                    set({searchTerm: term, ordering: defaultOrdering}, false, 'CLEAR_SEARCH');
+                } else {
                     set({searchTerm: term}, false, 'SET_SEARCH_TERM');
                 }
             },

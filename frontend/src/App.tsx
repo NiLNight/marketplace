@@ -1,22 +1,18 @@
-// App.tsx
-
-import { Outlet } from 'react-router-dom';
-import { Header} from "./components/Header.tsx";
+// src/App.tsx
+import {Outlet} from 'react-router-dom';
+import {Header} from "./components/Header";
+import {Footer} from "./components/Footer"; // <-- Импортируем Footer
 
 function App() {
-  return (
-    // Это наш общий Layout для всех страниц
-    <main className="min-h-screen bg-slate-900 p-4 sm:p-8">
-      <Header />  {/* 2. Добавляем компонент Header сюда. Он будет над всеми страницами */}
-
-      {/* <Outlet /> — это место, куда React Router будет "вставлять"
-          нужный компонент страницы (`ProductCatalogPage` или `ProductDetailPage`)
-          в зависимости от текущего URL. */}
-      <Outlet />
-
-      {/* <Footer /> <-- здесь мог бы быть общий футер */}
-    </main>
-  );
+    return (
+        <div className="flex flex-col min-h-screen bg-slate-900">
+            <Header/>
+            <main className="flex-grow p-4 sm:p-8">
+                <Outlet/>
+            </main>
+            <Footer/> {/* <-- Добавляем Footer */}
+        </div>
+    );
 }
 
 export default App;

@@ -5,18 +5,16 @@ import apiClient from '../api';
 
 interface LoginFormProps {
     onSuccess: () => void;
-    onActivateAccount: (email: string) => void; // Новый колбэк для переключения на форму активации
+    onActivateAccount: (email: string) => void;
 }
 
 export function LoginForm({onSuccess, onActivateAccount}: LoginFormProps) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    // Состояние для специфической ошибки неактивного аккаунта
     const [isActivationRequired, setActivationRequired] = useState(false);
-
-    const {login, error: authError, isLoading, logout} = useAuthStore();
     const [localError, setLocalError] = useState<string | null>(null);
+
+    const {login, isLoading} = useAuthStore();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -24,10 +22,6 @@ export function LoginForm({onSuccess, onActivateAccount}: LoginFormProps) {
         setActivationRequired(false);
 
         try {
-            // Сначала выходим из системы, чтобы очистить старые токены на всякий случай
-            if (useAuthStore.getState().isLoggedIn) {
-                await logout();
-            }
             await login({email, password});
             onSuccess();
         } catch (err: any) {
@@ -36,10 +30,8 @@ export function LoginForm({onSuccess, onActivateAccount}: LoginFormProps) {
 
             if (code === 'account_not_activated') {
                 setActivationRequired(true);
-                setLocalError(message);
-            } else {
-                setLocalError(message);
             }
+            setLocalError(message);
             console.error('Login failed');
         }
     };
@@ -47,7 +39,7 @@ export function LoginForm({onSuccess, onActivateAccount}: LoginFormProps) {
     const handleActivate = async () => {
         try {
             await apiClient.post('/user/resend-code/', {email});
-            onActivateAccount(email); // Переключаем модальное окно на форму подтверждения
+            onActivateAccount(email);
         } catch (err: any) {
             setLocalError(err.response?.data?.error || 'Не удалось отправить код.');
         }
@@ -55,22 +47,19 @@ export function LoginForm({onSuccess, onActivateAccount}: LoginFormProps) {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
-            {(localError || authError) && !isActivationRequired && (
-                <div className="rounded bg-red-900/50 p-3 text-center text-red-300">
-                    {localError || authError}
-                </div>
-            )}
-
-            {isActivationRequired && (
-                <div className="rounded border border-yellow-500/50 bg-yellow-900/30 p-4 text-center">
-                    <p className="text-yellow-300">{localError}</p>
-                    <button
-                        type="button"
-                        onClick={handleActivate}
-                        className="mt-2 rounded bg-yellow-500 px-3 py-1 text-sm text-black transition hover:bg-yellow-400"
-                    >
-                        Активировать
-                    </button>
+            {localError && (
+                <div
+                    className={isActivationRequired ? "rounded border border-yellow-500/50 bg-yellow-900/30 p-4 text-center" : "rounded bg-red-900/50 p-3 text-center text-red-300"}>
+                    <p className={isActivationRequired ? "text-yellow-300" : ""}>{localError}</p>
+                    {isActivationRequired && (
+                        <button
+                            type="button"
+                            onClick={handleActivate}
+                            className="mt-2 rounded bg-yellow-500 px-3 py-1 text-sm text-black transition hover:bg-yellow-400"
+                        >
+                            Активировать
+                        </button>
+                    )}
                 </div>
             )}
 

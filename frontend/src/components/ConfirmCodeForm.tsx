@@ -7,7 +7,7 @@ interface ConfirmCodeFormProps {
     onSuccess: () => void;
 }
 
-const RESEND_TIMEOUT = 60; // 60 секунд
+const RESEND_TIMEOUT = 60;
 
 export function ConfirmCodeForm({email, onSuccess}: ConfirmCodeFormProps) {
     const [code, setCode] = useState('');
@@ -15,7 +15,6 @@ export function ConfirmCodeForm({email, onSuccess}: ConfirmCodeFormProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [resendCooldown, setResendCooldown] = useState(0);
 
-    // Таймер обратного отсчета для кнопки повторной отправки
     useEffect(() => {
         if (resendCooldown > 0) {
             const timer = setTimeout(() => setResendCooldown(resendCooldown - 1), 1000);
@@ -39,13 +38,13 @@ export function ConfirmCodeForm({email, onSuccess}: ConfirmCodeFormProps) {
     };
 
     const handleResendCode = async () => {
-        if (resendCooldown > 0) return; // Не даем нажать, если таймер активен
+        if (resendCooldown > 0) return;
 
         setIsLoading(true);
         setError(null);
         try {
             await apiClient.post('/user/resend-code/', {email});
-            setResendCooldown(RESEND_TIMEOUT); // Запускаем таймер
+            setResendCooldown(RESEND_TIMEOUT);
             alert('Новый код отправлен на ваш email.');
         } catch (err: any) {
             setError(err.response?.data?.error || 'Не удалось отправить код.');
