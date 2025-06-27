@@ -1,49 +1,97 @@
 // src/components/LoginForm.tsx
 import {useState} from 'react';
 import {useAuthStore} from '../stores/authStore';
+import apiClient from '../api';
 
-export function LoginForm({onSuccess}: { onSuccess: () => void }) {
+interface LoginFormProps {
+    onSuccess: () => void;
+    onActivateAccount: (email: string) => void; // Новый колбэк для переключения на форму активации
+}
+
+export function LoginForm({onSuccess, onActivateAccount}: LoginFormProps) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const {login, error, isLoading} = useAuthStore();
+
+    // Состояние для специфической ошибки неактивного аккаунта
+    const [isActivationRequired, setActivationRequired] = useState(false);
+
+    const {login, error: authError, isLoading, logout} = useAuthStore();
+    const [localError, setLocalError] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setLocalError(null);
+        setActivationRequired(false);
+
         try {
+            // Сначала выходим из системы, чтобы очистить старые токены на всякий случай
+            if (useAuthStore.getState().isLoggedIn) {
+                await logout();
+            }
             await login({email, password});
-            // Если логин успешен, вызываем колбэк для закрытия модального окна
             onSuccess();
-        } catch (err) {
-            // Ошибка уже обработана в сторе, здесь ничего делать не нужно
+        } catch (err: any) {
+            const code = err.response?.data?.code;
+            const message = err.response?.data?.error || 'Произошла ошибка входа';
+
+            if (code === 'account_not_activated') {
+                setActivationRequired(true);
+                setLocalError(message);
+            } else {
+                setLocalError(message);
+            }
             console.error('Login failed');
+        }
+    };
+
+    const handleActivate = async () => {
+        try {
+            await apiClient.post('/user/resend-code/', {email});
+            onActivateAccount(email); // Переключаем модальное окно на форму подтверждения
+        } catch (err: any) {
+            setLocalError(err.response?.data?.error || 'Не удалось отправить код.');
         }
     };
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Поле для отображения ошибок */}
-            {error && <div className="rounded bg-red-900/50 p-3 text-center text-red-300">{error}</div>}
+            {(localError || authError) && !isActivationRequired && (
+                <div className="rounded bg-red-900/50 p-3 text-center text-red-300">
+                    {localError || authError}
+                </div>
+            )}
+
+            {isActivationRequired && (
+                <div className="rounded border border-yellow-500/50 bg-yellow-900/30 p-4 text-center">
+                    <p className="text-yellow-300">{localError}</p>
+                    <button
+                        type="button"
+                        onClick={handleActivate}
+                        className="mt-2 rounded bg-yellow-500 px-3 py-1 text-sm text-black transition hover:bg-yellow-400"
+                    >
+                        Активировать
+                    </button>
+                </div>
+            )}
 
             <div>
-                <label htmlFor="email" className="block text-sm font-medium text-slate-300">Email</label>
+                <label className="block text-sm font-medium text-slate-300">Email</label>
                 <input
                     type="email"
-                    id="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 p-2 text-white placeholder-slate-400 focus:border-cyan-500 focus:ring-cyan-500"
+                    className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 p-2 text-white"
                 />
             </div>
             <div>
-                <label htmlFor="password" className="block text-sm font-medium text-slate-300">Пароль</label>
+                <label className="block text-sm font-medium text-slate-300">Пароль</label>
                 <input
                     type="password"
-                    id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 p-2 text-white placeholder-slate-400 focus:border-cyan-500 focus:ring-cyan-500"
+                    className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 p-2 text-white"
                 />
             </div>
             <button
