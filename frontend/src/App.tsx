@@ -1,12 +1,13 @@
 // App.tsx
 
 import { Outlet } from 'react-router-dom';
+import { Header} from "./components/Header.tsx";
 
 function App() {
   return (
     // Это наш общий Layout для всех страниц
     <main className="min-h-screen bg-slate-900 p-4 sm:p-8">
-      {/* <Header />  <-- здесь могла бы быть общая шапка сайта */}
+      <Header />  {/* 2. Добавляем компонент Header сюда. Он будет над всеми страницами */}
 
       {/* <Outlet /> — это место, куда React Router будет "вставлять"
           нужный компонент страницы (`ProductCatalogPage` или `ProductDetailPage`)
