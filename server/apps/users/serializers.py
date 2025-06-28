@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from apps.users.models import UserProfile
 from apps.users.exceptions import InvalidUserData
 from apps.users.services.users_services import UserService
@@ -9,6 +9,24 @@ import logging
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
+
+
+class CustomTokenRefreshSerializer(TokenRefreshSerializer):
+    """
+    Кастомный сериализатор для обновления токена.
+    Извлекает refresh_token из httpOnly cookie, если он не передан в теле запроса.
+    """
+    refresh = serializers.CharField(required=False)
+
+    def validate(self, attrs):
+        # Если refresh токен не пришел в теле запроса, пытаемся взять его из cookie
+        if 'refresh' not in attrs:
+            attrs['refresh'] = self.context['request'].COOKIES.get('refresh_token')
+
+        if not attrs.get('refresh'):
+            raise serializers.ValidationError('Refresh token не найден.')
+
+        return super().validate(attrs)
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
