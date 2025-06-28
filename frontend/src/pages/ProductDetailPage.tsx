@@ -2,6 +2,7 @@
 import {useQuery} from '@tanstack/react-query';
 import {useParams} from 'react-router-dom';
 import apiClient from '../api'; // <-- Используем apiClient
+import { AddToCartButton } from '../components/AddToCartButton';
 
 // Тип на основе схемы ProductDetail из вашего OpenAPI
 type ProductDetail = {
@@ -78,6 +79,15 @@ export function ProductDetailPage() {
                             <p>В наличии: <span className="font-semibold">{product.stock} шт.</span></p>
                             <p>Рейтинг: <span className="font-semibold">{product.rating_avg.toFixed(1)} ★</span></p>
                             <p>Продавец: <span className="font-semibold">{product.owner}</span></p>
+                        </div>
+                        <div className="mt-auto pt-6">
+                            {product.stock > 0 ? (
+                                <AddToCartButton productId={product.id}/>
+                            ) : (
+                                <button disabled
+                                        className="w-full rounded-md bg-slate-700 px-4 py-2 text-slate-400 cursor-not-allowed">Нет
+                                    в наличии</button>
+                            )}
                         </div>
                     </div>
                 </div>

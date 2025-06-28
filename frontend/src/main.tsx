@@ -9,6 +9,7 @@ import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import {ProductCatalogPage} from './pages/ProductCatalogPage.tsx';
 import {ProductDetailPage} from './pages/ProductDetailPage.tsx';
 import {AppInitializer} from './components/AppInitializer.tsx'; // <-- Импортируем
+import {CartPage} from './pages/CartPage.tsx';
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
             {
                 path: "products/:productId",
                 element: <ProductDetailPage/>,
+            },
+            {
+                path: "cart",
+                element: <CartPage/>,
             },
         ],
     },

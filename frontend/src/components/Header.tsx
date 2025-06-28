@@ -1,7 +1,9 @@
 // src/components/Header.tsx
-import {LogIn, UserPlus} from 'lucide-react';
+import {LogIn, UserPlus, ShoppingCart} from 'lucide-react';
 import {useAuthStore} from '../stores/authStore';
-import {useState} from 'react';
+import {useCartStore} from '../stores/useCartStore';
+import {useState, useEffect} from 'react';
+import {Link} from 'react-router-dom';
 import {Modal} from './Modal';
 import {LoginForm} from './LoginForm';
 import {RegisterForm} from './RegisterForm';
@@ -11,9 +13,17 @@ type ModalView = 'LOGIN' | 'REGISTER' | 'CONFIRM_CODE';
 
 export function Header() {
     const {isLoggedIn, user, logout} = useAuthStore();
+    const {total_items, fetchCart} = useCartStore();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalView, setModalView] = useState<ModalView>('LOGIN');
     const [emailForConfirmation, setEmailForConfirmation] = useState('');
+
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            fetchCart();
+        }
+    }, [isLoggedIn, fetchCart]);
 
     const openModal = (view: ModalView) => {
         setModalView(view);
@@ -41,9 +51,18 @@ export function Header() {
                 <a href="/" className="text-2xl font-bold text-white">
                     Marketplace
                 </a>
-                <nav className="flex items-center gap-4">
+                <nav className="flex items-center gap-6">
+                    <Link to="/cart" className="relative text-slate-300 transition hover:text-white">
+                        <ShoppingCart size={24}/>
+                        {isLoggedIn && total_items > 0 && (
+                            <span
+                                className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-cyan-500 text-xs font-bold text-white">
+                {total_items}
+              </span>
+                        )}
+                    </Link>
                     {isLoggedIn ? (
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-6">
                             <span className="text-white">Привет, {user?.username}!</span>
                             <button
                                 onClick={logout}
