@@ -159,12 +159,14 @@ class UserLoginView(APIView):
             from apps.carts.services.cart_services import CartService
             CartService.merge_cart_on_login(user, request.session['cart'])
             del request.session['cart']
+            CacheService.invalidate_cache(prefix=f"cart", pk=user.id)
             logger.info(f"Cart merged for user={user.id}")
         # Слияние списка желаний из сессии, если он существует
         if request.session.get('wishlist'):
             # Импортируем сервис списка желаний только при необходимости, чтобы избежать циклического импорта
             from apps.wishlists.services.wishlist_services import WishlistService
             WishlistService.merge_wishlist_on_login(user, request.session['wishlist'])
+            CacheService.invalidate_cache(prefix=f"wishlist", pk=user.id)
             del request.session['wishlist']
             logger.info(f"Wishlist merged for user={user.id}")
         logger.info(f"User {user.id} logged in successfully")

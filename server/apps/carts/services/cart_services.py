@@ -2,7 +2,7 @@ import logging
 from django.db import transaction
 from apps.carts.models import OrderItem
 from apps.products.models import Product
-from apps.carts.exceptions import CartException, ProductNotAvailable, InvalidQuantity, CartItemNotFound
+from apps.carts.exceptions import ProductNotAvailable, InvalidQuantity, CartItemNotFound
 
 logger = logging.getLogger(__name__)
 
