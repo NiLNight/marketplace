@@ -209,6 +209,7 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     'BLACKLIST_AFTER_ROTATION': True,
     'TOKEN_USER_CLASS': 'apps.user.authentication.CustomTokenUser',
+    'ROTATE_REFRESH_TOKENS': True,
 
     # custom
     "AUTH_COOKIE": "access_token",  # имя cookie
