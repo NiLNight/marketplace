@@ -5,13 +5,16 @@ import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
-import {createBrowserRouter, RouterProvider} from 'react-router-dom';
+import {createBrowserRouter, RouterProvider, Navigate} from 'react-router-dom';
 import {ProductCatalogPage} from './pages/ProductCatalogPage.tsx';
 import {ProductDetailPage} from './pages/ProductDetailPage.tsx';
 import {AppInitializer} from './components/AppInitializer.tsx'; // <-- Импортируем
 import {CartPage} from './pages/CartPage.tsx';
 import {Toaster} from 'react-hot-toast';
 import {CheckoutPage} from './pages/CheckoutPage.tsx';
+import { ProfileLayout } from './pages/ProfileLayout.tsx';
+import { OrderHistoryPage } from './pages/OrderHistoryPage.tsx';
+import { OrderDetailPage } from './pages/OrderDetailPage.tsx';
 
 const queryClient = new QueryClient();
 
@@ -35,8 +38,23 @@ const router = createBrowserRouter([
             {
                 path: "checkout",
                 element: <CheckoutPage/>
+            },
+            {
+                path: "profile",
+                element: <ProfileLayout/>,
+                children: [
+                    // Перенаправление с /profile на /profile/orders
+                    {index: true, element: <Navigate to="/profile/orders" replace/>},
+                    {
+                        path: "orders",
+                        element: <OrderHistoryPage/>,
+                    },
+                    {
+                        path: "orders/:orderId",
+                        element: <OrderDetailPage/>,
+                    }
+                ]
             }
-            ,
         ],
     },
 ]);
