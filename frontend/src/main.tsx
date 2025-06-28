@@ -12,9 +12,10 @@ import {AppInitializer} from './components/AppInitializer.tsx'; // <-- Импо�
 import {CartPage} from './pages/CartPage.tsx';
 import {Toaster} from 'react-hot-toast';
 import {CheckoutPage} from './pages/CheckoutPage.tsx';
-import { ProfileLayout } from './pages/ProfileLayout.tsx';
-import { OrderHistoryPage } from './pages/OrderHistoryPage.tsx';
-import { OrderDetailPage } from './pages/OrderDetailPage.tsx';
+import {ProfileLayout} from './pages/ProfileLayout.tsx';
+import {OrderHistoryPage} from './pages/OrderHistoryPage.tsx';
+import {OrderDetailPage} from './pages/OrderDetailPage.tsx';
+import {ProfilePage} from "./pages/ProfilePage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -44,7 +45,11 @@ const router = createBrowserRouter([
                 element: <ProfileLayout/>,
                 children: [
                     // Перенаправление с /profile на /profile/orders
-                    {index: true, element: <Navigate to="/profile/orders" replace/>},
+                    {index: true, element: <Navigate to="/profile/details" replace/>},
+                    {
+                        path: "details", // <-- Новый маршрут
+                        element: <ProfilePage/>,
+                    },
                     {
                         path: "orders",
                         element: <OrderHistoryPage/>,

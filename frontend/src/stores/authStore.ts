@@ -3,22 +3,42 @@ import {create} from 'zustand';
 import apiClient from '../api';
 import {devtools} from 'zustand/middleware';
 
+interface UserProfile {
+    public_id: string;
+    phone: string | null;
+    birth_date: string | null;
+    avatar: string | null; // URL аватара приходит как строка
+}
+
 interface User {
     id: number;
     username: string;
     email: string;
 }
 
-interface AuthState {
-    user: User | null;
-    isLoggedIn: boolean;
-    isLoading: boolean;
-    error: string | null;
+interface UserProfileUpdateData {
+    phone?: string | null;
+    birth_date?: string | null;
+    avatar?: File; // При отправке это будет файл
+}
+interface UserUpdateData {
+    username?: string;
+    first_name?: string;
+    last_name?: string;
+    profile?: UserProfileUpdateData;
+}
 
-    checkAuth: () => Promise<void>;
-    login: (data: { email: string; password: string }) => Promise<void>;
-    logout: () => Promise<void>;
-    register: (data: { username: string, email: string; password: string }) => Promise<void>;
+interface AuthState {
+  user: User | null;
+  isLoggedIn: boolean;
+  isLoading: boolean;
+  error: string | null;
+
+  checkAuth: () => Promise<void>;
+  login: (data: { email: string; password: string }) => Promise<void>;
+  logout: () => Promise<void>;
+  register: (data: {username: string, email: string; password: string }) => Promise<void>;
+  updateProfile: (data: UserUpdateData) => Promise<void>; // <-- Тип аргумента обновлен
 }
 
 let refreshIntervalId: number | null = null;
@@ -101,6 +121,36 @@ export const useAuthStore = create<AuthState>()(devtools(
                 set({error: errorMessage, isLoading: false});
                 throw error;
             }
+        },
+    updateProfile: async (data: UserUpdateData) => {
+        set({ isLoading: true, error: null });
+
+        const formData = new FormData();
+
+        // Проверяем каждое поле перед добавлением
+        if (data.username) formData.append('username', data.username);
+        if (data.first_name || data.first_name === '') formData.append('first_name', data.first_name);
+        if (data.last_name || data.last_name === '') formData.append('last_name', data.last_name);
+
+        if (data.profile) {
+            if (data.profile.phone || data.profile.phone === '') formData.append('profile.phone', data.profile.phone);
+            if (data.profile.birth_date || data.profile.birth_date === '') formData.append('profile.birth_date', data.profile.birth_date);
+            if (data.profile.avatar) {
+                formData.append('profile.avatar', data.profile.avatar);
+            }
         }
+
+        try {
+            const response = await apiClient.patch<User>('/user/profile/', formData, { // <-- Указываем тип ответа
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
+            // Обновляем данные пользователя в сторе
+            set({ user: response.data, isLoading: false, error: null });
+        } catch (error: any) {
+            const errorMessage = error.response?.data?.username?.[0] || error.response?.data?.error || "Не удалось обновить профиль";
+            set({ isLoading: false, error: errorMessage });
+            throw new Error(errorMessage);
+        }
+        },
     }), {name: 'AuthStore'}
 ));
