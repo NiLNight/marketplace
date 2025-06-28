@@ -23,7 +23,7 @@ interface AuthState {
 
 let refreshIntervalId: number | null = null;
 // Обновляем токен за 30 секунд до его истечения (в вашем случае 2 минуты)
-const REFRESH_INTERVAL = (2 * 60 - 30) * 1000; // 90 секунд
+const REFRESH_INTERVAL = (15 * 60 - 30) * 1000; // 90 секунд
 
 const startProactiveTokenRefresh = () => {
     if (refreshIntervalId) {
