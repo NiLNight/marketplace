@@ -206,7 +206,7 @@ FRONTEND_URL = "http://localhost:8000"
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=14),
     'BLACKLIST_AFTER_ROTATION': True,
     'TOKEN_USER_CLASS': 'apps.user.authentication.CustomTokenUser',
     'ROTATE_REFRESH_TOKENS': True,
