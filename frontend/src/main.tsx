@@ -10,7 +10,8 @@ import {ProductCatalogPage} from './pages/ProductCatalogPage.tsx';
 import {ProductDetailPage} from './pages/ProductDetailPage.tsx';
 import {AppInitializer} from './components/AppInitializer.tsx'; // <-- Импортируем
 import {CartPage} from './pages/CartPage.tsx';
-import { Toaster } from 'react-hot-toast';
+import {Toaster} from 'react-hot-toast';
+import {CheckoutPage} from './pages/CheckoutPage.tsx';
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,11 @@ const router = createBrowserRouter([
                 path: "cart",
                 element: <CartPage/>,
             },
+            {
+                path: "checkout",
+                element: <CheckoutPage/>
+            }
+            ,
         ],
     },
 ]);

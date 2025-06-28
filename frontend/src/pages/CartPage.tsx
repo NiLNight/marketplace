@@ -1,11 +1,13 @@
 // src/pages/CartPage.tsx
 import {useEffect} from 'react';
 import {useCartStore} from '../stores/useCartStore';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {CartItemRow} from '../components/CartItemRow'; // <-- Импортируем новый компонент
 
 export function CartPage() {
     const {items, isLoading, fetchCart} = useCartStore();
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchCart();
@@ -45,7 +47,9 @@ export function CartPage() {
                     <p className="text-3xl font-bold">{totalPrice.toFixed(2)} руб.</p>
                 </div>
                 <button
-                    className="rounded-md bg-green-600 px-8 py-3 text-lg font-bold text-white transition hover:bg-green-700">
+                    onClick={() => navigate('/checkout')}
+                    className="rounded-md bg-green-600 px-8 py-3 text-lg font-bold text-white transition hover:bg-green-700"
+                >
                     Оформить заказ
                 </button>
             </div>
