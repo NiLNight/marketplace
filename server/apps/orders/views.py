@@ -187,6 +187,7 @@ class OrderCreateView(APIView):
             request=request
         )
         CacheService.invalidate_cache(prefix=f"order_list:{user_id}")
+        CacheService.invalidate_cache(prefix=f"cart:{user_id}")
         logger.info(f"Order {order.id} created successfully for user={user_id},"
                     f" path={request.path}, IP={request.META.get('REMOTE_ADDR')}")
         return Response(
