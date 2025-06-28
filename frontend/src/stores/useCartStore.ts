@@ -2,7 +2,9 @@
 import {create} from 'zustand';
 import {devtools} from 'zustand/middleware';
 import apiClient from '../api';
+import toast from 'react-hot-toast';
 
+// Типы на основе вашего OpenAPI
 interface Product {
     id: number;
     title: string;
@@ -24,8 +26,8 @@ interface CartState {
 
     fetchCart: () => Promise<void>;
     addToCart: (productId: number, quantity: number) => Promise<void>;
-    updateItemQuantity: (productId: number, quantity: number) => Promise<void>; // <-- Новый метод
-    removeFromCart: (productId: number) => Promise<void>; // <-- Новый метод
+    updateItemQuantity: (productId: number, quantity: number) => Promise<void>;
+    removeFromCart: (productId: number) => Promise<void>;
 }
 
 export const useCartStore = create<CartState>()(devtools(
@@ -38,6 +40,7 @@ export const useCartStore = create<CartState>()(devtools(
         fetchCart: async () => {
             set({isLoading: true});
             try {
+                // Просто вызываем. Бэкенд вернет либо корзину юзера, либо из сессии.
                 const response = await apiClient.get<CartItem[]>('/carts/');
                 const items = response.data;
                 const total_items = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -51,7 +54,6 @@ export const useCartStore = create<CartState>()(devtools(
         addToCart: async (productId: number, quantity: number) => {
             set({isLoading: true});
             try {
-                // В вашем API ID товара передается в теле
                 await apiClient.post('/carts/add/', {product_id: productId, quantity});
                 await get().fetchCart();
             } catch (error: any) {
@@ -63,27 +65,23 @@ export const useCartStore = create<CartState>()(devtools(
 
         updateItemQuantity: async (productId: number, quantity: number) => {
             const originalItems = get().items;
-            // Оптимистичное обновление: сначала меняем UI, потом отправляем запрос
             const newItems = originalItems.map(item =>
                 item.product.id === productId ? {...item, quantity} : item
-            ).filter(item => item.quantity > 0); // Удаляем, если кол-во 0
+            ).filter(item => item.quantity > 0);
 
             const newTotal = newItems.reduce((sum, item) => sum + item.quantity, 0);
             set({items: newItems, total_items: newTotal});
 
             try {
                 await apiClient.patch(`/carts/${productId}/`, {quantity});
-                // Можно сделать fetchCart() для полной синхронизации, но для UX это не всегда нужно
             } catch (error: any) {
-                // Если ошибка, откатываем изменения в UI
                 set({items: originalItems, total_items: originalItems.reduce((sum, item) => sum + item.quantity, 0)});
-                alert(error.response?.data?.error || "Не удалось обновить товар");
+                toast.error(error.response?.data?.error || "Не удалось обновить товар");
             }
         },
 
         removeFromCart: async (productId: number) => {
             const originalItems = get().items;
-            // Оптимистичное обновление
             const newItems = originalItems.filter(item => item.product.id !== productId);
             const newTotal = newItems.reduce((sum, item) => sum + item.quantity, 0);
             set({items: newItems, total_items: newTotal});
@@ -91,9 +89,8 @@ export const useCartStore = create<CartState>()(devtools(
             try {
                 await apiClient.delete(`/carts/delete/${productId}/`);
             } catch (error: any) {
-                // Откатываем изменения
                 set({items: originalItems, total_items: originalItems.reduce((sum, item) => sum + item.quantity, 0)});
-                alert(error.response?.data?.error || "Не удалось удалить товар");
+                toast.error(error.response?.data?.error || "Не удалось удалить товар");
             }
         },
     }),

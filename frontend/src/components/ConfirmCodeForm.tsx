@@ -1,6 +1,7 @@
 // src/components/ConfirmCodeForm.tsx
 import {useState, useEffect} from 'react';
 import apiClient from '../api';
+import toast from 'react-hot-toast';
 
 interface ConfirmCodeFormProps {
     email: string;
@@ -28,7 +29,7 @@ export function ConfirmCodeForm({email, onSuccess}: ConfirmCodeFormProps) {
         setError(null);
         try {
             await apiClient.post('/user/confirm-code/', {email, code});
-            alert('Аккаунт успешно активирован! Теперь вы можете войти.');
+            toast('Аккаунт успешно активирован! Теперь вы можете войти.');
             onSuccess();
         } catch (err: any) {
             setError(err.response?.data?.error || 'Неверный код или произошла ошибка.');
@@ -45,7 +46,7 @@ export function ConfirmCodeForm({email, onSuccess}: ConfirmCodeFormProps) {
         try {
             await apiClient.post('/user/resend-code/', {email});
             setResendCooldown(RESEND_TIMEOUT);
-            alert('Новый код отправлен на ваш email.');
+            toast('Новый код отправлен на ваш email.');
         } catch (err: any) {
             setError(err.response?.data?.error || 'Не удалось отправить код.');
         } finally {

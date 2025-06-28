@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { ShoppingCart } from 'lucide-react';
 import { useCartStore } from '../stores/useCartStore';
+import toast from 'react-hot-toast';
 
 interface AddToCartButtonProps {
     productId: number;
@@ -19,9 +20,10 @@ export function AddToCartButton({ productId, className }: AddToCartButtonProps) 
         setIsLoading(true);
         try {
             await addToCart(productId, 1);
-            alert('Товар добавлен в корзину!'); // Простое уведомление для пользователя
+            toast.success('Товар добавлен в корзину!'); // Простое уведомление для пользователя
         } catch (error) {
-            alert(error instanceof Error ? error.message : 'Произошла ошибка');
+            const message = error instanceof Error ? error.message : 'Произошла ошибка';
+            toast.error(message);
         } finally {
             setIsLoading(false);
         }

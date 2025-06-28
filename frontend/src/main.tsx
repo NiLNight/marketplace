@@ -10,6 +10,7 @@ import {ProductCatalogPage} from './pages/ProductCatalogPage.tsx';
 import {ProductDetailPage} from './pages/ProductDetailPage.tsx';
 import {AppInitializer} from './components/AppInitializer.tsx'; // <-- Импортируем
 import {CartPage} from './pages/CartPage.tsx';
+import { Toaster } from 'react-hot-toast';
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,15 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         {/* Оборачиваем все приложение в AppInitializer */}
         <AppInitializer>
             <QueryClientProvider client={queryClient}>
+                <Toaster
+                    position="top-center"
+                    toastOptions={{
+                        style: {
+                            background: '#334155', // slate-700
+                            color: '#fff',
+                        },
+                    }}
+                />
                 <RouterProvider router={router}/>
             </QueryClientProvider>
         </AppInitializer>
