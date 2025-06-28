@@ -5,6 +5,8 @@ from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenRefreshView
 
 from apps.core.services.cache_services import CacheService
 from apps.users.services.trottles import CeleryThrottle
@@ -13,7 +15,7 @@ from apps.users.serializers import (
     UserLoginSerializer,
     UserSerializer,
     PasswordResetSerializer,
-    PasswordResetConfirmSerializer
+    PasswordResetConfirmSerializer, CustomTokenRefreshSerializer
 )
 from apps.users.utils import set_jwt_cookies, handle_api_errors
 from apps.users.services.users_services import UserService, ConfirmPasswordService, ConfirmCodeService
@@ -21,6 +23,41 @@ from config import settings
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
+
+
+class CustomTokenRefreshView(TokenRefreshView):
+    """
+    Кастомное представление для обновления токена, которое устанавливает токены в httpOnly cookies.
+    """
+    serializer_class = CustomTokenRefreshSerializer
+
+    @handle_api_errors
+    def post(self, request, *args, **kwargs):
+        # Получаем refresh_token из cookie, чтобы потом извлечь из него user_id
+        refresh_token_from_cookie = request.COOKIES.get(settings.SIMPLE_JWT['REFRESH_COOKIE'])
+
+        if not refresh_token_from_cookie:
+            return Response({"error": "Refresh token не найден в cookie."}, status=status.HTTP_401_UNAUTHORIZED)
+        # Вызываем родительский метод, чтобы simple-jwt сделал свою работу
+        response = super().post(request, *args, **kwargs)
+
+        # Если обновление прошло успешно (статус 200)
+        if response.status_code == 200:
+            try:
+                # Декодируем старый refresh токен, чтобы безопасно получить ID пользователя
+                refresh = RefreshToken(refresh_token_from_cookie, verify=False)
+                user_id = refresh.get('user_id')
+                user = User.objects.get(id=user_id)
+
+                # Теперь, когда у нас есть пользователь, мы можем сгенерировать для него
+                response_with_cookies = set_jwt_cookies(Response(status=status.HTTP_200_OK), user)
+                response_with_cookies.data = {"message": "Token refreshed successfully"}
+                return response_with_cookies
+            except Exception as e:
+                logger.error(f"Error updating token after validation: {e}")
+                return Response({"error": "Ошибка при обработке токена."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return response
 
 
 class UserRegistrationView(APIView):
