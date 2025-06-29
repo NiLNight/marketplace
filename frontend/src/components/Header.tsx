@@ -8,6 +8,7 @@ import {Modal} from './Modal';
 import {LoginForm} from './LoginForm';
 import {RegisterForm} from './RegisterForm';
 import {ConfirmCodeForm} from './ConfirmCodeForm';
+import {useWishlistStore} from '../stores/useWishlistStore';
 
 type ModalView = 'LOGIN' | 'REGISTER' | 'CONFIRM_CODE';
 
@@ -18,21 +19,24 @@ export function Header() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalView, setModalView] = useState<ModalView>('LOGIN');
     const [emailForConfirmation, setEmailForConfirmation] = useState('');
+    const {fetchWishlist} = useWishlistStore();
 
 
     useEffect(() => {
         console.log('Header mounted, fetching initial cart...');
         fetchCart();
-    }, [fetchCart]);
+        fetchWishlist();
+    }, [fetchCart, fetchWishlist]);
 
     const prevIsLoggedIn = useRef(isLoggedIn);
     useEffect(() => {
         if (isLoggedIn && !prevIsLoggedIn.current) {
             console.log('User logged in, fetching merged cart...');
             fetchCart();
+            fetchWishlist();
         }
         prevIsLoggedIn.current = isLoggedIn;
-    }, [isLoggedIn, fetchCart]);
+    }, [isLoggedIn, fetchCart, fetchWishlist]);
 
 
     const openModal = (view: ModalView) => {

@@ -55,7 +55,6 @@ apiClient.interceptors.response.use(
             try {
                 await apiClient.post('/api/token/refresh/');
                 processQueue(null, 'new_token');
-                // @ts-ignore
                 return apiClient(originalRequest);
             } catch (refreshError: any) {
                 processQueue(refreshError, null);

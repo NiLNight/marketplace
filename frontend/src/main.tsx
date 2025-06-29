@@ -16,6 +16,7 @@ import {ProfileLayout} from './pages/ProfileLayout.tsx';
 import {OrderHistoryPage} from './pages/OrderHistoryPage.tsx';
 import {OrderDetailPage} from './pages/OrderDetailPage.tsx';
 import {ProfilePage} from "./pages/ProfilePage.tsx";
+import {WishlistPage} from "./pages/WishlistPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -57,7 +58,11 @@ const router = createBrowserRouter([
                     {
                         path: "orders/:orderId",
                         element: <OrderDetailPage/>,
-                    }
+                    },
+                    {
+                        path: "wishlist",
+                        element: <WishlistPage/>
+                    },
                 ]
             }
         ],

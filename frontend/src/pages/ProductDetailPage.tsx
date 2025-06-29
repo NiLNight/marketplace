@@ -1,8 +1,9 @@
-// src/components/ProductDetailPage.tsx
+// src/pages/ProductDetailPage.tsx
 import {useQuery} from '@tanstack/react-query';
 import {useParams} from 'react-router-dom';
-import apiClient from '../api'; // <-- Используем apiClient
-import { AddToCartButton } from '../components/AddToCartButton';
+import apiClient from '../api';
+import {AddToCartButton} from '../components/AddToCartButton';
+import {AddToWishlistButton} from '../components/AddToWishlistButton'; // <-- 1. Импортируем кнопку
 
 // Тип на основе схемы ProductDetail из вашего OpenAPI
 type ProductDetail = {
@@ -24,7 +25,7 @@ type ProductDetail = {
 };
 
 const fetchProductById = async (productId: string): Promise<ProductDetail> => {
-    const {data} = await apiClient.get(`/products/${productId}/`); // <-- Используем apiClient
+    const {data} = await apiClient.get(`/products/${productId}/`);
     return data;
 };
 
@@ -59,7 +60,8 @@ export function ProductDetailPage() {
                 <h1 className="text-4xl font-bold mb-4">{product.title}</h1>
                 <p className="text-lg text-slate-400 mb-6">Категория: {product.category.title}</p>
                 <div className="grid md:grid-cols-2 gap-8">
-                    <div>
+
+                    <div className="relative">
                         {imageUrl ? (
                             <img src={imageUrl} alt={product.title} className="w-full rounded-lg shadow-lg"/>
                         ) : (
@@ -67,16 +69,21 @@ export function ProductDetailPage() {
                                 className="w-full h-96 bg-slate-800 rounded-lg flex items-center justify-center text-slate-500">Нет
                                 изображения</div>
                         )}
+                        <AddToWishlistButton productId={product.id}/>
                     </div>
+
                     <div className="flex flex-col">
                         <div className="mb-6">
                             <span
                                 className="text-4xl font-bold text-green-400">{product.price_with_discount} руб.</span>
-                            <span className="ml-4 text-xl text-slate-500 line-through">{product.price} руб.</span>
+                            {parseFloat(product.discount) > 0 &&
+                                <span className="ml-4 text-xl text-slate-500 line-through">{product.price} руб.</span>}
                         </div>
                         <p className="text-slate-300 flex-grow">{product.description}</p>
-                        <div className="mt-6 pt-6 border-t border-slate-700">
-                            <p>В наличии: <span className="font-semibold">{product.stock} шт.</span></p>
+                        <div className="mt-6 pt-6 border-t border-slate-700 space-y-2">
+                            <p>В наличии: <span
+                                className="font-semibold">{product.stock > 0 ? `${product.stock} шт.` : 'Нет в наличии'}</span>
+                            </p>
                             <p>Рейтинг: <span className="font-semibold">{product.rating_avg.toFixed(1)} ★</span></p>
                             <p>Продавец: <span className="font-semibold">{product.owner}</span></p>
                         </div>

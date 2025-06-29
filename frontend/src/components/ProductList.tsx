@@ -1,10 +1,11 @@
 // src/components/ProductList.tsx
-import {useInfiniteQuery} from '@tanstack/react-query'; // <-- Изменено на useInfiniteQuery
+import {useInfiniteQuery} from '@tanstack/react-query';
 import {ImageIcon} from 'lucide-react';
 import {Link} from 'react-router-dom';
 import {useFilterStore, type FilterStore} from '../stores/useFilterStore';
 import {useDebounce} from '../hooks/useDebounce';
-import apiClient from '../api'; // <-- Используем наш централизованный клиент
+import apiClient from '../api';
+import {AddToWishlistButton} from './AddToWishlistButton'; // Убедитесь, что импорт есть
 
 type Product = {
     id: number;
@@ -17,11 +18,10 @@ type Product = {
 
 type ApiResponse = {
     count: number;
-    next: string | null; // <-- API должен возвращать ссылку на следующую страницу
+    next: string | null;
     results: Product[];
 };
 
-// Функция теперь принимает pageParam для пагинации
 const fetchProducts = async ({pageParam = 1, filters}: {
     pageParam?: number,
     filters: FilterStore
@@ -36,7 +36,7 @@ const fetchProducts = async ({pageParam = 1, filters}: {
     if (filters.ordering) {
         params.append('ordering', filters.ordering);
     }
-    params.append('page', String(pageParam)); // <-- Добавляем параметр страницы
+    params.append('page', String(pageParam));
 
     const {data} = await apiClient.get<ApiResponse>('/products/list/', {params});
     return data;
@@ -58,9 +58,8 @@ export function ProductList() {
     } = useInfiniteQuery({
         queryKey: ['products', queryFilters],
         queryFn: ({pageParam}) => fetchProducts({pageParam, filters: queryFilters}),
-        getNextPageParam: (lastPage, _allPages) => {
+        getNextPageParam: (lastPage) => {
             if (lastPage.next) {
-                // Если API возвращает полную ссылку, извлекаем номер страницы
                 try {
                     const url = new URL(lastPage.next);
                     return Number(url.searchParams.get('page'));
@@ -106,6 +105,8 @@ export function ProductList() {
                         <Link to={`/products/${product.id}`} key={product.id} className="group flex">
                             <div
                                 className="flex w-full flex-col overflow-hidden rounded-lg bg-slate-800 shadow-lg transition-shadow duration-300 hover:shadow-cyan-500/30">
+
+                                {/* --- НАЧАЛО ИСПРАВЛЕНИЙ --- */}
                                 <div className="relative w-full aspect-[4/5] bg-slate-700">
                                     {imageUrl ? (
                                         <img src={imageUrl} alt={product.title}
@@ -115,7 +116,11 @@ export function ProductList() {
                                             <ImageIcon className="h-16 w-16 text-slate-500"/>
                                         </div>
                                     )}
+                                    {/* Кнопка теперь ВНУТРИ этого блока */}
+                                    <AddToWishlistButton productId={product.id}/>
                                 </div>
+                                {/* --- КОНЕЦ ИСПРАВЛЕНИЙ --- */}
+
                                 <div className="flex flex-grow flex-col p-4">
                                     <h3 className="flex-grow font-semibold text-white"
                                         title={product.title}>{product.title}</h3>
