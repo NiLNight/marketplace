@@ -1,7 +1,7 @@
 // src/pages/ProfilePage.tsx
 import {useAuthStore} from '../stores/authStore';
-import {useForm, SubmitHandler} from 'react-hook-form';
-import {useEffect, useState, useRef} from 'react';
+import {useForm, type SubmitHandler} from 'react-hook-form'; // <-- Исправлен импорт
+import {useEffect, useState} from 'react'; // <-- Убран неиспользуемый useRef
 import toast from 'react-hot-toast';
 
 // Типы для формы
@@ -19,11 +19,12 @@ interface ProfileFormInputs {
 export function ProfilePage() {
     const {user, updateProfile, isLoading} = useAuthStore();
     const {register, handleSubmit, reset, watch} = useForm<ProfileFormInputs>();
-    const [avatarPreview, setAvatarPreview] = useState<string | null>(user?.profile?.avatar || null);
+    // Инициализация с null, чтобы избежать проблем с первоначальным значением
+    const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 
     const avatarFile = watch('profile.avatar');
 
-    // Обновляем превью аватара, когда пользователь выбирает новый файл
+    // Эффект для локального превью при выборе нового файла
     useEffect(() => {
         if (avatarFile && avatarFile.length > 0) {
             const file = avatarFile[0];
@@ -35,7 +36,7 @@ export function ProfilePage() {
         }
     }, [avatarFile]);
 
-    // Заполняем форму данными пользователя при первой загрузке
+    // Эффект для заполнения формы и аватара из стора при загрузке
     useEffect(() => {
         if (user) {
             reset({
@@ -48,9 +49,10 @@ export function ProfilePage() {
                     avatar: null
                 }
             });
+
             if (user.profile?.avatar) {
                 const baseUrl = import.meta.env.VITE_API_BASE_URL;
-                // Проверяем, не является ли аватар уже полным URL
+                // Проверяем, является ли аватар уже полным URL (на всякий случай)
                 if (user.profile.avatar.startsWith('http')) {
                     setAvatarPreview(user.profile.avatar);
                 } else {
@@ -63,16 +65,31 @@ export function ProfilePage() {
     }, [user, reset]);
 
     const onSubmit: SubmitHandler<ProfileFormInputs> = async (data) => {
-        const profileData = {
-            ...data,
-            profile: {
-                ...data.profile,
-                avatar: data.profile.avatar && data.profile.avatar.length > 0 ? data.profile.avatar[0] : undefined
-            }
-        };
+        // Собираем данные для отправки, отфильтровывая пустые значения
+        const profilePayload: { phone?: string; birth_date?: string; avatar?: File } = {};
+        if (data.profile.phone) profilePayload.phone = data.profile.phone;
+        if (data.profile.birth_date) profilePayload.birth_date = data.profile.birth_date;
+        if (data.profile.avatar?.[0]) profilePayload.avatar = data.profile.avatar[0];
+
+        const payload: {
+            username?: string;
+            first_name?: string;
+            last_name?: string;
+            profile?: typeof profilePayload
+        } = {};
+        if (data.username !== user?.username) payload.username = data.username;
+        if (data.first_name !== user?.first_name) payload.first_name = data.first_name || '';
+        if (data.last_name !== user?.last_name) payload.last_name = data.last_name || '';
+        if (Object.keys(profilePayload).length > 0) payload.profile = profilePayload;
+
+        // Не отправляем пустой запрос
+        if (Object.keys(payload).length === 0) {
+            toast('Вы не внесли никаких изменений.');
+            return;
+        }
 
         toast.promise(
-            updateProfile(profileData),
+            updateProfile(payload),
             {
                 loading: 'Обновление профиля...',
                 success: 'Профиль успешно обновлен!',
@@ -93,7 +110,7 @@ export function ProfilePage() {
                     <img
                         src={avatarPreview || `https://ui-avatars.com/api/?name=${user.username}&background=random`}
                         alt="Аватар"
-                        className="h-24 w-24 rounded-full object-cover"
+                        className="h-24 w-24 rounded-full object-cover bg-slate-700"
                     />
                     <div>
                         <label htmlFor="avatar-upload"

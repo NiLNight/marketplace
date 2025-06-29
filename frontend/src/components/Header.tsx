@@ -1,5 +1,5 @@
 // src/components/Header.tsx
-import {LogIn, UserPlus, ShoppingCart} from 'lucide-react';
+import {LogIn, UserPlus, ShoppingCart, UserCircle2} from 'lucide-react';
 import {useAuthStore} from '../stores/authStore';
 import {useCartStore} from '../stores/useCartStore';
 import {useState, useEffect, useRef} from 'react';
@@ -75,6 +75,10 @@ export function Header() {
                     {isLoggedIn ? (
                         <div className="flex items-center gap-4">
                             <span className="text-white">Привет, {user?.username}!</span>
+                            <Link to="/profile" className="text-slate-300 transition hover:text-white">
+                                <UserCircle2 size={24}/>
+                            </Link>
+
                             <button onClick={logout}
                                     className="rounded-md bg-red-500 px-4 py-2 text-white transition hover:bg-red-600">
                                 Выйти
