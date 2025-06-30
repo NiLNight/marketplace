@@ -3,7 +3,11 @@ import {useQuery} from '@tanstack/react-query';
 import {useParams} from 'react-router-dom';
 import apiClient from '../api';
 import {AddToCartButton} from '../components/AddToCartButton';
-import {AddToWishlistButton} from '../components/AddToWishlistButton'; // <-- 1. Импортируем кнопку
+import {AddToWishlistButton} from '../components/AddToWishlistButton';
+import {ReviewList} from '../components/ReviewList'; // <-- 1. Импортируем компонент списка отзывов
+import { AddReviewForm } from '../components/AddReviewForm'; // <-- Импорт
+import { useAuthStore } from '../stores/authStore'; // <-- Импорт
+import { useCheckUserReview } from '../hooks/useCheckUserReview'; // <-- Импорт
 
 // Тип на основе схемы ProductDetail из вашего OpenAPI
 type ProductDetail = {
@@ -31,6 +35,9 @@ const fetchProductById = async (productId: string): Promise<ProductDetail> => {
 
 export function ProductDetailPage() {
     const {productId} = useParams<{ productId: string }>();
+    const { isLoggedIn } = useAuthStore();
+    const numericProductId = Number(productId);
+    const { hasReviewed } = useCheckUserReview(numericProductId);
 
     const {data: product, isLoading, isError, error} = useQuery({
         queryKey: ['product', productId],
@@ -60,7 +67,6 @@ export function ProductDetailPage() {
                 <h1 className="text-4xl font-bold mb-4">{product.title}</h1>
                 <p className="text-lg text-slate-400 mb-6">Категория: {product.category.title}</p>
                 <div className="grid md:grid-cols-2 gap-8">
-
                     <div className="relative">
                         {imageUrl ? (
                             <img src={imageUrl} alt={product.title} className="w-full rounded-lg shadow-lg"/>
@@ -71,7 +77,6 @@ export function ProductDetailPage() {
                         )}
                         <AddToWishlistButton productId={product.id}/>
                     </div>
-
                     <div className="flex flex-col">
                         <div className="mb-6">
                             <span
@@ -98,6 +103,22 @@ export function ProductDetailPage() {
                         </div>
                     </div>
                 </div>
+
+                {/* --- НАЧАЛО ИЗМЕНЕНИЙ --- */}
+                <div className="mt-16"> {/* Большой отступ сверху */}
+                    <h2 className="text-3xl font-bold mb-8 text-center text-white">Отзывы о товаре</h2>
+                    {isLoggedIn && !hasReviewed && (
+                        <AddReviewForm productId={numericProductId} />
+                    )}
+                    {isLoggedIn && hasReviewed && (
+                        <div className="p-4 mb-8 bg-green-900/50 text-green-300 rounded-lg text-center">
+                            Вы уже оставили отзыв на этот товар. Спасибо!
+                        </div>
+                    )}
+                    <ReviewList productId={product.id}/>
+                </div>
+                {/* --- КОНЕЦ ИЗМЕНЕНИЙ --- */}
+
             </div>
         </div>
     );
