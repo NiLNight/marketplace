@@ -2,21 +2,26 @@
 import {useInfiniteQuery} from '@tanstack/react-query';
 import apiClient from '../api';
 import {ReviewCard, type Review} from './ReviewCard';
+import { useReviewFilterStore } from '../stores/useReviewFilterStore';
 
 interface ApiResponse {
     results: Review[];
     next: string | null;
 }
 
-const fetchReviews = async ({pageParam = 1, productId}: {
+const fetchReviews = async ({pageParam = 1, productId, ordering}: {
     pageParam?: number;
-    productId: number
+    productId: number;
+    ordering: string;
 }): Promise<ApiResponse> => {
-    const {data} = await apiClient.get<ApiResponse>(`/reviews/${productId}/`, {params: {page: pageParam}});
+    const {data} = await apiClient.get<ApiResponse>(`/reviews/${productId}/`, {
+        params: {page: pageParam, ordering}});
     return data;
 };
 
 export function ReviewList({productId}: { productId: number }) {
+    const {ordering} = useReviewFilterStore();
+
     const {
         data,
         fetchNextPage,
@@ -24,8 +29,9 @@ export function ReviewList({productId}: { productId: number }) {
         isLoading,
         isFetchingNextPage
     } = useInfiniteQuery({
-        queryKey: ['reviews', productId],
-        queryFn: ({pageParam}) => fetchReviews({pageParam, productId}),
+
+        queryKey: ['reviews', productId, ordering],
+        queryFn: ({pageParam}) => fetchReviews({pageParam, productId, ordering}),
         getNextPageParam: (lastPage) => {
             if (lastPage.next) {
                 try {

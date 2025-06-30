@@ -4,10 +4,11 @@ import {useParams} from 'react-router-dom';
 import apiClient from '../api';
 import {AddToCartButton} from '../components/AddToCartButton';
 import {AddToWishlistButton} from '../components/AddToWishlistButton';
-import {ReviewList} from '../components/ReviewList'; // <-- 1. Импортируем компонент списка отзывов
-import { AddReviewForm } from '../components/AddReviewForm'; // <-- Импорт
-import { useAuthStore } from '../stores/authStore'; // <-- Импорт
-import { useCheckUserReview } from '../hooks/useCheckUserReview'; // <-- Импорт
+import {ReviewList} from '../components/ReviewList';
+import { AddReviewForm } from '../components/AddReviewForm';
+import { useAuthStore } from '../stores/authStore';
+import { useCheckUserReview } from '../hooks/useCheckUserReview';
+import { SortDropdown } from '../components/SortDropdown';
 
 // Тип на основе схемы ProductDetail из вашего OpenAPI
 type ProductDetail = {
@@ -104,9 +105,9 @@ export function ProductDetailPage() {
                     </div>
                 </div>
 
-                {/* --- НАЧАЛО ИЗМЕНЕНИЙ --- */}
                 <div className="mt-16"> {/* Большой отступ сверху */}
                     <h2 className="text-3xl font-bold mb-8 text-center text-white">Отзывы о товаре</h2>
+                    <SortDropdown />
                     {isLoggedIn && !hasReviewed && (
                         <AddReviewForm productId={numericProductId} />
                     )}
@@ -117,8 +118,6 @@ export function ProductDetailPage() {
                     )}
                     <ReviewList productId={product.id}/>
                 </div>
-                {/* --- КОНЕЦ ИЗМЕНЕНИЙ --- */}
-
             </div>
         </div>
     );
