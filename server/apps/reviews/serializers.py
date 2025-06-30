@@ -20,6 +20,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField()
     product = serializers.StringRelatedField()
     likes_count = serializers.SerializerMethodField()
+    comments_count = serializers.SerializerMethodField()
 
     def get_likes_count(self, obj) -> int:
         """Подсчитывает количество лайков отзыва.
@@ -32,10 +33,14 @@ class ReviewSerializer(serializers.ModelSerializer):
         """
         return obj.likes.count()
 
+    def get_comments_count(self, obj) -> int:
+        return obj.comments.count()
+
     class Meta:
         model = Review
-        fields = ['id', 'product', 'user', 'value', 'text', 'image', 'created', 'updated', 'likes_count']
-        read_only_fields = ['id', 'user', 'created', 'updated', 'likes_count']
+        fields = ['id', 'product', 'user', 'value', 'text', 'image', 'created', 'updated', 'likes_count',
+                  'comments_count']
+        read_only_fields = ['id', 'user', 'created', 'updated', 'likes_count', 'comments_count']
 
 
 class ReviewCreateSerializer(serializers.ModelSerializer):
