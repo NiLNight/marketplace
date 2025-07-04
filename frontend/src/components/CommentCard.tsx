@@ -1,5 +1,5 @@
 // src/components/CommentCard.tsx
-import {ThumbsUp, UserCircle2, MessageSquare, Edit, Trash2} from "lucide-react";
+import {ThumbsUp, MessageSquare, Edit, Trash2} from "lucide-react";
 import {useState} from 'react';
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import apiClient from "../api";
@@ -11,11 +11,19 @@ import {useCheckOwnership} from "../hooks/useCheckOwnership";
 export interface Comment {
     id: number;
     review: number;
-    user: string;
+    user: User;
     text: string;
     created: string;
     likes_count: number;
     children?: Comment[];
+}
+
+interface UserProfile {
+    avatar: string | null;
+}
+interface User {
+    username: string;
+    profile: UserProfile;
 }
 
 interface CommentCardProps {
@@ -31,11 +39,15 @@ const updateComment = ({id, text}: { id: number; text: string }) => apiClient.pa
 export function CommentCard({comment}: CommentCardProps) {
     const {isLoggedIn} = useAuthStore();
     const queryClient = useQueryClient();
-    const isOwner = useCheckOwnership(comment.user);
+    const isOwner = useCheckOwnership(comment.user?.username);
 
     const [isReplying, setIsReplying] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editText, setEditText] = useState(comment.text);
+
+    const avatarUrl = comment.user.profile?.avatar
+        ? `${import.meta.env.VITE_API_BASE_URL}${comment.user.profile.avatar}`
+        : `https://ui-avatars.com/api/?name=${comment.user.username}&background=random&size=96`;
 
     const mutation = useMutation({
         mutationFn: toggleCommentLike,
@@ -98,11 +110,13 @@ export function CommentCard({comment}: CommentCardProps) {
 
     return (
         <div className="flex items-start gap-3">
-            <UserCircle2 size={28} className="mt-1 text-slate-500 flex-shrink-0"/>
+            <img src={avatarUrl} alt={comment.user.username}
+                 className="h-8 w-8 rounded-full bg-slate-700 object-cover"/>
+
             <div className="flex-grow">
                 <div className="rounded-md bg-slate-700/50 px-3 py-2">
                     <div className="flex items-center justify-between">
-                        <span className="text-sm font-semibold text-white">{comment.user}</span>
+                        <span className="text-sm font-semibold text-white">{comment.user.username}</span>
                         <span className="text-xs text-slate-500">{new Date(comment.created).toLocaleDateString()}</span>
                     </div>
                     {isEditing ? (

@@ -1,5 +1,5 @@
 // src/components/ReviewCard.tsx
-import {ThumbsUp, UserCircle2, MessageSquare, Edit} from 'lucide-react';
+import {ThumbsUp, MessageSquare, Edit} from 'lucide-react';
 import {useAuthStore} from '../stores/authStore';
 import apiClient from '../api';
 import toast from 'react-hot-toast';
@@ -12,13 +12,20 @@ import {EditReviewForm} from './EditReviewForm';
 
 export interface Review {
     id: number;
-    user: string;
+    user: User;
     value: number;
     text: string;
     image: string | null;
     created: string;
     likes_count: number;
     comments_count: number;
+}
+interface UserProfile {
+    avatar: string | null;
+}
+interface User {
+    username: string;
+    profile: UserProfile;
 }
 
 interface ReviewCardProps {
@@ -40,7 +47,11 @@ export function ReviewCard({review, productId}: ReviewCardProps) {
     const queryClient = useQueryClient();
     const [showComments, setShowComments] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
-    const isOwner = useCheckOwnership(review.user);
+    const isOwner = useCheckOwnership(review.user?.username);
+
+    const avatarUrl = review.user.profile?.avatar
+        ? `${import.meta.env.VITE_API_BASE_URL}${review.user.profile.avatar}`
+        : `https://ui-avatars.com/api/?name=${review.user.username}&background=random`;
 
     const mutation = useMutation({
         mutationFn: toggleLike,
@@ -64,10 +75,11 @@ export function ReviewCard({review, productId}: ReviewCardProps) {
                 <EditReviewForm review={review} productId={productId} onCancel={() => setIsEditing(false)}/>
             ) : (
                 <div className="flex items-start gap-4">
-                    <UserCircle2 size={32} className="mt-1 text-slate-400 flex-shrink-0"/>
+                    <img src={avatarUrl} alt={review.user.username} className="h-10 w-10 rounded-full bg-slate-700 object-cover" />
+
                     <div className="flex-grow">
                         <div className="flex items-center justify-between">
-                            <span className="font-semibold text-white">{review.user}</span>
+                            <span className="font-semibold text-white">{review.user.username}</span>
                             <span
                                 className="text-xs text-slate-500">{new Date(review.created).toLocaleDateString()}</span>
                         </div>
