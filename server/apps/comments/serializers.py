@@ -3,6 +3,7 @@ from rest_framework import serializers
 from apps.comments.models import Comment
 from apps.comments.exceptions import InvalidCommentData
 from apps.reviews.models import Review
+from apps.users.serializers import UserSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +18,7 @@ class CommentSerializer(serializers.ModelSerializer):
         children: Вложенные дочерние комментарии.
         likes_count: Количество лайков комментария.
     """
-    user = serializers.StringRelatedField()
+    user = UserSerializer(read_only=True)
     children = serializers.SerializerMethodField()
     likes_count = serializers.SerializerMethodField()
 

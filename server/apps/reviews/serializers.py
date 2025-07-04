@@ -3,6 +3,7 @@ from rest_framework import serializers
 from apps.reviews.models import Review
 from apps.reviews.exceptions import InvalidReviewData
 from apps.products.models import Product
+from apps.users.serializers import UserSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +18,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         product: Название продукта.
         likes_count: Количество лайков отзыва.
     """
-    user = serializers.StringRelatedField()
+    user = UserSerializer(read_only=True)
     product = serializers.StringRelatedField()
     likes_count = serializers.SerializerMethodField()
     comments_count = serializers.SerializerMethodField()
