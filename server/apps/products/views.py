@@ -148,7 +148,7 @@ class ProductListView(BaseProductView):
             if request.GET.get('q'):
                 queryset = ProductQueryService.search_products(request)
             else:
-                queryset = ProductQueryService.get_base_queryset()
+                queryset = ProductQueryService.get_base_queryset(request)
             cache_key = CacheService.build_cache_key(request, prefix="product_list")
             return self.process_queryset(queryset, request, cache_key, user_id)
         except ValueError as e:
@@ -188,7 +188,7 @@ class ProductDetailView(BaseProductView):
             if cached_data:
                 return Response(cached_data)
 
-            product = ProductQueryService.get_single_product(pk)
+            product = ProductQueryService.get_single_product(pk, request)
             serializer = self.serializer_class(product, context={'request': request})
             cache_key = f'product_detail:{pk}'
             CacheService.set_cached_data(cache_key, serializer.data, timeout=7200)
@@ -257,7 +257,7 @@ class ProductUpdateView(BaseProductView):
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(f"Updating product {pk}, user={user_id}, path={request.path}")
         try:
-            product = ProductQueryService.get_single_product(pk)
+            product = ProductQueryService.get_single_product(pk, request)
             self.check_object_permissions(request, product)
 
             serializer = self.serializer_class(

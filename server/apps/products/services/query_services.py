@@ -30,7 +30,7 @@ class ProductQueryService:
     LARGE_PAGE_SIZE = 100
 
     @classmethod
-    def get_base_queryset(cls) -> QuerySet:
+    def get_base_queryset(cls, request: Any) -> QuerySet:
         """Возвращает базовый QuerySet для продуктов.
 
         В тестовом режиме возвращает все продукты, в production только активные.
@@ -41,6 +41,8 @@ class ProductQueryService:
         logger.debug("Retrieving base queryset for active products")
         if settings.TESTING:
             return Product.objects.all()
+        elif request.user.is_authenticated and request.GET.get('my_products'):
+            return Product.objects.filter()
         return Product.objects.filter(is_active=True)
 
     @classmethod
@@ -64,11 +66,12 @@ class ProductQueryService:
         )
 
     @classmethod
-    def get_single_product(cls, pk: int) -> Product:
+    def get_single_product(cls, pk: int, request: Any) -> Product:
         """Получает один продукт по ID с аннотациями.
 
         Args:
             pk: Идентификатор продукта.
+            request: Request
 
         Returns:
             Объект Product.
@@ -79,7 +82,7 @@ class ProductQueryService:
         logger.info(f"Retrieving product with pk={pk}")
         try:
             product = cls._apply_common_annotations(
-                cls.get_base_queryset()
+                cls.get_base_queryset(request)
             ).get(pk=pk)
             logger.info(f"Retrieved product {pk}")
             return product
@@ -268,7 +271,7 @@ class ProductQueryService:
             query = request.GET.get('q', '').strip()
             if not query:
                 logger.warning("Empty search query in search_products")
-                return cls.get_base_queryset().none()
+                return cls.get_base_queryset(request).none()
 
             search = ProductDocument.search()
 

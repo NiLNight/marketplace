@@ -55,9 +55,9 @@ class ProductListSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'title', 'price', 'price_with_discount',
             'stock', 'rating_avg', 'popularity_score',
-            'thumbnail', 'created', 'category'
+            'thumbnail', 'created', 'category', 'is_active'
         ]
-        read_only_fields = ['id', 'created', 'rating_avg', 'popularity_score']
+        read_only_fields = ['id', 'created', 'rating_avg', 'popularity_score', 'is_active']
 
     def get_price_with_discount(self, obj: Product) -> Decimal:
         """Рассчитывает цену с учетом скидки.
@@ -156,7 +156,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             'stock', 'discount', 'category', 'category_id', 'thumbnail',
             'created', 'rating_avg', 'owner', 'is_active', 'has_user_reviewed'
         ]
-        read_only_fields = ['id', 'is_active', 'created', 'owner', 'rating_avg']
+        read_only_fields = ['id', 'created', 'owner', 'rating_avg']
 
     def get_price_with_discount(self, obj: Product) -> Decimal:
         """Рассчитывает цену с учетом скидки.

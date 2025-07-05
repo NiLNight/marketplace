@@ -1,7 +1,7 @@
 // src/pages/MyProductsPage.tsx
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
 import apiClient from "../api";
-import { ProductRow } from "../components/ProductRow";
+import {ProductRow} from "../components/ProductRow";
 import toast from "react-hot-toast";
 
 // Типы для товаров
@@ -17,12 +17,16 @@ export interface Product {
     };
 }
 
+const updateProductStatus = ({productId, isActive}: { productId: number, isActive: boolean }) => {
+    return apiClient.patch(`/products/${productId}/update/`, {is_active: isActive});
+};
+
 // Функции для API
 const fetchMyProducts = async (): Promise<Product[]> => {
     // Предполагаем, что бэкенд вернет список товаров текущего пользователя
     // Если такого эндпоинта нет, его нужно будет создать.
     // Пока будем использовать /products/list/ и фильтровать на клиенте (как временное решение)
-    const { data } = await apiClient.get('/products/list/?my_products=true'); // нужен специальный параметр
+    const {data} = await apiClient.get('/products/list/?my_products=true'); // нужен специальный параметр
     return data.results || [];
 };
 
@@ -32,7 +36,18 @@ const deleteProduct = (productId: number) => {
 
 export function MyProductsPage() {
     const queryClient = useQueryClient();
-    const { data: products, isLoading } = useQuery({
+    const updateStatusMutation = useMutation({
+        mutationFn: updateProductStatus,
+        onSuccess: () => {
+            toast.success("Статус товара обновлен.");
+            // Инвалидируем кэш, чтобы список перерисовался с новым статусом
+            queryClient.invalidateQueries({queryKey: ['myProducts']});
+        },
+        onError: () => {
+            toast.error("Не удалось обновить статус.");
+        }
+    });
+    const {data: products, isLoading} = useQuery({
         queryKey: ['myProducts'],
         queryFn: fetchMyProducts,
     });
@@ -41,12 +56,17 @@ export function MyProductsPage() {
         mutationFn: deleteProduct,
         onSuccess: () => {
             toast.success("Товар успешно удален.");
-            queryClient.invalidateQueries({ queryKey: ['myProducts'] });
+            queryClient.invalidateQueries({queryKey: ['myProducts']});
         },
         onError: () => {
             toast.error("Не удалось удалить товар.");
         }
     });
+
+    const handleStatusToggle = (productId: number) => {
+        // Мы можем только деактивировать, поэтому всегда отправляем is_active: false
+        updateStatusMutation.mutate({productId, isActive: false});
+    };
 
     const handleDelete = (id: number) => {
         if (window.confirm("Вы уверены, что хотите удалить этот товар? Это действие нельзя отменить.")) {
@@ -64,19 +84,25 @@ export function MyProductsPage() {
             <div className="overflow-hidden rounded-lg border border-slate-700">
                 <table className="min-w-full">
                     <thead className="bg-slate-800 text-xs uppercase text-slate-400">
-                        <tr>
-                            <th className="p-4 text-left">Фото</th>
-                            <th className="p-4 text-left">Название</th>
-                            <th className="p-4 text-left">Категория</th>
-                            <th className="p-4 text-left">Цена</th>
-                            <th className="p-4 text-left">Запас</th>
-                            <th className="p-4 text-left">Статус</th>
-                            <th className="p-4 text-left">Действия</th>
-                        </tr>
+                    <tr>
+                        <th className="p-4 text-left">Фото</th>
+                        <th className="p-4 text-left">Название</th>
+                        <th className="p-4 text-left">Категория</th>
+                        <th className="p-4 text-left">Цена</th>
+                        <th className="p-4 text-left">Запас</th>
+                        <th className="p-4 text-left">Статус</th>
+                        <th className="p-4 text-left">Действия</th>
+                    </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-700">
                         {products?.map(product => (
-                            <ProductRow key={product.id} product={product} onDelete={handleDelete} />
+                        <ProductRow
+                            key={product.id}
+                            product={product}
+                            onStatusToggle={handleStatusToggle} // <-- Передаем новую функцию
+                            onDelete={handleDelete}
+                            isUpdatingStatus={updateStatusMutation.isPending && updateStatusMutation.variables?.productId === product.id}
+                        />
                         ))}
                     </tbody>
                 </table>
