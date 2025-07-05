@@ -13,7 +13,6 @@ from apps.reviews.services.reviews_services import ReviewService
 from apps.reviews.serializers import ReviewSerializer, ReviewCreateSerializer
 from apps.reviews.utils import handle_api_errors
 from django.contrib.contenttypes.models import ContentType
-from apps.products.services.tasks import update_popularity_score
 
 logger = logging.getLogger(__name__)
 
@@ -69,7 +68,7 @@ class ReviewListView(APIView):
         reviews = ReviewService.apply_ordering(reviews, ordering)
         paginator = self.pagination_class()
         page = paginator.paginate_queryset(reviews, request)
-        serializer = self.serializer_class(page, many=True)
+        serializer = self.serializer_class(page, many=True, context={'request': request})
 
         cache_key = CacheService.build_cache_key(request, prefix=f"reviews:{product_id}")
         response_data = paginator.get_paginated_response(serializer.data).data

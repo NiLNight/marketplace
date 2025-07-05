@@ -21,11 +21,7 @@ class CommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     children = serializers.SerializerMethodField()
     likes_count = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Comment
-        fields = ['id', 'review', 'user', 'text', 'parent', 'created', 'updated', 'children', 'likes_count']
-        read_only_fields = ['id', 'user', 'created', 'updated', 'children', 'likes_count']
+    is_liked = serializers.SerializerMethodField()
 
     def get_children(self, obj):
         """Получает дочерние комментарии.
@@ -40,7 +36,7 @@ class CommentSerializer(serializers.ModelSerializer):
             Exception: Если произошла ошибка при получении дочерних комментариев из-за проблем с базой данных.
         """
         queryset = obj.cached_children
-        serializer = CommentSerializer(queryset, many=True)
+        serializer = CommentSerializer(queryset, many=True, context=self.context)
         return serializer.data
 
     def get_likes_count(self, obj) -> int:
@@ -56,6 +52,17 @@ class CommentSerializer(serializers.ModelSerializer):
             Exception: Если произошла ошибка при подсчете лайков из-за проблем с базой данных.
         """
         return obj.likes.count()
+
+    def get_is_liked(self, obj) -> bool:
+        user = self.context.get('request').user
+        if user.is_authenticated:
+            return obj.likes.filter(user=user).exists()
+        return False
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'review', 'user', 'text', 'parent', 'created', 'updated', 'children', 'likes_count', 'is_liked']
+        read_only_fields = ['id', 'user', 'created', 'updated', 'children', 'likes_count']
 
 
 class CommentCreateSerializer(serializers.ModelSerializer):

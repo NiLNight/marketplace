@@ -15,12 +15,14 @@ export interface Comment {
     text: string;
     created: string;
     likes_count: number;
+    is_liked: boolean;
     children?: Comment[];
 }
 
 interface UserProfile {
     avatar: string | null;
 }
+
 interface User {
     username: string;
     profile: UserProfile;
@@ -142,9 +144,15 @@ export function CommentCard({comment}: CommentCardProps) {
                 </div>
                 {!isEditing && (
                     <div className="mt-1 flex items-center gap-4 pl-1">
-                        <button onClick={handleLike} disabled={likeMutation.isPending}
-                                className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-cyan-400">
-                            <ThumbsUp size={14}/>
+                        <button
+                            onClick={handleLike}
+                            disabled={likeMutation.isPending}
+                            className={`flex items-center gap-1.5 text-xs transition disabled:opacity-50 ${
+                                    comment.is_liked ? 'text-cyan-400' : 'text-slate-400 hover:text-cyan-400'
+                                }`}
+                        >
+                            <ThumbsUp size={14}
+                                      className={comment.is_liked ? 'fill-cyan-400/20 stroke-cyan-400' : ''}/>
                             <span>{comment.likes_count}</span>
                         </button>
                         <button onClick={() => setIsReplying(!isReplying)}

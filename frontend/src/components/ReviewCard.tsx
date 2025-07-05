@@ -19,10 +19,13 @@ export interface Review {
     created: string;
     likes_count: number;
     comments_count: number;
+    is_liked: boolean;
 }
+
 interface UserProfile {
     avatar: string | null;
 }
+
 interface User {
     username: string;
     profile: UserProfile;
@@ -75,7 +78,8 @@ export function ReviewCard({review, productId}: ReviewCardProps) {
                 <EditReviewForm review={review} productId={productId} onCancel={() => setIsEditing(false)}/>
             ) : (
                 <div className="flex items-start gap-4">
-                    <img src={avatarUrl} alt={review.user.username} className="h-10 w-10 rounded-full bg-slate-700 object-cover" />
+                    <img src={avatarUrl} alt={review.user.username}
+                         className="h-10 w-10 rounded-full bg-slate-700 object-cover"/>
 
                     <div className="flex-grow">
                         <div className="flex items-center justify-between">
@@ -95,9 +99,18 @@ export function ReviewCard({review, productId}: ReviewCardProps) {
                                  className="mt-3 max-h-64 w-auto rounded-lg"/>
                         )}
                         <div className="mt-4 flex items-center gap-4 border-t border-slate-700/50 pt-3">
-                            <button onClick={handleLikeClick} disabled={mutation.isPending}
-                                    className="flex items-center gap-2 text-sm text-slate-400 transition hover:text-cyan-400 disabled:opacity-50">
-                                <ThumbsUp size={16}/>
+                            <button
+                                onClick={handleLikeClick}
+                                disabled={mutation.isPending}
+                                className={`flex items-center gap-2 text-sm transition disabled:opacity-50 ${
+                                    review.is_liked
+                                        ? 'text-cyan-400'
+                                        : 'text-slate-400 hover:text-cyan-400'
+                                }`}>
+                                <ThumbsUp
+                                    size={16}
+                                    className={review.is_liked ? 'fill-cyan-400/20 stroke-cyan-400' : ''}
+                                />
                                 <span>{review.likes_count}</span>
                             </button>
                             <button onClick={() => setShowComments(!showComments)}
