@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import {useAuthStore} from "../stores/authStore";
 import {AddCommentForm} from "./AddCommentForm";
 import {useCheckOwnership} from "../hooks/useCheckOwnership";
+import { getImageUrl } from '../utils/url';
 
 export interface Comment {
     id: number;
@@ -47,9 +48,8 @@ export function CommentCard({comment}: CommentCardProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [editText, setEditText] = useState(comment.text);
 
-    const avatarUrl = comment.user.profile?.avatar
-        ? `${import.meta.env.VITE_API_BASE_URL}${comment.user.profile.avatar}`
-        : `https://ui-avatars.com/api/?name=${comment.user.username}&background=random&size=96`;
+    const avatarUrl = getImageUrl(comment.user.profile?.avatar)
+        || `https://ui-avatars.com/api/?name=${comment.user.username}&background=random&size=96`;
 
     const mutation = useMutation({
         mutationFn: toggleCommentLike,

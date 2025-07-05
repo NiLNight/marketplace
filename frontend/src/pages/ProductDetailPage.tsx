@@ -8,6 +8,7 @@ import {ReviewList} from '../components/ReviewList';
 import { AddReviewForm } from '../components/AddReviewForm';
 import { useAuthStore } from '../stores/authStore';
 import { SortDropdown } from '../components/SortDropdown';
+import { getImageUrl } from '../utils/url';
 
 // Тип на основе схемы ProductDetail из вашего OpenAPI
 type ProductDetail = {
@@ -57,12 +58,7 @@ export function ProductDetailPage() {
         return <div className="text-white text-center p-10">Товар не найден.</div>;
     }
 
-    const baseUrl = import.meta.env.VITE_API_BASE_URL;
-    const imageUrl = product.thumbnail
-        ? product.thumbnail.startsWith('http')
-            ? product.thumbnail
-            : `${baseUrl}${product.thumbnail}`
-        : null;
+    const imageUrl = getImageUrl(product?.thumbnail);
 
     const hasReviewed = product.has_user_reviewed;
 

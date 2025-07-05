@@ -9,6 +9,7 @@ import {CommentList} from './CommentList';
 import {AddCommentForm} from './AddCommentForm';
 import {useCheckOwnership} from '../hooks/useCheckOwnership';
 import {EditReviewForm} from './EditReviewForm';
+import { getImageUrl } from '../utils/url';
 
 export interface Review {
     id: number;
@@ -51,15 +52,11 @@ export function ReviewCard({review, productId}: ReviewCardProps) {
     const [showComments, setShowComments] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const isOwner = useCheckOwnership(review.user?.username);
-    const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-    const avatarUrl = review.user.profile?.avatar
-        ? review.user.profile.avatar.startsWith('http') ? review.user.profile.avatar : `${baseUrl}${review.user.profile.avatar}`
-        : `https://ui-avatars.com/api/?name=${review.user.username}&background=random`;
+    const avatarUrl = getImageUrl(review.user.profile?.avatar)
+        || `https://ui-avatars.com/api/?name=${review.user.username}&background=random`;
 
-    const imageUrl = review.image
-        ? review.image.startsWith('http') ? review.image : `${baseUrl}${review.image}`
-        : null;
+    const imageUrl = getImageUrl(review.image);
 
     const mutation = useMutation({
         mutationFn: toggleLike,
