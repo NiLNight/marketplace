@@ -1,5 +1,5 @@
 // src/components/Header.tsx
-import {LogIn, UserPlus, ShoppingCart, UserCircle2} from 'lucide-react';
+import {LogIn, UserPlus, ShoppingCart, UserCircle2, Store} from 'lucide-react';
 import {useAuthStore} from '../stores/authStore';
 import {useCartStore} from '../stores/useCartStore';
 import {useState, useEffect, useRef} from 'react';
@@ -74,6 +74,10 @@ export function Header() {
                 {total_items}
               </span>
                         )}
+                    </Link>
+
+                    <Link to="/dashboard" className="text-slate-300 transition hover:text-white" title="Кабинет продавца">
+                            <Store size={24} />
                     </Link>
 
                     {isLoggedIn ? (
