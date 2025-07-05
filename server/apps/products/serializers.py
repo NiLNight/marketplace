@@ -147,13 +147,14 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         read_only=True,
         slug_field='username'
     )
+    has_user_reviewed = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
         fields = [
             'id', 'title', 'description', 'price', 'price_with_discount',
             'stock', 'discount', 'category', 'category_id', 'thumbnail',
-            'created', 'rating_avg', 'owner', 'is_active'
+            'created', 'rating_avg', 'owner', 'is_active', 'has_user_reviewed'
         ]
         read_only_fields = ['id', 'is_active', 'created', 'owner', 'rating_avg']
 
@@ -171,6 +172,12 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         except Exception as e:
             logger.error(f"Failed to calculate price with discount for product {obj.id}: {str(e)}")
             return obj.price
+
+    def get_has_user_reviewed(self, obj: Product) -> bool:
+        request = self.context.get('request')
+        if not request or not request.user.is_authenticated:
+            return False
+        return obj.reviews.filter(user=request.user).exists()
 
     def update(self, instance: Product, validated_data: Dict[str, Any]) -> Product:
         """Обновляет продукт через сервис ProductServices.

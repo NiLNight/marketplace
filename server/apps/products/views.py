@@ -189,7 +189,7 @@ class ProductDetailView(BaseProductView):
                 return Response(cached_data)
 
             product = ProductQueryService.get_single_product(pk)
-            serializer = self.serializer_class(product)
+            serializer = self.serializer_class(product, context={'request': request})
             cache_key = f'product_detail:{pk}'
             CacheService.set_cached_data(cache_key, serializer.data, timeout=7200)
             logger.info(f"Successfully retrieved product {pk}, user={user_id}")

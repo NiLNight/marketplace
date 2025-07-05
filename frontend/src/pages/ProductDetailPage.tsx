@@ -7,7 +7,6 @@ import {AddToWishlistButton} from '../components/AddToWishlistButton';
 import {ReviewList} from '../components/ReviewList';
 import { AddReviewForm } from '../components/AddReviewForm';
 import { useAuthStore } from '../stores/authStore';
-import { useCheckUserReview } from '../hooks/useCheckUserReview';
 import { SortDropdown } from '../components/SortDropdown';
 
 // Тип на основе схемы ProductDetail из вашего OpenAPI
@@ -27,6 +26,7 @@ type ProductDetail = {
         title: string;
         slug: string;
     };
+    has_user_reviewed: boolean;
 };
 
 const fetchProductById = async (productId: string): Promise<ProductDetail> => {
@@ -38,7 +38,6 @@ export function ProductDetailPage() {
     const {productId} = useParams<{ productId: string }>();
     const { isLoggedIn } = useAuthStore();
     const numericProductId = Number(productId);
-    const { hasReviewed } = useCheckUserReview(numericProductId);
 
     const {data: product, isLoading, isError, error} = useQuery({
         queryKey: ['product', productId],
@@ -58,9 +57,14 @@ export function ProductDetailPage() {
         return <div className="text-white text-center p-10">Товар не найден.</div>;
     }
 
+    const baseUrl = import.meta.env.VITE_API_BASE_URL;
     const imageUrl = product.thumbnail
-        ? `${import.meta.env.VITE_API_BASE_URL}${product.thumbnail}`
+        ? product.thumbnail.startsWith('http')
+            ? product.thumbnail
+            : `${baseUrl}${product.thumbnail}`
         : null;
+
+    const hasReviewed = product.has_user_reviewed;
 
     return (
         <div className="min-h-screen bg-slate-900 p-8 text-white">

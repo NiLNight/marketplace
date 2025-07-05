@@ -108,7 +108,7 @@ class ReviewCreateView(APIView):
 
         review = ReviewService.create_review(serializer.validated_data, request.user)
         logger.info(f"Created review {review.id}, user={user_id}")
-        return Response(ReviewSerializer(review).data, status=status.HTTP_201_CREATED)
+        return Response(ReviewSerializer(review, context={'request': request}).data, status=status.HTTP_201_CREATED)
 
 
 class ReviewUpdateView(APIView):
@@ -143,7 +143,7 @@ class ReviewUpdateView(APIView):
 
         review = ReviewService.update_review(pk, serializer.validated_data, request.user)
         logger.info(f"Updated review {pk}, user={user_id}")
-        return Response(ReviewSerializer(review).data, status=status.HTTP_200_OK)
+        return Response(ReviewSerializer(review, context={'request': request}).data, status=status.HTTP_200_OK)
 
 
 class ReviewLikeView(APIView):
