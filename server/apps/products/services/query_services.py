@@ -112,22 +112,26 @@ class ProductQueryService:
     @classmethod
     def apply_common_filters(
             cls,
+            request: Any,
             source: Union[Any, Search],
             category_id: Optional[int] = None,
             min_price: Optional[float] = None,
             max_price: Optional[float] = None,
             min_discount: Optional[float] = None,
-            in_stock: Optional[bool] = None
+            in_stock: Optional[bool] = None,
+            my_products: Optional[QuerySet] = None,
     ) -> Union[Any, Search]:
         """Применяет общие фильтры к QuerySet или объекту поиска Elasticsearch.
 
         Args:
+            request: request
             source: QuerySet (для PostgreSQL) или объект Search (для Elasticsearch).
             category_id: ID категории для фильтрации.
             min_price: Минимальная цена (с учётом скидки для Elasticsearch).
             max_price: Максимальная цена (с учётом скидки для Elasticsearch).
             min_discount: Минимальная скидка (в процентах).
             in_stock: Фильтр по наличию на складе.
+            my_products: Фильтр продукта по пользователю
 
         Returns:
             Отфильтрованный QuerySet или объект Search.
@@ -157,6 +161,8 @@ class ProductQueryService:
                     source = source.filter('range', discount={'gte': min_discount})
                 if in_stock:
                     source = source.filter('range', stock={'gt': 0})
+                if my_products and request.user.is_authenticated:
+                    source = source.filter('terms', user_id=request.user.id)
             else:  # PostgreSQL QuerySet
                 if category_id:
                     try:
@@ -174,6 +180,8 @@ class ProductQueryService:
                     source = source.filter(discount__gte=min_discount)
                 if in_stock:
                     source = source.filter(stock__gt=0)
+                if my_products and request.user.is_authenticated:
+                    source = source.filter(user_id=request.user.id)
             return source
         except (TypeError, ValueError) as e:
             logger.warning(f"Invalid filter parameters: {str(e)}")
@@ -195,7 +203,7 @@ class ProductQueryService:
         """
         logger.debug(f"Applying filters with params={request.GET.dict()}")
         params = get_filter_params(request)
-        return cls.apply_common_filters(queryset, **params)
+        return cls.apply_common_filters(request, queryset, **params)
 
     @classmethod
     def apply_ordering(cls, queryset: Any, request: Any) -> Any:
