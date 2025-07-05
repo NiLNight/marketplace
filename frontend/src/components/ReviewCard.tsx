@@ -51,10 +51,15 @@ export function ReviewCard({review, productId}: ReviewCardProps) {
     const [showComments, setShowComments] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const isOwner = useCheckOwnership(review.user?.username);
+    const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
     const avatarUrl = review.user.profile?.avatar
-        ? `${import.meta.env.VITE_API_BASE_URL}${review.user.profile.avatar}`
+        ? review.user.profile.avatar.startsWith('http') ? review.user.profile.avatar : `${baseUrl}${review.user.profile.avatar}`
         : `https://ui-avatars.com/api/?name=${review.user.username}&background=random`;
+
+    const imageUrl = review.image
+        ? review.image.startsWith('http') ? review.image : `${baseUrl}${review.image}`
+        : null;
 
     const mutation = useMutation({
         mutationFn: toggleLike,
@@ -94,8 +99,8 @@ export function ReviewCard({review, productId}: ReviewCardProps) {
                             ))}
                         </div>
                         {review.text && <p className="mt-3 text-slate-300">{review.text}</p>}
-                        {review.image && (
-                            <img src={`${import.meta.env.VITE_API_BASE_URL}${review.image}`} alt="Изображение к отзыву"
+                        {imageUrl && (
+                            <img src={imageUrl} alt="Изображение к отзыву"
                                  className="mt-3 max-h-64 w-auto rounded-lg"/>
                         )}
                         <div className="mt-4 flex items-center gap-4 border-t border-slate-700/50 pt-3">

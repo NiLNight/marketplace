@@ -109,7 +109,7 @@ class CommentCreateView(APIView):
 
         CacheService.invalidate_cache(prefix=f"comments:{comment.review_id}")
         logger.info(f"Created Comment {comment.id}, user={user_id}")
-        return Response(CommentSerializer(comment).data, status=status.HTTP_201_CREATED)
+        return Response(CommentSerializer(comment, context={'request': request}).data, status=status.HTTP_201_CREATED)
 
 
 class CommentUpdateView(APIView):
@@ -145,7 +145,7 @@ class CommentUpdateView(APIView):
         updated_comment = CommentService.update_comment(pk, serializer.validated_data, request.user)
         CacheService.invalidate_cache(prefix=f"comments:{updated_comment.review_id}")
         logger.info(f"Updated Comment {pk}, user={user_id}")
-        return Response(CommentSerializer(updated_comment).data, status=status.HTTP_200_OK)
+        return Response(CommentSerializer(updated_comment, context={'request': request}).data, status=status.HTTP_200_OK)
 
 
 class CommentDeleteView(APIView):
