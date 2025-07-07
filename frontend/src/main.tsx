@@ -17,10 +17,11 @@ import {OrderHistoryPage} from './pages/OrderHistoryPage.tsx';
 import {OrderDetailPage} from './pages/OrderDetailPage.tsx';
 import {ProfilePage} from "./pages/ProfilePage.tsx";
 import {WishlistPage} from "./pages/WishlistPage.tsx";
-import { DashboardLayout } from './pages/DashboardLayout.tsx';
-import { CreateProductPage } from './pages/CreateProductPage.tsx';
-import { MyProductsPage } from './pages/MyProductsPage.tsx';
+import {DashboardLayout} from './pages/DashboardLayout.tsx';
+import {CreateProductPage} from './pages/CreateProductPage.tsx';
+import {MyProductsPage} from './pages/MyProductsPage.tsx';
 import {EditProductPage} from "./pages/EditProductPage.tsx";
+import {ResetPasswordPage} from "./pages/ResetPasswordPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -71,13 +72,26 @@ const router = createBrowserRouter([
             },
             {
                 path: "dashboard",
-                element: <DashboardLayout />,
+                element: <DashboardLayout/>,
                 children: [
-                    { index: true, element: <MyProductsPage /> },
-                    { path: "products", element: <MyProductsPage /> },
-                    { path: "products/create", element: <CreateProductPage /> },
-                    { path: "products/edit/:productId", element: <EditProductPage /> },
+                    {index: true, element: <MyProductsPage/>},
+                    {
+                        path: "products",
+                        element: <MyProductsPage/>
+                    },
+                    {
+                        path: "products/create",
+                        element: <CreateProductPage/>
+                    },
+                    {
+                        path: "products/edit/:productId",
+                        element: <EditProductPage/>
+                    },
                 ]
+            },
+            {
+                path: "user/password-reset-confirm/", // <-- Путь должен совпадать с тем, что генерирует бэкенд
+                element: <ResetPasswordPage/>,
             }
         ],
     },

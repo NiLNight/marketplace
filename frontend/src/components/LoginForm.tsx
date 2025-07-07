@@ -6,9 +6,10 @@ import apiClient from '../api';
 interface LoginFormProps {
     onSuccess: () => void;
     onActivateAccount: (email: string) => void;
+    onForgotPassword: () => void;
 }
 
-export function LoginForm({onSuccess, onActivateAccount}: LoginFormProps) {
+export function LoginForm({onSuccess, onActivateAccount, onForgotPassword}: LoginFormProps) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isActivationRequired, setActivationRequired] = useState(false);
@@ -82,6 +83,15 @@ export function LoginForm({onSuccess, onActivateAccount}: LoginFormProps) {
                     required
                     className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 p-2 text-white"
                 />
+            </div>
+            <div className="text-right">
+                <button
+                    type="button"
+                    onClick={onForgotPassword}
+                    className="text-sm text-cyan-400 hover:underline"
+                >
+                    Забыли пароль?
+                </button>
             </div>
             <button
                 type="submit"

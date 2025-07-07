@@ -24,7 +24,6 @@ export function ProductRow({product, onStatusToggle, onDelete, isUpdatingStatus}
             <td className="p-4 align-middle text-slate-300">{product.price} руб.</td>
             <td className="p-4 align-middle text-slate-300">{product.stock} шт.</td>
             <td className="p-4 align-middle">
-                {/* --- НАЧАЛО ИСПРАВЛЕНИЙ --- */}
                 <button
                     onClick={() => onStatusToggle(product.id)}
                     disabled={!product.is_active || isUpdatingStatus}
@@ -36,7 +35,6 @@ export function ProductRow({product, onStatusToggle, onDelete, isUpdatingStatus}
                 >
                     {isUpdatingStatus ? '...' : (product.is_active ? 'Активен' : 'Скрыт')}
                 </button>
-                {/* --- КОНЕЦ ИСПРАВЛЕНИЙ --- */}
             </td>
             <td className="p-4 align-middle">
                 <div className="flex items-center gap-3">

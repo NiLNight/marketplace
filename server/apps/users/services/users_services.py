@@ -276,7 +276,7 @@ class ConfirmPasswordService:
             uid = urlsafe_base64_encode(force_bytes(user.id))
             logger.debug(f"Generated uid={uid} for user={user.id}")
             
-            reset_url = f"http://localhost:8000/user/password-reset-confirm/?token={token}&uid={uid}"
+            reset_url = f"http://localhost:5173/user/password-reset-confirm/?token={token}&uid={uid}"
             logger.debug(f"Generated reset URL: {reset_url}")
             
             logger.info(f"Sending password reset task to Celery for email={email}")

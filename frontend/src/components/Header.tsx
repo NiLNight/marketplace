@@ -9,8 +9,9 @@ import {LoginForm} from './LoginForm';
 import {RegisterForm} from './RegisterForm';
 import {ConfirmCodeForm} from './ConfirmCodeForm';
 import {useWishlistStore} from '../stores/useWishlistStore';
+import { ForgotPasswordForm } from './ForgotPasswordForm';
 
-type ModalView = 'LOGIN' | 'REGISTER' | 'CONFIRM_CODE';
+type ModalView = 'LOGIN' | 'REGISTER' | 'CONFIRM_CODE' | 'FORGOT_PASSWORD';
 
 export function Header() {
     const {isLoggedIn, user, logout} = useAuthStore();
@@ -57,6 +58,7 @@ export function Header() {
         LOGIN: 'Вход в аккаунт',
         REGISTER: 'Создание аккаунта',
         CONFIRM_CODE: 'Подтверждение Email',
+        FORGOT_PASSWORD: 'Сброс пароля',
     };
 
     return (
@@ -108,7 +110,6 @@ export function Header() {
                     )}
                 </nav>
             </header>
-
             <Modal
                 isOpen={isModalOpen}
                 onClose={closeModal}
@@ -118,6 +119,7 @@ export function Header() {
                     <LoginForm
                         onSuccess={closeModal}
                         onActivateAccount={switchToConfirmView}
+                        onForgotPassword={() => setModalView('FORGOT_PASSWORD')}
                     />
                 )}
                 {modalView === 'REGISTER' && (
@@ -131,6 +133,9 @@ export function Header() {
                         email={emailForConfirmation}
                         onSuccess={closeModal}
                     />
+                )}
+                {modalView === 'FORGOT_PASSWORD' && (
+                    <ForgotPasswordForm onFormSubmit={closeModal} />
                 )}
             </Modal>
         </>
