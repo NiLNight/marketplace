@@ -20,11 +20,12 @@ class OrderSerializer(serializers.ModelSerializer):
         pickup_point: Данные о пункте выдачи.
     """
     pickup_point = PickupPointSerializer(read_only=True)
+    items = CartItemSerializer(many=True, source='order_items', read_only=True)
 
     class Meta:
         """Метаданные сериализатора OrderSerializer."""
         model = Order
-        fields = ['id', 'status', 'total_price', 'created', 'pickup_point']
+        fields = ['id', 'status', 'total_price', 'created', 'pickup_point', 'items']
 
     def validate(self, attrs):
         """

@@ -67,7 +67,7 @@ class BaseProductView(APIView):
         try:
             # Применяем фильтры, аннотации и сортировку
             queryset = ProductQueryService.apply_filters(queryset, request)
-            queryset = ProductQueryService.get_product_list(queryset)
+            queryset = ProductQueryService.get_product_list(queryset=queryset, request=request)
             queryset = ProductQueryService.apply_ordering(queryset, request)
 
             # Пагинация

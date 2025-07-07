@@ -39,17 +39,22 @@ class ProductQueryService:
             QuerySet: Базовый QuerySet с продуктами.
         """
         logger.debug("Retrieving base queryset for active products")
+        my_products = request.GET.get('my_products', None)
         if settings.TESTING:
             return Product.objects.all()
-        elif request.user.is_authenticated and request.GET.get('my_products'):
-            return Product.objects.filter()
+        elif my_products:
+            return Product.objects.filter(
+                user=request.user) \
+                if (my_products == 'true' and
+                    request.user.is_authenticated) else Product.objects.none()
         return Product.objects.filter(is_active=True)
 
     @classmethod
-    def get_product_list(cls, queryset: Optional[Any] = None) -> Any:
+    def get_product_list(cls, request: Any, queryset: Optional[Any] = None) -> Any:
         """Возвращает список продуктов с аннотациями и оптимизированными полями.
 
         Args:
+            request: Request
             queryset: QuerySet продуктов. Если не указан, используется базовый queryset.
 
         Returns:
@@ -57,7 +62,7 @@ class ProductQueryService:
         """
         logger.debug("Applying annotations for product list")
         if queryset is None:
-            queryset = cls.get_base_queryset()
+            queryset = cls.get_base_queryset(request)
         return cls._apply_common_annotations(
             queryset
         ).select_related('category').only(
@@ -82,7 +87,7 @@ class ProductQueryService:
         logger.info(f"Retrieving product with pk={pk}")
         try:
             product = cls._apply_common_annotations(
-                cls.get_base_queryset(request)
+                Product.objects.all()
             ).get(pk=pk)
             logger.info(f"Retrieved product {pk}")
             return product
@@ -164,8 +169,8 @@ class ProductQueryService:
                     source = source.filter('range', discount={'gte': min_discount})
                 if in_stock:
                     source = source.filter('range', stock={'gt': 0})
-                if my_products and request.user.is_authenticated:
-                    source = source.filter('terms', user_id=request.user.id)
+                # if my_products and request.user.is_authenticated:
+                #     source = source.filter('terms', user_id=request.user.id)
             else:  # PostgreSQL QuerySet
                 if category_id:
                     try:
@@ -183,8 +188,8 @@ class ProductQueryService:
                     source = source.filter(discount__gte=min_discount)
                 if in_stock:
                     source = source.filter(stock__gt=0)
-                if my_products and request.user.is_authenticated:
-                    source = source.filter(user_id=request.user.id)
+                # if my_products and request.user.is_authenticated:
+                #     source = source.filter(user_id=request.user.id)
             return source
         except (TypeError, ValueError) as e:
             logger.warning(f"Invalid filter parameters: {str(e)}")
