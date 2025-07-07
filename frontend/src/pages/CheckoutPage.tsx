@@ -19,14 +19,15 @@ interface PickupPoint {
     city: City;
 }
 
-// Обновляем функцию, чтобы она принимала searchQuery
+// Обновляем функцию, добавляем searchQuery и page_size
 const fetchPickupPoints = async (cityId: number | null, searchQuery: string): Promise<PickupPoint[]> => {
     if (!cityId) return [];
 
     const params = new URLSearchParams();
     params.append('city_id', String(cityId));
+    params.append('page_size', '100'); // <-- 1. Запрашиваем до 100 пунктов сразу
     if (searchQuery) {
-        params.append('q', searchQuery); // <-- Теперь этот параметр будет отправляться
+        params.append('q', searchQuery);
     }
 
     const {data} = await apiClient.get('/delivery/pickup_points/', {params});
@@ -55,7 +56,6 @@ export function CheckoutPage() {
         }
     }, [cartItems, fetchCart]);
 
-    // Запросы к API
     const {data: cities, isLoading: isLoadingCities} = useQuery({queryKey: ['cities'], queryFn: fetchCities});
 
     const {data: pickupPoints, isLoading: isLoadingPoints} = useQuery({
@@ -112,45 +112,39 @@ export function CheckoutPage() {
                             {cities?.map(city => <option key={city.id} value={city.id}>{city.name}</option>)}
                         </select>
                     </div>
-
-                    {/* --- НАЧАЛО ИЗМЕНЕНИЙ: БЛОК С ПУНКТАМИ ВЫДАЧИ --- */}
                     {selectedCity && (
                         <div className="space-y-4 rounded-lg bg-slate-800 p-4">
                             <div>
                                 <label htmlFor="pickup-search" className="block text-sm font-medium text-slate-300">Поиск
                                     по адресу</label>
-                                <input
-                                    id="pickup-search"
-                                    type="text"
-                                    placeholder="Введите улицу, метро..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 p-2 text-white"
-                                />
+                                <input id="pickup-search" type="text" placeholder="Введите улицу, метро..."
+                                       value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                                       className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 p-2 text-white"/>
                             </div>
 
                             {isLoadingPoints ? (
                                 <div className="text-slate-400">Загрузка пунктов...</div>
                             ) : (
+                                // 2. Добавляем div с прокруткой
                                 <div className="max-h-60 space-y-2 overflow-y-auto pr-2">
                                     {pickupPoints && pickupPoints.length > 0 ? (
                                         pickupPoints.map(point => (
-                                            <label
-                                                key={point.id}
-                                                htmlFor={`point-${point.id}`}
-                                                className={`flex cursor-pointer items-start gap-3 rounded-md p-3 transition-colors ${selectedPickupPoint === point.id ? 'bg-cyan-600/50 ring-2 ring-cyan-500' : 'bg-slate-700 hover:bg-slate-600/50'}`}
-                                            >
-                                                <input
-                                                    type="radio"
-                                                    id={`point-${point.id}`}
-                                                    name="pickupPoint"
-                                                    value={point.id}
-                                                    checked={selectedPickupPoint === point.id}
-                                                    onChange={() => setSelectedPickupPoint(point.id)}
-                                                    className="mt-1 h-4 w-4 border-slate-500 bg-slate-800 text-cyan-600 focus:ring-cyan-500"
-                                                />
+                                            // --- 3. НАЧАЛО ИЗМЕНЕНИЙ В СТИЛЯХ ---
+                                            <label key={point.id} htmlFor={`point-${point.id}`}
+                                                   className={`flex cursor-pointer items-start gap-3 rounded-md p-3 border-2 transition-colors ${selectedPickupPoint === point.id ? 'border-cyan-500 bg-cyan-900/50' : 'border-transparent bg-slate-700 hover:bg-slate-600/50'}`}>
+                                                <div
+                                                    className="mt-1 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border-2 border-slate-500">
+                                                    {selectedPickupPoint === point.id && (
+                                                        <div className="h-2.5 w-2.5 rounded-full bg-cyan-400"></div>
+                                                    )}
+                                                </div>
                                                 <span className="flex-grow text-sm">{point.address}</span>
+                                                <input type="radio" id={`point-${point.id}`} name="pickupPoint"
+                                                       value={point.id} checked={selectedPickupPoint === point.id}
+                                                       onChange={() => setSelectedPickupPoint(point.id)}
+                                                       className="sr-only"/>
                                             </label>
+                                            // --- КОНЕЦ ИЗМЕНЕНИЙ В СТИЛЯХ ---
                                         ))
                                     ) : (
                                         <p className="p-3 text-center text-sm text-slate-400">Пункты выдачи не
@@ -160,10 +154,9 @@ export function CheckoutPage() {
                             )}
                         </div>
                     )}
-                    {/* --- КОНЕЦ ИЗМЕНЕНИЙ --- */}
                 </div>
 
-                {/* Правая часть: Состав и итог заказа */}
+                {/* Правая часть (без изменений) */}
                 <div className="space-y-4 rounded-lg bg-slate-800 p-6 self-start">
                     <h2 className="text-2xl font-semibold">2. Ваш заказ</h2>
                     {cartItems.map(item => (
