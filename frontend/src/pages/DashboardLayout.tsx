@@ -7,37 +7,32 @@ const inactiveLinkClass = "flex items-center gap-3 rounded-lg px-3 py-2 text-sla
 
 export function DashboardLayout() {
     return (
-        <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-            <div className="hidden border-r border-slate-700 bg-slate-800/40 md:block">
-                <div className="flex h-full max-h-screen flex-col gap-2">
-                    <div className="flex h-14 items-center border-b border-slate-700 px-4 lg:h-[60px] lg:px-6">
-                        <span className="flex items-center gap-2 font-semibold text-white">
-                            <Store/>
-                            <span>Мой магазин</span>
-                        </span>
+        <div className="grid w-full gap-8 md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+
+            <div className="hidden md:block">
+                <div className="sticky top-8 space-y-4">
+                    <div className="flex items-center gap-2 font-semibold text-white px-2 lg:px-4">
+                        <Store/>
+                        <span>Мой магазин</span>
                     </div>
-                    <div className="flex-1">
-                        <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-                            <NavLink to="/dashboard/products" end
-                                     className={({isActive}) => isActive ? activeLinkClass : inactiveLinkClass}>
-                                <Package className="h-4 w-4"/>
-                                Мои товары
-                            </NavLink>
-                            <NavLink to="/dashboard/products/create"
-                                     className={({isActive}) => isActive ? activeLinkClass : inactiveLinkClass}>
-                                <PlusCircle className="h-4 w-4"/>
-                                Добавить товар
-                            </NavLink>
-                            {/* Ссылка на статистику (пока заглушка) */}
-                        </nav>
-                    </div>
+                    <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+                        <NavLink to="/dashboard/products" end
+                                 className={({isActive}) => isActive ? activeLinkClass : inactiveLinkClass}>
+                            <Package className="h-4 w-4"/>
+                            Мои товары
+                        </NavLink>
+                        <NavLink to="/dashboard/products/create"
+                                 className={({isActive}) => isActive ? activeLinkClass : inactiveLinkClass}>
+                            <PlusCircle className="h-4 w-4"/>
+                            Добавить товар
+                        </NavLink>
+                    </nav>
                 </div>
             </div>
-            <div className="flex flex-col">
-                <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-                    <Outlet/>
-                </main>
-            </div>
+
+            <main>
+                <Outlet/>
+            </main>
         </div>
     );
 }
