@@ -14,7 +14,7 @@
 - Pillow, pytils, shortuuid
 - Black, Flake8, isort, mypy (линтеры и форматирование)
 
-Полный список — в [requirements.txt](requirements.txt).
+Полный список — в [requirements.txt](requirements/base.txt).
 
 ---
 
@@ -33,7 +33,7 @@
    ```
 3. Установите зависимости:
    ```bash
-   pip install -r requirements.txt
+   pip install -r base.txt
    ```
 4. Создайте файл .env на основе .env.example и заполните своими значениями:
    ```bash
