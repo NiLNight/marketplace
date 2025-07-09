@@ -348,7 +348,7 @@ class ProductQueryService:
             # Получаем продукты из базы данных с сохранением порядка из Elasticsearch
             product_ids = [hit.meta.id for hit in response]
             logger.debug(f"Final product_ids order: {product_ids}")
-            products = cls.get_base_queryset().filter(id__in=product_ids)
+            products = cls.get_base_queryset(request).filter(id__in=product_ids)
 
             # Сохраняем порядок сортировки из Elasticsearch
             preserved_order = Case(
