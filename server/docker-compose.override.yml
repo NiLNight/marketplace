@@ -1,0 +1,22 @@
+# Этот файл переопределяет настройки из docker-compose.yml для локальной разработки.
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev # 1. Используем наш новый Dockerfile для разработки
+    command: python manage.py runserver 0.0.0.0:8000 # 2. Запускаем через runserver с автоперезагрузкой
+    volumes:
+      - .:/app # 3. Монтируем весь код, чтобы изменения в IDE сразу отражались в контейнере
+    ports:
+      - "8000:8000" # Пробрасываем порт для доступа из браузера
+    # depends_on остается таким же, как в основном файле
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev # 1. Используем тот же dev Dockerfile
+    command: celery -A config worker -l info # Простая команда для локального запуска
+    volumes:
+      - .:/app # 3. Также монтируем код, чтобы celery видел изменения
+    # depends_on остается таким же
