@@ -1,0 +1,15 @@
+-r local.txt
+
+# Testing
+pytest==8.1.1
+pytest-django==4.8.0
+pytest-cov==4.1.0
+factory-boy==3.3.0
+Faker==25.2.0
+
+# Linters & Formatters
+black==24.4.2
+flake8==7.0.0
+isort==5.13.2
+mypy==1.9.0
+# pycodestyle - будет установлен как зависимость flake8
