@@ -1,0 +1,35 @@
+# Django & DRF
+asgiref==3.8.1
+Django==5.1.4
+djangorestframework==3.15.2
+djangorestframework-simplejwt==5.4.0
+drf-spectacular==0.28.0
+gunicorn==22.0.0
+
+# Database
+psycopg==3.1.18
+psycopg-binary==3.1.18
+
+# Caching & Queues
+redis==5.0.4
+celery==5.4.0
+django-redis==5.4.0
+flower==2.0.1
+amqp==5.2.0
+billiard==4.2.0
+kombu==5.3.7
+vine==5.1.0
+
+# Elasticsearch
+django-elasticsearch-dsl==8.0
+elasticsearch==8.12.1
+elasticsearch-dsl==8.11.0
+
+# Utilities
+Pillow==10.2.0
+python-dotenv==1.0.1
+pytils==0.4.1
+shortuuid==1.0.13
+django-mptt==0.16.0
+django-cors-headers==4.3.1
+sqlparse>=0.3.0
