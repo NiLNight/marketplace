@@ -1,43 +1,46 @@
+# --- Этап 1: Builder ---
 FROM python:3.12-slim as builder
 
-# Установка рабочей директории
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
 WORKDIR /app
 
-# Установка зависимостей для сборки
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# Устанавливаем системные зависимости
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     build-essential \
+    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Копирование и установка зависимостей
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Копируем только файлы зависимостей
+COPY requirements/base.txt /app/requirements/base.txt
 
-# Финальный этап
+# Устанавливаем зависимости в "колеса"
+RUN pip wheel --no-cache-dir --wheel-dir /app/wheels -r /app/requirements/base.txt
+
+
+# --- Этап 2: Final ---
 FROM python:3.12-slim
 
-# Создание непривилегированного пользователя
-RUN groupadd -r marketplace && useradd -r -g marketplace marketplace
+RUN groupadd -r marketplace && useradd --no-log-init -r -g marketplace marketplace
 
-# Установка рабочей директории
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    libpq5 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Копируем "колеса" и устанавливаем их
+COPY --from=builder /app/wheels /wheels
+RUN pip install --no-cache /wheels/*
+
 WORKDIR /app
 
-# Копирование установленных пакетов и бинарных файлов из builder
-COPY --from=builder /usr/local/lib/python3.12/site-packages/ /usr/local/lib/python3.12/site-packages/
-COPY --from=builder /usr/local/bin/ /usr/local/bin/
-
-# Копирование кода проекта
+# Копируем код приложения
 COPY . .
 
 # Установка прав на файлы
 RUN chown -R marketplace:marketplace /app
-
-# Переключение на непривилегированного пользователя
 USER marketplace
 
-# Переменные окружения
-ENV PYTHONUNBUFFERED=1 \
-    DJANGO_SETTINGS_MODULE=config.settings \
-    PYTHONDONTWRITEBYTECODE=1
-
-# Порт для Django
-EXPOSE 8000 
+EXPOSE 8000
