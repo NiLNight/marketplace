@@ -97,8 +97,8 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'marketplace',
+        'ENGINE': str(os.environ.get('DB_ENGINE')),
+        'NAME': str(os.environ.get('DB_NAME')),
         'USER': str(os.environ.get('DB_USER')),
         'PASSWORD': str(os.environ.get('DB_PASS')),
         'HOST': str(os.environ.get('DB_HOST')),
@@ -275,7 +275,8 @@ SESSION_COOKIE_AGE = 86400  # 24 часа
 SESSION_COOKIE_NAME = 'marketplace_sessionid'
 
 # Настройки Celery
-CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+RABBITMQ_HOST = str(os.environ.get('RABBITMQ_HOST', 'localhost'))
+CELERY_BROKER_URL = f'amqp://guest:guest@{RABBITMQ_HOST}:5672//'
 CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
@@ -288,7 +289,7 @@ CELERY_WORKER_SEND_TASK_EVENTS = True
 # Настройки Elasticsearch
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': 'http://localhost:9200',
+        'hosts': str(os.environ.get('ELASTICSEARCH_HOSTS')),
         'timeout': 30,
     },
 }
