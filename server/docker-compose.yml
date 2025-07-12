@@ -65,7 +65,7 @@ services:
   backend:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: deployment/docker/backend/Dockerfile
     container_name: marketplace-backend
     command: >
       sh -c "python manage.py migrate &&
@@ -92,7 +92,7 @@ services:
   celery:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: deployment/docker/backend/Dockerfile
     container_name: marketplace-celery-worker
     command: celery -A config worker -l debug --pool=solo
     volumes:
