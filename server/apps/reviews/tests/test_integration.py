@@ -9,12 +9,9 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
 from django.db.models import Avg
-from unittest.mock import patch
 
 from apps.reviews.models import Review
 from apps.products.models import Product, Category
-from apps.core.services.cache_services import CacheService
-from apps.products.services.query_services import ProductQueryService
 from apps.products.utils import calculate_popularity_score
 from apps.orders.models import Order
 from apps.carts.models import OrderItem

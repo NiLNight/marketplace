@@ -2,10 +2,9 @@
 
 import logging
 from decimal import Decimal
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
-from rest_framework.exceptions import ValidationError
 from apps.reviews.models import Review
 from apps.reviews.serializers import ReviewSerializer, ReviewCreateSerializer
 from apps.products.models import Product, Category
@@ -50,15 +49,20 @@ class ReviewSerializerTest(TestCase):
             value=5,
             text='Отличный продукт!'
         )
+        self.factory = RequestFactory()
 
     def test_review_serialization(self):
         """Тест сериализации отзыва."""
-        serializer = ReviewSerializer(self.review)
-        data = serializer.data
+        # Создаем request с аутентифицированным пользователем
+        request = self.factory.get('/reviews/')
+        request.user = self.user
         
+        serializer = ReviewSerializer(self.review, context={'request': request})
+        data = serializer.data
+
         self.assertEqual(data['value'], 5)
         self.assertEqual(data['text'], 'Отличный продукт!')
-        self.assertEqual(data['user'], str(self.user))
+        self.assertEqual(data['user']['username'], self.user.username)
         self.assertEqual(data['product'], str(self.product))
         self.assertIn('created', data)
         self.assertIn('updated', data)
@@ -70,7 +74,7 @@ class ReviewSerializerTest(TestCase):
             user=user2,
             content_object=self.review
         )
-        serializer = ReviewSerializer(self.review)
+        serializer = ReviewSerializer(self.review, context={'request': request})
         self.assertEqual(serializer.data['likes_count'], 1)
 
     def test_review_create_serializer_validation(self):
@@ -107,7 +111,7 @@ class ReviewSerializerTest(TestCase):
         serializer = ReviewCreateSerializer(self.review, data=update_data, partial=True)
         self.assertTrue(serializer.is_valid())
         updated_review = serializer.save()
-        
+
         self.assertEqual(updated_review.value, 3)
         self.assertEqual(updated_review.text, 'Обновленный текст отзыва')
         self.assertEqual(updated_review.product, self.product)
@@ -129,27 +133,35 @@ class ReviewSerializerTest(TestCase):
             text='Отзыв с картинкой',
             image=image
         )
+
+        # Создаем request с аутентифицированным пользователем
+        request = self.factory.get('/reviews/')
+        request.user = user2
         
-        serializer = ReviewSerializer(review_with_image)
+        serializer = ReviewSerializer(review_with_image, context={'request': request})
         self.assertIn('image', serializer.data)
         self.assertTrue(serializer.data['image'].endswith('.jpg'))
 
     def test_review_likes_serialization(self):
         """Тест сериализации лайков отзыва."""
-        serializer = ReviewSerializer(self.review)
+        # Создаем request с аутентифицированным пользователем
+        request = self.factory.get('/reviews/')
+        request.user = self.user
+        
+        serializer = ReviewSerializer(self.review, context={'request': request})
         self.assertIn('likes_count', serializer.data)
         self.assertEqual(serializer.data['likes_count'], 0)
 
         # Добавляем лайки и проверяем обновление счетчика
         user2 = User.objects.create_user('user2', 'user2@example.com', 'pass123')
         user3 = User.objects.create_user('user3', 'user3@example.com', 'pass123')
-        
+
         Like.objects.create(user=user2, content_object=self.review)
-        serializer = ReviewSerializer(self.review)
+        serializer = ReviewSerializer(self.review, context={'request': request})
         self.assertEqual(serializer.data['likes_count'], 1)
-        
+
         Like.objects.create(user=user3, content_object=self.review)
-        serializer = ReviewSerializer(self.review)
+        serializer = ReviewSerializer(self.review, context={'request': request})
         self.assertEqual(serializer.data['likes_count'], 2)
 
     def test_review_create_with_empty_text(self):
@@ -180,4 +192,4 @@ class ReviewSerializerTest(TestCase):
         }
         serializer = ReviewCreateSerializer(data=data)
         self.assertFalse(serializer.is_valid())
-        self.assertIn('image', serializer.errors) 
+        self.assertIn('image', serializer.errors)

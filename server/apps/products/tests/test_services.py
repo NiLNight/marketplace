@@ -4,12 +4,11 @@
 Содержит тесты для ProductServices и ProductQueryService.
 """
 
+from django.core.cache import cache
 from decimal import Decimal
-from django.test import TestCase, override_settings
+from django.test import TestCase, override_settings, RequestFactory
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.core.exceptions import ValidationError
-from rest_framework.exceptions import PermissionDenied
 from apps.products.models import Category, Product
 from apps.products.services.product_services import ProductServices
 from apps.products.services.query_services import ProductQueryService
@@ -38,6 +37,7 @@ class ProductServicesTests(TestCase):
             title='Электроника',
             description='Электронные устройства'
         )
+        cls.factory = RequestFactory()
 
     def setUp(self):
         """Подготовка данных для каждого теста."""
@@ -187,7 +187,7 @@ class ProductServicesTests(TestCase):
         # TODO: Добавить создание отзывов после реализации ReviewService
         ProductServices.delete_product(product.id, self.user)
         with self.assertRaises(ProductNotFound):
-            ProductQueryService.get_single_product(product.id)
+            ProductQueryService.get_single_product(product.id, self.factory.get('/products'))
 
 
 @override_settings(ELASTICSEARCH_DSL_AUTOSYNC=False)
@@ -246,10 +246,13 @@ class ProductQueryServiceTests(TestCase):
             is_active=True
         )
 
+        cls.factory = RequestFactory()
+
     def test_get_base_queryset(self):
         """Тест получения базового QuerySet."""
         # В тестовом режиме должны возвращаться все продукты
-        queryset = ProductQueryService.get_base_queryset()
+        request = self.factory.get('/products')
+        queryset = ProductQueryService.get_base_queryset(request)
         self.assertEqual(queryset.count(), 3)  # Все продукты
 
         # Делаем один продукт неактивным
@@ -257,17 +260,18 @@ class ProductQueryServiceTests(TestCase):
         self.product1.save()
 
         # В тестовом режиме все равно должны возвращаться все продукты
-        queryset = ProductQueryService.get_base_queryset()
+        queryset = ProductQueryService.get_base_queryset(request)
         self.assertEqual(queryset.count(), 3)  # Все продукты, включая неактивные
 
         # Проверяем, что в production режиме возвращаются только активные продукты
         with self.settings(TESTING=False):
-            queryset = ProductQueryService.get_base_queryset()
+            queryset = ProductQueryService.get_base_queryset(request)
             self.assertEqual(queryset.count(), 2)  # Только активные продукты
 
     def test_get_product_list(self):
         """Тест получения списка продуктов с аннотациями."""
-        products = ProductQueryService.get_product_list()
+        request = self.factory.get('/products')
+        products = ProductQueryService.get_product_list(request)
         self.assertEqual(products.count(), 3)
 
         # Проверяем наличие аннотаций
@@ -278,14 +282,16 @@ class ProductQueryServiceTests(TestCase):
 
     def test_get_single_product(self):
         """Тест получения одного продукта."""
-        product = ProductQueryService.get_single_product(self.product1.id)
+        request = self.factory.get('/products')
+        product = ProductQueryService.get_single_product(self.product1.id, request)
         self.assertEqual(product.id, self.product1.id)
         self.assertTrue(hasattr(product, 'rating_avg'))
 
     def test_get_single_product_not_found(self):
         """Тест получения несуществующего продукта."""
+        request = self.factory.get('/products')
         with self.assertRaises(ProductNotFound):
-            ProductQueryService.get_single_product(999)
+            ProductQueryService.get_single_product(999, request)
 
     def test_apply_common_filters(self):
         """Тест применения фильтров."""
@@ -366,7 +372,7 @@ class ProductQueryServiceTests(TestCase):
 
         request = MockRequest()
         paginator = ProductQueryService.LARGE_PAGE_SIZE
-        queryset = ProductQueryService.get_product_list()
+        queryset = ProductQueryService.get_product_list(request)
         
         # Проверяем количество на первой странице
         self.assertEqual(queryset.count(), 28)  # 25 новых + 3 исходных
@@ -405,7 +411,6 @@ class ProductQueryServiceTests(TestCase):
 
     def test_cache_invalidation(self):
         """Тест инвалидации кэша при изменении продуктов."""
-        from django.core.cache import cache
         from apps.core.services.cache_services import CacheService
 
         # Очищаем кэш перед тестом
@@ -421,7 +426,7 @@ class ProductQueryServiceTests(TestCase):
         cache_key = CacheService.build_cache_key(request, prefix="product_list")
         
         # Первый запрос (кэш пустой)
-        queryset = ProductQueryService.get_product_list()
+        queryset = ProductQueryService.get_product_list(self.factory.get('/products'))
         initial_count = queryset.count()
         
         # Создаем новый продукт
@@ -437,5 +442,5 @@ class ProductQueryServiceTests(TestCase):
 
         # Проверяем, что кэш инвалидирован и новый продукт виден
         CacheService.invalidate_cache(prefix="product_list")
-        queryset = ProductQueryService.get_product_list()
+        queryset = ProductQueryService.get_product_list(request)
         self.assertEqual(queryset.count(), initial_count + 1)

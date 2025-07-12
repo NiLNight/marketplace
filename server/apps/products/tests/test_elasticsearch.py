@@ -7,13 +7,11 @@
 from decimal import Decimal
 from unittest.mock import patch, MagicMock
 
-from django.db.models import Case, When
 from django.test import TestCase, override_settings
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from elasticsearch_dsl import Search
 from rest_framework import status
-from rest_framework.test import APIClient
 from django.core.cache import cache
 from apps.products.models import Category, Product
 from apps.products.documents import ProductDocument

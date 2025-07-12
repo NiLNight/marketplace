@@ -174,7 +174,7 @@ class ReviewServiceTest(TestCase):
         paginator = PageNumberPagination()
         paginator.page_size = 10
         page = paginator.paginate_queryset(reviews, request)
-        serializer = ReviewSerializer(page, many=True)
+        serializer = ReviewSerializer(page, many=True, context={'request': request})
         response_data = paginator.get_paginated_response(serializer.data).data
         
         # Сохраняем в кэш

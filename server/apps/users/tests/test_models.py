@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils import timezone
-from apps.users.models import UserProfile, EmailVerified
+from apps.users.models import EmailVerified
 
 User = get_user_model()
 
@@ -38,8 +38,8 @@ class UserProfileModelTests(TestCase):
 
     def test_valid_phone_number(self):
         """Тест валидации корректного номера телефона."""
-        # Тест формата +999999999
-        self.profile.phone = '+123456789'
+        # Тест формата +99999999999
+        self.profile.phone = '+12345678900'
         try:
             self.profile.full_clean()
         except ValidationError as e:
