@@ -300,7 +300,7 @@ class ProductDeleteView(BaseProductView):
         user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(f"Deleting product {pk}, user={user_id}, path={request.path}")
         try:
-            product = ProductQueryService.get_single_product(pk)
+            product = ProductQueryService.get_single_product(pk, request)
             self.check_object_permissions(request, product)
 
             ProductServices.delete_product(pk, request.user)

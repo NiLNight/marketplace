@@ -39,7 +39,19 @@ class ReviewSerializer(serializers.ModelSerializer):
         return obj.comments.count()
 
     def get_is_liked(self, obj) -> bool:
-        user = self.context.get('request').user
+        """Проверяет, лайкнул ли текущий пользователь отзыв.
+
+        Args:
+            obj (Review): Объект отзыва.
+
+        Returns:
+            bool: True, если пользователь лайкнул отзыв, иначе False.
+        """
+        request = self.context.get('request')
+        if not request or not hasattr(request, 'user'):
+            return False
+        
+        user = request.user
         if user.is_authenticated:
             return obj.likes.filter(user=user).exists()
         return False

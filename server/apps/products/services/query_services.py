@@ -120,14 +120,12 @@ class ProductQueryService:
     @classmethod
     def apply_common_filters(
             cls,
-            request: Any,
             source: Union[Any, Search],
             category_id: Optional[int] = None,
             min_price: Optional[float] = None,
             max_price: Optional[float] = None,
             min_discount: Optional[float] = None,
             in_stock: Optional[bool] = None,
-            my_products: Optional[QuerySet] = None,
     ) -> Union[Any, Search]:
         """Применяет общие фильтры к QuerySet или объекту поиска Elasticsearch.
 
@@ -169,8 +167,6 @@ class ProductQueryService:
                     source = source.filter('range', discount={'gte': min_discount})
                 if in_stock:
                     source = source.filter('range', stock={'gt': 0})
-                # if my_products and request.user.is_authenticated:
-                #     source = source.filter('terms', user_id=request.user.id)
             else:  # PostgreSQL QuerySet
                 if category_id:
                     try:
@@ -188,8 +184,6 @@ class ProductQueryService:
                     source = source.filter(discount__gte=min_discount)
                 if in_stock:
                     source = source.filter(stock__gt=0)
-                # if my_products and request.user.is_authenticated:
-                #     source = source.filter(user_id=request.user.id)
             return source
         except (TypeError, ValueError) as e:
             logger.warning(f"Invalid filter parameters: {str(e)}")
@@ -211,7 +205,7 @@ class ProductQueryService:
         """
         logger.debug(f"Applying filters with params={request.GET.dict()}")
         params = get_filter_params(request)
-        return cls.apply_common_filters(request, queryset, **params)
+        return cls.apply_common_filters(queryset, **params)
 
     @classmethod
     def apply_ordering(cls, queryset: Any, request: Any) -> Any:
@@ -343,7 +337,7 @@ class ProductQueryService:
             logger.debug(f"Elasticsearch hits: {[(hit.meta.id, hit.meta.score) for hit in response]}")
 
             if not response.hits:
-                return cls.get_base_queryset().none()
+                return cls.get_base_queryset(request).none()
 
             # Получаем продукты из базы данных с сохранением порядка из Elasticsearch
             product_ids = [hit.meta.id for hit in response]

@@ -32,7 +32,6 @@ def get_filter_params(request: HttpRequest) -> Dict[str, Any]:
         'max_price': None,
         'min_discount': None,
         'in_stock': None,
-        'my_products': None
     }
     try:
         # Проверяем category_id или category
@@ -62,10 +61,6 @@ def get_filter_params(request: HttpRequest) -> Dict[str, Any]:
         in_stock = params.get('in_stock')
         if in_stock is not None:
             result['in_stock'] = in_stock.lower() == 'true'
-
-        my_products = params.get('my_products')
-        if my_products is not None:
-            result['my_products'] = my_products.lower() == 'true'
 
         return result
     except (ValueError, TypeError) as e:
