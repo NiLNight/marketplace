@@ -35,7 +35,7 @@ README.md
 .gitignore
 
 # Docker
-Dockerfile
+deployment/docker/backend/Dockerfile
 docker-compose.yml
 .docker/
 
