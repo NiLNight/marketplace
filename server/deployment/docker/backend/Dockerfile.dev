@@ -18,14 +18,14 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/*
 
 # Копируем только папку с файлами зависимостей, чтобы Docker мог кэшировать этот слой
-COPY requirements/ /app/requirements/
+COPY ../../../requirements /app/requirements/
 
 # Устанавливаем все зависимости, включая dev-пакеты, из файла dev.txt
 # (который, в свою очередь, ссылается на local.txt и base.txt)
 RUN pip install --no-cache-dir -r /app/requirements/dev.txt
 
 # Копируем весь остальной код проекта в рабочую директорию
-COPY . .
+COPY ../../.. .
 
 # Этот Dockerfile не создает непривилегированного пользователя и не меняет владельца,
 # так как для локальной разработки это может усложнить работу с файлами,
