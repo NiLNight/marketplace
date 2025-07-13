@@ -27,9 +27,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = str(os.environ.get('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = str(os.environ.get('DEBUG', 'False')).lower() == 'true'
 
-ALLOWED_HOSTS = []
+# Определяем окружение
+ENVIRONMENT = str(os.environ.get('ENVIRONMENT', 'production'))
+
+if ENVIRONMENT == 'production':
+    ALLOWED_HOSTS = [
+        'marketplace.example.com',  # Замените на реальный домен
+        'www.marketplace.example.com',
+        'api.marketplace.example.com',
+    ]
+else:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
 # Application definition
 
@@ -68,8 +78,17 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # Кастомные middleware для безопасности
+    'apps.core.middleware.SecurityHeadersMiddleware',
+    'apps.core.middleware.RateLimitMiddleware',
+    'apps.core.middleware.RequestLoggingMiddleware',
+    'apps.core.middleware.SQLInjectionProtectionMiddleware',
+    'apps.core.middleware.HealthCheckMiddleware',
 ]
+
+# Добавляем debug toolbar только в development
+if DEBUG:
+    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 
 ROOT_URLCONF = 'config.urls'
 
@@ -106,6 +125,10 @@ DATABASES = {
         'TEST': {
             'NAME': 'marketplace_test',  # Фиксированное имя тестовой базы
             'SERIALIZE': False,     # Отключаем сериализацию данных для ускорения тестов
+        },
+        'OPTIONS': {
+            'connect_timeout': 10,
+            'application_name': 'marketplace',
         },
     }
 }
@@ -146,6 +169,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8,
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -172,7 +198,7 @@ USE_TZ = True
 INTERNAL_IPS = ['127.0.0.1']
 
 DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK": lambda request: True,
+    "SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG,
 }
 
 STATIC_URL = '/static/'
@@ -197,25 +223,29 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+# CORS настройки
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+    "https://marketplace.example.com",  # Замените на реальный домен
+    "https://www.marketplace.example.com",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
-FRONTEND_URL = "http://localhost:8000"
+FRONTEND_URL = str(os.environ.get('FRONTEND_URL', "http://localhost:8000"))
 
+# JWT настройки
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=14),
     'BLACKLIST_AFTER_ROTATION': True,
-    'TOKEN_USER_CLASS': 'apps.user.authentication.CustomTokenUser',
+    'TOKEN_USER_CLASS': 'apps.users.authentication.CustomTokenUser',
     'ROTATE_REFRESH_TOKENS': True,
 
     # custom
     "AUTH_COOKIE": "access_token",  # имя cookie
     "REFRESH_COOKIE": "refresh_token",
     "AUTH_COOKIE_DOMAIN": None,  # указывает домен, для которого будет отправлен cookie
-    "AUTH_COOKIE_SECURE": False,  # ограничивает передачу cookie только через защищенные (HTTPS) соединения.
+    "AUTH_COOKIE_SECURE": not DEBUG,  # ограничивает передачу cookie только через защищенные (HTTPS) соединения.
     "AUTH_COOKIE_HTTP_ONLY": True,  # запрещает клиентскому js доступ к cookie
     "AUTH_COOKIE_PATH": "/",  # URL-путь, по которому будет отправлен cookie
     "AUTH_COOKIE_SAMESITE": "Lax",  # указывает, следует ли отправлять cookie в межсайтовых запросах
@@ -300,23 +330,33 @@ ELASTICSEARCH_INDEX_NAMES = {
     'apps.products.documents.product': 'products',
 }
 
-# Безопасность
-if not DEBUG:
-    ALLOWED_HOSTS = [
-        'marketplace.example.com',  # Замените на реальный домен
-        'www.marketplace.example.com',
-    ]
-    
+# Безопасность для продакшена
+if ENVIRONMENT == 'production':
+    # HTTPS настройки
     SECURE_SSL_REDIRECT = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_HSTS_SECONDS = 31536000  # 1 год
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
+    
+    # Cookie настройки
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SIMPLE_JWT['AUTH_COOKIE_SECURE'] = True
-else:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+    
+    # Security Headers
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
+    
+    # Rate limiting для продакшена
+    REST_FRAMEWORK['DEFAULT_THROTTLE_RATES'] = {
+        'user': '1000/minute',  # 1000 запросов в минуту для аутентифицированных
+        'anon': '100/minute',   # 100 запросов в минуту для анонимных
+        'verification_code': '5/hour',  # 5 запросов в час для кода подтверждения
+        'login': '5/minute',    # 5 попыток входа в минуту
+        'register': '3/hour',   # 3 регистрации в час
+    }
 
 # Настройки логирования
 LOGGING = {
@@ -333,7 +373,7 @@ LOGGING = {
     },
     'handlers': {
         'console': {
-            'level': 'DEBUG',
+            'level': 'INFO' if ENVIRONMENT == 'production' else 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
         },
@@ -343,7 +383,7 @@ LOGGING = {
             'formatter': 'django.server',
         },
         'file': {
-            'level': 'DEBUG',
+            'level': 'INFO' if ENVIRONMENT == 'production' else 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': 'logs/app.log',
             'formatter': 'verbose',
@@ -362,7 +402,12 @@ LOGGING = {
         },
         'apps': {
             'handlers': ['console', 'file'],
-            'level': 'DEBUG',
+            'level': 'INFO' if ENVIRONMENT == 'production' else 'DEBUG',
+            'propagate': True,
+        },
+        'security': {
+            'handlers': ['console', 'file'],
+            'level': 'WARNING',
             'propagate': True,
         },
     }
@@ -371,9 +416,3 @@ LOGGING = {
 # Создание директории для логов, если её нет
 LOGS_DIR = BASE_DIR / 'logs'
 LOGS_DIR.mkdir(exist_ok=True)
-
-# Rate limiting
-REST_FRAMEWORK['DEFAULT_THROTTLE_RATES'] = {
-    'user': '5000/min',
-    'anon': '500/min',
-}
