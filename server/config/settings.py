@@ -124,7 +124,7 @@ DATABASES = {
         'PORT': str(os.environ.get('DB_PORT')),
         'TEST': {
             'NAME': 'marketplace_test',  # Фиксированное имя тестовой базы
-            'SERIALIZE': False,     # Отключаем сериализацию данных для ускорения тестов
+            'SERIALIZE': False,  # Отключаем сериализацию данных для ускорения тестов
         },
         'OPTIONS': {
             'connect_timeout': 10,
@@ -338,24 +338,24 @@ if ENVIRONMENT == 'production':
     SECURE_HSTS_SECONDS = 31536000  # 1 год
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
-    
+
     # Cookie настройки
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SIMPLE_JWT['AUTH_COOKIE_SECURE'] = True
-    
+
     # Security Headers
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
-    
+
     # Rate limiting для продакшена
     REST_FRAMEWORK['DEFAULT_THROTTLE_RATES'] = {
         'user': '1000/minute',  # 1000 запросов в минуту для аутентифицированных
-        'anon': '100/minute',   # 100 запросов в минуту для анонимных
+        'anon': '100/minute',  # 100 запросов в минуту для анонимных
         'verification_code': '5/hour',  # 5 запросов в час для кода подтверждения
-        'login': '5/minute',    # 5 попыток входа в минуту
-        'register': '3/hour',   # 3 регистрации в час
+        'login': '5/minute',  # 5 попыток входа в минуту
+        'register': '3/hour',  # 3 регистрации в час
     }
 
 # Настройки логирования
