@@ -303,7 +303,7 @@ docker stats
 
 - **Приложение**: http://localhost:8000
 - **Админка**: http://localhost:8000/admin/
-- **API документация**: http://localhost:8000/api/docs/
+- **API документация**: http://localhost:8000/api/swagger/
 - **Elasticsearch**: http://localhost:9200
 - **Flower (Celery)**: http://localhost:5555
 
