@@ -1,27 +1,23 @@
+# docker-compose.prod.yml (Только для ПРОДАКШЕНА)
+version: '3.9'
+
 services:
   # База данных PostgreSQL
   db:
     image: postgres:17-alpine
     container_name: marketplace-db-prod
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
-      - ./backups:/backups
-    ports:
-      - "127.0.0.1:5432:5432"  # Только локальный доступ
-    environment:
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASS}
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256
-    restart: unless-stopped
+      - postgres_data_prod:/var/lib/postgresql/data/
+    env_file: .env.prod
+    restart: always
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
       interval: 30s
       timeout: 10s
       retries: 5
       start_period: 40s
     networks:
-      - marketplace_network
+      - marketplace-network
 
   # Redis для кэширования
   redis:
@@ -29,38 +25,32 @@ services:
     container_name: marketplace-redis-prod
     command: redis-server --requirepass ${REDIS_PASSWORD}
     volumes:
-      - redis_data:/data
-    ports:
-      - "127.0.0.1:6379:6379"  # Только локальный доступ
-    restart: unless-stopped
+      - redis_data_prod:/data
+    env_file: .env.prod
+    restart: always
     healthcheck:
-      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      test: [ "CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping" ]
       interval: 30s
       timeout: 10s
       retries: 5
     networks:
-      - marketplace_network
+      - marketplace-network
 
   # RabbitMQ для очередей
   rabbitmq:
     image: rabbitmq:3.12-management-alpine
     container_name: marketplace-rabbitmq-prod
-    environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASS}
+    env_file: .env.prod
     volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
-    ports:
-      - "127.0.0.1:5672:5672"  # Только локальный доступ
-      - "127.0.0.1:15672:15672"  # Веб-интерфейс только локально
-    restart: unless-stopped
+      - rabbitmq_data_prod:/var/lib/rabbitmq
+    restart: always
     healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      test: [ "CMD", "rabbitmq-diagnostics", "check_running" ]
       interval: 30s
       timeout: 10s
       retries: 5
     networks:
-      - marketplace_network
+      - marketplace-network
 
   # Elasticsearch для поиска
   elasticsearch:
@@ -70,88 +60,71 @@ services:
       - discovery.type=single-node
       - xpack.security.enabled=false
       - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
-      - cluster.name=marketplace-cluster
-      - node.name=marketplace-node
     volumes:
-      - elasticsearch_data:/usr/share/elasticsearch/data
-    ports:
-      - "127.0.0.1:9200:9200"  # Только локальный доступ
-    restart: unless-stopped
+      - elasticsearch_data_prod:/usr/share/elasticsearch/data
+    restart: always
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=10s"]
+      test: [ "CMD", "curl", "-f", "http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=10s" ]
       interval: 30s
       timeout: 10s
       retries: 5
       start_period: 60s
     networks:
-      - marketplace_network
+      - marketplace-network
 
   # Основное приложение
   backend:
     build:
       context: .
-      dockerfile: Dockerfile.prod
+      dockerfile: deployment/docker/backend/Dockerfile
+      target: production
     container_name: marketplace-backend-prod
-    environment:
-      - ENVIRONMENT=production
-      - DEBUG=False
-      - DJANGO_SETTINGS_MODULE=config.settings
+    command: >
+      sh -c "
+        python manage.py migrate --no-input &&
+        python manage.py collectstatic --no-input --clear &&
+        gunicorn config.wsgi:application -c deployment/gunicorn/gunicorn.conf.py
+      "
     volumes:
-      - static_volume:/app/static
-      - media_volume:/app/media
-      - logs_volume:/app/logs
-    ports:
-      - "127.0.0.1:8000:8000"  # Только локальный доступ для nginx
+      - static_volume_prod:/app/static
+      - media_volume_prod:/app/media
+      - logs_volume_prod:/app/logs
     env_file: .env.prod
     depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-      elasticsearch:
-        condition: service_healthy
-    restart: unless-stopped
+      db: { condition: service_healthy }
+      redis: { condition: service_healthy }
+      rabbitmq: { condition: service_healthy }
+      elasticsearch: { condition: service_healthy }
+    restart: always
     networks:
-      - marketplace_network
+      - marketplace-network
 
   # Celery worker
   celery:
     build:
       context: .
-      dockerfile: Dockerfile.prod
+      dockerfile: deployment/docker/backend/Dockerfile
+      target: production
     container_name: marketplace-celery-prod
     command: celery -A config worker -l info --pool=solo
-    environment:
-      - ENVIRONMENT=production
-      - DEBUG=False
     volumes:
-      - logs_volume:/app/logs
+      - logs_volume_prod:/app/logs
     env_file: .env.prod
-    depends_on:
-      backend:
-        condition: service_started
-      redis:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-    restart: unless-stopped
+    depends_on: [ backend, redis, rabbitmq ]
+    restart: always
     networks:
-      - marketplace_network
+      - marketplace-network
 
   # Celery beat для периодических задач
   celery-beat:
     build:
       context: .
-      dockerfile: Dockerfile.prod
+      dockerfile: deployment/docker/backend/Dockerfile
+      target: production
     container_name: marketplace-celery-beat-prod
-    command: celery -A config beat -l info
-    environment:
-      - ENVIRONMENT=production
-      - DEBUG=False
+    command: celery -A config beat -l info  --pool=solo
     volumes:
-      - logs_volume:/app/logs
+      - logs_volume_prod:/app/logs
     env_file: .env.prod
     depends_on:
       backend:
@@ -160,111 +133,52 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-    restart: unless-stopped
+    restart: always
     networks:
-      - marketplace_network
+      - marketplace-network
 
   # Flower для мониторинга Celery
   flower:
     build:
       context: .
-      dockerfile: Dockerfile.prod
+      dockerfile: deployment/docker/backend/Dockerfile
+      target: production
     container_name: marketplace-flower-prod
     command: celery -A config flower --port=5555
-    environment:
-      - ENVIRONMENT=production
-      - DEBUG=False
-    ports:
-      - "127.0.0.1:5555:5555"  # Только локальный доступ
     env_file: .env.prod
     depends_on:
       celery:
         condition: service_started
-    restart: unless-stopped
+    restart: always
     networks:
-      - marketplace_network
+      - marketplace-network
 
   # Nginx reverse proxy
   nginx:
-    image: nginx:alpine
+    build: ./deployment/docker/nginx
     container_name: marketplace-nginx-prod
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - static_volume:/app/static:ro
-      - media_volume:/app/media:ro
-      - ./ssl:/etc/ssl:ro  # SSL сертификаты
-      - nginx_logs:/var/log/nginx
+      - static_volume_prod:/app/static:ro
+      - media_volume_prod:/app/media:ro
+      - ./deployment/ssl:/etc/nginx/ssl:ro # Папка для SSL сертификатов
     ports:
       - "80:80"
       - "443:443"
     depends_on:
-      backend:
-        condition: service_started
-    restart: unless-stopped
+      - backend
+    restart: always
     networks:
-      - marketplace_network
-
-  # Мониторинг с Prometheus
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: marketplace-prometheus-prod
-    volumes:
-      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - prometheus_data:/prometheus
-    ports:
-      - "127.0.0.1:9090:9090"  # Только локальный доступ
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/etc/prometheus/console_libraries'
-      - '--web.console.templates=/etc/prometheus/consoles'
-      - '--storage.tsdb.retention.time=200h'
-      - '--web.enable-lifecycle'
-    restart: unless-stopped
-    networks:
-      - marketplace_network
-
-  # Grafana для визуализации
-  grafana:
-    image: grafana/grafana:latest
-    container_name: marketplace-grafana-prod
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
-    volumes:
-      - grafana_data:/var/lib/grafana
-      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
-      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
-    ports:
-      - "127.0.0.1:3000:3000"  # Только локальный доступ
-    restart: unless-stopped
-    networks:
-      - marketplace_network
+      - marketplace-network
 
 volumes:
-  postgres_data:
-    driver: local
-  redis_data:
-    driver: local
-  rabbitmq_data:
-    driver: local
-  elasticsearch_data:
-    driver: local
-  static_volume:
-    driver: local
-  media_volume:
-    driver: local
-  logs_volume:
-    driver: local
-  nginx_logs:
-    driver: local
-  prometheus_data:
-    driver: local
-  grafana_data:
-    driver: local
+  postgres_data_prod:
+  redis_data_prod:
+  rabbitmq_data_prod:
+  elasticsearch_data_prod:
+  static_volume_prod:
+  media_volume_prod:
+  logs_volume_prod:
 
 networks:
-  marketplace_network:
+  marketplace-network:
     driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/16 
