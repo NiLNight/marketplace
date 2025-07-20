@@ -6,6 +6,11 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     ports:
       - "${DB_PORT:-5432}:5432"
+    environment:
+      # Явно передаем переменные, которые нужны postgres для инициализации
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
     env_file:
       - .env # Используем .env по умолчанию
     restart: unless-stopped
@@ -81,6 +86,7 @@ services:
     build:
       context: .
       dockerfile: deployment/docker/backend/Dockerfile
+      target: development
     container_name: marketplace-celery-worker
     command: celery -A config worker -l debug --pool=solo
     volumes:
