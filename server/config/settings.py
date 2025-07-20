@@ -12,10 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from datetime import timedelta
 from pathlib import Path
-from dotenv import load_dotenv
 import sys
 
-load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,11 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = str(os.environ.get('SECRET_KEY'))
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = str(os.environ.get('DEBUG', 'False')).lower() == 'true'
-
 # Определяем окружение
-ENVIRONMENT = str(os.environ.get('ENVIRONMENT', 'production'))
+ENVIRONMENT = str(os.environ.get('ENVIRONMENT', 'development'))
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = ENVIRONMENT != 'production'
 
 if ENVIRONMENT == 'production':
     ALLOWED_HOSTS = [
@@ -44,6 +42,7 @@ else:
 # Application definition
 
 INSTALLED_APPS = [
+    'django_prometheus',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -55,7 +54,6 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
-    'debug_toolbar',
     'django_elasticsearch_dsl',
     # Приложения
     'apps.core.apps.CoreConfig',
@@ -69,7 +67,11 @@ INSTALLED_APPS = [
     'apps.delivery.apps.DeliveryConfig',
 ]
 
+if DEBUG:
+    INSTALLED_APPS += ['debug_toolbar']
+
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -84,6 +86,7 @@ MIDDLEWARE = [
     'apps.core.middleware.RequestLoggingMiddleware',
     'apps.core.middleware.SQLInjectionProtectionMiddleware',
     'apps.core.middleware.HealthCheckMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 # Добавляем debug toolbar только в development
@@ -279,12 +282,16 @@ SPECTACULAR_SETTINGS = {
 # Настройки Redis
 REDIS_HOST = str(os.environ.get('REDIS_HOST', 'localhost'))
 REDIS_PORT = str(os.environ.get('REDIS_PORT', '6379'))
+REDIS_PASSWORD = str(os.environ.get('REDIS_PASSWORD', ''))
+
+REDIS_URL = f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}" if REDIS_PASSWORD \
+    else f"redis://{REDIS_HOST}:{REDIS_PORT}"
 
 # Настройки кэширования
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}/1',
+        'LOCATION': f'{REDIS_URL}/1',
         'KEY_PREFIX': 'marketplace',
         'TIMEOUT': 300,  # 5 минут по умолчанию
         'OPTIONS': {
@@ -306,7 +313,10 @@ SESSION_COOKIE_NAME = 'marketplace_sessionid'
 
 # Настройки Celery
 RABBITMQ_HOST = str(os.environ.get('RABBITMQ_HOST', 'localhost'))
-CELERY_BROKER_URL = f'amqp://guest:guest@{RABBITMQ_HOST}:5672//'
+RABBITMQ_USER = str(os.environ.get('RABBITMQ_USER', 'guest'))
+RABBITMQ_PASS = str(os.environ.get('RABBITMQ_PASS', ''))
+
+CELERY_BROKER_URL = f'amqp://{RABBITMQ_USER}:{RABBITMQ_PASS}@{RABBITMQ_HOST}:5672//'
 CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
