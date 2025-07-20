@@ -70,7 +70,7 @@ python deployment/scripts/generate_secret_key.py
 docker-compose up -d
 
 # Для продакшена
-docker-compose -f docker-compose.prod.yml up -d
+docker-compose --env-file .env.prod -f docker-compose.prod.yml up -d
 ```
 
 ### 4. Проверка работоспособности
@@ -213,7 +213,20 @@ python manage.py createsuperuser
 python manage.py collectstatic
 ```
 
-#### 9. Запуск сервисов
+#### 9. Перенос данных
+
+```bash
+# Создание дампа
+"E:\PostgreSQL\17\bin\pg_dump.exe" -U marketplace -h localhost -p 5432 -d marketplace -F c -b -v -f marketplace_dump.sqlc
+
+# Перенос дампа в докер
+docker cp marketplace_dump.sqlc marketplace-db:/tmp/marketplace_dump.sqlc
+
+# Восстановление из дампа
+docker-compose exec -T db pg_restore -U marketplace -d marketplace --clean --no-acl --no-owner /tmp/marketplace_dump.sqlc
+```
+
+#### 10. Запуск сервисов
 
 ```bash
 # Запустите Redis и Elasticsearch (локально или через Docker)
@@ -354,13 +367,13 @@ EOF
 
 ```bash
 # Запуск продакшен окружения
-docker-compose -f docker-compose.prod.yml up -d
+docker-compose --env-file .env.prod -f docker-compose.prod.yml up -d
 
 # Проверка статуса
-docker-compose -f docker-compose.prod.yml ps
+docker-compose --env-file .env.prod -f docker-compose.prod.yml ps
 
 # Логи в реальном времени
-docker-compose -f docker-compose.prod.yml logs -f
+docker-compose --env-file .env.prod -f docker-compose.prod.yml logs -f
 ```
 
 ### Продакшен сервисы
@@ -451,7 +464,7 @@ coverage report
 
 ### Swagger UI
 
-- **URL**: http://localhost:8000/api/docs/swagger/
+- **URL**: http://localhost:8000/api/swagger/
 - Интерактивная документация API
 - Возможность тестирования endpoints
 
