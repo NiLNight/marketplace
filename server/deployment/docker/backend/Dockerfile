@@ -73,7 +73,8 @@ WORKDIR /app
 COPY . .
 
 # Меняем владельца всех файлов приложения на нашего непривилегированного пользователя.
-RUN chown -R marketplace:marketplace /app
+RUN mkdir -p /app/static /app/media /app/logs && \
+    chown -R marketplace:marketplace /app
 
 # Переключаемся на непривилегированного пользователя. Все последующие команды
 # будут выполняться от его имени.
