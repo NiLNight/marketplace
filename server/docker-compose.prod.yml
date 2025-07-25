@@ -1,6 +1,3 @@
-# docker-compose.prod.yml (Только для ПРОДАКШЕНА)
-version: '3.9'
-
 services:
   # База данных PostgreSQL
   db:
@@ -9,6 +6,10 @@ services:
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data/
     env_file: .env.prod
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
     restart: always
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
@@ -23,7 +24,7 @@ services:
   redis:
     image: redis:7-alpine
     container_name: marketplace-redis-prod
-    command: redis-server --requirepass ${REDIS_PASSWORD}
+    command: redis-server --requirepass '${REDIS_PASSWORD}'
     volumes:
       - redis_data_prod:/data
     env_file: .env.prod
@@ -122,13 +123,15 @@ services:
       dockerfile: deployment/docker/backend/Dockerfile
       target: production
     container_name: marketplace-celery-beat-prod
-    command: celery -A config beat -l info  --pool=solo
+    command: celery -A config beat -l info
     volumes:
       - logs_volume_prod:/app/logs
     env_file: .env.prod
     depends_on:
       backend:
         condition: service_started
+      db:
+        condition: service_healthy
       redis:
         condition: service_healthy
       rabbitmq:
@@ -150,6 +153,27 @@ services:
       celery:
         condition: service_started
     restart: always
+    networks:
+      - marketplace-network
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: marketplace-prometheus-prod
+    volumes:
+      - ./deployment/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data_prod:/prometheus
+    restart: always
+    networks:
+      - marketplace-network
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: marketplace-grafana-prod
+    env_file: .env.prod # Для GRAFANA_PASSWORD
+    volumes:
+      - grafana_data_prod:/var/lib/grafana
+    restart: always
+    depends_on:
+      - prometheus
     networks:
       - marketplace-network
 
@@ -178,6 +202,8 @@ volumes:
   static_volume_prod:
   media_volume_prod:
   logs_volume_prod:
+  prometheus_data_prod:
+  grafana_data_prod:
 
 networks:
   marketplace-network:
