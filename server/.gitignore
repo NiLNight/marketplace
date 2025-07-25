@@ -9,3 +9,5 @@
 /prompt.txt
 /celerybeat-schedule
 /.env.prod
+/deployment/ssl/privkey.pem
+/deployment/ssl/fullchain.pem

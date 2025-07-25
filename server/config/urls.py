@@ -7,6 +7,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 from apps.users.views import CustomTokenRefreshView
 
 urlpatterns = [
+    path('', include('django_prometheus.urls')),
     path('admin/', admin.site.urls),
     path('user/', include('apps.users.urls')),
     path('products/', include('apps.products.urls')),
