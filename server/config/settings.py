@@ -32,6 +32,7 @@ DEBUG = ENVIRONMENT != 'production'
 
 if ENVIRONMENT == 'production':
     ALLOWED_HOSTS = [
+        'backend',
         'marketplace.example.com',  # Замените на реальный домен
         'www.marketplace.example.com',
         'api.marketplace.example.com',
@@ -313,11 +314,11 @@ SESSION_COOKIE_NAME = 'marketplace_sessionid'
 
 # Настройки Celery
 RABBITMQ_HOST = str(os.environ.get('RABBITMQ_HOST', 'localhost'))
-RABBITMQ_USER = str(os.environ.get('RABBITMQ_USER', 'guest'))
-RABBITMQ_PASS = str(os.environ.get('RABBITMQ_PASS', ''))
+RABBITMQ_USER = str(os.environ.get('RABBITMQ_DEFAULT_USER', 'guest'))
+RABBITMQ_PASS = str(os.environ.get('RABBITMQ_DEFAULT_PASS', 'guest'))
 
 CELERY_BROKER_URL = f'amqp://{RABBITMQ_USER}:{RABBITMQ_PASS}@{RABBITMQ_HOST}:5672//'
-CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
+CELERY_RESULT_BACKEND = f'{REDIS_URL}/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
