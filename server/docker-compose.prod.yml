@@ -88,7 +88,7 @@ services:
       "
     volumes:
       - static_volume_prod:/app/static
-      - media_volume_prod:/app/media
+      - ./media:/app/media
       - logs_volume_prod:/app/logs
     env_file: .env.prod
     depends_on:
@@ -159,7 +159,7 @@ services:
     image: prom/prometheus:latest
     container_name: marketplace-prometheus-prod
     volumes:
-      - ./deployment/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./deployment/docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data_prod:/prometheus
     restart: always
     networks:
@@ -183,7 +183,7 @@ services:
     container_name: marketplace-nginx-prod
     volumes:
       - static_volume_prod:/app/static:ro
-      - media_volume_prod:/app/media:ro
+      - ./media:/app/media:ro
       - ./deployment/ssl:/etc/nginx/ssl:ro # Папка для SSL сертификатов
     ports:
       - "80:80"
@@ -200,7 +200,6 @@ volumes:
   rabbitmq_data_prod:
   elasticsearch_data_prod:
   static_volume_prod:
-  media_volume_prod:
   logs_volume_prod:
   prometheus_data_prod:
   grafana_data_prod:
