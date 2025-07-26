@@ -12,58 +12,6 @@ from apps.users.exceptions import UserException
 logger = logging.getLogger(__name__)
 
 
-def set_jwt_cookies(response, user):
-    """Устанавливает JWT-токены в cookies ответа.
-
-    Создает новые access и refresh токены для пользователя и устанавливает их в cookies
-    с учетом настроек безопасности из конфигурации.
-
-    Args:
-        response (HttpResponse): Объект ответа.
-        user (User): Аутентифицированный пользователь.
-
-    Returns:
-        HttpResponse: Ответ с установленными cookies.
-
-    Raises:
-        ValueError: Если срок действия токена некорректен.
-    """
-    refresh = RefreshToken.for_user(user)
-    refresh.set_jti()  # Ротация токена для повышения безопасности путем создания нового идентификатора
-    access_token = str(refresh.access_token)
-    refresh_token = str(refresh)
-
-    cookie_params = {
-        'domain': settings.SIMPLE_JWT.get('AUTH_COOKIE_DOMAIN', None),
-        'path': settings.SIMPLE_JWT.get('AUTH_COOKIE_PATH', '/'),
-        'secure': settings.SIMPLE_JWT.get('AUTH_COOKIE_SECURE', True),
-        'httponly': settings.SIMPLE_JWT.get('AUTH_COOKIE_HTTP_ONLY', True),
-        'samesite': settings.SIMPLE_JWT.get('AUTH_COOKIE_SAMESITE', 'Strict'),
-    }
-
-    access_expires = datetime.utcnow() + settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
-    refresh_expires = datetime.utcnow() + settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME']
-    if access_expires < datetime.utcnow() or refresh_expires < datetime.utcnow():
-        raise ValueError("Invalid token lifetime")
-
-    response.set_cookie(
-        key=settings.SIMPLE_JWT['AUTH_COOKIE'],
-        value=access_token,
-        expires=access_expires,
-        **cookie_params
-    )
-
-    response.set_cookie(
-        key=settings.SIMPLE_JWT['REFRESH_COOKIE'],
-        value=refresh_token,
-        expires=refresh_expires,
-        **cookie_params
-    )
-
-    logger.info(f"JWT cookies set for user={user.id}")
-    return response
-
-
 def handle_api_errors(view_func):
     """Декоратор для обработки ошибок в API-представлениях приложения users.
 
