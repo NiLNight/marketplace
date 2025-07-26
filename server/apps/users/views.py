@@ -9,6 +9,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from apps.core.services.cache_services import CacheService
+from apps.users.cookie_utils import delete_jwt_cookies
 from apps.users.services.trottles import CeleryThrottle
 from apps.users.serializers import (
     UserRegistrationSerializer,
@@ -17,7 +18,8 @@ from apps.users.serializers import (
     PasswordResetSerializer,
     PasswordResetConfirmSerializer, CustomTokenRefreshSerializer
 )
-from apps.users.utils import set_jwt_cookies, handle_api_errors
+from apps.users.utils import handle_api_errors
+from apps.users.cookie_utils import set_jwt_cookies
 from apps.users.services.users_services import UserService, ConfirmPasswordService, ConfirmCodeService
 from config import settings
 
@@ -196,13 +198,19 @@ class UserLogoutView(APIView):
         Raises:
             InvalidUserData: Если refresh-токен недействителен.
         """
+        user_id = request.user.id if request.user.is_authenticated else 'anonymous'
         logger.info(f"Processing logout for user={request.user.id}")
-        refresh_token = request.COOKIES.get('refresh_token')
-        UserService.logout_user(refresh_token)
+        try:
+            # Пытаемся добавить refresh_token в черный список
+            refresh_token = request.COOKIES.get(settings.SIMPLE_JWT['REFRESH_COOKIE'])
+            UserService.logout_user(refresh_token)
+        except Exception as e:
+            logger.error(f"Error blacklisting token for user={user_id}, but proceeding with logout: {e}")
+
         response = Response({"message": "Выход успешно выполнен"}, status=status.HTTP_200_OK)
-        response.delete_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'])
-        response.delete_cookie(settings.SIMPLE_JWT['REFRESH_COOKIE'])
-        logger.info(f"User {request.user.id} logged out successfully")
+        delete_jwt_cookies(response)
+
+        logger.info(f"User {user_id} logged out. Cookie deletion headers sent.")
         return response
 
 
