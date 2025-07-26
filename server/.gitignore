@@ -11,3 +11,5 @@
 /.env.prod
 /deployment/ssl/privkey.pem
 /deployment/ssl/fullchain.pem
+/logs/app.log
+/logs/old.log
