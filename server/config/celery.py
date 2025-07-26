@@ -64,8 +64,4 @@ app.conf.beat_schedule = {
         'task': 'apps.users.tasks.cleanup_expired_tokens',
         'schedule': crontab(hour=3, minute=0),  # Каждый день в 3:00
     },
-    'update-product-ratings': {
-        'task': 'apps.products.tasks.update_product_ratings',
-        'schedule': crontab(hour='*/1'),  # Каждый час
-    },
 }
