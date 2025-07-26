@@ -32,6 +32,7 @@ DEBUG = ENVIRONMENT != 'production'
 
 if ENVIRONMENT == 'production':
     ALLOWED_HOSTS = [
+        'localhost',
         'backend',
         'marketplace.example.com',  # Замените на реальный домен
         'www.marketplace.example.com',
@@ -252,7 +253,7 @@ SIMPLE_JWT = {
     "AUTH_COOKIE_SECURE": not DEBUG,  # ограничивает передачу cookie только через защищенные (HTTPS) соединения.
     "AUTH_COOKIE_HTTP_ONLY": True,  # запрещает клиентскому js доступ к cookie
     "AUTH_COOKIE_PATH": "/",  # URL-путь, по которому будет отправлен cookie
-    "AUTH_COOKIE_SAMESITE": "Lax",  # указывает, следует ли отправлять cookie в межсайтовых запросах
+    "AUTH_COOKIE_SAMESITE": "None",  # указывает, следует ли отправлять cookie в межсайтовых запросах
 }
 
 REST_FRAMEWORK = {
