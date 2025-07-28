@@ -33,6 +33,7 @@ DEBUG = ENVIRONMENT != 'production'
 if ENVIRONMENT == 'production':
     ALLOWED_HOSTS = [
         'localhost',
+        'nginx',
         'backend',
         'marketplace.example.com',  # Замените на реальный домен
         'www.marketplace.example.com',
@@ -344,6 +345,12 @@ ELASTICSEARCH_INDEX_NAMES = {
 
 # Безопасность для продакшена
 if ENVIRONMENT == 'production':
+
+    SECURE_REDIRECT_EXEMPT = [
+        r'^health/$',
+        r'^metrics$',
+    ]
+
     # HTTPS настройки
     SECURE_SSL_REDIRECT = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
