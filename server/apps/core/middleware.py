@@ -133,11 +133,15 @@ class SQLInjectionProtectionMiddleware(MiddlewareMixin):
         return any(pattern in value_lower for pattern in self.suspicious_patterns)
 
 
-class HealthCheckMiddleware(MiddlewareMixin):
-    """Отвечает на health check запросы."""
+class HealthCheckMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
 
     def __call__(self, request):
-        if request.path_info == '/health/':
+        if request.path == '/health/':
+            logger.info("Health check endpoint was hit! Responding OK.")
             return JsonResponse({'status': 'ok'})
+
         response = self.get_response(request)
+
         return response
