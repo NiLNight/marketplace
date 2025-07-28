@@ -10,8 +10,10 @@ from apps.wishlists.views import (
     WishlistGetView
 )
 
+app_name = 'wishlists'
+
 urlpatterns = [
-    path('add/', WishlistAddView.as_view(), name='wishlist-add'),
-    path('delete/<int:pk>/', WishlistItemDeleteView.as_view(), name='wishlist-item-delete'),
-    path('', WishlistGetView.as_view(), name='wishlist-get')
+    path('add/', WishlistAddView.as_view(), name='wishlist_add'),
+    path('delete/<int:pk>/', WishlistItemDeleteView.as_view(), name='wishlist_item_delete'),
+    path('', WishlistGetView.as_view(), name='wishlist_get')
 ]
