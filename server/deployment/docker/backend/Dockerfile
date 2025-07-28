@@ -18,7 +18,7 @@ WORKDIR /app
 # `--no-install-recommends` уменьшает количество ненужных пакетов.
 # `rm -rf /var/lib/apt/lists/*` очищает кэш apt после установки.
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends build-essential libpq-dev && \
+    apt-get install -y --no-install-recommends build-essential libpq-dev curl && \
     rm -rf /var/lib/apt/lists/*
 
 # Обновляем pip до последней версии для лучшей совместимости и безопасности.
