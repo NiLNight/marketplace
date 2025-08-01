@@ -34,3 +34,4 @@ django-mptt==0.17.0
 django-cors-headers==4.7.0
 sqlparse>=0.3.0
 django-prometheus==2.4.1
+locust==2.37.14
