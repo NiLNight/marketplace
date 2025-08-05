@@ -50,33 +50,41 @@ worker_exit_on_app_exit = True
 # Настройки для мониторинга
 enable_stdio_inheritance = True
 
+
 def when_ready(server):
     """Вызывается когда сервер готов принимать запросы."""
     server.log.info("Gunicorn server is ready to accept connections")
+
 
 def worker_int(worker):
     """Вызывается при получении SIGINT в worker."""
     worker.log.info("Worker received SIGINT")
 
+
 def pre_fork(server, worker):
     """Вызывается перед созданием worker."""
     server.log.info("Worker spawned (pid: %s)", worker.pid)
+
 
 def post_fork(server, worker):
     """Вызывается после создания worker."""
     server.log.info("Worker spawned (pid: %s)", worker.pid)
 
+
 def post_worker_init(worker):
     """Вызывается после инициализации worker."""
     worker.log.info("Worker initialized (pid: %s)", worker.pid)
+
 
 def worker_abort(worker):
     """Вызывается при аварийном завершении worker."""
     worker.log.info("Worker aborted (pid: %s)", worker.pid)
 
+
 def post_request(worker, req, environ, resp):
     """Вызывается после обработки запроса."""
     worker.log.info(f"Request processed: {req.method} {req.path} -> {resp.status}")
+
 
 # Настройки для мониторинга здоровья
 def health_check(environ, start_response):
@@ -86,10 +94,11 @@ def health_check(environ, start_response):
     start_response(status, response_headers)
     return [b'OK']
 
+
 # Дополнительные настройки безопасности
 forwarded_allow_ips = '*'  # Настройте в соответствии с вашей инфраструктурой
 secure_scheme_headers = {
     'X-FORWARDED-PROTOCOL': 'ssl',
     'X-FORWARDED-PROTO': 'https',
     'X-FORWARDED-SSL': 'on'
-} 
+}
