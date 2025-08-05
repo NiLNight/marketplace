@@ -85,10 +85,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # Кастомные middleware для безопасности
     'apps.core.middleware.SecurityHeadersMiddleware',
-    'apps.core.middleware.RateLimitMiddleware',
-    'apps.core.middleware.RequestLoggingMiddleware',
-    'apps.core.middleware.SQLInjectionProtectionMiddleware',
-    'apps.core.middleware.HealthCheckMiddleware',
     'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
