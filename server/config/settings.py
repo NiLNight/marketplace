@@ -343,7 +343,7 @@ ELASTICSEARCH_INDEX_NAMES = {
 if ENVIRONMENT == 'production':
 
     SECURE_REDIRECT_EXEMPT = [
-        r'^health/$',
+        r'^core/health/$',
         r'^metrics$',
     ]
 
