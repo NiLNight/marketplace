@@ -70,7 +70,7 @@ python deployment/scripts/generate_secret_key.py
 docker-compose up -d
 
 # Для продакшена
-docker-compose --env-file .env.prod -f docker-compose.prod.yml up -d
+docker-compose -p server_prod --env-file .env.prod -f docker-compose.prod.yml up -d 
 ```
 
 ### 4. Проверка работоспособности
@@ -125,12 +125,14 @@ EMAIL_HOST_USER='dev@marketplace.local'
 EMAIL_HOST_PASSWORD='dev_email_password_123'
 
 # Frontend URL
-FRONTEND_URL='http://localhost:3000'
+FRONTEND_URL='http://localhost:5173'
 
 # Grafana Password
 GRAFANA_PASSWORD='admin123'
 EOF
 ```
+
+> **Примечание**: Документацию и настройку фронтенда см. в [../frontend/README.md](../frontend/README.md).
 
 #### Запуск сервисов
 
@@ -367,13 +369,16 @@ EOF
 
 ```bash
 # Запуск продакшен окружения
-docker-compose --env-file .env.prod -f docker-compose.prod.yml up -d
+docker-compose -p server_prod --env-file .env.prod -f docker-compose.prod.yml up -d 
+
+# Запуск и сборка продакшен окружения
+docker-compose -p server_prod --env-file .env.prod -f docker-compose.prod.yml up --build
 
 # Проверка статуса
-docker-compose --env-file .env.prod -f docker-compose.prod.yml ps
+docker-compose -p server_prod --env-file .env.prod -f docker-compose.prod.yml ps
 
 # Логи в реальном времени
-docker-compose --env-file .env.prod -f docker-compose.prod.yml logs -f
+docker-compose -p server_prod --env-file .env.prod -f docker-compose.prod.yml logs -f
 ```
 
 ### Продакшен сервисы

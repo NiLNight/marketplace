@@ -1,69 +1,112 @@
-# React + TypeScript + Vite
+# Marketplace Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Фронтенд-приложение для проекта Marketplace, созданное с использованием [React](https://react.dev/), [TypeScript](https://www.typescriptlang.org/) и [Vite](https://vitejs.dev/).
 
-Currently, two official plugins are available:
+## 📋 Содержание
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Технический стек](#технический-стек)
+- [Предварительные требования](#предварительные-требования)
+- [Установка](#установка)
+- [Конфигурация](#конфигурация)
+- [Запуск проекта](#запуск-проекта)
+- [Структура проекта](#структура-проекта)
+- [Скрипты](#скрипты)
 
-## Expanding the ESLint configuration
+## 🛠 Технический стек
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Core**: React 19, TypeScript
+- **Сборщик**: Vite
+- **Стилизация**: TailwindCSS
+- **Управление состоянием**: Zustand
+- **Запросы данных**: React Query (TanStack Query)
+- **Формы**: React Hook Form
+- **Маршрутизация**: React Router DOM v7
+- **HTTP Клиент**: Axios
+- **Иконки**: Lucide React, Heroicons
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## ⚡ Предварительные требования
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- **Node.js**: рекомендуется v20 или выше.
+- **npm**: (поставляется вместе с Node.js).
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🚀 Установка
+
+1. Перейдите в директорию фронтенда:
+   ```bash
+   cd frontend
+   ```
+
+2. Установите зависимости:
+   ```bash
+   npm install
+   ```
+
+## ⚙️ Конфигурация
+
+Приложение использует переменные окружения для конфигурации. Конфигурация по умолчанию настраивает подключение к локально запущенному бэкенду.
+
+1. Создайте файл `.env` в корневой папке `frontend` (если он отсутствует):
+   ```properties
+   # Базовый URL для Backend API
+   VITE_API_BASE_URL=http://localhost:8000/api/
+   ```
+
+   > **Примечание**: Если ваш бэкенд запущен на другом порту или хосте (например, через Docker с Nginx), обновите этот URL соответствующим образом.
+
+## ▶️ Запуск проекта
+
+### Режим разработки (Development)
+Чтобы запустить сервер разработки с Hot Module Replacement (HMR):
+
+```bash
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Откройте `http://localhost:5173` (или URL, указанный в терминале) в вашем браузере.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Сборка для продакшена (Production)
+Чтобы собрать приложение для продакшена:
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build
 ```
+
+Артефакты сборки будут созданы в директории `dist`.
+
+Чтобы проверить продакшен-сборку локально:
+
+```bash
+npm run preview
+```
+
+## 📂 Структура проекта
+
+```
+frontend/
+├── public/              # Статические ассеты (favicon и т.д.)
+├── src/
+│   ├── assets/          # Изображения, шрифты и т.д.
+│   ├── components/      # Переиспользуемые UI компоненты
+│   ├── hooks/           # Кастомные React хуки
+│   ├── layouts/         # Макеты страниц
+│   ├── pages/           # Страницы приложения (маршруты)
+│   ├── services/        # API сервисы
+│   ├── store/           # Zustand сторы
+│   ├── styles/          # Глобальные стили и конфиг Tailwind
+│   ├── types/           # Определения типов TypeScript
+│   ├── utils/           # Утилитарные функции
+│   ├── App.tsx          # Главный компонент приложения
+│   └── main.tsx         # Точка входа
+├── .env                 # Переменные окружения
+├── package.json         # Зависимости и скрипты
+├── tailwind.config.js   # Конфигурация Tailwind
+└── vite.config.ts       # Конфигурация Vite
+```
+
+## 📜 Скрипты
+
+- `npm run dev`: Запуск сервера разработки.
+- `npm run build`: Сборка для продакшена.
+- `npm run preview`: Предпросмотр продакшен-сборки.
+- `npm run lint`: Запуск ESLint.
+- `npm run storybook`: Запуск Storybook (если настроен).
