@@ -372,7 +372,7 @@ EOF
 docker-compose -p server_prod --env-file .env.prod -f docker-compose.prod.yml up -d 
 
 # Запуск и сборка продакшен окружения
-docker-compose -p server_prod --env-file .env.prod -f docker-compose.prod.yml up --build
+docker-compose -p server_prod --env-file .env.prod -f docker-compose.prod.yml up --build -d
 
 # Проверка статуса
 docker-compose -p server_prod --env-file .env.prod -f docker-compose.prod.yml ps
@@ -448,6 +448,9 @@ echo "*.env" >> .gitignore
 ```bash
 # Все тесты
 python manage.py test --keepdb
+
+#Для продакшена
+docker-compose -p server_prod -f docker-compose.prod.yml exec backend python manage.py test --keepdb
 
 # Конкретное приложение
 python manage.py test apps.users

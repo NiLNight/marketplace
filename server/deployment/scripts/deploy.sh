@@ -89,7 +89,7 @@ check_prerequisites() {
     
     # Проверка SSL сертификатов для продакшена
     if [ "$ENVIRONMENT" = "production" ]; then
-        if [ ! -f "$DEPLOYMENT_DIR/ssl/marketplace.crt" ] || [ ! -f "$DEPLOYMENT_DIR/ssl/marketplace.key" ]; then
+        if [ ! -f "$DEPLOYMENT_DIR/ssl/fullchain.pem" ] || [ ! -f "$DEPLOYMENT_DIR/ssl/privkey.pem" ]; then
             log_warning "SSL сертификаты не найдены. Создайте их или используйте самоподписанные для тестирования."
         fi
     fi

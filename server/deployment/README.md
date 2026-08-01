@@ -182,8 +182,8 @@ sudo apt install -y certbot
 sudo certbot certonly --standalone -d your-domain.com
 
 # Скопируйте сертификаты
-sudo cp /etc/letsencrypt/live/your-domain.com/fullchain.pem deployment/ssl/marketplace.crt
-sudo cp /etc/letsencrypt/live/your-domain.com/privkey.pem deployment/ssl/marketplace.key
+sudo cp /etc/letsencrypt/live/your-domain.com/fullchain.pem deployment/ssl/fullchain.pem
+sudo cp /etc/letsencrypt/live/your-domain.com/privkey.pem deployment/ssl/privkey.pem
 sudo chown $USER:$USER deployment/ssl/*
 ```
 

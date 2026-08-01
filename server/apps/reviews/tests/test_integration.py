@@ -22,7 +22,7 @@ User = get_user_model()
 logger = logging.getLogger(__name__)
 
 
-@override_settings(ELASTICSEARCH_DSL_AUTOSYNC=True)
+@override_settings(ELASTICSEARCH_DSL_AUTOSYNC=True, SECURE_SSL_REDIRECT=False)
 class ReviewIntegrationTests(TestCase):
     """Тесты интеграции между отзывами, рейтингами, популярностью и кэшированием."""
 
@@ -67,7 +67,7 @@ class ReviewIntegrationTests(TestCase):
         response = self.client.get(reverse('products:product_list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        response = self.client.get(reverse('review-list', args=[self.product.id]))
+        response = self.client.get(reverse('reviews:review_list', args=[self.product.id]))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Создаем отзыв
@@ -76,7 +76,7 @@ class ReviewIntegrationTests(TestCase):
             'value': 5,
             'text': 'Отличный продукт!'
         }
-        response = self.client.post(reverse('review-create'), data)
+        response = self.client.post(reverse('reviews:review_create'), data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # Для тестов вызываем обновление популярности синхронно
@@ -95,7 +95,7 @@ class ReviewIntegrationTests(TestCase):
             'value': 5,
             'text': 'Отличный продукт!'
         }
-        response = self.client.post(reverse('review-create'), data)
+        response = self.client.post(reverse('reviews:review_create'), data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # Проверяем рейтинг
@@ -114,7 +114,7 @@ class ReviewIntegrationTests(TestCase):
             'value': 3,
             'text': 'Нормальный продукт'
         }
-        response = self.client.post(reverse('review-create'), data)
+        response = self.client.post(reverse('reviews:review_create'), data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # Проверяем обновленный рейтинг
@@ -131,7 +131,7 @@ class ReviewIntegrationTests(TestCase):
             'value': 5,
             'text': 'Отличный продукт!'
         }
-        response = self.client.post(reverse('review-create'), data)
+        response = self.client.post(reverse('reviews:review_create'), data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # Проверяем, что показатель популярности увеличился
@@ -190,7 +190,7 @@ class ReviewIntegrationTests(TestCase):
                 'value': 4,
                 'text': f'Отзыв от user{i}'
             }
-            response = self.client.post(reverse('review-create'), data)
+            response = self.client.post(reverse('reviews:review_create'), data)
             self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # Проверяем, что показатель популярности значительно увеличился
@@ -205,7 +205,7 @@ class ReviewIntegrationTests(TestCase):
             'value': 5,
             'text': 'Отличный продукт!'
         }
-        response = self.client.post(reverse('review-create'), data)
+        response = self.client.post(reverse('reviews:review_create'), data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # Проверяем поиск в Elasticsearch
@@ -258,7 +258,7 @@ class ReviewIntegrationTests(TestCase):
             'value': 5,
             'text': 'Отличный продукт!'
         }
-        response = self.client.patch(reverse('review-update', args=[review.id]), data)
+        response = self.client.patch(reverse('reviews:review_update', args=[review.id]), data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Для тестов вызываем обновление популярности синхронно

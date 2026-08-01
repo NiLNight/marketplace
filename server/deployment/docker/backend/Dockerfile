@@ -3,7 +3,7 @@
 # --- Этап 1: 'base' ---
 # Общая основа для development и production. Устанавливает системные зависимости и Python.
 # Используем slim-образ для уменьшения размера.
-FROM python:3.12-slim as base
+FROM python:3.12-slim AS base
 
 # Устанавливаем переменные окружения для Python, чтобы избежать создания .pyc файлов
 # и обеспечить немедленный вывод в логи, что критично для Docker.
@@ -29,7 +29,7 @@ RUN pip install --no-cache-dir --upgrade pip
 # Этот этап используется для сборки production-зависимостей.
 # Это позволяет Docker кэшировать зависимости и значительно ускоряет последующие сборки,
 # если файлы requirements не менялись.
-FROM base as builder
+FROM base AS builder
 
 # Копируем только файлы с зависимостями.
 COPY requirements/ /app/requirements/
@@ -41,7 +41,7 @@ RUN pip wheel --no-cache-dir --wheel-dir /app/wheels -r /app/requirements/base.t
 
 # --- Этап 3: 'development' (Цель для разработки) ---
 # Эта цель будет использоваться при запуске `docker-compose up` без указания prod-файла.
-FROM base as development
+FROM base AS development
 
 # Копируем все файлы зависимостей.
 COPY requirements/ /app/requirements/
@@ -55,7 +55,7 @@ COPY . .
 
 # --- Этап 4: 'production' (Цель для продакшена) ---
 # Эта цель создает оптимизированный и безопасный образ для деплоя.
-FROM base as production
+FROM base AS production
 
 # Создаем непривилегированного пользователя и группу для запуска приложения.
 # Запуск от root в продакшене — плохая практика безопасности.
