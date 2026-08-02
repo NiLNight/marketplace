@@ -332,7 +332,7 @@ CELERY_WORKER_SEND_TASK_EVENTS = True
 ELASTICSEARCH_DSL = {
     'default': {
         'hosts': str(os.environ.get('ELASTICSEARCH_HOSTS')),
-        'timeout': 30,
+        'timeout': 90,
     },
 }
 
