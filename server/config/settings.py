@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     'django_elasticsearch_dsl',
+    'mptt',
     # Приложения
     'apps.core.apps.CoreConfig',
     'apps.users.apps.UsersConfig',
@@ -331,10 +332,14 @@ CELERY_WORKER_SEND_TASK_EVENTS = True
 # Настройки Elasticsearch
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': str(os.environ.get('ELASTICSEARCH_HOSTS')),
-        'timeout': 90,
+        'hosts': os.environ.get('ELASTICSEARCH_HOSTS', 'http://elasticsearch:9200'),
+        'timeout': 60,             # Увеличиваем таймаут до 60 секунд
+        'max_retries': 3,          # До 3 попыток при сбое
+        'retry_on_timeout': True,  # Повторять запрос при таймауте
     },
 }
+
+ELASTICSEARCH_DSL_SIGNAL_PROCESSOR = 'django_elasticsearch_dsl.signals.CelerySignalProcessor'
 
 # Дополнительные настройки Elasticsearch
 ELASTICSEARCH_INDEX_NAMES = {
