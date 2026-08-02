@@ -219,15 +219,17 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Конфигурация сервера электронной почты
-EMAIL_BACKEND = str(os.environ.get('EMAIL_BACKEND'))
+# Конфигурация электронной почты (Resend / SMTP)
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.resend.com')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True').lower() in ('true', '1', 't')
+EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL', 'False').lower() in ('true', '1', 't')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'resend')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
-EMAIL_HOST = str(os.environ.get('EMAIL_HOST'))
-EMAIL_HOST_USER = str(os.environ.get('EMAIL_HOST_USER'))
-EMAIL_HOST_PASSWORD = str(os.environ.get('EMAIL_HOST_PASSWORD'))
-EMAIL_PORT = str(os.environ.get('EMAIL_PORT'))
-EMAIL_USE_TLS = str(os.environ.get('EMAIL_USE_TLS'))
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'Marketplace <onboarding@resend.dev>')
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 # CORS настройки
 CORS_ALLOWED_ORIGINS = [
