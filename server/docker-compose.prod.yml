@@ -199,6 +199,7 @@ services:
       - static_volume_prod:/app/static:ro
       - ./media:/app/media:ro
       - ./deployment/ssl:/etc/nginx/ssl:ro # Папка для SSL сертификатов
+      - ../frontend/dist:/usr/share/nginx/html:ro # Папка со статикой фронтенда
     ports:
       - "80:80"
       - "443:443"
