@@ -220,7 +220,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Конфигурация сервера электронной почты
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = str(os.environ.get('EMAIL_BACKEND'))
 
 EMAIL_HOST = str(os.environ.get('EMAIL_HOST'))
 EMAIL_HOST_USER = str(os.environ.get('EMAIL_HOST_USER'))
