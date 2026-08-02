@@ -93,6 +93,7 @@ services:
         gunicorn config.wsgi:application -c deployment/gunicorn/gunicorn.conf.py
       "
     volumes:
+      - ./config/settings.py:/app/config/settings.py:ro
       - static_volume_prod:/app/static
       - ./media:/app/media
       - logs_volume_prod:/app/logs
@@ -121,6 +122,7 @@ services:
     container_name: marketplace-celery-prod
     command: celery -A config worker -l info --pool=solo
     volumes:
+      - ./config/settings.py:/app/config/settings.py:ro
       - logs_volume_prod:/app/logs
     env_file: .env.prod
     depends_on: [ backend, redis, rabbitmq ]
@@ -137,6 +139,7 @@ services:
     container_name: marketplace-celery-beat-prod
     command: celery -A config beat -l info
     volumes:
+      - ./config/settings.py:/app/config/settings.py:ro
       - logs_volume_prod:/app/logs
     env_file: .env.prod
     depends_on:
