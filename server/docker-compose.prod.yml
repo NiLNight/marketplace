@@ -162,34 +162,34 @@ services:
     networks:
       - marketplace-network
 
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: marketplace-prometheus-prod
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./deployment/docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus_data_prod:/prometheus
-    restart: always
-    depends_on:
-      backend:
-        condition: service_healthy
-    networks:
-      - marketplace-network
+#  prometheus:
+#    image: prom/prometheus:latest
+#    container_name: marketplace-prometheus-prod
+#    ports:
+#      - "9090:9090"
+#    volumes:
+#      - ./deployment/docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+#      - prometheus_data_prod:/prometheus
+#    restart: always
+#    depends_on:
+#      backend:
+#        condition: service_healthy
+#    networks:
+#      - marketplace-network
 
-  grafana:
-    image: grafana/grafana-oss:latest
-    container_name: marketplace-grafana-prod
-    env_file: .env.prod # Для GRAFANA_PASSWORD
-    ports:
-      - "3000:3000"
-    volumes:
-      - grafana_data_prod:/var/lib/grafana
-    restart: always
-    depends_on:
-      - prometheus
-    networks:
-      - marketplace-network
+#  grafana:
+#    image: grafana/grafana-oss:latest
+#    container_name: marketplace-grafana-prod
+#    env_file: .env.prod # Для GRAFANA_PASSWORD
+#    ports:
+#      - "3000:3000"
+#    volumes:
+#      - grafana_data_prod:/var/lib/grafana
+#    restart: always
+#    depends_on:
+#      - prometheus
+#    networks:
+#      - marketplace-network
 
   # Nginx reverse proxy
   nginx:
@@ -200,6 +200,7 @@ services:
       - ./media:/app/media:ro
       - ./deployment/ssl:/etc/nginx/ssl:ro # Папка для SSL сертификатов
       - ../frontend/dist:/usr/share/nginx/html:ro # Папка со статикой фронтенда
+      - ./deployment/docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro # Монтируем конфигурацию Nginx напрямую
     ports:
       - "80:80"
       - "443:443"
@@ -217,8 +218,8 @@ volumes:
   elasticsearch_data_prod:
   static_volume_prod:
   logs_volume_prod:
-  prometheus_data_prod:
-  grafana_data_prod:
+#  prometheus_data_prod:
+#  grafana_data_prod:
 
 networks:
   marketplace-network:
