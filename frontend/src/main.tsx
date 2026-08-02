@@ -6,6 +6,7 @@ import App from './App.tsx';
 import './index.css';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {createBrowserRouter, RouterProvider, Navigate} from 'react-router-dom';
+import {ProtectedRoute} from './components/ProtectedRoute.tsx';
 import {ProductCatalogPage} from './pages/ProductCatalogPage.tsx';
 import {ProductDetailPage} from './pages/ProductDetailPage.tsx';
 import {AppInitializer} from './components/AppInitializer.tsx'; // <-- Импортируем
@@ -72,7 +73,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "dashboard",
-                element: <DashboardLayout/>,
+                element: <ProtectedRoute><DashboardLayout/></ProtectedRoute>,
                 children: [
                     {index: true, element: <MyProductsPage/>},
                     {
