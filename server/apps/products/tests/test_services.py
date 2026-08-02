@@ -61,7 +61,7 @@ class ProductServicesTests(TestCase):
         self.assertEqual(product.title, 'iPhone 15')
         self.assertEqual(product.price, Decimal('999.99'))
         self.assertEqual(product.user, self.user)
-        self.assertFalse(product.is_active)
+        self.assertTrue(product.is_active)
 
     def test_create_product_invalid_data(self):
         """Тест создания продукта с некорректными данными."""

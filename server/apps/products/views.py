@@ -224,6 +224,9 @@ class ProductCreateView(BaseProductView):
             serializer.is_valid(raise_exception=True)
             product = ProductServices.create_product(serializer.validated_data, request.user)
 
+            # Инвалидация кэша списка продуктов
+            CacheService.invalidate_cache(prefix="product_list")
+
             logger.info(f"Successfully created product {product.id}, user={user_id}")
             return Response(
                 ProductDetailSerializer(product).data,

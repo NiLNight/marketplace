@@ -38,7 +38,7 @@ class ProductServices:
                      k in ['title', 'price', 'category', 'stock', 'discount', 'description', 'thumbnail']}
         logger.info(f"Creating product with data={safe_data}, user={user_id}")
         try:
-            product = Product(user=user, **data)
+            product = Product(user=user, is_active=True, **data)
             product.full_clean()
             product.save()
             logger.info(f"Created product {product.id}, user={user_id}")
