@@ -31,14 +31,17 @@ ENVIRONMENT = str(os.environ.get('ENVIRONMENT', 'development'))
 DEBUG = ENVIRONMENT != 'production'
 
 if ENVIRONMENT == 'production':
-    ALLOWED_HOSTS = [
-        'localhost',
-        'nginx',
-        'backend',
-        'marketplace.example.com',  # Замените на реальный домен
-        'www.marketplace.example.com',
-        'api.marketplace.example.com',
-    ]
+    allowed_hosts_env = os.environ.get('ALLOWED_HOSTS')
+    if allowed_hosts_env:
+        ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_env.split(',') if host.strip()]
+    else:
+        ALLOWED_HOSTS = [
+            'localhost',
+            'nginx',
+            'backend',
+            'nilplace.space',
+            'www.nilplace.space',
+        ]
 else:
     ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
