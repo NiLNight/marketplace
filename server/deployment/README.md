@@ -1,435 +1,263 @@
-# 🚀 Деплой Marketplace Backend
+# 🚀 Marketplace - Production & Deployment Guide
 
-Полное руководство по развертыванию Django приложения Marketplace в продакшене.
-
-## 📋 Содержание
-
-- [Быстрый старт](#быстрый-старт)
-- [Архитектура](#архитектура)
-- [Требования](#требования)
-- [Установка](#установка)
-- [Конфигурация](#конфигурация)
-- [Деплой](#деплой)
-- [Мониторинг](#мониторинг)
-- [Безопасность](#безопасность)
-- [Устранение неполадок](#устранение-неполадок)
-
-## ⚡ Быстрый старт
-
-### 1. Клонирование и настройка
-
-```bash
-# Клонируйте репозиторий
-git clone <repository-url>
-cd marketplace/server
-
-# Создайте .env файл
-cp deployment/env/env.development .env
-
-# Настройте переменные окружения
-nano .env
-```
-
-### 2. Запуск в режиме разработки
-
-```bash
-# Установите зависимости
-pip install -r requirements/local.txt
-
-# Запустите миграции
-python manage.py migrate
-
-# Создайте суперпользователя
-python manage.py createsuperuser
-
-# Запустите сервер разработки
-python manage.py runserver
-```
-
-### 3. Запуск с Docker
-
-```bash
-# Соберите и запустите контейнеры
-docker-compose up -d
-
-# Проверьте статус
-docker-compose ps
-```
-
-## 🏗️ Архитектура
-
-```
-marketplace/
-├── deployment/           # Файлы деплоя
-│   ├── docker/          # Docker конфигурации
-│   │   ├── backend/     # Backend образы
-│   │   ├── nginx/       # Nginx конфигурации
-│   │   └── prometheus/  # Мониторинг
-│   ├── env/             # Переменные окружения
-│   ├── gunicorn/        # Gunicorn конфигурации
-│   └── scripts/         # Скрипты деплоя
-├── apps/                # Django приложения
-├── config/              # Настройки Django
-├── requirements/         # Зависимости Python
-└── logs/                # Логи приложения
-```
-
-### Компоненты системы
-
-- **Django Backend** - Основное приложение
-- **PostgreSQL** - База данных
-- **Redis** - Кэширование и сессии
-- **RabbitMQ** - Очереди для Celery
-- **Elasticsearch** - Поиск и индексация
-- **Nginx** - Веб-сервер и прокси
-- **Gunicorn** - WSGI сервер
-- **Celery** - Асинхронные задачи
-- **Prometheus** - Мониторинг метрик
-- **Grafana** - Визуализация метрик
-- **Flower** - Мониторинг Celery
-
-## 📋 Требования
-
-### Системные требования
-
-- **OS**: Ubuntu 20.04+ / CentOS 8+ / Debian 11+
-- **RAM**: Минимум 4GB, рекомендуется 8GB+
-- **CPU**: 2+ ядра
-- **Диск**: 20GB+ свободного места
-- **Сеть**: Статический IP адрес
-
-### Программное обеспечение
-
-- **Docker**: 20.10+
-- **Docker Compose**: 2.0+
-- **Git**: 2.25+
-- **Python**: 3.9+
-- **Node.js**: 16+ (для фронтенда)
-
-### Порты
-
-| Сервис | Порт | Описание |
-|--------|------|----------|
-| Nginx | 80, 443 | Веб-сервер |
-| Django | 8000 | Backend API |
-| PostgreSQL | 5432 | База данных |
-| Redis | 6379 | Кэш |
-| RabbitMQ | 5672, 15672 | Очереди |
-| Elasticsearch | 9200 | Поиск |
-| Prometheus | 9090 | Метрики |
-| Grafana | 3000 | Дашборды |
-| Flower | 5555 | Celery мониторинг |
-
-## 🔧 Установка
-
-### 1. Подготовка сервера
-
-```bash
-# Обновите систему
-sudo apt update && sudo apt upgrade -y
-
-# Установите необходимые пакеты
-sudo apt install -y \
-    curl \
-    wget \
-    git \
-    unzip \
-    software-properties-common \
-    apt-transport-https \
-    ca-certificates \
-    gnupg \
-    lsb-release
-
-# Установите Docker
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-sudo usermod -aG docker $USER
-
-# Установите Docker Compose
-sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-
-# Перезагрузите систему
-sudo reboot
-```
-
-### 2. Настройка файрвола
-
-```bash
-# Установите UFW
-sudo apt install -y ufw
-
-# Настройте правила
-sudo ufw default deny incoming
-sudo ufw default allow outgoing
-sudo ufw allow ssh
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
-sudo ufw allow 22/tcp
-
-# Включите файрвол
-sudo ufw enable
-```
-
-### 3. Настройка SSL сертификатов
-
-```bash
-# Создайте директорию для сертификатов
-mkdir -p deployment/ssl
-
-# Для Let's Encrypt (рекомендуется)
-sudo apt install -y certbot
-sudo certbot certonly --standalone -d your-domain.com
-
-# Скопируйте сертификаты
-sudo cp /etc/letsencrypt/live/your-domain.com/fullchain.pem deployment/ssl/fullchain.pem
-sudo cp /etc/letsencrypt/live/your-domain.com/privkey.pem deployment/ssl/privkey.pem
-sudo chown $USER:$USER deployment/ssl/*
-```
-
-## ⚙️ Конфигурация
-
-### 1. Переменные окружения
-
-Создайте файл `.env` на основе примера:
-
-```bash
-# Для разработки
-cp deployment/env/env.development .env
-
-# Для продакшена
-cp deployment/env/env.production .env
-```
-
-### 2. Настройка базы данных
-
-```bash
-# Создайте базу данных
-sudo -u postgres psql
-
-CREATE DATABASE marketplace_prod;
-CREATE USER marketplace_user WITH PASSWORD 'your-strong-password';
-GRANT ALL PRIVILEGES ON DATABASE marketplace_prod TO marketplace_user;
-ALTER USER marketplace_user CREATEDB;
-\q
-```
-
-### 3. Генерация SECRET_KEY
-
-```bash
-# Сгенерируйте новый SECRET_KEY
-python deployment/scripts/generate_secret_key.py
-
-# Скопируйте результат в .env файл
-```
-
-## 🚀 Деплой
-
-### Автоматический деплой
-
-```bash
-# Запустите полный деплой
-./deployment/scripts/deploy.sh
-
-# Или отдельные команды
-./deployment/scripts/deploy.sh build    # Сборка образов
-./deployment/scripts/deploy.sh migrate  # Миграции
-./deployment/scripts/deploy.sh static   # Статические файлы
-./deployment/scripts/deploy.sh health   # Проверка здоровья
-```
-
-### Ручной деплой
-
-```bash
-# 1. Остановите существующие контейнеры
-docker-compose down
-
-# 2. Соберите образы
-docker-compose build --no-cache
-
-# 3. Запустите сервисы
-docker-compose up -d
-
-# 4. Выполните миграции
-docker-compose exec backend python manage.py migrate
-
-# 5. Соберите статические файлы
-docker-compose exec backend python manage.py collectstatic --noinput
-
-# 6. Создайте суперпользователя
-docker-compose exec backend python manage.py createsuperuser
-```
-
-### Проверка деплоя
-
-```bash
-# Проверьте статус контейнеров
-docker-compose ps
-
-# Проверьте логи
-docker-compose logs
-
-# Проверьте здоровье приложения
-curl http://localhost:8000/health/
-
-# Проверьте безопасность
-python deployment/scripts/security_check.py
-```
-
-## 📊 Мониторинг
-
-### Доступные дашборды
-
-- **Grafana**: http://your-domain.com:3000
-  - Логин: `admin`
-  - Пароль: из переменной `GRAFANA_PASSWORD`
-
-- **Prometheus**: http://your-domain.com:9090
-  - Метрики производительности
-
-- **Flower**: http://your-domain.com:5555
-  - Мониторинг Celery задач
-
-### Основные метрики
-
-- **Производительность**: Время ответа, RPS
-- **Ресурсы**: CPU, RAM, диск
-- **База данных**: Подключения, запросы
-- **Очереди**: Размер очередей, время обработки
-- **Ошибки**: 4xx, 5xx статусы
-
-### Алерты
-
-Настройте алерты в Grafana для:
-- Высокой нагрузки CPU (>80%)
-- Нехватки памяти (>90%)
-- Медленных запросов (>5s)
-- Ошибок (>5%)
-
-## 🔒 Безопасность
-
-### Основные меры безопасности
-
-1. **HTTPS**: Принудительное перенаправление на HTTPS
-2. **HSTS**: HTTP Strict Transport Security
-3. **CSP**: Content Security Policy
-4. **Rate Limiting**: Ограничение запросов
-5. **CORS**: Настройка Cross-Origin Resource Sharing
-6. **SQL Injection**: Защита через ORM
-7. **XSS**: Защита от межсайтового скриптинга
-8. **CSRF**: Защита от подделки запросов
-
-### Регулярные проверки
-
-```bash
-# Еженедельная проверка безопасности
-python deployment/scripts/security_check.py
-
-# Обновление зависимостей
-pip install --upgrade -r requirements/base.txt
-
-# Проверка уязвимостей
-safety check
-
-# Обновление SSL сертификатов
-sudo certbot renew
-```
-
-### Резервное копирование
-
-```bash
-# Автоматическое резервное копирование
-./deployment/scripts/deploy.sh backup
-
-# Восстановление из резервной копии
-docker-compose exec db psql -U marketplace_user -d marketplace_prod < backup.sql
-```
-
-## 🔧 Устранение неполадок
-
-### Частые проблемы
-
-#### 1. Контейнеры не запускаются
-
-```bash
-# Проверьте логи
-docker-compose logs
-
-# Проверьте статус
-docker-compose ps
-
-# Перезапустите контейнеры
-docker-compose restart
-```
-
-#### 2. Ошибки подключения к базе данных
-
-```bash
-# Проверьте настройки БД
-docker-compose exec db psql -U marketplace_user -d marketplace_prod
-
-# Проверьте переменные окружения
-echo $DB_HOST $DB_NAME $DB_USER
-```
-
-#### 3. Проблемы с SSL
-
-```bash
-# Проверьте сертификаты
-openssl x509 -in deployment/ssl/marketplace.crt -text -noout
-
-# Обновите сертификаты
-sudo certbot renew
-```
-
-#### 4. Высокая нагрузка
-
-```bash
-# Проверьте использование ресурсов
-docker stats
-
-# Увеличьте количество workers
-# В .env файле: GUNICORN_WORKERS=8
-```
-
-### Полезные команды
-
-```bash
-# Просмотр логов в реальном времени
-docker-compose logs -f
-
-# Подключение к контейнеру
-docker-compose exec backend bash
-
-# Проверка сетевых подключений
-docker network ls
-docker network inspect marketplace_default
-
-# Очистка неиспользуемых ресурсов
-docker system prune -a
-```
-
-## 📞 Поддержка
-
-### Логи и отладка
-
-- **Логи приложения**: `logs/app.log`
-- **Логи Nginx**: `/var/log/nginx/`
-- **Логи Docker**: `docker-compose logs`
-
-### Контакты
-
-- **Документация**: [GitHub Wiki](https://github.com/your-repo/wiki)
-- **Issues**: [GitHub Issues](https://github.com/your-repo/issues)
-- **Discord**: [Сервер сообщества](https://discord.gg/your-server)
-
-### Полезные ссылки
-
-- [Django Deployment Checklist](https://docs.djangoproject.com/en/stable/howto/deployment/checklist/)
-- [Docker Best Practices](https://docs.docker.com/develop/dev-best-practices/)
-- [Nginx Configuration](https://nginx.org/en/docs/)
-- [Gunicorn Configuration](https://docs.gunicorn.org/en/stable/configure.html)
+Полнофункциональный маркетплейс (Django REST Framework + React/Vite + PostgreSQL + Redis + RabbitMQ + Elasticsearch + Nginx).
 
 ---
 
-**⚠️ Важно**: Всегда тестируйте изменения в staging окружении перед применением в продакшене! 
+## 📋 Содержание
+
+- [Технический стек](#-технический-стек)
+- [Структура проекта](#-структура-проекта)
+- [Пошаговая инструкция по деплою (Production)](#-пошаговая-инструкция-по-деплою-production)
+  - [Шаг 1. Подготовка VPS сервера](#шаг-1-подготовка-vps-сервера)
+  - [Шаг 2. Клонирование репозитория](#шаг-2-клонирование-репозитория)
+  - [Шаг 3. Выпуск SSL-сертификатов (Certbot)](#шаг-3-выпуск-ssl-сертификатов-certbot)
+  - [Шаг 4. Настройка файла .env.prod](#шаг-4-настройка-файла-envprod)
+  - [Шаг 5. Сборка фронтенда (React / Vite)](#шаг-5-сборка-фронтенда-react--vite)
+  - [Шаг 6. Запуск Docker Compose](#шаг-6-запуск-docker-compose)
+  - [Шаг 7. База данных и поисковый индекс Elasticsearch](#шаг-7-база-данных-и-поисковый-индекс-elasticsearch)
+- [Полезные команды обслуживания](#-полезные-команды-обслуживания)
+- [Глубокая очистка диска на VPS](#-глубокая-очистка-диска-на-vps)
+
+---
+
+## 🛠 Технический стек
+
+- **Backend**: Python 3.12, Django 5.1, Django REST Framework, SimpleJWT, Celery
+- **Frontend**: React 19, TypeScript, Vite, TailwindCSS, Zustand
+- **Базы данных и брокеры**: PostgreSQL 17, Redis 7, RabbitMQ 3.12
+- **Поиск**: Elasticsearch 8 (с асинхронными сигналами Celery)
+- **Веб-сервер & SSL**: Nginx (Reverse Proxy), Let's Encrypt (Certbot)
+- **Email**: Resend SMTP
+
+---
+
+## 📂 Структура проекта
+
+```
+marketplace/
+├── frontend/             # React SPA приложение
+│   ├── src/
+│   ├── .env              # VITE_API_BASE_URL=https://nilplace.space/
+│   └── dist/             # Собранный продакшен-код фронтенда
+└── server/               # Django REST API Бэкенд
+    ├── apps/             # Модули приложения
+    ├── config/           # Настройки Django, Celery, URLs
+    ├── deployment/       # Конфигурации деплоя
+    │   ├── docker/nginx/ # Nginx конфигурация
+    │   └── ssl/          # Папка с SSL сертификатами
+    ├── .env.prod         # Переменные окружения для продакшена
+    └── docker-compose.prod.yml
+```
+
+---
+
+## 🚀 Пошаговая инструкция по деплою (Production)
+
+### Шаг 1. Подготовка VPS сервера
+
+1. **Подключитесь к VPS по SSH:**
+   ```bash
+   ssh root@ВАШ_IP_СЕРВЕРА
+   ```
+
+2. **Обновите систему и установите базовные утилиты:**
+   ```bash
+   apt update && apt upgrade -y
+   apt install -y git docker.io docker-compose-v2 curl
+   systemctl enable --now docker
+   ```
+
+3. **Оптимизация памяти ядра для Elasticsearch (Обязательно для Linux):**
+   ```bash
+   sysctl -w vm.max_map_count=262144
+   echo "vm.max_map_count=262144" >> /etc/sysctl.conf
+   ```
+
+---
+
+### Шаг 2. Клонирование репозитория
+
+```bash
+mkdir -p /var/www && cd /var/www
+git clone https://github.com/NiLNight/marketplace.git
+cd marketplace
+```
+
+---
+
+### Шаг 3. Выпуск SSL-сертификатов (Certbot)
+
+1. Убедитесь, что `A`-записи вашего домена (например, `nilplace.space` и `www.nilplace.space`) смотрят на IP вашего VPS.
+2. Установите Certbot и выпустите сертификат:
+   ```bash
+   apt install -y certbot
+   certbot certonly --standalone -d nilplace.space -d www.nilplace.space
+   ```
+3. Скопируйте сертификаты в папку проекта (`-L` критически важен для копирования реальных файлов вместо симлинков):
+   ```bash
+   cd /var/www/marketplace/server
+   mkdir -p deployment/ssl
+   cp -L /etc/letsencrypt/live/nilplace.space/fullchain.pem deployment/ssl/fullchain.pem
+   cp -L /etc/letsencrypt/live/nilplace.space/privkey.pem deployment/ssl/privkey.pem
+   ```
+
+---
+
+### Шаг 4. Настройка файла `.env.prod`
+
+Создайте файл `/var/www/marketplace/server/.env.prod`:
+
+```bash
+cat > .env.prod << 'EOF'
+# Django Settings
+SECRET_KEY="сгенерированный_секретный_ключ"
+DEBUG=False
+ENVIRONMENT=production
+ALLOWED_HOSTS="nilplace.space,www.nilplace.space,backend,nginx,localhost"
+
+# Database Settings
+DB_ENGINE='django.db.backends.postgresql'
+DB_HOST="db"
+DB_PORT='5432'
+DB_NAME='marketplace_prod'
+DB_USER='marketplace_user'
+DB_PASS='ваш_надежный_пароль_бд'
+
+# Redis & RabbitMQ
+REDIS_HOST='redis'
+REDIS_PORT='6379'
+REDIS_PASSWORD='ваш_пароль_redis'
+RABBITMQ_HOST='rabbitmq'
+RABBITMQ_PORT='5672'
+
+# Elasticsearch Settings
+ELASTICSEARCH_HOSTS='http://elasticsearch:9200'
+
+# Email Settings (Resend SMTP)
+EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+EMAIL_HOST=smtp.resend.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=resend
+EMAIL_HOST_PASSWORD=re_ВАШ_API_KEY_RESEND
+
+# Важно: используйте кавычки для строк с символами < >
+DEFAULT_FROM_EMAIL="Marketplace <onboarding@resend.dev>"
+SERVER_EMAIL="Marketplace <onboarding@resend.dev>"
+
+# Frontend URL
+FRONTEND_URL="https://nilplace.space"
+EOF
+```
+
+---
+
+### Шаг 5. Сборка фронтенда (React / Vite)
+
+1. **Установите Node.js 20:**
+   ```bash
+   curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+   apt install -y nodejs
+   ```
+
+2. **Создайте `.env` во фронтенде:**
+   ```bash
+   cd /var/www/marketplace/frontend
+   echo "VITE_API_BASE_URL=https://nilplace.space/" > .env
+   ```
+
+3. **Соберите фронтенд:**
+   ```bash
+   npm install
+   npx vite build
+   ```
+   *(Результат сборки появится в `frontend/dist`)*.
+
+---
+
+### Шаг 6. Запуск Docker Compose
+
+В папке `/var/www/marketplace/server` выполните запуск продакшен-инфраструктуры:
+
+```bash
+cd /var/www/marketplace/server
+docker compose -p server_prod --env-file .env.prod -f docker-compose.prod.yml up -d
+```
+
+Проверьте статус всех контейнеров (все 9 должны быть `Up` / `Healthy`):
+```bash
+docker compose -p server_prod --env-file .env.prod -f docker-compose.prod.yml ps
+```
+
+---
+
+### Шаг 7. База данных и поисковый индекс Elasticsearch
+
+1. **Примените миграции базы данных:**
+   ```bash
+   docker compose -p server_prod --env-file .env.prod -f docker-compose.prod.yml exec backend python manage.py migrate
+   ```
+
+2. **Создайте пользователя Администратора:**
+   ```bash
+   docker compose -p server_prod --env-file .env.prod -f docker-compose.prod.yml exec backend python manage.py createsuperuser
+   ```
+
+3. **Восстановление дампа PostgreSQL (если есть дамп):**
+   ```bash
+   # Копируем дамп в контейнер
+   docker cp /tmp/marketplace_dump.sqlc marketplace-db-prod:/tmp/marketplace_dump.sqlc
+   
+   # Восстанавливаем
+   docker exec -t marketplace-db-prod pg_restore -U marketplace_user -d marketplace_prod --clean --no-acl --no-owner /tmp/marketplace_dump.sqlc
+   ```
+
+4. **Инициализация поиска Elasticsearch:**
+   ```bash
+   # Отключаем контроль порога диска для стабильности
+   docker exec marketplace-elasticsearch-prod curl -X PUT "http://localhost:9200/_cluster/settings" -H 'Content-Type: application/json' -d '{"transient": {"cluster.routing.allocation.disk.threshold_enabled": false}}'
+   
+   # Создаем и наполняем индексы
+   docker compose -p server_prod --env-file .env.prod -f docker-compose.prod.yml exec backend python manage.py search_index --create
+   docker compose -p server_prod --env-file .env.prod -f docker-compose.prod.yml exec backend python manage.py search_index --populate
+   ```
+
+---
+
+## ⚙️ Полезные команды обслуживания
+
+* **Перезапустить сервисы без пересборки (1 секунда, 0 МБ диска):**
+  ```bash
+  docker compose -p server_prod --env-file .env.prod -f docker-compose.prod.yml restart backend celery
+  ```
+
+* **Просмотр логов в реальном времени:**
+  ```bash
+  docker compose -p server_prod --env-file .env.prod -f docker-compose.prod.yml logs -f backend
+  docker compose -p server_prod --env-file .env.prod -f docker-compose.prod.yml logs -f celery
+  ```
+
+* **Проверка доступности здравоохранения (Healthcheck):**
+  ```bash
+  curl https://nilplace.space/core/health/
+  ```
+
+---
+
+## 🧹 Глубокая очистка диска на VPS
+
+Если на VPS с неболшим диском (10 ГБ) заканчивается место, выполните этот безопасный комплекс очистки:
+
+```bash
+# 1. Очищаем журнал системных логов Ubuntu
+journalctl --vacuum-time=1d
+journalctl --vacuum-size=50M
+
+# 2. Очищаем кеш пакетов APT
+apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
+
+# 3. Полная очистка неиспользуемых слоев и кеша Docker
+docker system prune -a --volumes -f
+docker builder prune -a -f
+```
